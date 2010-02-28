@@ -3,7 +3,7 @@
    <description url="http://m2e-extensions.googlecode.com/hg/update-sites/m2e-exts/latest">
       Eclipse Update Site for latest push of the M2Eclipse Extensions.
    </description>
-   <feature url="features/org.maven.ide.eclipse.extensions.m2e_extensions_0.10.0.201002281021.jar" id="org.maven.ide.eclipse.extensions.m2e_extensions" version="0.10.0.201002281021">
+   <feature url="features/org.maven.ide.eclipse.extensions.m2e_extensions_0.10.0.201002281110.jar" id="org.maven.ide.eclipse.extensions.m2e_extensions" version="0.10.0.201002281110">
       <category name="m2e-ext"/>
    </feature>
    <category-def name="m2e-ext" label="M2Eclipse Extensions :: Project Configurators (findbugs,checkstyle,PMD)">
