@@ -1,0 +1,17 @@
+#using glob syntax
+syntax: glob
+
+bin/**
+target/**
+*~
+*.class
+
+syntax: regexp
+
+.*\.site/features/.*
+.*\.site/plugins/.*
+
+syntax: regexp
+^maven/ide/plugins/org\.maven\.ide\.eclipse\.extensions\.site/artifacts\.xml$
+syntax: regexp
+^maven/ide/plugins/org\.maven\.ide\.eclipse\.extensions\.site/content\.xml$

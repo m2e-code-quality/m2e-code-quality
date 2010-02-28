@@ -1,0 +1,13 @@
+The distribution contains works from:
+
+
+* google-collections
+
+    http://code.google.com/p/google-collections/
+    
+* Apache httpcomponents
+
+    http://hc.apache.org/
+    
+    Currently, the file URIUtils has been copied verbatim for using
+    a single method on it.

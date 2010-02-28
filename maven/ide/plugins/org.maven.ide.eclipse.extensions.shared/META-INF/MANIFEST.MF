@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: M2Eclipse Extensions Shared component
+Bundle-SymbolicName: org.maven.ide.eclipse.extensions.shared
+Bundle-Version: 0.10.0.qualifier
+Bundle-RequiredExecutionEnvironment: J2SE-1.5,
+ JavaSE-1.6
+Bundle-Vendor: m2e-extensions Project
+Require-Bundle: org.maven.ide.eclipse;bundle-version="[0.10.0,0.11.0)",
+ org.maven.ide.eclipse.maven_embedder;bundle-version="[0.10.0,0.11.0)",
+ org.eclipse.core.runtime;bundle-version="3.4.0",
+ org.eclipse.core.resources;bundle-version="3.4.0"
+Export-Package: com.google.common.annotations,
+ com.google.common.base,
+ com.google.common.collect,
+ org.apache.http.client.utils,
+ org.maven.ide.eclipse.extensions.shared.util
+Bundle-ClassPath: .,
+ lib/google-collections-1.0.jar

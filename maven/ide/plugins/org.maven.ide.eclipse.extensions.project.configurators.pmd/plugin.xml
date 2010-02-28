@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         id="org.maven.ide.eclipse.extensions.pmd"
+         name="M2Eclipse extension for configuring Eclipse PMD using maven-pmd-plugin project configuration"
+         point="org.maven.ide.eclipse.projectConfigurators">
+ 	  <configurator id="org.maven.ide.eclipse.extensions.pmd"
+      	class="org.maven.ide.eclipse.extensions.project.configurators.pmd.EclipsePmdProjectConfigurator"
+        name="M2E-PMD"/>
+         
+   </extension>
+
+</plugin>

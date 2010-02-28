@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.maven.ide.eclipse.extensions.m2e_extensions"
+      label="M2Eclipse Extensions (Project Configurators)"
+      version="0.10.0.qualifier"
+      provider-name="m2e-extensions Project"
+      plugin="org.maven.ide.eclipse.extensions.shared">
+
+   <description url="%description.url">
+      %description.text
+   </description>
+
+   <copyright url="%description.url">
+      %copyright.text
+   </copyright>
+
+   <license url="http://www.apache.org/licenses/LICENSE-2.0.html">
+      %license.text
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime" version="3.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources" version="3.3.0" match="greaterOrEqual"/>
+      <import plugin="net.sf.eclipsecs.core" version="5.0.1" match="greaterOrEqual"/>
+      <import plugin="org.maven.ide.eclipse" version="0.10.0" match="equivalent"/>
+      <import plugin="org.maven.ide.eclipse.maven_embedder" version="0.10.0" match="equivalent"/>
+      <import plugin="org.maven.ide.eclipse.extensions.shared" version="0.10.0" match="equivalent"/>
+      <import plugin="org.eclipse.core.runtime" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.maven.ide.eclipse.extensions.shared" version="0.10.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="edu.umd.cs.findbugs.plugin.eclipse" version="1.3.9" match="greaterOrEqual"/>
+      <import plugin="net.sourceforge.pmd.eclipse.plugin" version="3.2.6" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="org.maven.ide.eclipse.extensions.project.configurators.checkstyle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.maven.ide.eclipse.extensions.project.configurators.findbugs"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.maven.ide.eclipse.extensions.project.configurators.pmd"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.maven.ide.eclipse.extensions.shared"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>

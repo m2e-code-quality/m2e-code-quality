@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="org.maven.ide.eclipse.extensions.findbugs"
+         name="M2Eclipse extension for configuring Eclipse Findbugs using available findbugs maven plugins"
+         point="org.maven.ide.eclipse.projectConfigurators">
+      <configurator
+            class="org.maven.ide.eclipse.extensions.project.configurators.findbugs.EclipseFindbugsProjectConfigurator"
+            id="org.maven.ide.eclipse.m2e.extensions.findbugs"
+            name="M2E-FINDBUGS">
+      </configurator>
+   </extension>
+
+</plugin>

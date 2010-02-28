@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         id="org.maven.ide.eclipse.m2e.extensions.checkstyle"
+         name="M2Eclipse maven-checkstyle-plugin project configurator"
+         point="org.maven.ide.eclipse.projectConfigurators">
+       <configurator id="org.maven.ide.eclipse.m2e.extensions.checkstyle"
+        class="org.maven.ide.eclipse.extensions.project.configurators.checkstyle.EclipseCheckstyleProjectConfigurator"
+        name="M2E-CS"/>         
+   </extension>
+</plugin>
