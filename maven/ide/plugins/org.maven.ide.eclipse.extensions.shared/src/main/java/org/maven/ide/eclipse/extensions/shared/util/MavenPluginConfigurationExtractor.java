@@ -7,6 +7,7 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 
@@ -27,6 +28,8 @@ import com.google.common.collect.ImmutableList;
  */
 public class MavenPluginConfigurationExtractor {
     private static final String M2ECLIPSE_CONFIG_ELEM_NAME = "m2eclipseConfig";
+    private static final String M2ECLIPSE_CONFIG_CHILD_ELEM_DISABLE = "disable";
+    private static final String M2ECLIPSE_CONFIG_CHILD_ELEM_DISABLE_DEF_VALUE = "false";
     private final Xpp3Dom configuration;
     private final Xpp3Dom m2eConfig;
     
@@ -107,7 +110,7 @@ public class MavenPluginConfigurationExtractor {
     }
     
     public boolean shouldDisableConfigurator() {
-        final String value = this.value(this.m2eConfig, "disable");
+        final String value = this.value(this.m2eConfig, M2ECLIPSE_CONFIG_CHILD_ELEM_DISABLE);
         //if not configured then we assume we want to run project configurator
         if (value == null) {
             return true;
@@ -115,6 +118,15 @@ public class MavenPluginConfigurationExtractor {
         return Boolean.parseBoolean(value);
     }
     
+    private static void checkAndSetDisableElementForM2eConfigDom(final Xpp3Dom m2eConfigDom) {
+        Preconditions.checkNotNull(m2eConfigDom, "m2ConfigDom cannot be null");
+        final Xpp3Dom disableElem = m2eConfigDom.getChild(M2ECLIPSE_CONFIG_CHILD_ELEM_DISABLE);
+        if (disableElem == null) {
+            final Xpp3Dom m2eConfigDisable = new Xpp3Dom(M2ECLIPSE_CONFIG_CHILD_ELEM_DISABLE);
+            m2eConfigDisable.setValue(M2ECLIPSE_CONFIG_CHILD_ELEM_DISABLE_DEF_VALUE);
+            m2eConfigDom.addChild(m2eConfigDisable);
+        }
+    }
     /**
      * Factory to create new instances of {@link MavenPluginConfigurationExtractor}.
      * 
@@ -128,6 +140,8 @@ public class MavenPluginConfigurationExtractor {
         if (m2eConfig == null) {
             m2eConfig = new Xpp3Dom(M2ECLIPSE_CONFIG_ELEM_NAME);
         }
+        //check and make sure if <disable> not specified we default to false.
+        checkAndSetDisableElementForM2eConfigDom(m2eConfig);
         return new MavenPluginConfigurationExtractor(new Xpp3Dom(pluginConfigDom), m2eConfig);
     }
 

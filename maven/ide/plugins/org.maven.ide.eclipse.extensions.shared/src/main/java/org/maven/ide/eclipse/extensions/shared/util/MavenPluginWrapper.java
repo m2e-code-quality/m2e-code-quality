@@ -25,11 +25,21 @@ public class MavenPluginWrapper {
         return this.plugin == null ? false : true;
     }
     
+    /**
+     * Retrieve the &lt;configuration&gt; element for this plugin instance. Note
+     * this is guaranteed to be never {@code null}.
+     * 
+     * @return {@code Xpp3Dom} instance.
+     */
     public Xpp3Dom getPluginConfigurationDom() {
-        if (this.plugin == null) {
-          return new Xpp3Dom(DEF_PLUGIN_CONFIG_ELEM_NAME);
+        Xpp3Dom pluginConfigDom = new Xpp3Dom(DEF_PLUGIN_CONFIG_ELEM_NAME);
+        if (this.plugin != null) {
+            final Xpp3Dom realPluginConfigDom = (Xpp3Dom) this.plugin.getConfiguration();
+            if (realPluginConfigDom != null) {
+                pluginConfigDom = realPluginConfigDom;
+            }
         }
-        return (Xpp3Dom) this.plugin.getConfiguration();
+        return pluginConfigDom;
     }
     
     /**

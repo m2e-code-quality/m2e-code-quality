@@ -4,6 +4,7 @@ import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Plugin;
 import org.maven.ide.eclipse.project.IMavenProjectFacade;
 import org.maven.ide.eclipse.project.MavenProjectChangedEvent;
 import org.maven.ide.eclipse.project.configurator.AbstractProjectConfigurator;
@@ -114,11 +115,12 @@ public abstract class AbstractMavenPluginProjectConfigurator
                         pluginWrapper,
                         mavenPluginCfg);
             } else {
-                this.console.logMessage(String.format(
-                        "Will not configure the Eclipse Plugin for Maven Plugin [%s:%s],"
-                        + "(Could not find maven plugin instance or configuration in pom)", 
-                        this.getMavenPluginGroupId(),
-                        this.getMavenPluginArtifactId()));
+                //TODO: redirect to eclipse logger.
+//                this.console.logMessage(String.format(
+//                        "Will not configure the Eclipse Plugin for Maven Plugin [%s:%s],"
+//                        + "(Could not find maven plugin instance or configuration in pom)", 
+//                        this.getMavenPluginGroupId(),
+//                        this.getMavenPluginArtifactId()));
             }
         }
         super.mavenProjectChanged(mavenProjectChangedEvent, monitor);
