@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>org.maven.ide.eclipse.extensions.project.configurators.findbugs</name>
+	<name>org.maven.ide.eclipse.extensions.project.configurators.checkstyle</name>
 	<comment></comment>
 	<projects>
 	</projects>

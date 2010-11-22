@@ -17,7 +17,8 @@
   </properties>
 
   <modules>
-    <module>com.basistech.m2e.core.quality.shared</module>
+    <module>com.basistech.m2e.code.quality.shared</module>
+    <module>com.basistech.m2e.code.quality.checkstyle</module>
 <!--
     <module>maven/ide/plugins/com.basistech.m2e-extensions.site-extras</module>
     <module>maven/ide/plugins/org.maven.ide.eclipse.extensions.project.configurators.checkstyle</module>
@@ -37,6 +38,12 @@
       <id>m2e</id>
       <layout>p2</layout>
       <url>http://m2eclipse.sonatype.org/sites/m2e/0.12.0.20101115-1102</url>
+    </repository>
+
+    <repository>
+      <id>cs</id>
+      <layout>p2</layout>
+      <url>http://eclipse-cs.sf.net/update/</url>
     </repository>
   </repositories>
 
