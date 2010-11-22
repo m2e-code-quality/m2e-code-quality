@@ -10,15 +10,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.basistech</groupId>
-    <artifactId>m2e-code-quality</artifactId>
-    <relativePath>../../../../pom.xml</relativePath>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>com.basistech.m2e-code-quality</groupId>
+    <artifactId>m2e-code-quality-plugins</artifactId>
+    <version>0.12.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>com.basistech</groupId>
-  <artifactId>org.maven.ide.eclipse.extensions.shared</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <artifactId>com.basistech.m2e.core.quality.shared</artifactId>
   <packaging>eclipse-plugin</packaging>
 
   <name>Shared Code for M2 Code Quality Plugin Extensions</name>
