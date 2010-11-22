@@ -4,7 +4,6 @@ import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Plugin;
 import org.maven.ide.eclipse.project.IMavenProjectFacade;
 import org.maven.ide.eclipse.project.MavenProjectChangedEvent;
 import org.maven.ide.eclipse.project.configurator.AbstractProjectConfigurator;
@@ -67,7 +66,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
     }
     
     @Override
-    protected void mavenProjectChanged(
+    public void mavenProjectChanged(
             final MavenProjectChangedEvent mavenProjectChangedEvent, 
             final IProgressMonitor monitor)
             throws CoreException {
