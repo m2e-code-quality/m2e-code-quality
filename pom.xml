@@ -39,11 +39,6 @@
       <url>http://m2eclipse.sonatype.org/sites/m2e/0.12.0.20101115-1102</url>
     </repository>
 
-    <repository>
-      <id>cs</id>
-      <layout>p2</layout>
-      <url>http://eclipse-cs.sf.net/update/</url>
-    </repository>
   </repositories>
 
   <build>

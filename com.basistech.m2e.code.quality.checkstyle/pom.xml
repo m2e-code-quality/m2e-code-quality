@@ -20,4 +20,13 @@
 
   <name>M2Eclipse Project Configurator for Eclipse Checkstyle</name>
 
+  <repositories>
+    <repository>
+      <id>cs</id>
+      <layout>p2</layout>
+      <url>file:/${basedir}/checkstyle.p2/repository</url>
+    </repository>
+
+  </repositories>
+
 </project>
