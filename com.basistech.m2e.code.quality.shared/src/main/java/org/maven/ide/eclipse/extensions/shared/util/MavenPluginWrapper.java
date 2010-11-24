@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Plugin;
+import org.apache.maven.model.Profile;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
@@ -79,12 +80,20 @@ public class MavenPluginWrapper {
             final MavenProject mavenProject,
             final String pluginGroupId,
             final String pluginArtifactId) {
-        for (Plugin p : mavenProject.getBuildPlugins()) {
-            if (pluginGroupId.equals(p.getGroupId())
-                    && pluginArtifactId.equals(p.getArtifactId())) { 
-                return p; 
-            }
-        }
+    	String key = pluginGroupId + ":" + pluginArtifactId;
+    	Plugin plugin = mavenProject.getPlugin(key);
+    	if (plugin != null) {
+    		return plugin;
+    	}
+    	/*
+    	 * If it's not direct, it might be in an active profile.
+    	 */
+    	for (Profile profile : mavenProject.getActiveProfiles()) {
+    		plugin = profile.getBuild().getPluginsAsMap().get(key);
+    		if (plugin != null) {
+    			return plugin;
+    		}
+    	}
         return null;
     }
     

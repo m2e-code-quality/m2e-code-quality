@@ -71,7 +71,7 @@ public final class ResourceResolver {
               final File f = new File(location);
               if (f.exists()) {
                   try {
-                      url = f.toURL();
+                      url = f.toURI().toURL();
                   } catch (MalformedURLException ex) {
                       //ignored, try next
                   }
