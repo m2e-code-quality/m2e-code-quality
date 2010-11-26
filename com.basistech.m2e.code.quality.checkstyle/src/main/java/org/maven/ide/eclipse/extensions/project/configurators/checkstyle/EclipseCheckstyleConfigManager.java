@@ -19,7 +19,7 @@ import org.maven.ide.eclipse.core.MavenConsole;
 
 import com.google.common.base.Preconditions;
 /**
- * An extension of the {@code Checkstyle} classs to add missing functionality.
+ * An extension of the {@code Checkstyle} class to add missing functionality.
  * 
  */
 public class EclipseCheckstyleConfigManager {

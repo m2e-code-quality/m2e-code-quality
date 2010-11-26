@@ -1,5 +1,8 @@
 package org.maven.ide.eclipse.extensions.shared.util;
 
+import org.apache.maven.execution.MavenExecutionRequest;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -21,6 +24,13 @@ public abstract class AbstractMavenPluginProjectConfigurator
         extends AbstractProjectConfigurator {
 
     @Override
+	public <T> T getParameterValue(String parameter, Class<T> asType,
+			MavenSession session, MojoExecution mojoExecution)
+			throws CoreException {
+		return super.getParameterValue(parameter, asType, session, mojoExecution);
+	}
+
+	@Override
     public void configure(
             final ProjectConfigurationRequest request, 
             final IProgressMonitor monitor)
@@ -35,7 +45,8 @@ public abstract class AbstractMavenPluginProjectConfigurator
                this.getMavenPluginArtifactId()));
             return;
         }
-        final MavenPluginWrapper pluginWrapper = this.getMavenPlugin(mavenProject);
+
+        final MavenPluginWrapper pluginWrapper = this.getMavenPlugin(request.getMavenProjectFacade());
         final IProject project = request.getProject();
 
         if (!pluginWrapper.isPluginConfigured()) {
@@ -47,22 +58,12 @@ public abstract class AbstractMavenPluginProjectConfigurator
             return;
         }
         
-        final MavenPluginConfigurationExtractor mavenPluginCfg = 
-            MavenPluginConfigurationExtractor.newInstance(pluginWrapper);
-        
-        if (mavenPluginCfg.shouldDisableConfigurator()) {
-            this.console.logMessage(String.format(
-                    "[%s]: Maven Plugin configuration indicated SKIPPING the m2e project configurator", 
-                    this.getLogPrefix()));
-            return;
-        }
-        
         this.handleProjectConfigurationChange(
+        		request.getMavenSession(),
                 mavenProject,
                 project, 
                 monitor,
-                pluginWrapper,
-                mavenPluginCfg);
+                pluginWrapper);
     }
     
     @Override
@@ -82,7 +83,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
                    this.getMavenPluginGroupId(),
                    this.getMavenPluginArtifactId()));
             }
-            final MavenPluginWrapper pluginWrapper = this.getMavenPlugin(mavenProject);
+            final MavenPluginWrapper pluginWrapper = this.getMavenPlugin(mavenProjectFacade);
             final IProject project = mavenProjectFacade.getProject();
             if (this.checkUnconfigurationRequired(
                     mavenProjectFacade, 
@@ -97,22 +98,16 @@ public abstract class AbstractMavenPluginProjectConfigurator
                 return;
             }
             if (pluginWrapper.isPluginConfigured()) {
-                final MavenPluginConfigurationExtractor mavenPluginCfg = 
-                    MavenPluginConfigurationExtractor.newInstance(pluginWrapper);
-                
-                if (mavenPluginCfg.shouldDisableConfigurator()) {
-                    this.console.logMessage(String.format(
-                       "[%s]: Maven Plugin configuration indicated SKIPPING the m2e project configurator", 
-                       this.getLogPrefix()));
-                    return;
-                }
-                //only call handler if maven plugin is configured or found.
+				//only call handler if maven plugin is configured or found.
+            	// we need a session.
+                MavenExecutionRequest request = maven.createExecutionRequest(monitor);
+            	MavenSession session = maven.createSession(request, mavenProject);
                 this.handleProjectConfigurationChange(
+                		session,
                         mavenProject,
                         project, 
                         monitor,
-                        pluginWrapper,
-                        mavenPluginCfg);
+                        pluginWrapper);
             } else {
                 //TODO: redirect to eclipse logger.
 //                this.console.logMessage(String.format(
@@ -126,11 +121,11 @@ public abstract class AbstractMavenPluginProjectConfigurator
     }
 
     protected abstract void handleProjectConfigurationChange(
+    		final MavenSession session,
             final MavenProject mavenProject, 
             final IProject project,
             final IProgressMonitor monitor,
-            final MavenPluginWrapper mavenPluginWrapper,
-            final MavenPluginConfigurationExtractor mavenPluginCfg) throws CoreException;
+            final MavenPluginWrapper mavenPluginWrapper) throws CoreException;
 
     /**
      * Get the maven plugin {@code groupId}.
@@ -145,6 +140,15 @@ public abstract class AbstractMavenPluginProjectConfigurator
      * @return the {@code groupId}.
      */
     protected abstract String getMavenPluginArtifactId();
+    
+    /**
+     * Return the specific goal that this class works on, or null if it all goals apply.
+     * Null may lead to chaotic overlaying of multiple configurations.
+     * @return
+     */
+    protected String getMavenPluginGoal() {
+    	return null;
+    }
 
     /**
      * Get the log prefix to be used when emitting console log messages.
@@ -172,35 +176,32 @@ public abstract class AbstractMavenPluginProjectConfigurator
      * @param curMavenProjectFacade the current {@code IMavenProjectFacade}.
      * @param oldMavenProjectFacade the previous {@code IMavenProjectFacade}.
      * @return {@code true} if the Eclipse plugin configuration needs to be deleted.
+     * @throws CoreException 
      */
     private boolean checkUnconfigurationRequired(
             final IMavenProjectFacade curMavenProjectFacade,
-            final IMavenProjectFacade oldMavenProjectFacade) {
+            final IMavenProjectFacade oldMavenProjectFacade) throws CoreException {
         Preconditions.checkNotNull(curMavenProjectFacade);
         
         if (oldMavenProjectFacade == null) {
             return false;
         }
-        final MavenProject curMavenProject = curMavenProjectFacade.getMavenProject();
-        final MavenProject oldMavenProject = oldMavenProjectFacade.getMavenProject();
-        if (curMavenProject == null || oldMavenProject == null) {
-            return false;
-        }
         final MavenPluginWrapper newMavenPlugin = this.getMavenPlugin(
-                curMavenProject);
+        		curMavenProjectFacade);
         final MavenPluginWrapper oldMavenPlugin = this.getMavenPlugin(
-                oldMavenProject);
+        		oldMavenProjectFacade);
         if (!newMavenPlugin.isPluginConfigured() && oldMavenPlugin.isPluginConfigured()) {
             return true;
         }
         return false;
     }
     
-    private MavenPluginWrapper getMavenPlugin(final MavenProject mavenProject) {
+    private MavenPluginWrapper getMavenPlugin(final IMavenProjectFacade projectFacade) throws CoreException {
         return MavenPluginWrapper.newInstance(
                 this.getMavenPluginGroupId(),
                 this.getMavenPluginArtifactId(), 
-                mavenProject);
+                this.getMavenPluginGoal(),
+                projectFacade);
     }
 
 }

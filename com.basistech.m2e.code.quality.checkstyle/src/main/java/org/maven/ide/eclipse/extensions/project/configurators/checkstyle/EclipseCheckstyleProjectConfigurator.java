@@ -21,13 +21,13 @@ import net.sf.eclipsecs.core.projectconfig.ProjectConfigurationFactory;
 import net.sf.eclipsecs.core.projectconfig.ProjectConfigurationWorkingCopy;
 import net.sf.eclipsecs.core.util.CheckstylePluginException;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.maven.ide.eclipse.core.MavenLogger;
 import org.maven.ide.eclipse.extensions.shared.util.AbstractMavenPluginProjectConfigurator;
-import org.maven.ide.eclipse.extensions.shared.util.MavenPluginConfigurationExtractor;
 import org.maven.ide.eclipse.extensions.shared.util.MavenPluginWrapper;
 
 /**
@@ -35,7 +35,7 @@ import org.maven.ide.eclipse.extensions.shared.util.MavenPluginWrapper;
 public class EclipseCheckstyleProjectConfigurator 
     extends AbstractMavenPluginProjectConfigurator {
 
-    private final IConfigurationType remoteConfigurationType = ConfigurationTypes
+	private final IConfigurationType remoteConfigurationType = ConfigurationTypes
             .getByInternalName("remote");
     
     public EclipseCheckstyleProjectConfigurator() {
@@ -51,6 +51,11 @@ public class EclipseCheckstyleProjectConfigurator
     protected String getMavenPluginGroupId() {
         return MAVEN_PLUGIN_GROUPID;
     }
+    
+    @Override
+	protected String getMavenPluginGoal() {
+		return "checkstyle";
+	}
 
     @Override
     protected String getLogPrefix() {
@@ -59,18 +64,20 @@ public class EclipseCheckstyleProjectConfigurator
 
     @Override
     protected void handleProjectConfigurationChange(
+    		final MavenSession session,
             final MavenProject mavenProject,
             final IProject project,
             final IProgressMonitor monitor,
-            final MavenPluginWrapper mavenPluginWrapper,
-            final MavenPluginConfigurationExtractor mavenPluginCfg) throws CoreException {
-
+            final MavenPluginWrapper mavenPluginWrapper) throws CoreException {
+    	
         this.console.logMessage(String.format(
                 "[%s]: Eclipse Checkstyle Configuration started", LOG_PREFIX));
         
         final MavenPluginConfigurationTranslator mavenCheckstyleConfig = 
             MavenPluginConfigurationTranslator
-                .newInstance(mavenProject, 
+                .newInstance(this,
+                		     session,
+                		     mavenProject, 
                              mavenPluginWrapper, 
                              project, 
                              LOG_PREFIX);
@@ -104,7 +111,7 @@ public class EclipseCheckstyleProjectConfigurator
     private void buildCheckstyleConfiguration( 
         final IProject project,
         final MavenPluginConfigurationTranslator cfgTranslator) 
-        throws CheckstylePluginException {
+        throws CheckstylePluginException, CoreException {
         //get the ruleset from configLocation
         final URL ruleset = cfgTranslator.getRuleset();
         //construct a new working copy

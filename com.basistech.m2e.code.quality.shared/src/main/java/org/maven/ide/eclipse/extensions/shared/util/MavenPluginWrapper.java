@@ -1,48 +1,35 @@
 package org.maven.ide.eclipse.extensions.shared.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.apache.maven.lifecycle.MavenExecutionPlan;
 import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Plugin;
-import org.apache.maven.model.Profile;
-import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.apache.maven.plugin.MojoExecution;
+import org.eclipse.core.runtime.CoreException;
+import org.maven.ide.eclipse.project.IMavenProjectFacade;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 
 public class MavenPluginWrapper {
+    private final MojoExecution execution;
     
-    private static final String DEF_PLUGIN_CONFIG_ELEM_NAME =
-        "configuration";
-    private final Plugin plugin;
-    private MavenPluginWrapper(final Plugin plugin) {
-        this.plugin = plugin;
+    private MavenPluginWrapper(final MojoExecution execution) {
+    	this.execution = execution;
     }
 
     public boolean isPluginConfigured() {
-        return this.plugin == null ? false : true;
+        return this.execution == null ? false : true;
     }
     
-    /**
-     * Retrieve the &lt;configuration&gt; element for this plugin instance. Note
-     * this is guaranteed to be never {@code null}.
-     * 
-     * @return {@code Xpp3Dom} instance.
-     */
-    public Xpp3Dom getPluginConfigurationDom() {
-        Xpp3Dom pluginConfigDom = new Xpp3Dom(DEF_PLUGIN_CONFIG_ELEM_NAME);
-        if (this.plugin != null) {
-            final Xpp3Dom realPluginConfigDom = (Xpp3Dom) this.plugin.getConfiguration();
-            if (realPluginConfigDom != null) {
-                pluginConfigDom = realPluginConfigDom;
-            }
-        }
-        return pluginConfigDom;
+    public MojoExecution getMojoExecution() {
+    	return execution;
     }
     
+
     /**
      * Return a list of dependencies of the plugin as configured in the
      * {@code <dependencies>} element of the plugin configuration <em>including</em>
@@ -57,41 +44,42 @@ public class MavenPluginWrapper {
      *         returns an {@code empty list}.
      */
     public List<Dependency> getDependenciesIncludingSelf() {
-        List<Dependency> dl = new ArrayList<Dependency>();
-        if (this.plugin == null) {
-            return dl;
+        if (this.execution == null) {
+            return Collections.emptyList();
         }
+        List<Dependency> dl = new ArrayList<Dependency>();
         dl.add(this.getPluginAsDependency());
-        dl.addAll(this.plugin.getDependencies());
+        dl.addAll(execution.getPlugin().getDependencies());
         return ImmutableList.copyOf(dl);
     }
 
     private Dependency getPluginAsDependency() {
         final Dependency d = new Dependency();
-        d.setGroupId(this.plugin.getGroupId());
-        d.setArtifactId(this.plugin.getArtifactId());
-        d.setVersion(this.plugin.getVersion());
+        d.setGroupId(execution.getPlugin().getGroupId());
+        d.setArtifactId(execution.getPlugin().getArtifactId());
+        d.setVersion(execution.getPlugin().getVersion());
         d.setType("maven-plugin");
         d.setClassifier(null);
         return d;
     }
     
-    private static Plugin findMavenPlugin(
-            final MavenProject mavenProject,
+    public static boolean mojoExecutionForPlugin(MojoExecution mojoExecution, String groupId, String artifactId,
+    			String goal) {
+    	return groupId.equals(mojoExecution.getGroupId())
+    			&& artifactId.equals(mojoExecution.getArtifactId())
+    			&& (goal == null || goal.equals(mojoExecution.getGoal()));
+    }
+    
+    private static MojoExecution findMavenPlugin(
+            IMavenProjectFacade mavenProjectFacade,
             final String pluginGroupId,
-            final String pluginArtifactId) {
-    	String key = pluginGroupId + ":" + pluginArtifactId;
-    	Plugin plugin = mavenProject.getPlugin(key);
-    	if (plugin != null) {
-    		return plugin;
-    	}
-    	/*
-    	 * If it's not direct, it might be in an active profile.
-    	 */
-    	for (Profile profile : mavenProject.getActiveProfiles()) {
-    		plugin = profile.getBuild().getPluginsAsMap().get(key);
-    		if (plugin != null) {
-    			return plugin;
+            final String pluginArtifactId,
+            final String pluginGoal) throws CoreException {
+    	MavenExecutionPlan executionPlan = mavenProjectFacade.getExecutionPlan(null);
+    	List<MojoExecution> mojoExecutions = executionPlan.getMojoExecutions();
+    	for (MojoExecution mojoExecution : mojoExecutions) {
+    		if(mojoExecutionForPlugin(mojoExecution, pluginGroupId, pluginArtifactId, pluginGoal)) {
+    			return mojoExecution;
     		}
     	}
         return null;
@@ -100,10 +88,11 @@ public class MavenPluginWrapper {
     public static MavenPluginWrapper newInstance(
             final String pluginGroupId,
             final String pluginArtifactId,
-            final MavenProject mavenProject) {
-        Preconditions.checkNotNull(mavenProject);
-        final Plugin mavenPlugin = findMavenPlugin(
-                mavenProject, pluginGroupId, pluginArtifactId);
-        return new MavenPluginWrapper(mavenPlugin);
+            final String pluginGoal,
+            IMavenProjectFacade mavenProjectFacade) throws CoreException {
+        Preconditions.checkNotNull(mavenProjectFacade);
+        final MojoExecution execution = findMavenPlugin(
+                mavenProjectFacade, pluginGroupId, pluginArtifactId, pluginGoal);
+        return new MavenPluginWrapper(execution);
     }
 }

@@ -1,10 +1,8 @@
 package org.maven.ide.eclipse.extensions.project.configurators.checkstyle;
 
-import static org.maven.ide.eclipse.extensions.project.configurators.checkstyle.CheckstyleEclipseConstants.LOG_PREFIX;
-
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
@@ -22,12 +20,15 @@ import net.sf.eclipsecs.core.projectconfig.ProjectConfigurationWorkingCopy;
 import net.sf.eclipsecs.core.util.CheckstylePluginException;
 
 import org.apache.http.client.utils.URIUtils;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.maven.ide.eclipse.MavenPlugin;
 import org.maven.ide.eclipse.core.MavenConsole;
-import org.maven.ide.eclipse.extensions.shared.util.MavenPluginConfigurationExtractor;
+import org.maven.ide.eclipse.extensions.shared.util.AbstractMavenPluginProjectConfigurator;
 import org.maven.ide.eclipse.extensions.shared.util.MavenPluginWrapper;
 import org.maven.ide.eclipse.extensions.shared.util.ResourceResolver;
 
@@ -44,26 +45,32 @@ public class MavenPluginConfigurationTranslator {
     private final MavenProject mavenProject;
     private final IProject project;
     private final URI basedirUri;
-    private final MavenPluginConfigurationExtractor cfgExtractor;
+    private final AbstractMavenPluginProjectConfigurator configurator;
     private final String prefix;
     private final ResourceResolver resourceResolver;
+    private final MavenSession session;
+    private final MojoExecution execution;
     
     private MavenPluginConfigurationTranslator(
-        final MavenProject mavenProject,
-        final MavenPluginWrapper pluginWrapper,
-        final IProject project,
-        final String prefix) {
-        this.console = MavenPlugin.getDefault().getConsole();
-        this.mavenProject = mavenProject;
-        this.project = project;
-        this.basedirUri = this.project.getLocationURI();
-        this.cfgExtractor = MavenPluginConfigurationExtractor.newInstance(pluginWrapper);
-        this.prefix = prefix;
-        this.resourceResolver = ResourceResolver.newInstance(pluginWrapper, prefix);
+    		final AbstractMavenPluginProjectConfigurator configurator,
+    		final MavenSession session,
+    		final MavenProject mavenProject,
+    		final MavenPluginWrapper pluginWrapper,
+    		final IProject project,
+    		final String prefix) {
+        	this.console = MavenPlugin.getDefault().getConsole();
+        	this.mavenProject = mavenProject;
+        	this.project = project;
+        	this.basedirUri = this.project.getLocationURI();
+        	this.prefix = prefix;
+        	this.resourceResolver = ResourceResolver.newInstance(pluginWrapper, prefix);
+        	this.session = session;
+        	this.execution = pluginWrapper.getMojoExecution();
+        	this.configurator = configurator;
     }
 
     public URL getRuleset() 
-        throws CheckstylePluginException {
+        throws CheckstylePluginException, CoreException {
         final URL ruleset = this.resourceResolver.resolveLocation(
                 this.getConfigLocation());
         if (ruleset == null) {
@@ -75,7 +82,7 @@ public class MavenPluginConfigurationTranslator {
 
     public void updateCheckConfigWithIncludeExcludePatterns(
             final ProjectConfigurationWorkingCopy pcWorkingCopy, final ICheckConfiguration checkCfg) 
-        throws CheckstylePluginException {
+        throws CheckstylePluginException, CoreException {
         final FileSet fs = new FileSet("java-sources", checkCfg);
         fs.setEnabled(true);
         //add fileset includes/excludes
@@ -85,86 +92,61 @@ public class MavenPluginConfigurationTranslator {
         pcWorkingCopy.getFileSets().add(fs);
     }
 
-    public Properties getConfiguredProperties() throws CheckstylePluginException {
-        final Properties properties = new Properties();
-        final String propertiesLocation = this.getPropertiesLocation();
-        if (propertiesLocation != null) {
-            final URL url = this.resourceResolver.resolveLocation(propertiesLocation);
-            if (url == null) {
-                throw new CheckstylePluginException(String.format(
-                        "Failed to resolve propertiesLocation [%s]",
-                        propertiesLocation));
-            }
-            try {
-                properties.load(url.openStream());
-            } catch (IOException e) {
-                throw new CheckstylePluginException(String.format(
-                        "Failed to LOAD properties from propertiesLocation [%s]",
-                        propertiesLocation));
-            }
-        }
-        return properties;
-    }
-
-    public void updatePropertiesWithPropertyExpansion(final Properties props) 
-        throws CheckstylePluginException {
-        final String propertyExpansion = this.getPropertyExpansion();
-        if (propertyExpansion != null) {
-            try {
-                props.load(new ByteArrayInputStream(propertyExpansion.getBytes()));
-            } catch (IOException e) {
-                throw new CheckstylePluginException(String.format(
-                        "[%s]: Failed to checkstyle propertyExpansion [%s]",
-                        LOG_PREFIX, propertyExpansion));
-            }
-        }
-    }
     
+
     /**
      * Get the {@literal propertiesLocation} element if present in the configuration.
      * 
      * @return the value of the {@code propertyExpansion} element.
+     * @throws CoreException 
      */
-    private String getPropertiesLocation() {
-        return this.cfgExtractor.value(null, "propertiesLocation");
+    protected String getPropertiesLocation() throws CoreException {
+    	return configurator.getParameterValue("propertiesLocation",
+    			String.class, session, execution);
     }
 
     /**
      * Get the {@literal propertyExpansion} element if present in the configuration.
      * 
      * @return the value of the {@code propertyExpansion} element.
+     * @throws CoreException 
      */
-    private String getPropertyExpansion() {
-        return this.cfgExtractor.value(null, "propertyExpansion");
+    protected String getPropertyExpansion() throws CoreException {
+        return configurator.getParameterValue("propertyExpansion",
+        		String.class, session, execution);
     }
 
     /**
      * Get the {@literal includeTestSourceDirectory} element value if present in the configuration.
      * 
      * @return the value of the {@code includeTestSourceDirectory} element.
+     * @throws CoreException 
      */
-    public boolean getIncludeTestSourceDirectory() {
-        return this.cfgExtractor.asBoolean(null, "includeTestSourceDirectory");
+    public boolean getIncludeTestSourceDirectory() throws CoreException {
+    	return configurator.getParameterValue("propertiesLocation",
+    			Boolean.class, session, execution).booleanValue();
     }
     
     /**
      * Get the {@literal configLocation} element if present in the configuration.
      * 
      * @return the value of the {@code configLocation} element.
+     * @throws CoreException 
      */
-    private String getConfigLocation() {
-        String configLocation = this.cfgExtractor.value(null, "configLocation");
+    private String getConfigLocation() throws CoreException {
+        String configLocation = configurator.getParameterValue("configLocation",
+        		String.class, session, execution);
         if (configLocation == null) {
             configLocation = CHECKSTYLE_DEFAULT_CONFIG_LOCATION;
         }
         return configLocation;
     }
     
-    private List<String> getIncludes() {
+    private List<String> getIncludes() throws CoreException {
         return this.getPatterns("includes");
     }
     
-    private List<String> getExcludes() {
+    private List<String> getExcludes() throws CoreException {
         return this.getPatterns("excludes");
     }
     
@@ -173,9 +155,10 @@ public class MavenPluginConfigurationTranslator {
      * @return                           A list of {@code FileMatchPattern}'s.
      * @throws CheckstylePluginException if an error occurs getting the include
      *                                   exclude patterns.
+     * @throws CoreException 
      */
     private List<FileMatchPattern> getIncludesExcludesFileMatchPatterns()
-        throws CheckstylePluginException {
+        throws CheckstylePluginException, CoreException {
 
         final List<FileMatchPattern> patterns = new LinkedList<FileMatchPattern>();
         
@@ -184,7 +167,7 @@ public class MavenPluginConfigurationTranslator {
          */
         Set<String> sourceFolders = new HashSet<String>(
                 this.mavenProject.getCompileSourceRoots());
-        if (this.getIncludeTestSourceDirectory()) {
+        if (getIncludeTestSourceDirectory()) {
             sourceFolders.addAll(this.mavenProject.getTestCompileSourceRoots());
         }
         
@@ -262,10 +245,12 @@ public class MavenPluginConfigurationTranslator {
      * 
      * @param elemName the parent element name (e.g. {@code <includes> or <excludes>}.
      * @return         a {@code List} of include patterns.
+     * @throws CoreException 
      */
-    private List<String> getPatterns(String elemName) {
+    private List<String> getPatterns(String elemName) throws CoreException {
         List<String> transformedPatterns = new LinkedList<String>();
-        final String patternsString = this.cfgExtractor.value(null, elemName);
+        final String patternsString = configurator.getParameterValue(elemName, String.class, session, 
+        		execution);
         if (patternsString == null || patternsString.length() == 0) {
             return transformedPatterns;
         }
@@ -327,17 +312,59 @@ public class MavenPluginConfigurationTranslator {
         return sb.toString();
     }
     
+	public Properties getConfiguredProperties() throws CoreException, CheckstylePluginException {
+		String propertiesLocation = getPropertiesLocation();
+		Properties properties = new Properties();
+		if (propertiesLocation != null) {
+			final URL url = this.resourceResolver.resolveLocation(propertiesLocation);
+			if (url == null) {
+				throw new CheckstylePluginException(String.format(
+						"Failed to resolve propertiesLocation [%s]",
+						propertiesLocation));
+	        }
+			try {
+				properties.load(url.openStream());
+	        } catch (IOException e) {
+	        	throw new CheckstylePluginException(String.format(
+	        			"Failed to LOAD properties from propertiesLocation [%s]",
+	        			propertiesLocation));
+	        }
+		}
+	    return properties;
+	}
+	
+	public void updatePropertiesWithPropertyExpansion(Properties props)
+			throws CheckstylePluginException, CoreException {
+		final String propertyExpansion = this.getPropertyExpansion();
+		if (propertyExpansion != null) {
+			try {
+				props.load(new StringReader(propertyExpansion));
+			} catch (IOException e) {
+				throw new CheckstylePluginException(String.format(
+						"[%s]: Failed to checkstyle propertyExpansion [%s]",
+						CheckstyleEclipseConstants.LOG_PREFIX,
+						propertyExpansion));
+			}
+      }
+	}
+    
     public static MavenPluginConfigurationTranslator newInstance(
+    		AbstractMavenPluginProjectConfigurator configurator,
+    		MavenSession session,
             final MavenProject mavenProject,
             final MavenPluginWrapper mavenPlugin,
             final IProject project,
             final String prefix) {
         final MavenPluginConfigurationTranslator m2csConverter =
             new MavenPluginConfigurationTranslator(
-                    mavenProject,
+                    configurator, session, mavenProject,
                     mavenPlugin,
                     project, 
                     prefix);
         return m2csConverter;
     }
+
+
+
+
 }
