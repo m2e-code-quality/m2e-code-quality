@@ -10,7 +10,6 @@
 
   <properties>
     <tycho-version>0.10.0</tycho-version>
-    <m2eclipse-core.version>0.12.0/S/0.12.0.20101102-1505</m2eclipse-core.version>
 <!--
     <site-compressed>http://repository.sonatype.org/service/local/repositories/forge-sites/content-compressed/</site-compressed>
 -->
