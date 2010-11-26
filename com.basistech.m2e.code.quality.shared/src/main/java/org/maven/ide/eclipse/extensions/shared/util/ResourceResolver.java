@@ -3,16 +3,10 @@ package org.maven.ide.eclipse.extensions.shared.util;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.LinkedList;
-import java.util.List;
 
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.model.Dependency;
-import org.eclipse.core.runtime.CoreException;
+import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.maven.ide.eclipse.MavenPlugin;
 import org.maven.ide.eclipse.core.MavenConsole;
-import org.maven.ide.eclipse.embedder.IMaven;
 
 /**
  * A utility class to resolve resources, which includes searching in resources
@@ -24,20 +18,12 @@ import org.maven.ide.eclipse.embedder.IMaven;
 public final class ResourceResolver {
 
     private final MavenConsole console = MavenPlugin.getDefault().getConsole();
-    private final IMaven maven;
-    private final MavenPluginWrapper pluginWrapper;
     private final String prefix;
-    private final ClassLoader pluginClassLoader;
+    private ClassRealm pluginRealm;
     
-    private ResourceResolver(final MavenPluginWrapper pluginWrapper, final String prefix) {
-        this.maven = MavenPlugin.getDefault().getMaven();
-        this.pluginWrapper = pluginWrapper;
+    private ResourceResolver(ClassRealm pluginRealm, final String prefix) {
+    	this.pluginRealm = pluginRealm;
         this.prefix = prefix;
-        this.pluginClassLoader = this.buildPluginClassLoader();
-    }
-
-    protected ClassLoader getPluginClassLoader() {
-        return this.pluginClassLoader;
     }
 
     /**
@@ -54,7 +40,7 @@ public final class ResourceResolver {
     public URL resolveLocation(final String location) {
         URL url = null;
         //1. Try it as a resource first.
-        url = this.pluginClassLoader.getResource(location);
+        url = pluginRealm.getResource(location);
         if (url == null) {
           try {
               //2. Try it as a remote resource.
@@ -89,77 +75,7 @@ public final class ResourceResolver {
         return url;
         
     }
-    
-    /**
-     * Get the pluginWrapper classloader with its dependencies if any. NOTE: this
-     * <em>may</em> be different from the Project Classloader.
-     */
-    private ClassLoader buildPluginClassLoader() {
-        final List<URL> jars = new LinkedList<URL>();
-          //Add all pluginWrapper Dependencies
-        List<Dependency> dependencies = this.pluginWrapper
-            .getDependenciesIncludingSelf();
-        if (dependencies != null && dependencies.size() > 0) {
-            for (Dependency d : dependencies) {
-                // Dependency dependency = (Dependency) dependencies.get(i);
-                final Artifact a = this.getResolvedArtifact(
-                        d.getGroupId(), 
-                        d.getArtifactId(), 
-                        d.getVersion(), 
-                        d.getType(), 
-                        d.getClassifier());
-                if (a != null) {
-                    this.addArtifactUrl(jars, a);
-                }
-            }
-        }
-        return new URLClassLoader(
-                jars.toArray(new URL[jars.size()]), 
-                Thread.currentThread().getContextClassLoader());
-    }
 
-    private void addArtifactUrl(final List<URL> jarList, final Artifact a) {
-        try {
-            jarList.add(a.getFile().toURI().toURL());
-        } catch (MalformedURLException e) {
-            this.console.logError(String.format(
-                    "[%s]: Could not create a URL for artifact [%s]", 
-                    this.prefix, a));
-        }
-    }
-    
-    private Artifact getResolvedArtifact(
-            final String groupId,
-            final String artifactId,
-            final String version,
-            final String type,
-            final String classifier) {
-        Artifact a = null;
-        try {
-            a = this.maven.resolve(
-                    groupId, 
-                    artifactId, 
-                    version, 
-                    type, 
-                    classifier, 
-                    null, 
-                    null);
-            if (a.isResolved()) {
-                this.console.logMessage(String.format(
-                        "[%s]: Successfully resolved artifact [%s]", 
-                        this.prefix, a));
-            }
-        } catch (CoreException ex) {
-            this.console.logError(String.format(
-                    "[%s]: Resolution for artifact [%s:%s:%s] failed.", 
-                    this.prefix,
-                    groupId,
-                    artifactId,
-                    version));
-        }
-        return a;
-    }
-    
     /**
      * Factory to create a new instance of {@link ResourceResolver}.
      * 
@@ -167,9 +83,8 @@ public final class ResourceResolver {
      * @param prefix        A prefix string for console log messages.
      * @return              new instance of {@link ResourceResolver}.
      */
-    public static ResourceResolver newInstance(
-            final MavenPluginWrapper pluginWrapper, 
-            final String prefix) {
-        return new ResourceResolver(pluginWrapper, prefix);
+    public static ResourceResolver newInstance(ClassRealm pluginRealm,
+    		final String prefix) {
+        return new ResourceResolver(pluginRealm, prefix);
     }
 }

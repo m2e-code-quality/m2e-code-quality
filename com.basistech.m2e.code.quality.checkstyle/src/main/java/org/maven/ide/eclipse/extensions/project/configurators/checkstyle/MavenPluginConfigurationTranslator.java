@@ -57,13 +57,14 @@ public class MavenPluginConfigurationTranslator {
     		final MavenProject mavenProject,
     		final MavenPluginWrapper pluginWrapper,
     		final IProject project,
-    		final String prefix) {
+    		final String prefix) throws CoreException {
         	this.console = MavenPlugin.getDefault().getConsole();
         	this.mavenProject = mavenProject;
         	this.project = project;
         	this.basedirUri = this.project.getLocationURI();
         	this.prefix = prefix;
-        	this.resourceResolver = ResourceResolver.newInstance(pluginWrapper, prefix);
+        	this.resourceResolver = ResourceResolver.newInstance(configurator.getPluginClassRealm(session, 
+        			pluginWrapper.getMojoExecution()), prefix);
         	this.session = session;
         	this.execution = pluginWrapper.getMojoExecution();
         	this.configurator = configurator;
@@ -354,7 +355,7 @@ public class MavenPluginConfigurationTranslator {
             final MavenProject mavenProject,
             final MavenPluginWrapper mavenPlugin,
             final IProject project,
-            final String prefix) {
+            final String prefix) throws CoreException {
         final MavenPluginConfigurationTranslator m2csConverter =
             new MavenPluginConfigurationTranslator(
                     configurator, session, mavenProject,

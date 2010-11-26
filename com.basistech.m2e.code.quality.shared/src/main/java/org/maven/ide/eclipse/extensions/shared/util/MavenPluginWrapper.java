@@ -8,6 +8,7 @@ import org.apache.maven.lifecycle.MavenExecutionPlan;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.MojoExecution;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.maven.ide.eclipse.project.IMavenProjectFacade;
 
 import com.google.common.base.Preconditions;
@@ -15,9 +16,11 @@ import com.google.common.collect.ImmutableList;
 
 
 public class MavenPluginWrapper {
-    private final MojoExecution execution;
+	private String key; // for toString
+	private final MojoExecution execution;
     
-    private MavenPluginWrapper(final MojoExecution execution) {
+    private MavenPluginWrapper(final String key, final MojoExecution execution) {
+    	this.key = key;
     	this.execution = execution;
     }
 
@@ -71,11 +74,12 @@ public class MavenPluginWrapper {
     }
     
     private static MojoExecution findMavenPlugin(
+    		IProgressMonitor monitor,
             IMavenProjectFacade mavenProjectFacade,
             final String pluginGroupId,
             final String pluginArtifactId,
             final String pluginGoal) throws CoreException {
-    	MavenExecutionPlan executionPlan = mavenProjectFacade.getExecutionPlan(null);
+    	MavenExecutionPlan executionPlan = mavenProjectFacade.getExecutionPlan(monitor);
     	List<MojoExecution> mojoExecutions = executionPlan.getMojoExecutions();
     	for (MojoExecution mojoExecution : mojoExecutions) {
     		if(mojoExecutionForPlugin(mojoExecution, pluginGroupId, pluginArtifactId, pluginGoal)) {
@@ -86,13 +90,27 @@ public class MavenPluginWrapper {
     }
     
     public static MavenPluginWrapper newInstance(
+    		IProgressMonitor monitor,
             final String pluginGroupId,
             final String pluginArtifactId,
             final String pluginGoal,
             IMavenProjectFacade mavenProjectFacade) throws CoreException {
         Preconditions.checkNotNull(mavenProjectFacade);
-        final MojoExecution execution = findMavenPlugin(
+        final MojoExecution execution = findMavenPlugin(monitor,
                 mavenProjectFacade, pluginGroupId, pluginArtifactId, pluginGoal);
-        return new MavenPluginWrapper(execution);
+        String key = pluginGroupId + ":" + pluginArtifactId;
+        if (pluginGoal != null) {
+        	key = key + ":" + pluginGoal;
+        }
+        return new MavenPluginWrapper(key, execution);
     }
+    
+    @Override
+	public String toString() {
+    	String s = "[MavenPluginWrapper " + key;
+    	if (execution == null) {
+    		s = s + " null wrapper]";
+    	}
+    	return s;
+	}
 }

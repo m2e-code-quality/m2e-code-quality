@@ -2,11 +2,16 @@ package org.maven.ide.eclipse.extensions.shared.util;
 
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecution;
+import org.apache.maven.plugin.descriptor.MojoDescriptor;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.maven.ide.eclipse.MavenPlugin;
+import org.maven.ide.eclipse.embedder.IMaven;
 import org.maven.ide.eclipse.project.IMavenProjectFacade;
 import org.maven.ide.eclipse.project.MavenProjectChangedEvent;
 import org.maven.ide.eclipse.project.configurator.AbstractProjectConfigurator;
@@ -46,7 +51,8 @@ public abstract class AbstractMavenPluginProjectConfigurator
             return;
         }
 
-        final MavenPluginWrapper pluginWrapper = this.getMavenPlugin(request.getMavenProjectFacade());
+        final MavenPluginWrapper pluginWrapper = this.getMavenPlugin(monitor,
+        		request.getMavenProjectFacade());
         final IProject project = request.getProject();
 
         if (!pluginWrapper.isPluginConfigured()) {
@@ -83,9 +89,10 @@ public abstract class AbstractMavenPluginProjectConfigurator
                    this.getMavenPluginGroupId(),
                    this.getMavenPluginArtifactId()));
             }
-            final MavenPluginWrapper pluginWrapper = this.getMavenPlugin(mavenProjectFacade);
+            final MavenPluginWrapper pluginWrapper = this.getMavenPlugin(monitor, mavenProjectFacade);
             final IProject project = mavenProjectFacade.getProject();
             if (this.checkUnconfigurationRequired(
+            		monitor,
                     mavenProjectFacade, 
                     mavenProjectChangedEvent.getOldMavenProject())) {
                 this.unconfigureEclipsePlugin(project, monitor);
@@ -179,6 +186,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
      * @throws CoreException 
      */
     private boolean checkUnconfigurationRequired(
+    		IProgressMonitor monitor,
             final IMavenProjectFacade curMavenProjectFacade,
             final IMavenProjectFacade oldMavenProjectFacade) throws CoreException {
         Preconditions.checkNotNull(curMavenProjectFacade);
@@ -187,8 +195,10 @@ public abstract class AbstractMavenPluginProjectConfigurator
             return false;
         }
         final MavenPluginWrapper newMavenPlugin = this.getMavenPlugin(
+        		monitor,
         		curMavenProjectFacade);
         final MavenPluginWrapper oldMavenPlugin = this.getMavenPlugin(
+        		monitor,
         		oldMavenProjectFacade);
         if (!newMavenPlugin.isPluginConfigured() && oldMavenPlugin.isPluginConfigured()) {
             return true;
@@ -196,8 +206,18 @@ public abstract class AbstractMavenPluginProjectConfigurator
         return false;
     }
     
-    private MavenPluginWrapper getMavenPlugin(final IMavenProjectFacade projectFacade) throws CoreException {
+    public ClassRealm getPluginClassRealm(MavenSession session, MojoExecution mojoExecution) throws CoreException {
+    	IMaven maven = MavenPlugin.getDefault().getMaven();
+    	// call for side effect of ensuring that the realm is set in the descriptor.
+    	maven.getConfiguredMojo(session, mojoExecution, Mojo.class);
+    	MojoDescriptor mojoDescriptor = mojoExecution.getMojoDescriptor();
+    	return mojoDescriptor.getPluginDescriptor().getClassRealm();
+    }
+    
+    private MavenPluginWrapper getMavenPlugin(IProgressMonitor monitor,
+    		final IMavenProjectFacade projectFacade) throws CoreException {
         return MavenPluginWrapper.newInstance(
+        		monitor,
                 this.getMavenPluginGroupId(),
                 this.getMavenPluginArtifactId(), 
                 this.getMavenPluginGoal(),
