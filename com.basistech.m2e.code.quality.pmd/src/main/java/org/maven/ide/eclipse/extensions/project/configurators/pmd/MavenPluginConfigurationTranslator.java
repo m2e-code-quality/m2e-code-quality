@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -68,6 +69,9 @@ public class MavenPluginConfigurationTranslator {
 
     public List<String> getRulesets() throws CoreException {
     	String[] rulesets = configurator.getParameterValue("rulesets", String[].class, session, execution);
+    	if (rulesets == null) {
+    		return Collections.emptyList();
+    	}
     	return Arrays.asList(rulesets);
     }
     
@@ -211,8 +215,13 @@ public class MavenPluginConfigurationTranslator {
         }
         
         // now we need to filter out any excludeRoots from plugin configurations
-        List<File> excludeRootsFromConfig =  
-        	Arrays.asList(configurator.getParameterValue("excludeRoots", File[].class, session, execution));
+        List<File> excludeRootsFromConfig;
+        File[] excludeRootsArray = configurator.getParameterValue("excludeRoots", File[].class, session, execution);
+        if (excludeRootsArray == null) {
+        	excludeRootsFromConfig = Collections.emptyList();
+        } else {
+        	excludeRootsFromConfig = Arrays.asList(excludeRootsArray);
+        }
         // do the filtering
         List<File> filteredIncludeRoots = new LinkedList<File>();
         for (File f : excludeRootsFromConfig) {
