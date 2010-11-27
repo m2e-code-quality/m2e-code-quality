@@ -1,5 +1,10 @@
 package org.maven.ide.eclipse.extensions.shared.util;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.Mojo;
@@ -34,6 +39,38 @@ public abstract class AbstractMavenPluginProjectConfigurator
 			throws CoreException {
 		return super.getParameterValue(parameter, asType, session, mojoExecution);
 	}
+    
+    public List<String> getCommaSeparatedStringParameterValues(String parameter,
+    		MavenSession session, MojoExecution execution) throws CoreException {
+    	String value = getParameterValue(parameter, String.class, session, execution);
+    	if (value == null) {
+    		return Collections.emptyList();
+    	} else {
+    		return Arrays.asList(value.split(","));
+    	}
+    }
+    
+    protected MojoExecution findForkedExecution(MojoExecution primary,
+    		String groupId,
+    		String artifactId,
+    		String goal) {
+    	 Map<String, List<MojoExecution>> forkedExecutions = primary.getForkedExecutions();
+         MojoExecution goalExecution = null;
+         for (List<MojoExecution> possibleExecutionList : forkedExecutions.values()) {
+         	for (MojoExecution possibleExecution : possibleExecutionList) {
+         		if (groupId.equals(possibleExecution.getGroupId())
+         			&& artifactId.equals(possibleExecution.getArtifactId())
+         			&& goal.equals(possibleExecution.getGoal())) {
+         			goalExecution = possibleExecution;
+         			break;
+         		}
+         	}
+         	if (goalExecution != null) {
+         		break;
+         	}
+         }
+         return goalExecution;
+    }
 
 	@Override
     public void configure(

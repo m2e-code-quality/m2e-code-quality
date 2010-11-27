@@ -5,15 +5,16 @@ import static org.maven.ide.eclipse.extensions.project.configurators.findbugs.Fi
 import static org.maven.ide.eclipse.extensions.project.configurators.findbugs.FindbugsEclipseConstants.MAVEN_PLUGIN_ARTIFACTID;
 import static org.maven.ide.eclipse.extensions.project.configurators.findbugs.FindbugsEclipseConstants.MAVEN_PLUGIN_GROUPID;
 
-import org.apache.maven.project.MavenProject;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.MojoExecution;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.maven.ide.eclipse.extensions.shared.util.AbstractMavenPluginProjectConfigurator;
 import org.maven.ide.eclipse.extensions.shared.util.ConfigurationException;
-import org.maven.ide.eclipse.extensions.shared.util.MavenPluginConfigurationExtractor;
 import org.maven.ide.eclipse.extensions.shared.util.MavenPluginWrapper;
+import org.maven.ide.eclipse.project.IMavenProjectFacade;
 
 import de.tobject.findbugs.FindbugsPlugin;
 import de.tobject.findbugs.nature.FindBugsNature;
@@ -59,21 +60,23 @@ public class EclipseFindbugsProjectConfigurator
 
     @Override
     protected void handleProjectConfigurationChange(
-            final MavenProject mavenProject,
+    		final MavenSession session,
+            final IMavenProjectFacade mavenProjectFacade, 
             final IProject project,
             final IProgressMonitor monitor,
-            final MavenPluginWrapper pluginWrapper,
-            final MavenPluginConfigurationExtractor mavenPluginCfg)
-            throws CoreException {
+            final MavenPluginWrapper mavenPluginWrapper) throws CoreException {
 
         this.console.logMessage(String.format(
                 "[%s]: Eclipse FINDBUGS Configuration STARTED", LOG_PREFIX));
         
+        MojoExecution findbugsGoalExecution = findForkedExecution(mavenPluginWrapper.getMojoExecution(), 
+        		"org.codehaus.mojo",
+        		"findbugs-maven-plugin",
+        		"findbugs");
         final MavenPluginConfigurationTranslator pluginCfgTranslator = 
             MavenPluginConfigurationTranslator.newInstance(
-                    mavenProject,
-                    pluginWrapper,
-                    project);
+            		this,
+                    session, findbugsGoalExecution, project);
         UserPreferences prefs;
         try {
             prefs = this.buildFindbugsPreferences(project, pluginCfgTranslator);
@@ -135,10 +138,11 @@ public class EclipseFindbugsProjectConfigurator
      * @param project the eclipse {@code IProject} instance.
      * @param pluginCfgTranslator the maven plugin configuration translator object.
      * @return
+     * @throws CoreException 
      */
     private UserPreferences buildFindbugsPreferences(
             final IProject project,
-            final MavenPluginConfigurationTranslator pluginCfgTranslator) {
+            final MavenPluginConfigurationTranslator pluginCfgTranslator) throws CoreException {
         //final UserPreferences prefs = FindbugsPlugin.getUserPreferences(project);        
         //Always create a new one
         final UserPreferences prefs = FindBugsPreferenceInitializer.createDefaultUserPreferences();        

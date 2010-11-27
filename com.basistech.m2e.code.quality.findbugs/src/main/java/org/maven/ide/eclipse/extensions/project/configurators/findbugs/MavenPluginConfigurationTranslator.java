@@ -1,5 +1,9 @@
 package org.maven.ide.eclipse.extensions.project.configurators.findbugs;
 
+import static org.maven.ide.eclipse.extensions.project.configurators.findbugs.FindbugsEclipseConstants.FB_EXCLUDE_FILTER_FILE;
+import static org.maven.ide.eclipse.extensions.project.configurators.findbugs.FindbugsEclipseConstants.FB_INCLUDE_FILTER_FILE;
+import static org.maven.ide.eclipse.extensions.project.configurators.findbugs.FindbugsEclipseConstants.LOG_PREFIX;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -10,15 +14,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.maven.project.MavenProject;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.MojoExecution;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.io.URLInputStreamFacade;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.maven.ide.eclipse.MavenPlugin;
 import org.maven.ide.eclipse.core.MavenConsole;
 import org.maven.ide.eclipse.extensions.shared.util.ConfigurationException;
-import org.maven.ide.eclipse.extensions.shared.util.MavenPluginConfigurationExtractor;
-import org.maven.ide.eclipse.extensions.shared.util.MavenPluginWrapper;
 import org.maven.ide.eclipse.extensions.shared.util.ResourceResolver;
 
 import com.google.common.base.Preconditions;
@@ -29,63 +33,67 @@ import edu.umd.cs.findbugs.I18N;
 import edu.umd.cs.findbugs.config.ProjectFilterSettings;
 import edu.umd.cs.findbugs.config.UserPreferences;
 
-import static org.maven.ide.eclipse.extensions.project.configurators.findbugs.FindbugsEclipseConstants.*;
-
 public class MavenPluginConfigurationTranslator {
     
-    private static final String DEF_VALUE_SEPARATOR = ",";
-    @SuppressWarnings("unused")
-    private final MavenProject mavenProject;
     private final MavenConsole console;
+    private final MavenSession session;
     private final IProject project;
-    private final MavenPluginConfigurationExtractor cfgExtractor;
+    private final MojoExecution findbugsExecution;
+    private final EclipseFindbugsProjectConfigurator configurator;
+
     private final ResourceResolver resourceResolver;
     
     private MavenPluginConfigurationTranslator(
-            final MavenProject mavenProject,
-            final MavenPluginWrapper pluginWrapper,
-            final IProject project) {
+    		final EclipseFindbugsProjectConfigurator configurator,
+    		final MavenSession session,
+    		MojoExecution findbugsExecution, 
+    		final IProject project) throws CoreException {
+    	this.configurator = configurator;
+    	this.session = session;
+    	this.findbugsExecution = findbugsExecution;
         this.console = MavenPlugin.getDefault().getConsole();
-        this.mavenProject = mavenProject;
         this.project = project;
-        this.cfgExtractor = MavenPluginConfigurationExtractor.newInstance(pluginWrapper);
-        this.resourceResolver = ResourceResolver.newInstance(pluginWrapper, LOG_PREFIX);
+        this.resourceResolver = ResourceResolver.newInstance(configurator.getPluginClassRealm(session, 
+    			findbugsExecution), LOG_PREFIX);
     }
 
-    public List<String> getVisitors() {
-        return this.cfgExtractor.splitValueAsList(null, "visitors", DEF_VALUE_SEPARATOR);
+    public List<String> getVisitors() throws CoreException {
+    	return configurator.getCommaSeparatedStringParameterValues("visitors", session, findbugsExecution);
     }
     
-    public List<String> getPluginList() {
-        return this.cfgExtractor.splitValueAsList(null, "pluginList", DEF_VALUE_SEPARATOR);
+    public List<String> getPluginList() throws CoreException {
+    	return configurator.getCommaSeparatedStringParameterValues("pluginList", session, findbugsExecution);
     }
 
-    public List<String> getOnlyAnalyze() {
-        return this.cfgExtractor.splitValueAsList(null, "onlyAnalyze", DEF_VALUE_SEPARATOR);
+    public List<String> getOnlyAnalyze() throws CoreException {
+    	return configurator.getCommaSeparatedStringParameterValues("onlyAnalyze", session, findbugsExecution);
     }
 
-    public boolean includeTests() {
-        return this.cfgExtractor.asBoolean(null, "includeTests");
+    public boolean includeTests() throws CoreException {
+    	Boolean val = configurator.getParameterValue("includeTests", Boolean.class, session, findbugsExecution);
+    	return val != null && val.booleanValue();
     }
 
-    public boolean debugEnabled() {
-        return this.cfgExtractor.asBoolean(null, "debug");
+    public boolean debugEnabled() throws CoreException {
+    	Boolean val = configurator.getParameterValue("debug", Boolean.class, session, findbugsExecution);
+    	return val != null && val.booleanValue();
     }
     
-    public void setThreshold(final UserPreferences prefs) {
-        final String threshold = this.cfgExtractor.value(null, "threshold");
-        try {
-            prefs.getFilterSettings().setMinPriority(threshold);
-        } catch (final Exception ex) {
-            this.console.logError(String.format(
-                    "[%s]: could not set <threshold>, reason [%s], leaving it alone",
-                    LOG_PREFIX, threshold));
+    public void setThreshold(final UserPreferences prefs) throws CoreException {
+        final String threshold = configurator.getParameterValue("debug", String.class, session, findbugsExecution);
+        if (threshold != null) {
+        	try {
+        		prefs.getFilterSettings().setMinPriority(threshold);
+        	} catch (final Exception ex) {
+        		this.console.logError(String.format(
+        				"[%s]: could not set <threshold>, reason [%s], leaving it alone",
+        				LOG_PREFIX, threshold));
+        	}
         }
     }
 
-    public void setVisitors(final UserPreferences prefs) {
-        final List<String> detectorsList = this.cfgExtractor
-            .splitValueAsList(null, "visitors", DEF_VALUE_SEPARATOR);
+    public void setVisitors(final UserPreferences prefs) throws CoreException {
+    	final List<String> detectorsList = configurator.getCommaSeparatedStringParameterValues("visitors", session, findbugsExecution);
         if (detectorsList.isEmpty()) {
             return;
         }
@@ -102,9 +110,8 @@ public class MavenPluginConfigurationTranslator {
         }
     }
 
-    public void setOmitVisitors(final UserPreferences prefs) {
-        final List<String> detectorsList = this.cfgExtractor
-            .splitValueAsList(null, "omitVisitors", DEF_VALUE_SEPARATOR);
+    public void setOmitVisitors(final UserPreferences prefs) throws CoreException {
+        final List<String> detectorsList = configurator.getCommaSeparatedStringParameterValues("omitVisitors", session, findbugsExecution);
         if (detectorsList.isEmpty()) {
             return;
         }
@@ -120,19 +127,21 @@ public class MavenPluginConfigurationTranslator {
         }
     }
 
-    public void setPriority(final UserPreferences prefs) {
-        final String priority = this.cfgExtractor.value(null, "priority");
-        try {
-            prefs.getFilterSettings().setMinPriority(priority);
-        } catch (final Exception ex) {
-            this.console.logError(String.format(
-                    "[%s]: could not set <threshold>, reason [%s], leaving it alone",
-                    LOG_PREFIX, priority));
+    public void setPriority(final UserPreferences prefs) throws CoreException {
+        final String priority = configurator.getParameterValue("priority", String.class, session, findbugsExecution);
+        if (priority != null) {
+        	try {
+        		prefs.getFilterSettings().setMinPriority(priority);
+        	} catch (final Exception ex) {
+        		this.console.logError(String.format(
+        				"[%s]: could not set <threshold>, reason [%s], leaving it alone",
+        				LOG_PREFIX, priority));
+        	}
         }
     }
     
-    public void setEffort(final UserPreferences prefs) {
-        String effort = this.cfgExtractor.value(null, "effort");
+    public void setEffort(final UserPreferences prefs) throws CoreException {
+        String effort = configurator.getParameterValue("effort", String.class, session, findbugsExecution);
         if (effort == null) {
             return;
         }
@@ -148,8 +157,8 @@ public class MavenPluginConfigurationTranslator {
         }
     }
     
-    public void setIncludeFilterFiles(final UserPreferences prefs) {
-        final String includeFilterFile = this.cfgExtractor.value(null, "includeFilterFile");
+    public void setIncludeFilterFiles(final UserPreferences prefs) throws CoreException {
+        final String includeFilterFile = configurator.getParameterValue("includeFileFilter", String.class, session, findbugsExecution);
         //don't do anything if null
         if (includeFilterFile == null) {
             return;
@@ -166,8 +175,8 @@ public class MavenPluginConfigurationTranslator {
         prefs.setIncludeFilterFiles(newIncludeFilteredFiles);
     }
 
-    public void setExcludeFilterFiles(final UserPreferences prefs) {
-        final String excludeFilterFile = this.cfgExtractor.value(null, "excludeFilterFile");
+    public void setExcludeFilterFiles(final UserPreferences prefs) throws CoreException {
+        final String excludeFilterFile = configurator.getParameterValue("excludeFileFilter", String.class, session, findbugsExecution);
         //don't do anything if null
         if (excludeFilterFile == null) {
             return;
@@ -202,11 +211,12 @@ public class MavenPluginConfigurationTranslator {
      *  </ul>
      * </p>
      * @param prefs the {@link UserPreferences} instance.
+     * @throws CoreException 
      */
-    public void setBugCatagories(final UserPreferences prefs) {
+    public void setBugCatagories(final UserPreferences prefs) throws CoreException {
         final ProjectFilterSettings pfs = prefs.getFilterSettings();
-        final List<String> addBugCatagoriesList = this.cfgExtractor
-            .splitValueAsList(null, "bugCategories", DEF_VALUE_SEPARATOR);
+        final List<String> addBugCatagoriesList = 
+        	configurator.getCommaSeparatedStringParameterValues("bugCategories", session, findbugsExecution);
         final List<String> availableBugCategories = 
             new LinkedList<String>(I18N.instance().getBugCategories());
         if (addBugCatagoriesList.size() > 0) {
@@ -265,16 +275,17 @@ public class MavenPluginConfigurationTranslator {
                 LOG_PREFIX, resc, newLocationFile));
     }
 
-    
     public static MavenPluginConfigurationTranslator newInstance(
-            final MavenProject mavenProject,
-            final MavenPluginWrapper pluginWrapper,
-            final IProject project) {
-        final MavenPluginConfigurationTranslator instance = 
+    		EclipseFindbugsProjectConfigurator configurator,
+    		MavenSession session,
+            MojoExecution findbugsExecution,
+            final IProject project) throws CoreException {
+        final MavenPluginConfigurationTranslator m2csConverter =
             new MavenPluginConfigurationTranslator(
-                    mavenProject, pluginWrapper,
+                    configurator, 
+                    session, 
+                    findbugsExecution,
                     project);
-        //instance.initialize();
-        return instance;
+        return m2csConverter;
     }
 }

@@ -73,22 +73,11 @@ public class EclipsePmdProjectConfigurator
 
         this.console.logMessage(String.format(
                 "[%s]: Eclipse PMD Configuration STARTED", this.getLogPrefix()));
-        
-        Map<String, List<MojoExecution>> forkedExecutions = mavenPluginWrapper.getMojoExecution().getForkedExecutions();
-        MojoExecution pmdGoalExecution = null;
-        for (List<MojoExecution> possiblePmdExecutionList : forkedExecutions.values()) {
-        	for (MojoExecution possiblePmdExecution : possiblePmdExecutionList) {
-        		if ("org.apache.maven.plugins".equals(possiblePmdExecution.getGroupId())
-        			&& "maven-pmd-plugin".equals(possiblePmdExecution.getArtifactId())
-        			&& "pmd".equals(possiblePmdExecution.getGoal())) {
-        			pmdGoalExecution = possiblePmdExecution;
-        			break;
-        		}
-        	}
-        	if (pmdGoalExecution != null) {
-        		break;
-        	}
-        }
+
+        MojoExecution pmdGoalExecution = findForkedExecution(mavenPluginWrapper.getMojoExecution(), 
+        		"org.apache.maven.plugins",
+        		"maven-pmd-plugin",
+        		"pmd");
         final MavenPluginConfigurationTranslator pluginCfgTranslator = 
             MavenPluginConfigurationTranslator.newInstance(
             		this,

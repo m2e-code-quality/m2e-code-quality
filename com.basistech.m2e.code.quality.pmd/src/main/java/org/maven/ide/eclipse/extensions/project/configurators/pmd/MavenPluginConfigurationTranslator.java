@@ -55,7 +55,8 @@ public class MavenPluginConfigurationTranslator {
     		final MavenSession session,
     		final MavenProject mavenProject,
     		final MavenPluginWrapper pluginWrapper,
-    		MojoExecution pmdGoalExecution, final IProject project,
+    		MojoExecution pmdGoalExecution, 
+    		final IProject project,
     		final String prefix) throws CoreException {
         	this.console = MavenPlugin.getDefault().getConsole();
         	this.mavenProject = mavenProject;
