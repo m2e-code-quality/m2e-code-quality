@@ -24,7 +24,7 @@
     <repository>
       <id>cs</id>
       <layout>p2</layout>
-      <url>file:/${basedir}/checkstyle.p2/repository</url>
+      <url>file:/${basedir}/checkstyle-p2-repository</url>
     </repository>
 
   </repositories>
