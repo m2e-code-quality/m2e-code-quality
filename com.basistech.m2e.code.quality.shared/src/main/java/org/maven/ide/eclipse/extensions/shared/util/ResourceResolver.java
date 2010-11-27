@@ -40,7 +40,12 @@ public final class ResourceResolver {
     public URL resolveLocation(final String location) {
         URL url = null;
         //1. Try it as a resource first.
-        url = pluginRealm.getResource(location);
+        // not that class loaders don't want leading slashes.
+        String urlLocation = location;
+        if (urlLocation.startsWith("/")) {
+        	urlLocation = urlLocation.substring(1);
+        }
+        url = pluginRealm.getResource(urlLocation);
         if (url == null) {
           try {
               //2. Try it as a remote resource.

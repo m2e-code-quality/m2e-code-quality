@@ -1,3 +1,7 @@
 .classpath
 .project
 .settings
+com.basistech.m2e.code.quality.checkstyle/target/
+com.basistech.m2e.code.quality.shared/bin/
+com.basistech.m2e.code.quality.shared/target/
+

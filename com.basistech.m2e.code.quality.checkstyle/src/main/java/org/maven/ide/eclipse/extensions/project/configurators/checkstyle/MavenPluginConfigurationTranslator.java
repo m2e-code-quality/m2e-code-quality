@@ -124,8 +124,13 @@ public class MavenPluginConfigurationTranslator {
      * @throws CoreException 
      */
     public boolean getIncludeTestSourceDirectory() throws CoreException {
-    	return configurator.getParameterValue("propertiesLocation",
-    			Boolean.class, session, execution).booleanValue();
+    	Boolean includeTestSourceDirectory = configurator.getParameterValue("includeTestSourceDirectory",
+    			Boolean.class, session, execution);
+    	if (includeTestSourceDirectory != null) {
+    		return includeTestSourceDirectory.booleanValue();
+    	} else {
+    		return false;
+    	}
     }
     
     /**
@@ -186,10 +191,10 @@ public class MavenPluginConfigurationTranslator {
                 .relativize(new File(folder).toURI())
                 .getPath();
             if (includePatterns.size() != 0) {
-                patterns.addAll(this.normalizePatternsToCheckstyleFileMathcPattern(
-                    includePatterns, 
-                    this.convertToEclipseCheckstyleRegExpPath(folderRelativePath), 
-                    true));
+                patterns.addAll(this.normalizePatternsToCheckstyleFileMatchPattern(
+                				includePatterns, 
+                				folderRelativePath, 
+                				true));
             } else {
                 patterns.add(new FileMatchPattern(folderRelativePath));
             }
@@ -206,7 +211,7 @@ public class MavenPluginConfigurationTranslator {
             String folderRelativePath = URIUtils
                 .resolve(this.basedirUri, new File(folder).toURI())
                 .getPath();
-            patterns.addAll(this.normalizePatternsToCheckstyleFileMathcPattern(
+            patterns.addAll(this.normalizePatternsToCheckstyleFileMatchPattern(
                     excludePatterns, 
                     this.convertToEclipseCheckstyleRegExpPath(folderRelativePath), 
                     false));
@@ -225,7 +230,7 @@ public class MavenPluginConfigurationTranslator {
         return csCompatiblePath;
     }
     
-    private List<FileMatchPattern> normalizePatternsToCheckstyleFileMathcPattern(
+    private List<FileMatchPattern> normalizePatternsToCheckstyleFileMatchPattern(
             final List<String> patterns, final String relativePath, 
             final boolean setIsIncludePatternFlag) 
             throws CheckstylePluginException {
