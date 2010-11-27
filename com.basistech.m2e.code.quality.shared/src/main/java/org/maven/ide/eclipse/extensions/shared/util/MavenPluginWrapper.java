@@ -73,7 +73,7 @@ public class MavenPluginWrapper {
     			&& (goal == null || goal.equals(mojoExecution.getGoal()));
     }
     
-    private static MojoExecution findMavenPlugin(
+    public static MojoExecution findMojoExecution(
     		IProgressMonitor monitor,
             IMavenProjectFacade mavenProjectFacade,
             final String pluginGroupId,
@@ -96,7 +96,7 @@ public class MavenPluginWrapper {
             final String pluginGoal,
             IMavenProjectFacade mavenProjectFacade) throws CoreException {
         Preconditions.checkNotNull(mavenProjectFacade);
-        final MojoExecution execution = findMavenPlugin(monitor,
+        final MojoExecution execution = findMojoExecution(monitor,
                 mavenProjectFacade, pluginGroupId, pluginArtifactId, pluginGoal);
         String key = pluginGroupId + ":" + pluginArtifactId;
         if (pluginGoal != null) {

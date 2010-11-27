@@ -22,13 +22,13 @@ import net.sf.eclipsecs.core.projectconfig.ProjectConfigurationWorkingCopy;
 import net.sf.eclipsecs.core.util.CheckstylePluginException;
 
 import org.apache.maven.execution.MavenSession;
-import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.maven.ide.eclipse.core.MavenLogger;
 import org.maven.ide.eclipse.extensions.shared.util.AbstractMavenPluginProjectConfigurator;
 import org.maven.ide.eclipse.extensions.shared.util.MavenPluginWrapper;
+import org.maven.ide.eclipse.project.IMavenProjectFacade;
 
 /**
  */
@@ -65,7 +65,7 @@ public class EclipseCheckstyleProjectConfigurator
     @Override
     protected void handleProjectConfigurationChange(
     		final MavenSession session,
-            final MavenProject mavenProject,
+            final IMavenProjectFacade mavenProjectFacade,
             final IProject project,
             final IProgressMonitor monitor,
             final MavenPluginWrapper mavenPluginWrapper) throws CoreException {
@@ -77,7 +77,7 @@ public class EclipseCheckstyleProjectConfigurator
             MavenPluginConfigurationTranslator
                 .newInstance(this,
                 		     session,
-                		     mavenProject, 
+                		     mavenProjectFacade.getMavenProject(monitor), 
                              mavenPluginWrapper, 
                              project, 
                              LOG_PREFIX);

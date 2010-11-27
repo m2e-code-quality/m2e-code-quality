@@ -46,16 +46,16 @@ public class MavenPluginConfigurationTranslator {
 
 	private MavenSession session;
 
-	private MojoExecution execution;
-
 	private AbstractMavenPluginProjectConfigurator configurator;
+
+	private MojoExecution pmdGoalExecution;
     
     private MavenPluginConfigurationTranslator(
     		final AbstractMavenPluginProjectConfigurator configurator,
     		final MavenSession session,
     		final MavenProject mavenProject,
     		final MavenPluginWrapper pluginWrapper,
-    		final IProject project,
+    		MojoExecution pmdGoalExecution, final IProject project,
     		final String prefix) throws CoreException {
         	this.console = MavenPlugin.getDefault().getConsole();
         	this.mavenProject = mavenProject;
@@ -63,12 +63,12 @@ public class MavenPluginConfigurationTranslator {
         	this.basedirUri = this.project.getLocationURI();
         	this.prefix = prefix;
         	this.session = session;
-        	this.execution = pluginWrapper.getMojoExecution();
+        	this.pmdGoalExecution = pmdGoalExecution;
         	this.configurator = configurator;
     }
 
     public List<String> getRulesets() throws CoreException {
-    	String[] rulesets = configurator.getParameterValue("rulesets", String[].class, session, execution);
+    	String[] rulesets = configurator.getParameterValue("rulesets", String[].class, session, pmdGoalExecution);
     	if (rulesets == null) {
     		return Collections.emptyList();
     	}
@@ -76,7 +76,7 @@ public class MavenPluginConfigurationTranslator {
     }
     
     private List<String> getExcludePatterns() throws CoreException {
-    	String[] excludes = configurator.getParameterValue("excludes", String[].class, session, execution);
+    	String[] excludes = configurator.getParameterValue("excludes", String[].class, session, pmdGoalExecution);
         final List<String> transformedPatterns = new LinkedList<String>();
         if (excludes != null && excludes.length > 0) {
             for (String p : excludes) {
@@ -104,7 +104,7 @@ public class MavenPluginConfigurationTranslator {
      * @throws CoreException 
      */
     private List<String> getIncludePatterns() throws CoreException {
-    	String[] includes = configurator.getParameterValue("excludes", String[].class, session, execution);
+    	String[] includes = configurator.getParameterValue("excludes", String[].class, session, pmdGoalExecution);
         final List<String> transformedPatterns = new LinkedList<String>();
         if (includes != null && includes.length > 0) {
             for (String p : includes) {
@@ -126,7 +126,7 @@ public class MavenPluginConfigurationTranslator {
      * @throws CoreException 
      */
     public boolean getIncludeTests () throws CoreException {
-    	Boolean tests = configurator.getParameterValue("includeTests", Boolean.class, session, execution);
+    	Boolean tests = configurator.getParameterValue("includeTests", Boolean.class, session, pmdGoalExecution);
     	return tests != null && tests.booleanValue();
     }
 
@@ -216,7 +216,7 @@ public class MavenPluginConfigurationTranslator {
         
         // now we need to filter out any excludeRoots from plugin configurations
         List<File> excludeRootsFromConfig;
-        File[] excludeRootsArray = configurator.getParameterValue("excludeRoots", File[].class, session, execution);
+        File[] excludeRootsArray = configurator.getParameterValue("excludeRoots", File[].class, session, pmdGoalExecution);
         if (excludeRootsArray == null) {
         	excludeRootsFromConfig = Collections.emptyList();
         } else {
@@ -224,9 +224,8 @@ public class MavenPluginConfigurationTranslator {
         }
         // do the filtering
         List<File> filteredIncludeRoots = new LinkedList<File>();
-        for (File f : excludeRootsFromConfig) {
-        	// how's this for inefficient?
-        	int idx = filteredIncludeRoots.indexOf(f);
+        for (File f : includeRoots) {
+        	int idx = excludeRootsFromConfig.indexOf(f);
             if (f.isDirectory() && (idx == -1)) {
                 filteredIncludeRoots.add(f);
             } else {
@@ -291,12 +290,14 @@ public class MavenPluginConfigurationTranslator {
     		MavenSession session,
             final MavenProject mavenProject,
             final MavenPluginWrapper mavenPlugin,
+            final MojoExecution pmdGoalExecution,
             final IProject project,
             final String prefix) throws CoreException {
         final MavenPluginConfigurationTranslator m2csConverter =
             new MavenPluginConfigurationTranslator(
                     configurator, session, mavenProject,
                     mavenPlugin,
+                    pmdGoalExecution,
                     project, 
                     prefix);
         m2csConverter.initialize();

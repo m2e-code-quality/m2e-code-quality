@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.sourceforge.pmd.Rule;
@@ -22,7 +23,7 @@ import net.sourceforge.pmd.eclipse.runtime.properties.PropertiesException;
 import net.sourceforge.pmd.eclipse.runtime.writer.WriterException;
 
 import org.apache.maven.execution.MavenSession;
-import org.apache.maven.project.MavenProject;
+import org.apache.maven.plugin.MojoExecution;
 import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -32,6 +33,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.maven.ide.eclipse.extensions.shared.util.AbstractMavenPluginProjectConfigurator;
 import org.maven.ide.eclipse.extensions.shared.util.MavenPluginWrapper;
 import org.maven.ide.eclipse.extensions.shared.util.ResourceResolver;
+import org.maven.ide.eclipse.project.IMavenProjectFacade;
+
 import static org.maven.ide.eclipse.extensions.project.configurators.pmd.PmdEclipseConstants.*;
 
 public class EclipsePmdProjectConfigurator
@@ -63,7 +66,7 @@ public class EclipsePmdProjectConfigurator
     @Override
     protected void handleProjectConfigurationChange(
     		final MavenSession session,
-            final MavenProject mavenProject, 
+            final IMavenProjectFacade mavenProjectFacade, 
             final IProject project,
             final IProgressMonitor monitor,
             final MavenPluginWrapper mavenPluginWrapper) throws CoreException {
@@ -71,12 +74,28 @@ public class EclipsePmdProjectConfigurator
         this.console.logMessage(String.format(
                 "[%s]: Eclipse PMD Configuration STARTED", this.getLogPrefix()));
         
+        Map<String, List<MojoExecution>> forkedExecutions = mavenPluginWrapper.getMojoExecution().getForkedExecutions();
+        MojoExecution pmdGoalExecution = null;
+        for (List<MojoExecution> possiblePmdExecutionList : forkedExecutions.values()) {
+        	for (MojoExecution possiblePmdExecution : possiblePmdExecutionList) {
+        		if ("org.apache.maven.plugins".equals(possiblePmdExecution.getGroupId())
+        			&& "maven-pmd-plugin".equals(possiblePmdExecution.getArtifactId())
+        			&& "pmd".equals(possiblePmdExecution.getGoal())) {
+        			pmdGoalExecution = possiblePmdExecution;
+        			break;
+        		}
+        	}
+        	if (pmdGoalExecution != null) {
+        		break;
+        	}
+        }
         final MavenPluginConfigurationTranslator pluginCfgTranslator = 
             MavenPluginConfigurationTranslator.newInstance(
             		this,
             		session,
-                    mavenProject,
+            		mavenProjectFacade.getMavenProject(),
                     mavenPluginWrapper,
+                    pmdGoalExecution,
                     project,
                     this.getLogPrefix());
         

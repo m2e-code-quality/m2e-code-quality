@@ -66,7 +66,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
         
         this.handleProjectConfigurationChange(
         		request.getMavenSession(),
-                mavenProject,
+                request.getMavenProjectFacade(),
                 project, 
                 monitor,
                 pluginWrapper);
@@ -111,7 +111,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
             	MavenSession session = maven.createSession(request, mavenProject);
                 this.handleProjectConfigurationChange(
                 		session,
-                        mavenProject,
+                        mavenProjectFacade,
                         project, 
                         monitor,
                         pluginWrapper);
@@ -129,7 +129,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 
     protected abstract void handleProjectConfigurationChange(
     		final MavenSession session,
-            final MavenProject mavenProject, 
+            final IMavenProjectFacade mavenProjectFacade, 
             final IProject project,
             final IProgressMonitor monitor,
             final MavenPluginWrapper mavenPluginWrapper) throws CoreException;
