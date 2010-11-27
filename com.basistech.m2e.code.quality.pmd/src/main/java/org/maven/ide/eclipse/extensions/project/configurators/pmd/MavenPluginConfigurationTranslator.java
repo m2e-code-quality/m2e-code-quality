@@ -3,18 +3,22 @@ package org.maven.ide.eclipse.extensions.project.configurators.pmd;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.http.client.utils.URIUtils;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.maven.ide.eclipse.MavenPlugin;
 import org.maven.ide.eclipse.core.MavenConsole;
-import org.maven.ide.eclipse.extensions.shared.util.MavenPluginConfigurationExtractor;
+import org.maven.ide.eclipse.extensions.shared.util.AbstractMavenPluginProjectConfigurator;
 import org.maven.ide.eclipse.extensions.shared.util.MavenPluginWrapper;
 
 import com.google.common.collect.ImmutableList;
@@ -30,63 +34,48 @@ public class MavenPluginConfigurationTranslator {
     private final MavenProject mavenProject;
     private final MavenConsole console;
     private final URI basedirUri;
-    private final MavenPluginConfigurationExtractor cfgExtractor;
     private final List<String> excludeSourceRoots = new ArrayList<String>();
     private final List<String> includeSourceRoots = new ArrayList<String>();
     private final List<String> includePatterns = new ArrayList<String>();
     private final List<String> excludePatterns = new ArrayList<String>();
     
     private final String prefix;
+
+	private IProject project;
+
+	private MavenSession session;
+
+	private MojoExecution execution;
+
+	private AbstractMavenPluginProjectConfigurator configurator;
     
     private MavenPluginConfigurationTranslator(
-            final MavenProject mavenProject,
-            final MavenPluginWrapper mavenPlugin,
-            final URI basedirUri,
-            final String prefix) {
-        this.console = MavenPlugin.getDefault().getConsole();
-        this.mavenProject = mavenProject;
-        this.basedirUri = basedirUri;
-        this.prefix = prefix;
-        this.cfgExtractor = MavenPluginConfigurationExtractor.newInstance(mavenPlugin);
+    		final AbstractMavenPluginProjectConfigurator configurator,
+    		final MavenSession session,
+    		final MavenProject mavenProject,
+    		final MavenPluginWrapper pluginWrapper,
+    		final IProject project,
+    		final String prefix) throws CoreException {
+        	this.console = MavenPlugin.getDefault().getConsole();
+        	this.mavenProject = mavenProject;
+        	this.project = project;
+        	this.basedirUri = this.project.getLocationURI();
+        	this.prefix = prefix;
+        	this.session = session;
+        	this.execution = pluginWrapper.getMojoExecution();
+        	this.configurator = configurator;
     }
 
-    public List<String> getRulesets() {
-        return this.cfgExtractor
-            .childValues(null, "rulesets", "ruleset");
+    public List<String> getRulesets() throws CoreException {
+    	String[] rulesets = configurator.getParameterValue("rulesets", String[].class, session, execution);
+    	return Arrays.asList(rulesets);
     }
     
-    /**
-     * Get the {@literal includeTests} element value if present in the configuration.
-     * 
-     * @return the value of the {@code includeTests} element.
-     */
-    public boolean getIncludeTests () {
-        return this.cfgExtractor
-            .asBoolean(null, "includeTests");
-    }
-
-    public List<String> getExcludeRoots() {
-        return ImmutableList.copyOf(this.excludeSourceRoots);
-    }
-    
-    public List<String> getIncludeRoots() {
-        return ImmutableList.copyOf(this.includeSourceRoots);
-    }
-    
-    public List<String> getIncludes() {
-        return ImmutableList.copyOf(this.includePatterns);
-    }
-
-    public List<String> getExcludes() {
-        return ImmutableList.copyOf(this.excludePatterns);
-    }
-
-    private List<String> getExcludePatterns() {
-        final List<String> patterns = this.cfgExtractor
-            .childValues(null, "excludes", "exclude");
+    private List<String> getExcludePatterns() throws CoreException {
+    	String[] excludes = configurator.getParameterValue("excludes", String[].class, session, execution);
         final List<String> transformedPatterns = new LinkedList<String>();
-        if (patterns != null && patterns.size() > 0) {
-            for (String p : patterns) {
+        if (excludes != null && excludes.length > 0) {
+            for (String p : excludes) {
                 p = StringUtils.strip(p);
                 if (StringUtils.isBlank(p)) {
                     continue;
@@ -108,13 +97,13 @@ public class MavenPluginConfigurationTranslator {
      *  excludes at this point.
      * </p>
      * @return a {@code List} of inclusive patterns.
+     * @throws CoreException 
      */
-    private List<String> getIncludePatterns() {
-        final List<String> patterns = this.cfgExtractor
-            .childValues(null, "includes", "include");
+    private List<String> getIncludePatterns() throws CoreException {
+    	String[] includes = configurator.getParameterValue("excludes", String[].class, session, execution);
         final List<String> transformedPatterns = new LinkedList<String>();
-        if (patterns != null && patterns.size() > 0) {
-            for (String p : patterns) {
+        if (includes != null && includes.length > 0) {
+            for (String p : includes) {
                 p = StringUtils.strip(p);
                 if (StringUtils.isBlank(p)) {
                     continue;
@@ -124,6 +113,37 @@ public class MavenPluginConfigurationTranslator {
         }
         return transformedPatterns;
     }
+    
+    
+    /**
+     * Get the {@literal includeTests} element value if present in the configuration.
+     * 
+     * @return the value of the {@code includeTests} element.
+     * @throws CoreException 
+     */
+    public boolean getIncludeTests () throws CoreException {
+    	Boolean tests = configurator.getParameterValue("includeTests", Boolean.class, session, execution);
+    	return tests != null && tests.booleanValue();
+    }
+
+    public List<String> getExcludeRoots() {
+        return ImmutableList.copyOf(this.excludeSourceRoots);
+    }
+    
+    public List<String> getIncludeRoots() {
+        return ImmutableList.copyOf(this.includeSourceRoots);
+    }
+    
+    public List<String> getIncludes() {
+        return ImmutableList.copyOf(this.includePatterns);
+    }
+
+    public List<String> getExcludes() {
+        return ImmutableList.copyOf(this.excludePatterns);
+    }
+
+  
+
 
     private String getTransformedPattern(final String antStylePattern, 
             final String msg) {
@@ -173,7 +193,7 @@ public class MavenPluginConfigurationTranslator {
         return sb.toString();
     }
     
-    private void buildExcludeAndIncludeSourceRoots() {
+    private void buildExcludeAndIncludeSourceRoots() throws CoreException {
         final List<File> includeRoots = new ArrayList<File>();
         final List<File> excludeRoots = new ArrayList<File>();
         
@@ -191,17 +211,17 @@ public class MavenPluginConfigurationTranslator {
         }
         
         // now we need to filter out any excludeRoots from plugin configurations
-        final List<File> excludeRootsFromConfig = 
-            this.transformResourceStringsToFiles(this.cfgExtractor
-                    .childValues(null, "excludeRoots", "excludeRoot")
-            );
+        List<File> excludeRootsFromConfig =  
+        	Arrays.asList(configurator.getParameterValue("excludeRoots", File[].class, session, execution));
         // do the filtering
         List<File> filteredIncludeRoots = new LinkedList<File>();
-        for (File f : includeRoots) {
-            int idx = excludeRootsFromConfig.indexOf(f);
+        for (File f : excludeRootsFromConfig) {
+        	// how's this for inefficient?
+        	int idx = filteredIncludeRoots.indexOf(f);
             if (f.isDirectory() && (idx == -1)) {
                 filteredIncludeRoots.add(f);
             } else {
+            	// adding in mid-iteration?
                 excludeRoots.add(excludeRootsFromConfig.get(idx));
                 this.console.logMessage(String.format(
                     "[%s]: As per plugin excludeRoot element,"
@@ -246,7 +266,7 @@ public class MavenPluginConfigurationTranslator {
         return sourceDirectories;
     }
 
-    private void initialize() {
+    private void initialize() throws CoreException {
         // Step 1). Get the included and excluded source roots setup.
         this.buildExcludeAndIncludeSourceRoots();
         // Step 2). Populate includes
@@ -258,16 +278,19 @@ public class MavenPluginConfigurationTranslator {
     }
     
     public static MavenPluginConfigurationTranslator newInstance(
+    		AbstractMavenPluginProjectConfigurator configurator,
+    		MavenSession session,
             final MavenProject mavenProject,
             final MavenPluginWrapper mavenPlugin,
             final IProject project,
-            final String prefix) {
-        final MavenPluginConfigurationTranslator instance = 
+            final String prefix) throws CoreException {
+        final MavenPluginConfigurationTranslator m2csConverter =
             new MavenPluginConfigurationTranslator(
-                    mavenProject, mavenPlugin,
-                    project.getLocationURI(), 
+                    configurator, session, mavenProject,
+                    mavenPlugin,
+                    project, 
                     prefix);
-        instance.initialize();
-        return instance;
+        m2csConverter.initialize();
+        return m2csConverter;
     }
 }

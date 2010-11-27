@@ -21,6 +21,7 @@ import net.sourceforge.pmd.eclipse.runtime.properties.IProjectPropertiesManager;
 import net.sourceforge.pmd.eclipse.runtime.properties.PropertiesException;
 import net.sourceforge.pmd.eclipse.runtime.writer.WriterException;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.core.resources.IFile;
@@ -29,7 +30,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.maven.ide.eclipse.extensions.shared.util.AbstractMavenPluginProjectConfigurator;
-import org.maven.ide.eclipse.extensions.shared.util.MavenPluginConfigurationExtractor;
 import org.maven.ide.eclipse.extensions.shared.util.MavenPluginWrapper;
 import org.maven.ide.eclipse.extensions.shared.util.ResourceResolver;
 import static org.maven.ide.eclipse.extensions.project.configurators.pmd.PmdEclipseConstants.*;
@@ -51,37 +51,42 @@ public class EclipsePmdProjectConfigurator
     }
 
     @Override
+	protected String getMavenPluginGoal() {
+		return "check";
+	}
+
+	@Override
     protected String getLogPrefix() {
         return LOG_PREFIX;
     }
 
     @Override
     protected void handleProjectConfigurationChange(
-            final MavenProject mavenProject,
+    		final MavenSession session,
+            final MavenProject mavenProject, 
             final IProject project,
             final IProgressMonitor monitor,
-            final MavenPluginWrapper pluginWrapper,
-            final MavenPluginConfigurationExtractor mavenPluginCfg) throws CoreException {
+            final MavenPluginWrapper mavenPluginWrapper) throws CoreException {
 
         this.console.logMessage(String.format(
                 "[%s]: Eclipse PMD Configuration STARTED", this.getLogPrefix()));
         
         final MavenPluginConfigurationTranslator pluginCfgTranslator = 
             MavenPluginConfigurationTranslator.newInstance(
+            		this,
+            		session,
                     mavenProject,
-                    pluginWrapper,
+                    mavenPluginWrapper,
                     project,
                     this.getLogPrefix());
         
-        final ResourceResolver resourceResolver = ResourceResolver.newInstance(
-                pluginWrapper, 
-                this.getLogPrefix());
-        
         this.createOrUpdateEclipsePmdConfiguration(
+        		session,
+        		mavenPluginWrapper,
                 project, 
-                resourceResolver, 
                 pluginCfgTranslator, 
-                monitor);
+                monitor,
+                this.getLogPrefix());
 
         this.addPMDNature(project, monitor);
         this.console.logMessage(String.format(
@@ -137,11 +142,15 @@ public class EclipsePmdProjectConfigurator
      * @throws CoreException if the creation failed.
      */
     private void createOrUpdateEclipsePmdConfiguration(
+    		final MavenSession session,
+    		final MavenPluginWrapper pluginWrapper,
             final IProject project,
-            final ResourceResolver resourceResolver,
             final MavenPluginConfigurationTranslator pluginCfgTranslator,
-            final IProgressMonitor monitor) throws CoreException {
+            final IProgressMonitor monitor,
+            final String prefix) throws CoreException {
 
+    	ResourceResolver resourceResolver = ResourceResolver.newInstance(getPluginClassRealm(session, 
+    			pluginWrapper.getMojoExecution()), prefix);
         final RuleSet ruleset = this.createPmdRuleSet(
                 pluginCfgTranslator, 
                 resourceResolver);
@@ -175,7 +184,7 @@ public class EclipsePmdProjectConfigurator
     
     private RuleSet createPmdRuleSet(
             final MavenPluginConfigurationTranslator pluginCfgTranslator,
-            final ResourceResolver resourceResolver) {
+            final ResourceResolver resourceResolver) throws CoreException {
 
         final RuleSet ruleSet = new RuleSet();
         ruleSet.setName("M2Eclipse PMD RuleSet");
