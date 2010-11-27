@@ -19,10 +19,9 @@
     <module>com.basistech.m2e.code.quality.shared</module>
     <module>com.basistech.m2e.code.quality.checkstyle</module>
     <module>com.basistech.m2e.code.quality.pmd</module>
+    <module>com.basistech.m2e.code.quality.findbugs</module>
 <!--
     <module>maven/ide/plugins/com.basistech.m2e-extensions.site-extras</module>
-    <module>maven/ide/plugins/org.maven.ide.eclipse.extensions.project.configurators.findbugs</module>
-    <module>maven/ide/plugins/org.maven.ide.eclipse.extensions.project.configurators.pmd</module>
 -->
   </modules>
 
