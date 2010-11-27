@@ -1,0 +1,319 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<repository name='file:/Users/benson/m2e/me-m2e-extensions/com.basistech.m2e.code.quality.pmd/repository - artifacts' type='org.eclipse.equinox.p2.artifact.repository.simpleRepository' version='1'>
+  <properties size='2'>
+    <property name='p2.timestamp' value='1290823341539'/>
+    <property name='p2.compressed' value='false'/>
+  </properties>
+  <mappings size='3'>
+    <rule filter='(&amp; (classifier=osgi.bundle))' output='${repoUrl}/plugins/${id}_${version}.jar'/>
+    <rule filter='(&amp; (classifier=binary))' output='${repoUrl}/binary/${id}_${version}'/>
+    <rule filter='(&amp; (classifier=org.eclipse.update.feature))' output='${repoUrl}/features/${id}_${version}.jar'/>
+  </mappings>
+  <artifacts size='42'>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.ui' version='3.2.1'>
+      <properties size='3'>
+        <property name='artifact.size' value='463898'/>
+        <property name='download.size' value='463898'/>
+        <property name='download.md5' value='20df06cb5f0a7d42e56a88f3278be6e1'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.runtime' version='3.2.3.v200712041040'>
+      <properties size='3'>
+        <property name='artifact.size' value='88481'/>
+        <property name='download.size' value='88481'/>
+        <property name='download.md5' value='37917df79477587a5c1fca99a88158ed'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.runtime' version='3.2.1'>
+      <properties size='3'>
+        <property name='artifact.size' value='178542'/>
+        <property name='download.size' value='178542'/>
+        <property name='download.md5' value='8db2b98702e45501677c45e8b1fef141'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.runtime' version='1.0.3'>
+      <properties size='3'>
+        <property name='artifact.size' value='164607'/>
+        <property name='download.size' value='164607'/>
+        <property name='download.md5' value='3ccc808864ce7f9ce061326d22bdf6fa'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.core' version='3.8.0'>
+      <properties size='3'>
+        <property name='artifact.size' value='9875969'/>
+        <property name='download.size' value='9875969'/>
+        <property name='download.md5' value='5213892c3fce138201f690d052eff0cb'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='net.sourceforge.pmd.eclipse' version='3.2.4.v200804111600'>
+      <properties size='4'>
+        <property name='artifact.size' value='7899'/>
+        <property name='download.size' value='7899'/>
+        <property name='download.md5' value='79ec49cc0456ba28a9a4d3fea612d113'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.eclipse' version='3.2.2'>
+      <properties size='3'>
+        <property name='artifact.size' value='69260'/>
+        <property name='download.size' value='69260'/>
+        <property name='download.md5' value='8d10289d1787e15cbd3eee151da927d6'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.eclipse' version='3.1.6'>
+      <properties size='3'>
+        <property name='artifact.size' value='69615'/>
+        <property name='download.size' value='69615'/>
+        <property name='download.md5' value='723e84310f8884847865da484795cea6'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='net.sourceforge.pmd.eclipse' version='2.3.1.v2'>
+      <properties size='4'>
+        <property name='artifact.size' value='7486'/>
+        <property name='download.size' value='7486'/>
+        <property name='download.md5' value='adb046c3c716ae3d9a799b24b9e6159b'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='net.sourceforge.pmd.eclipse' version='3.2.3.v200712021445'>
+      <properties size='4'>
+        <property name='artifact.size' value='7904'/>
+        <property name='download.size' value='7904'/>
+        <property name='download.md5' value='b5454eb460329a322d9110e41def4c15'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.core' version='4.1.0.v200712041040'>
+      <properties size='3'>
+        <property name='artifact.size' value='9385294'/>
+        <property name='download.size' value='9385294'/>
+        <property name='download.md5' value='97cecab3ed417a9aa38c015d79b1208c'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.ui' version='3.2.3.v200712041040'>
+      <properties size='3'>
+        <property name='artifact.size' value='273951'/>
+        <property name='download.size' value='273951'/>
+        <property name='download.md5' value='457cd551e8b7fa273b2c19b0ccf44e19'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='net.sourceforge.pmd.eclipse' version='3.2.5.v200810131150'>
+      <properties size='4'>
+        <property name='artifact.size' value='7896'/>
+        <property name='download.size' value='7896'/>
+        <property name='download.md5' value='6527d4f276f5713b48ba0feabe46ce86'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='net.sourceforge.pmd.eclipse' version='3.2.6.v200903300643'>
+      <properties size='4'>
+        <property name='artifact.size' value='7902'/>
+        <property name='download.size' value='7902'/>
+        <property name='download.md5' value='8e21b0e6ac862dfb40337ad88488f379'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='net.sourceforge.pmd.eclipse' version='3.1.7'>
+      <properties size='4'>
+        <property name='artifact.size' value='7583'/>
+        <property name='download.size' value='7583'/>
+        <property name='download.md5' value='cf2754a50dc65ddd556e510791dfbc79'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.runtime' version='3.2.4.v200804111600'>
+      <properties size='3'>
+        <property name='artifact.size' value='90183'/>
+        <property name='download.size' value='90183'/>
+        <property name='download.md5' value='65e6a8d10d5babdec3d6b70274a07658'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.ui' version='3.2.3.v200712021445'>
+      <properties size='3'>
+        <property name='artifact.size' value='281396'/>
+        <property name='download.size' value='281396'/>
+        <property name='download.md5' value='5854c08b1c84b10e62f887854ee60a1d'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='net.sourceforge.pmd.eclipse' version='3.2.3.v200712041040'>
+      <properties size='4'>
+        <property name='artifact.size' value='7904'/>
+        <property name='download.size' value='7904'/>
+        <property name='download.md5' value='b48832abb7a59e64f3e2c27ee46be26d'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.core' version='4.0.1'>
+      <properties size='3'>
+        <property name='artifact.size' value='4035964'/>
+        <property name='download.size' value='4035964'/>
+        <property name='download.md5' value='e7bf12d3c6458441b73356b1b6bfd143'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.ui' version='3.2.4.v200804111600'>
+      <properties size='3'>
+        <property name='artifact.size' value='293106'/>
+        <property name='download.size' value='293106'/>
+        <property name='download.md5' value='34059495604924c23ed3787c9bc2be6f'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='net.sourceforge.pmd.eclipse' version='3.2.2'>
+      <properties size='4'>
+        <property name='artifact.size' value='7586'/>
+        <property name='download.size' value='7586'/>
+        <property name='download.md5' value='122ba510c72eedaccce1468085f3975f'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.core' version='4.2.1.v200804111600'>
+      <properties size='3'>
+        <property name='artifact.size' value='9485902'/>
+        <property name='download.size' value='9485902'/>
+        <property name='download.md5' value='24aba1c9980180bc5a0cae1e8ebbcb5e'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.eclipse' version='3.1.7'>
+      <properties size='3'>
+        <property name='artifact.size' value='69893'/>
+        <property name='download.size' value='69893'/>
+        <property name='download.md5' value='8e229f672af1324eb89a501fb34e405e'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.eclipse' version='3.2.3.v200712021445'>
+      <properties size='3'>
+        <property name='artifact.size' value='76088'/>
+        <property name='download.size' value='76088'/>
+        <property name='download.md5' value='53c366aa333f3fe5767b1c1a70a2cc80'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.eclipse.plugin' version='3.2.6.v200903300643'>
+      <properties size='3'>
+        <property name='artifact.size' value='4494688'/>
+        <property name='download.size' value='4494688'/>
+        <property name='download.md5' value='7e0bf4e6968239084cc2bf53a3bcfd02'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.eclipse' version='3.2.3.v200712041040'>
+      <properties size='3'>
+        <property name='artifact.size' value='76088'/>
+        <property name='download.size' value='76088'/>
+        <property name='download.md5' value='9f8b6ea8a022dbac7289550d04ed8cd3'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.core' version='4.1.0.v200712021445'>
+      <properties size='3'>
+        <property name='artifact.size' value='9385653'/>
+        <property name='download.size' value='9385653'/>
+        <property name='download.md5' value='356ca5dd08bddcefc507bb3c81a84f6d'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.ui' version='1.0.0'>
+      <properties size='3'>
+        <property name='artifact.size' value='359729'/>
+        <property name='download.size' value='359729'/>
+        <property name='download.md5' value='95599de2d1b9b2808f8d72b33544adac'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.runtime' version='1.0.1'>
+      <properties size='3'>
+        <property name='artifact.size' value='1661663'/>
+        <property name='download.size' value='1661663'/>
+        <property name='download.md5' value='c621d870a05570cf8f200e267685d298'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.eclipse' version='3.2.1'>
+      <properties size='3'>
+        <property name='artifact.size' value='69021'/>
+        <property name='download.size' value='69021'/>
+        <property name='download.md5' value='59e2372528f8612b74eb653b90bdae89'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.ui' version='1.0.2'>
+      <properties size='3'>
+        <property name='artifact.size' value='360856'/>
+        <property name='download.size' value='360856'/>
+        <property name='download.md5' value='5b95ff23a3c8f49027ec2efc69221cbb'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.core' version='3.7.0'>
+      <properties size='3'>
+        <property name='artifact.size' value='8285663'/>
+        <property name='download.size' value='8285663'/>
+        <property name='download.md5' value='41e008a0d28325462499287e4e7fdd53'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.eclipse.plugin' version='3.2.5.v200810131150'>
+      <properties size='3'>
+        <property name='artifact.size' value='4489358'/>
+        <property name='download.size' value='4489358'/>
+        <property name='download.md5' value='589a613e732875995e9267c4cc030473'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.core' version='3.6.2.v2'>
+      <properties size='3'>
+        <property name='artifact.size' value='4024350'/>
+        <property name='download.size' value='4024350'/>
+        <property name='download.md5' value='8b7f67c6b837af60f16acc24d40e1967'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.runtime' version='3.2.3.v200712021445'>
+      <properties size='3'>
+        <property name='artifact.size' value='88230'/>
+        <property name='download.size' value='88230'/>
+        <property name='download.md5' value='9f02e2385757144a309182e709edf70a'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='net.sourceforge.pmd.eclipse' version='3.1.6'>
+      <properties size='4'>
+        <property name='artifact.size' value='7582'/>
+        <property name='download.size' value='7582'/>
+        <property name='download.md5' value='93dd5c07695596b456ab096b18b933b2'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.core' version='3.9.0'>
+      <properties size='3'>
+        <property name='artifact.size' value='10233994'/>
+        <property name='download.size' value='10233994'/>
+        <property name='download.md5' value='228ca7e5ecdda6b7eea933d83f5d61bf'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.ui' version='3.2.2'>
+      <properties size='3'>
+        <property name='artifact.size' value='463386'/>
+        <property name='download.size' value='463386'/>
+        <property name='download.md5' value='1bc14bb4c7457cc69f801920e12ad188'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.eclipse' version='2.3.1.v2'>
+      <properties size='3'>
+        <property name='artifact.size' value='562783'/>
+        <property name='download.size' value='562783'/>
+        <property name='download.md5' value='0eab577ae7d184e27d89bf06498edb2f'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.eclipse' version='3.2.4.v200804111600'>
+      <properties size='3'>
+        <property name='artifact.size' value='76957'/>
+        <property name='download.size' value='76957'/>
+        <property name='download.md5' value='0029ec599cd3d382b8676be6b14d49b2'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='net.sourceforge.pmd.runtime' version='3.2.2'>
+      <properties size='3'>
+        <property name='artifact.size' value='178836'/>
+        <property name='download.size' value='178836'/>
+        <property name='download.md5' value='b7b6ff2c1e9797e67562981547142a8f'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='net.sourceforge.pmd.eclipse' version='3.2.1'>
+      <properties size='4'>
+        <property name='artifact.size' value='7585'/>
+        <property name='download.size' value='7585'/>
+        <property name='download.md5' value='6b8e3ecfa7c74f8eacf8e1a7ec90a6db'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+  </artifacts>
+</repository>
