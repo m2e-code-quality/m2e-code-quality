@@ -1,5 +1,11 @@
 package org.maven.ide.eclipse.extensions.project.configurators.pmd;
 
+import static org.maven.ide.eclipse.extensions.project.configurators.pmd.PmdEclipseConstants.LOG_PREFIX;
+import static org.maven.ide.eclipse.extensions.project.configurators.pmd.PmdEclipseConstants.MAVEN_PLUGIN_ARTIFACTID;
+import static org.maven.ide.eclipse.extensions.project.configurators.pmd.PmdEclipseConstants.MAVEN_PLUGIN_GROUPID;
+import static org.maven.ide.eclipse.extensions.project.configurators.pmd.PmdEclipseConstants.PMD_RULESET_FILE;
+import static org.maven.ide.eclipse.extensions.project.configurators.pmd.PmdEclipseConstants.PMD_SETTINGS_FILE;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -7,7 +13,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import net.sourceforge.pmd.Rule;
@@ -34,8 +39,6 @@ import org.maven.ide.eclipse.extensions.shared.util.AbstractMavenPluginProjectCo
 import org.maven.ide.eclipse.extensions.shared.util.MavenPluginWrapper;
 import org.maven.ide.eclipse.extensions.shared.util.ResourceResolver;
 import org.maven.ide.eclipse.project.IMavenProjectFacade;
-
-import static org.maven.ide.eclipse.extensions.project.configurators.pmd.PmdEclipseConstants.*;
 
 public class EclipsePmdProjectConfigurator
         extends AbstractMavenPluginProjectConfigurator {
