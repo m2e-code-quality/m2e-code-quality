@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>com.basistech.m2e.code.quality.shared</artifactId>
-  <packaging>eclipse-plugin</packaging>
+  <packaging>eclipse-feature</packaging>
 
   <name>Shared Code for M2 Code Quality Plugin Extensions</name>
 
