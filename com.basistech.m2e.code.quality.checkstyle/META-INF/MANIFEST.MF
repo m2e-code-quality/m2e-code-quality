@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.4.0",
  org.eclipse.core.resources;bundle-version="3.4.0",
  net.sf.eclipsecs.core;bundle-version="[5.2.0,6.0.0)",
  net.sf.eclipsecs.checkstyle;bundle-version="[5.2.0,6.0.0)",
- com.basistech.m2e.core.quality.shared;bundle-version="0.12.0",
+ com.basistech.m2e.code.quality.shared;bundle-version="0.12.0",
  org.eclipse.ui.console;bundle-version="3.4.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5,
  JavaSE-1.6

@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>com.basistech.m2e.code.quality.pmd</artifactId>
-  <packaging>eclipse-plugin</packaging>
+  <packaging>eclipse-feature</packaging>
 
   <name>M2Eclipse Project Configurator for Eclipse PMD</name>
 
