@@ -11,5 +11,5 @@
 	    id="com.basistech.m2e.code.quality.pmd.feature" version="0.0.0">
       <category name="m2eclipse-code-quality"/>
    </feature>
-   <category-def name="m2elipse-code-quality" label="Code Quality Plugin Configuration for M2Eclipse"/>
+   <category-def name="m2eclipse-code-quality" label="Code Quality Plugin Configuration for M2Eclipse"/>
 </site>
