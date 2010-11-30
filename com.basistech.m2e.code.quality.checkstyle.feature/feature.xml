@@ -12,10 +12,15 @@
       <import plugin="net.sf.eclipsecs.core" version="5.2.0" match="compatible"/>
       <import plugin="net.sf.eclipsecs.checkstyle" version="5.2.0" match="compatible"/>
       <import plugin="org.eclipse.ui.console" version="3.4.0" match="greaterOrEqual"/>
-      <import feature="com.basistech.m2e.code.quality.shared" version="0.12.0.qualifier" match="perfect"/>
    </requires>
-
+ 
    <plugin
+         id="com.basistech.m2e.code.quality.shared"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+  <plugin
          id="com.basistech.m2e.code.quality.checkstyle"
          download-size="0"
          install-size="0"

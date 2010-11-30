@@ -8,9 +8,17 @@
     <version>0.12.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>com.basistech.m2e.code.quality.shared</artifactId>
-  <packaging>eclipse-plugin</packaging>
+  <artifactId>com.basistech.m2e.code.quality.checkstyle.feature</artifactId>
+  <packaging>eclipse-feature</packaging>
 
-  <name>Shared Code for M2 Code Quality Plugin Extensions</name>
+  <name>M2Eclipse Project Configurator for Eclipse Checkstyle Feature</name>
+
+  <repositories>
+    <repository>
+      <id>cs</id>
+      <layout>p2</layout>
+      <url>file:/${basedir}/../com.basistech.m2e.code.quality.checkstyle/checkstyle-p2-repository</url>
+    </repository>
+  </repositories>
 
 </project>

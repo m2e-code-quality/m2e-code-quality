@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>com.basistech.m2e.code.quality.checkstyle</artifactId>
-  <packaging>eclipse-feature</packaging>
+  <packaging>eclipse-plugin</packaging>
 
   <name>M2Eclipse Project Configurator for Eclipse Checkstyle</name>
 
