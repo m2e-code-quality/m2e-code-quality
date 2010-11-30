@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.basistech.m2e-code-quality.site"
+      label="Code Quality Plugins Eclipse Update Site"
+      version="0.12.0.qualifier"
+      provider-name="Basis Technology Corp">
+
+   <includes
+         id="com.basistech.m2e.code.quality.pmd.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="com.basistech.m2e.code.quality.checkstyle.feature"
+         version="0.0.0"/>
+
+</feature>
