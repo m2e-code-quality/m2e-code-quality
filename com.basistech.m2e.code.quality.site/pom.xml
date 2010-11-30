@@ -8,10 +8,23 @@
     <version>0.12.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>org.maven.ide.eclipse.site</artifactId>
+  <artifactId>com.basistech.m2e.code.quality.site</artifactId>
   <packaging>eclipse-feature</packaging>
 
   <name>M2Eclipse Code Quality Plugins Update Site</name>
+
+  <repositories>
+    <repository>
+      <id>cs</id>
+      <layout>p2</layout>
+      <url>file:/${basedir}/../com.basistech.m2e.code.quality.checkstyle/checkstyle-p2-repository</url>
+    </repository>
+    <repository>
+      <id>pmd</id>
+      <layout>p2</layout>
+      <url>file:/${basedir}/../com.basistech.m2e.code.quality.pmd/pmd-p2-repository</url>
+    </repository>
+  </repositories>
 
   <build>
     <plugins>

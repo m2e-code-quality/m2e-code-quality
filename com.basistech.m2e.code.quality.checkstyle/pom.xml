@@ -19,7 +19,6 @@
       <layout>p2</layout>
       <url>file:/${basedir}/checkstyle-p2-repository</url>
     </repository>
-
   </repositories>
 
 </project>
