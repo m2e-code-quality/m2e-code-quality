@@ -5,11 +5,14 @@
     <artifactId>m2e-code-quality-plugins</artifactId>
     <version>0.12.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+
+ <scm>
+        <connection>scm:git:git://github.com/bimargulies/m2e-code-quality.git</connection>
+        <url>scm:git:git://github.com/bimargulies/m2e-code-quality.git</url>
+    </scm>
+
     <properties>
         <tycho-version>0.10.0</tycho-version>
-        <!--
-    <site-compressed>http://repository.sonatype.org/service/local/repositories/forge-sites/content-compressed/</site-compressed>
--->
     </properties>
     <modules>
         <module>com.basistech.m2e.code.quality.shared</module>
@@ -33,6 +36,7 @@
         </repository>
     </repositories>
     <build>
+        <defaultGoal>install</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.sonatype.tycho</groupId>

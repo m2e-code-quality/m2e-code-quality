@@ -75,12 +75,28 @@
       </plugin>
 
     </plugins>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-provider-gitexe</artifactId>
+        <version>1.3</version>
+      </extension>
+      <extension>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-manager-plexus</artifactId>
+        <version>1.3</version>
+      </extension>
+      <extension>
+        <groupId>org.kathrynhuxtable.maven.wagon</groupId>
+        <artifactId>wagon-gitsite</artifactId>
+        <version>0.2</version>
+      </extension>
+    </extensions>
   </build>
 
   <profiles>
     <profile>
       <id>publish-site</id>
-
       <build>
         <plugins>
           <plugin>
@@ -90,16 +106,14 @@
             <executions>
               <execution>
                 <id>publish-site</id>
-                <phase>deploy</phase>
+                <phase>install</phase>
                 <goals>
                   <goal>upload-file</goal>
                 </goals>
                 <configuration>
-                  <file>${project.build.directory}/${project.artifactId}-${project.version}-site.zip</file>
-
-                  <serverId>forge-releases</serverId>
-                  <repositoryUrl>${m2e.site-compressed}</repositoryUrl>
-                  <repositoryPath>m2e/${unqualifiedVersion}/S/${unqualifiedVersion}.${buildQualifier}</repositoryPath>
+                  <file>${project.build.directory}/site</file>
+                  <repositoryUrl>gitsite:git@github.com/bimargulies/m2e-code-quality.git</repositoryUrl>
+                  <repositoryPath>update-site/${unqualifiedVersion}/S/${unqualifiedVersion}.${buildQualifier}</repositoryPath>
                 </configuration>
               </execution>
             </executions>
