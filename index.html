@@ -1,36 +1,36 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-	<title>bimargulies/m2e-code-quality @ GitHub</title>
-	
-	<style type="text/css">
-		body {
-  		margin-top: 1.0em;
-  		background-color: white;
-		  font-family: "Helvetica,Arial,FreeSans";
-  		color:black;
+        <title>bimargulies/m2e-code-quality @ GitHub</title>
+        
+        <style type="text/css">
+                body {
+                margin-top: 1.0em;
+                background-color: white;
+               font-family: "Helvetica,Arial,FreeSans";
+                color:black;
     }
     #container {
       margin: 0 auto;
       width: 700px;
     }
-		h1 { font-size: 3.8em; color: #d743fb; margin-bottom: 3px; }
-		h1 .small { font-size: 0.4em; }
-		h1 a { text-decoration: none }
-		h2 { font-size: 1.5em; color: #d743fb; }
+                h1 { font-size: 3.8em; color: #d743fb; margin-bottom: 3px; }
+                h1 .small { font-size: 0.4em; }
+                h1 a { text-decoration: none }
+                h2 { font-size: 1.5em; color: #d743fb; }
     h3 { text-align: center; color: #d743fb; }
     a { color: #d743fb; }
     .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
     .download { float: right; }
-		pre { background: #000; color: #fff; padding: 15px;}
+                pre { background: #000; color: #fff; padding: 15px;}
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
-	</style>
-	
+        </style>
+        
 </head>
 
 <body>
@@ -49,20 +49,45 @@
       <span class="small">by <a href="http://github.com/bimargulies">bimargulies</a></span></h1>
 
     <div class="description">
-      A collection of Eclipse plugins for M2ECLIPSE to configure the Eclipse plugins for common code-quality plugins.
-    </div>
-
-    <h2>License</h2>
-<p>Apache</p>
-<h2>Authors</h2>
-<p>Benson Margulies (bmargulies@gmail.com)<br/><br/>      </p>
-<h2>Contact</h2>
-<p>Benson Margulies (bimargulies@gmail.com)<br/>      </p>
-
-
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
+      <p>
+      This project builds Eclipse plugins that connect some other
+      Eclipse plugins with their corresponding Maven plugins. If
+      you've gone to a lot of trouble to set up just the Checkstyle or
+      PMD configuration you want in Maven, and you import your Maven
+      projects into Eclipse with M2Eclipse, you want to see the same
+      warnings in your Eclipse editors that the maven build will
+      complain of.
+      </p>
+      <p>
+      At this time, the two plugins supported are Checkstyle and PMD.
+      Findbugs waits for a new release to supply a missing OSGi export.
+      </p>
+      <p>
+      The current snapshot/qualifier versions are available on the
+      update site, with newer versions replacing older ones. When
+      there's some evidence that this works fairly reliably,
+      I'll make a release.
+  </div>
+   <h2>License</h2>
+   <p>Apache License 2.0</p>
+   <h2>Authors</h2>
+   <p>Benson Margulies (bmargulies@gmail.com)</p>
+  <h2>Contact</h2>
+   <p>Benson Margulies (bimargulies@gmail.com)</p>
+  <h2>Acknowledgements</h2>
+  <p>This code is a derived work of the code published on Google Code
+   as <a
+   href="http://code.google.com/p/m2e-extensions">m2e-extensions<a>,
+   and the source files carry the copyright of their original author,
+   in addition to my employer (for my modifications).
+  </p>
+   <h2>Download</h2>
+    <p>To install this on Eclipse, use the
+  <a href="site">update-site</a>.
+  I'm testing this with Eclipse 3.6 and M2Eclipse 0.12.
+  </p>
+   <p>
+      As usual on github, you can download this project in either
       <a href="http://github.com/bimargulies/m2e-code-quality/zipball/master">zip</a> or
       <a href="http://github.com/bimargulies/m2e-code-quality/tarball/master">tar</a> formats.
     </p>
@@ -74,9 +99,6 @@
     <div class="footer">
       get the source code on GitHub : <a href="http://github.com/bimargulies/m2e-code-quality">bimargulies/m2e-code-quality</a>
     </div>
-
-  </div>
-
-  
+ </div>
 </body>
 </html>
