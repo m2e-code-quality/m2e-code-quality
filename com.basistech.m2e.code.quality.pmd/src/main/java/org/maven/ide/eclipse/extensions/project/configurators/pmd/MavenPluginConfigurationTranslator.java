@@ -247,7 +247,7 @@ public class MavenPluginConfigurationTranslator {
                 filteredIncludeRoots.add(f);
             } else {
             	// adding in mid-iteration?
-                excludeRoots.add(excludeRootsFromConfig.get(idx));
+                excludeRoots.add(f);
                 this.console.logMessage(String.format(
                     "[%s]: As per plugin excludeRoot element,"
                     + " discarding all sources from [%s]", this.prefix, f));
