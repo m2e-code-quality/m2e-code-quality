@@ -23,6 +23,7 @@ import static org.maven.ide.eclipse.extensions.project.configurators.pmd.PmdEcli
 import static org.maven.ide.eclipse.extensions.project.configurators.pmd.PmdEclipseConstants.PMD_SETTINGS_FILE;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -257,22 +258,31 @@ public class EclipsePmdProjectConfigurator
             final IProgressMonitor monitor) throws CoreException {
         final PMDPlugin pmdPlugin = PMDPlugin.getDefault();
 
-        BufferedOutputStream bos = null;
+
+        BufferedOutputStream outputStream = null;
+        ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
         try {
-            bos = new BufferedOutputStream(new FileOutputStream(
-                    rulesetFile.getLocation().toFile()));
-            pmdPlugin.getRuleSetWriter().write(bos, ruleSet);
+            outputStream = new BufferedOutputStream(new FileOutputStream(
+									 rulesetFile.getLocation().toFile()));
+            pmdPlugin.getRuleSetWriter().write(byteArrayStream, ruleSet);
+            
+            // ..and now we have two problems
+            String fixedXml = byteArrayStream.toString().replaceAll("\\<exclude\\>(.*)\\</exclude\\>", "<exclude name=\"$1\"/>");
+
+            outputStream.write(fixedXml.getBytes());
+            outputStream.close();
+            
             rulesetFile.refreshLocal(IResource.DEPTH_ZERO, monitor);
         } catch (IOException ex) {
             this.console.logError(String.format(
-                    "[%s]: could not write ruleset, reason [%s]",
-                    this.getLogPrefix(),
-                    ex.getMessage()));
+						"[%s]: could not write ruleset, reason [%s]",
+						this.getLogPrefix(),
+						ex.getMessage()));
         } catch (WriterException ex) {
             this.console.logError(String.format(
-                    "[%s]: could not write ruleset, reason [%s]",
-                    this.getLogPrefix(),
-                    ex.getMessage()));
+						"[%s]: could not write ruleset, reason [%s]",
+						this.getLogPrefix(),
+						ex.getMessage()));
         }
         return rulesetFile.getLocation().toFile();
     }

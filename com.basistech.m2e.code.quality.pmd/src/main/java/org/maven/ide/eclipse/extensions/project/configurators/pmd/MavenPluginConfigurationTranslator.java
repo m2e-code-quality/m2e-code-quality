@@ -222,6 +222,10 @@ public class MavenPluginConfigurationTranslator {
             this.transformResourceStringsToFiles(this.mavenProject.getCompileSourceRoots())
         );
         
+        List<String>targetDirectories = new ArrayList<String>();
+        targetDirectories.add(this.mavenProject.getBuild().getDirectory());
+        excludeRoots.addAll(this.transformResourceStringsToFiles(targetDirectories));
+        
         //Get all the normalized test roots and add them to include or exclude.
         final List<File> testCompileSourceRoots = 
             this.transformResourceStringsToFiles(this.mavenProject.getTestCompileSourceRoots());
@@ -243,7 +247,11 @@ public class MavenPluginConfigurationTranslator {
         List<File> filteredIncludeRoots = new LinkedList<File>();
         for (File f : includeRoots) {
         	int idx = excludeRootsFromConfig.indexOf(f);
-            if (f.isDirectory() && (idx == -1)) {
+		/**
+		 * Be optimistic when adding inclusions; if the specified File does not exist yet, then assume
+		 * it will at some point and include it.
+		 */
+		if (idx == -1 && (f.isDirectory() || !f.exists())) {
                 filteredIncludeRoots.add(f);
             } else {
             	// adding in mid-iteration?
@@ -264,7 +272,7 @@ public class MavenPluginConfigurationTranslator {
         final List<String> folders = new ArrayList<String>();
         //No null check as internally we *know*
         for (File f: sources) {
-            String relativePath = URIUtils.resolve(f.toURI(), this.basedirUri).getPath();
+	    String relativePath = URIUtils.resolve(this.basedirUri,f.toURI()).getPath();
                 //TODO this.basedirUri.relativize(f.toURI()).getPath();
             if (relativePath.endsWith("/")) {
                 relativePath = relativePath.substring(0, relativePath.length() - 1);

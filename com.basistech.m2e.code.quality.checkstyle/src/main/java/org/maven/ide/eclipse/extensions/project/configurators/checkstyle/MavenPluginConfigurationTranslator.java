@@ -224,9 +224,8 @@ public class MavenPluginConfigurationTranslator {
          */
         final List<String> excludePatterns = this.getExcludes();
         for (String folder : sourceFolders) {
-            String folderRelativePath = URIUtils
-                .resolve(this.basedirUri, new File(folder).toURI())
-                .getPath();
+	    String folderRelativePath = 
+               this.basedirUri.relativize(new File(folder).toURI()).getPath();
             patterns.addAll(this.normalizePatternsToCheckstyleFileMatchPattern(
                     excludePatterns, 
                     this.convertToEclipseCheckstyleRegExpPath(folderRelativePath), 
