@@ -20,11 +20,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.maven.execution.DefaultMavenExecutionRequest;
+import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.MojoExecution;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.maven.ide.eclipse.MavenPlugin;
+import org.maven.ide.eclipse.embedder.IMaven;
 import org.maven.ide.eclipse.project.IMavenProjectFacade;
 
 import com.google.common.base.Preconditions;
@@ -102,8 +106,20 @@ public class MavenPluginWrapper {
     			return mojoExecution;
     		}
     	}
+    	// maybe it's bound to a phase after 'package', we have to do this the slow way.
+    	IMaven maven = MavenPlugin.getDefault().getMaven();
+    	MavenExecutionRequest mer = maven.createExecutionRequest(monitor);
+    	List<String> goals = Collections.singletonList("deploy");
+    	mer.setGoals(goals);
+    	MavenExecutionPlan fullPlan = maven.calculateExecutionPlan(mer, mavenProjectFacade.getMavenProject(monitor), monitor); 
+    	mojoExecutions = fullPlan.getMojoExecutions();
+    	for (MojoExecution mojoExecution : mojoExecutions) {
+    		if(mojoExecutionForPlugin(mojoExecution, pluginGroupId, pluginArtifactId, pluginGoal)) {
+    			return mojoExecution;
+    		}
+    	}
         return null;
-    }
+    }//
     
     public static MavenPluginWrapper newInstance(
     		IProgressMonitor monitor,
