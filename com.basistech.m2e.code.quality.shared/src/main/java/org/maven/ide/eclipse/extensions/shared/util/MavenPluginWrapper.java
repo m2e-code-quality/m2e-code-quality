@@ -100,18 +100,10 @@ public class MavenPluginWrapper {
             final String[] pluginGoal) throws CoreException {
     	MavenExecutionPlan executionPlan = mavenProjectFacade.getExecutionPlan(monitor);
     	List<MojoExecution> mojoExecutions = executionPlan.getMojoExecutions();
-    	for (MojoExecution mojoExecution : mojoExecutions) {
-    		if (pluginGoal != null) {
-    			for (String goal : pluginGoal) {
-    	    		if(mojoExecutionForPlugin(mojoExecution, pluginGroupId, pluginArtifactId, goal)) {
-    	    			return mojoExecution;
-    	    		}
-    			}
-    		} else {
-    			if(mojoExecutionForPlugin(mojoExecution, pluginGroupId, pluginArtifactId, null)) {
-	    			return mojoExecution;
-	    		}
-    		}
+    	MojoExecution exec = searchExecutions(pluginGroupId, pluginArtifactId, pluginGoal,
+				mojoExecutions);
+    	if (exec != null) {
+    		return exec;
     	}
     	// maybe it's bound to a phase after 'package', we have to do this the slow way.
     	IMaven maven = MavenPlugin.getDefault().getMaven();
@@ -120,7 +112,25 @@ public class MavenPluginWrapper {
     	mer.setGoals(goals);
     	MavenExecutionPlan fullPlan = maven.calculateExecutionPlan(mer, mavenProjectFacade.getMavenProject(monitor), monitor); 
     	mojoExecutions = fullPlan.getMojoExecutions();
-    	for (MojoExecution mojoExecution : mojoExecutions) {
+    	exec = searchExecutions(pluginGroupId, pluginArtifactId, pluginGoal,
+    	                  		mojoExecutions);
+    	if (exec != null) {
+    		return exec;
+    	}
+    	mer = maven.createExecutionRequest(monitor);
+    	goals = Collections.singletonList("site:site");
+    	mer.setGoals(goals);
+    	fullPlan = maven.calculateExecutionPlan(mer, mavenProjectFacade.getMavenProject(monitor), monitor); 
+    	mojoExecutions = fullPlan.getMojoExecutions();
+
+        return searchExecutions(pluginGroupId, pluginArtifactId, pluginGoal,
+    			                mojoExecutions);
+    }//
+
+	private static MojoExecution searchExecutions(final String pluginGroupId,
+			final String pluginArtifactId, final String[] pluginGoal,
+			List<MojoExecution> mojoExecutions) {
+		for (MojoExecution mojoExecution : mojoExecutions) {
     		if (pluginGoal != null) {
     			for (String goal : pluginGoal) {
     	    		if(mojoExecutionForPlugin(mojoExecution, pluginGroupId, pluginArtifactId, goal)) {
@@ -133,8 +143,8 @@ public class MavenPluginWrapper {
 	    		}
     		}
     	}
-        return null;
-    }//
+		return null;
+	}
     
     public static MavenPluginWrapper newInstance(
     		IProgressMonitor monitor,
