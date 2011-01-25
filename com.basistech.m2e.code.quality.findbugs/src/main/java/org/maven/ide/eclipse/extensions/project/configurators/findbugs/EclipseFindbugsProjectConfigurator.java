@@ -45,8 +45,8 @@ public class EclipseFindbugsProjectConfigurator
         extends AbstractMavenPluginProjectConfigurator {
 
     @Override
-	protected String getMavenPluginGoal() {
-		return "check";
+	protected String[] getMavenPluginGoal() {
+		return new String[] {"check"};
 	}
 
 	@Override

@@ -97,12 +97,20 @@ public class MavenPluginWrapper {
             IMavenProjectFacade mavenProjectFacade,
             final String pluginGroupId,
             final String pluginArtifactId,
-            final String pluginGoal) throws CoreException {
+            final String[] pluginGoal) throws CoreException {
     	MavenExecutionPlan executionPlan = mavenProjectFacade.getExecutionPlan(monitor);
     	List<MojoExecution> mojoExecutions = executionPlan.getMojoExecutions();
     	for (MojoExecution mojoExecution : mojoExecutions) {
-    		if(mojoExecutionForPlugin(mojoExecution, pluginGroupId, pluginArtifactId, pluginGoal)) {
-    			return mojoExecution;
+    		if (pluginGoal != null) {
+    			for (String goal : pluginGoal) {
+    	    		if(mojoExecutionForPlugin(mojoExecution, pluginGroupId, pluginArtifactId, goal)) {
+    	    			return mojoExecution;
+    	    		}
+    			}
+    		} else {
+    			if(mojoExecutionForPlugin(mojoExecution, pluginGroupId, pluginArtifactId, null)) {
+	    			return mojoExecution;
+	    		}
     		}
     	}
     	// maybe it's bound to a phase after 'package', we have to do this the slow way.
@@ -113,8 +121,16 @@ public class MavenPluginWrapper {
     	MavenExecutionPlan fullPlan = maven.calculateExecutionPlan(mer, mavenProjectFacade.getMavenProject(monitor), monitor); 
     	mojoExecutions = fullPlan.getMojoExecutions();
     	for (MojoExecution mojoExecution : mojoExecutions) {
-    		if(mojoExecutionForPlugin(mojoExecution, pluginGroupId, pluginArtifactId, pluginGoal)) {
-    			return mojoExecution;
+    		if (pluginGoal != null) {
+    			for (String goal : pluginGoal) {
+    	    		if(mojoExecutionForPlugin(mojoExecution, pluginGroupId, pluginArtifactId, goal)) {
+    	    			return mojoExecution;
+    	    		}
+    			}
+    		} else {
+    			if(mojoExecutionForPlugin(mojoExecution, pluginGroupId, pluginArtifactId, null)) {
+	    			return mojoExecution;
+	    		}
     		}
     	}
         return null;
@@ -124,15 +140,11 @@ public class MavenPluginWrapper {
     		IProgressMonitor monitor,
             final String pluginGroupId,
             final String pluginArtifactId,
-            final String pluginGoal,
+            final String[] pluginGoal,
             IMavenProjectFacade mavenProjectFacade) throws CoreException {
         Preconditions.checkNotNull(mavenProjectFacade);
-        final MojoExecution execution = findMojoExecution(monitor,
-                mavenProjectFacade, pluginGroupId, pluginArtifactId, pluginGoal);
+        final MojoExecution execution = findMojoExecution(monitor, mavenProjectFacade, pluginGroupId, pluginArtifactId, pluginGoal);
         String key = pluginGroupId + ":" + pluginArtifactId;
-        if (pluginGoal != null) {
-        	key = key + ":" + pluginGoal;
-        }
         return new MavenPluginWrapper(key, execution);
     }
     

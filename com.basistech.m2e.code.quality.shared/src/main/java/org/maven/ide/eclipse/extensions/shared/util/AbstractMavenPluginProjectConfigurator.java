@@ -202,11 +202,12 @@ public abstract class AbstractMavenPluginProjectConfigurator
     protected abstract String getMavenPluginArtifactId();
     
     /**
-     * Return the specific goal that this class works on, or null if it all goals apply.
-     * Null may lead to chaotic overlaying of multiple configurations.
+     * Return the specific goals that this class works on, or null if it all goals apply.
+     * Null may lead to chaotic overlaying of multiple configurations. If more than one,
+     * this will process in order looking for an execution.
      * @return
      */
-    protected String getMavenPluginGoal() {
+    protected String[] getMavenPluginGoal() {
     	return null;
     }
 
@@ -271,9 +272,9 @@ public abstract class AbstractMavenPluginProjectConfigurator
     		final IMavenProjectFacade projectFacade) throws CoreException {
         return MavenPluginWrapper.newInstance(
         		monitor,
-                this.getMavenPluginGroupId(),
-                this.getMavenPluginArtifactId(), 
-                this.getMavenPluginGoal(),
+                getMavenPluginGroupId(),
+                getMavenPluginArtifactId(), 
+                getMavenPluginGoal(),
                 projectFacade);
     }
 
