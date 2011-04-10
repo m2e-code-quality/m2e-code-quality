@@ -121,7 +121,7 @@ public class MavenPluginConfigurationTranslator {
      * @throws CoreException 
      */
     private List<String> getIncludePatterns() throws CoreException {
-    	String[] includes = configurator.getParameterValue("excludes", String[].class, session, pmdGoalExecution);
+    	String[] includes = configurator.getParameterValue("includes", String[].class, session, pmdGoalExecution);
         final List<String> transformedPatterns = new LinkedList<String>();
         if (includes != null && includes.length > 0) {
             for (String p : includes) {
