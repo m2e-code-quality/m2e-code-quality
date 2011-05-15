@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package org.maven.ide.eclipse.extensions.project.configurators.checkstyle;
+package com.basistech.m2e.code.quality.checkstyle;
 
-import static org.maven.ide.eclipse.extensions.project.configurators.checkstyle.CheckstyleEclipseConstants.ECLIPSE_CS_CACHE_FILENAME;
-import static org.maven.ide.eclipse.extensions.project.configurators.checkstyle.CheckstyleEclipseConstants.ECLIPSE_CS_PREFS_FILE;
+import static com.basistech.m2e.code.quality.checkstyle.CheckstyleEclipseConstants.ECLIPSE_CS_CACHE_FILENAME;
+import static com.basistech.m2e.code.quality.checkstyle.CheckstyleEclipseConstants.ECLIPSE_CS_PREFS_FILE;
 
 import java.util.ArrayList;
 import java.util.List;

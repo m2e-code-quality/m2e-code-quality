@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package org.maven.ide.eclipse.extensions.project.configurators.pmd;
+package com.basistech.m2e.code.quality.pmd;
 
-import static org.maven.ide.eclipse.extensions.project.configurators.pmd.PmdEclipseConstants.MAVEN_PLUGIN_ARTIFACTID;
-import static org.maven.ide.eclipse.extensions.project.configurators.pmd.PmdEclipseConstants.MAVEN_PLUGIN_GROUPID;
-import static org.maven.ide.eclipse.extensions.project.configurators.pmd.PmdEclipseConstants.PMD_RULESET_FILE;
-import static org.maven.ide.eclipse.extensions.project.configurators.pmd.PmdEclipseConstants.PMD_SETTINGS_FILE;
+import static com.basistech.m2e.code.quality.pmd.PmdEclipseConstants.MAVEN_PLUGIN_ARTIFACTID;
+import static com.basistech.m2e.code.quality.pmd.PmdEclipseConstants.MAVEN_PLUGIN_GROUPID;
+import static com.basistech.m2e.code.quality.pmd.PmdEclipseConstants.PMD_RULESET_FILE;
+import static com.basistech.m2e.code.quality.pmd.PmdEclipseConstants.PMD_SETTINGS_FILE;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;

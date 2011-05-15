@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package org.maven.ide.eclipse.extensions.project.configurators.pmd;
+package com.basistech.m2e.code.quality.pmd;
 
 import java.io.File;
 import java.net.URI;

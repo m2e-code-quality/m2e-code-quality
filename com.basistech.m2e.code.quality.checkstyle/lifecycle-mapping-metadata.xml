@@ -12,7 +12,7 @@
       </pluginExecutionFilter>
       <action>
         <configurator>
-          <id>org.maven.ide.eclipse.extensions.project.configurators.checkstyle.EclipseCheckstyleProjectConfigurator</id>
+          <id>com.basistech.m2e.code.quality.checkstyle.EclipseCheckstyleProjectConfigurator</id>
         </configurator>
       </action>
     </pluginExecution>

@@ -6,7 +6,7 @@
        <configurator 
          id="com.basistech.m2e.code.quality.checkstyleConfigurator"
          name="M2Eclipse maven-checkstyle-plugin project configurator"
-        class="org.maven.ide.eclipse.extensions.project.configurators.checkstyle.EclipseCheckstyleProjectConfigurator"
+        class="com.basistech.m2e.code.quality.checkstyle.EclipseCheckstyleProjectConfigurator"
         />
    </extension>
    <extension
