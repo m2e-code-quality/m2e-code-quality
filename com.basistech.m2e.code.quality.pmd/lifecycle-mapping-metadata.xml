@@ -12,7 +12,7 @@
       </pluginExecutionFilter>
       <action>
         <configurator>
-          <id>com.basistech.m2e.code.quality.pmd.EclipsePmdProjectConfigurator</id>
+          <id>com.basistech.m2e.code.quality.pmd</id>
         </configurator>
       </action>
     </pluginExecution>
