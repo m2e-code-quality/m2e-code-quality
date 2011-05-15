@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lifecycleMappingMetadata>
+  <pluginExecutions>
+    <pluginExecution>
+      <pluginExecutionFilter>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-checkstyle-plugin</artifactId>
+	<version>[2.6,)</version>
+        <goals>
+          <goal>checkstyle</goal>
+        </goals>
+      </pluginExecutionFilter>
+      <action>
+        <configurator>
+          <id>org.maven.ide.eclipse.extensions.project.configurators.checkstyle.EclipseCheckstyleProjectConfigurator</id>
+        </configurator>
+      </action>
+    </pluginExecution>
+    <!-- add in the other checkstyle plugin goal? -->
+  </pluginExecutions>
+</lifecycleMappingMetadata>

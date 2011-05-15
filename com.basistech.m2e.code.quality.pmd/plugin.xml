@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.2"?>
+<?eclipse version="3.4"?>
 <plugin>
    <extension
          id="com.basistech.m2e.code.quality.pmd"
@@ -8,5 +8,8 @@
  	  <configurator id="com.basistech.m2e.code.quality.pmd"
       	class="org.maven.ide.eclipse.extensions.project.configurators.pmd.EclipsePmdProjectConfigurator"
         name="M2E-PMD"/>
+   </extension>
+   <extension
+         point="org.eclipse.m2e.core.lifecycleMappingMetadataSource">
    </extension>
 </plugin>
