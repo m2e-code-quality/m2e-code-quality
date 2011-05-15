@@ -18,7 +18,6 @@ package org.maven.ide.eclipse.extensions.project.configurators.checkstyle;
 
 import static org.maven.ide.eclipse.extensions.project.configurators.checkstyle.CheckstyleEclipseConstants.ECLIPSE_CS_CACHE_FILENAME;
 import static org.maven.ide.eclipse.extensions.project.configurators.checkstyle.CheckstyleEclipseConstants.ECLIPSE_CS_PREFS_CONFIG_NAME;
-import static org.maven.ide.eclipse.extensions.project.configurators.checkstyle.CheckstyleEclipseConstants.LOG_PREFIX;
 import static org.maven.ide.eclipse.extensions.project.configurators.checkstyle.CheckstyleEclipseConstants.MAVEN_PLUGIN_ARTIFACTID;
 import static org.maven.ide.eclipse.extensions.project.configurators.checkstyle.CheckstyleEclipseConstants.MAVEN_PLUGIN_GROUPID;
 
@@ -41,10 +40,10 @@ import org.apache.maven.execution.MavenSession;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.maven.ide.eclipse.core.MavenLogger;
-import org.maven.ide.eclipse.extensions.shared.util.AbstractMavenPluginProjectConfigurator;
-import org.maven.ide.eclipse.extensions.shared.util.MavenPluginWrapper;
-import org.maven.ide.eclipse.project.IMavenProjectFacade;
+import org.eclipse.m2e.core.project.IMavenProjectFacade;
+
+import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
+import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
 
 /**
  */
@@ -74,11 +73,6 @@ public class EclipseCheckstyleProjectConfigurator
 	}
 
     @Override
-    protected String getLogPrefix() {
-        return LOG_PREFIX;
-    }
-
-    @Override
     protected void handleProjectConfigurationChange(
     		final MavenSession session,
             final IMavenProjectFacade mavenProjectFacade,
@@ -86,17 +80,13 @@ public class EclipseCheckstyleProjectConfigurator
             final IProgressMonitor monitor,
             final MavenPluginWrapper mavenPluginWrapper) throws CoreException {
     	
-        this.console.logMessage(String.format(
-                "[%s]: Eclipse Checkstyle Configuration started", LOG_PREFIX));
-        
         final MavenPluginConfigurationTranslator mavenCheckstyleConfig = 
             MavenPluginConfigurationTranslator
                 .newInstance(this,
                 		     session,
                 		     mavenProjectFacade.getMavenProject(monitor), 
                              mavenPluginWrapper, 
-                             project, 
-                             LOG_PREFIX);
+                             project);
 
         try {
             this.buildCheckstyleConfiguration(
@@ -107,11 +97,8 @@ public class EclipseCheckstyleProjectConfigurator
             // Add the builder and nature
             csPluginNature.configure(monitor);
         } catch (CheckstylePluginException ex) {
-            this.console.logError(String.format("[%s]: %s", LOG_PREFIX, ex));
-            MavenLogger.log("CheckstylePluginException", ex);
+            //MavenLogger.log("CheckstylePluginException", ex);
         }
-        this.console.logMessage(String.format(
-                "[%s]: Eclipse Checkstyle Configuration ended", LOG_PREFIX));
     }
     
     @Override
@@ -187,17 +174,13 @@ public class EclipseCheckstyleProjectConfigurator
             for (CheckConfigurationWorkingCopy copy : workingCopies) {
                 if (ECLIPSE_CS_PREFS_CONFIG_NAME.equals(copy.getName())) {
                     if (this.remoteConfigurationType.equals(copy.getType())) {
-                        this.console.logMessage(String.format(
-                          "[%s]: A local Checkstyle configuration allready exists with name "
-                          + " [%s]. Will update with maven-checkstyle-plugin configuration for project",
-                          LOG_PREFIX, ECLIPSE_CS_PREFS_CONFIG_NAME));
                         workingCopy = copy;
                         break;
                     }
                     throw new CheckstylePluginException(String.format(
-                            "[%s]: A local Checkstyle configuration allready exists with name "
+                            "A local Checkstyle configuration allready exists with name "
                             + " [%s] with incompatible type [%s]",
-                            LOG_PREFIX, ECLIPSE_CS_PREFS_CONFIG_NAME, copy.getType()));
+                            ECLIPSE_CS_PREFS_CONFIG_NAME, copy.getType()));
                 }
             }
         }

@@ -3,16 +3,18 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.basistech.m2e-code-quality</groupId>
     <artifactId>m2e-code-quality-plugins</artifactId>
-    <version>0.12.0-SNAPSHOT</version>
+    <version>0.13.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-
- <scm>
+    <scm>
         <connection>scm:git:git://github.com/bimargulies/m2e-code-quality.git</connection>
         <url>scm:git:git://github.com/bimargulies/m2e-code-quality.git</url>
     </scm>
-
     <properties>
         <tycho-version>0.10.0</tycho-version>
+        <tycho-version>0.10.0</tycho-version>
+        <m2eclipse-core.version>0.13.0/N/0.13.0.201104062205</m2eclipse-core.version>
+        <target.platform>m2e-e35</target.platform>
+        <target.platform.version>0.13.0-SNAPSHOT</target.platform.version>
     </properties>
     <modules>
         <module>com.basistech.m2e.code.quality.shared</module>
@@ -21,18 +23,22 @@
         <module>com.basistech.m2e.code.quality.pmd</module>
         <module>com.basistech.m2e.code.quality.pmd.feature</module>
         <module>com.basistech.m2e.code.quality.findbugs</module>
-	<module>com.basistech.m2e.code.quality.site</module>
+        <module>com.basistech.m2e.code.quality.site</module>
     </modules>
     <repositories>
         <repository>
-            <id>galileo</id>
+            <id>rso</id>
+            <url>http://repository.sonatype.org/content/groups/sonatype-public-grid</url>
+        </repository>
+        <repository>
+            <id>helios</id>
             <layout>p2</layout>
-            <url>http://download.eclipse.org/releases/galileo</url>
+            <url>http://download.eclipse.org/releases/helios</url>
         </repository>
         <repository>
             <id>m2e</id>
             <layout>p2</layout>
-            <url>http://m2eclipse.sonatype.org/sites/m2e/0.12.0.20101115-1102</url>
+            <url>http://repository.sonatype.org/content/sites/forge-sites/m2e/${m2eclipse-core.version}</url>
         </repository>
     </repositories>
     <build>
@@ -73,6 +79,37 @@
         </plugins>
         <pluginManagement>
             <plugins>
+                <!--TODO TEXT. This plugin's configuration is used in m2e only.-->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+			    org.sonatype.tycho
+			  </groupId>
+                                        <artifactId>
+			    maven-osgi-source-plugin
+			  </artifactId>
+                                        <versionRange>
+  										[0.10.0,)
+  									</versionRange>
+                                        <goals>
+                                            <goal>plugin-source</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore/>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>org.sonatype.tycho</groupId>
                     <artifactId>maven-osgi-test-plugin</artifactId>
@@ -88,16 +125,16 @@
                         <forkedProcessTimeoutInSeconds>7200</forkedProcessTimeoutInSeconds>
                     </configuration>
                 </plugin>
-		<plugin>
-		  <groupId>org.sonatype.tycho</groupId>
-		  <artifactId>maven-osgi-packaging-plugin</artifactId>
-		  <version>0.10.0</version>
-		</plugin>
-		<plugin>
-		  <groupId>org.sonatype.tycho</groupId>
-		  <artifactId>tycho-p2-plugin</artifactId>
-		  <version>0.10.0</version>
-		</plugin>
+                <plugin>
+                    <groupId>org.sonatype.tycho</groupId>
+                    <artifactId>maven-osgi-packaging-plugin</artifactId>
+                    <version>0.10.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.tycho</groupId>
+                    <artifactId>tycho-p2-plugin</artifactId>
+                    <version>0.10.0</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>

@@ -18,7 +18,6 @@ package org.maven.ide.eclipse.extensions.project.configurators.checkstyle;
 
 import static org.maven.ide.eclipse.extensions.project.configurators.checkstyle.CheckstyleEclipseConstants.ECLIPSE_CS_CACHE_FILENAME;
 import static org.maven.ide.eclipse.extensions.project.configurators.checkstyle.CheckstyleEclipseConstants.ECLIPSE_CS_PREFS_FILE;
-import static org.maven.ide.eclipse.extensions.project.configurators.checkstyle.CheckstyleEclipseConstants.LOG_PREFIX;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +29,6 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.maven.ide.eclipse.MavenPlugin;
-import org.maven.ide.eclipse.core.MavenConsole;
 
 import com.google.common.base.Preconditions;
 /**
@@ -41,11 +38,9 @@ import com.google.common.base.Preconditions;
 public class EclipseCheckstyleConfigManager {
 
     private final CheckstyleNature csNature;
-    private final MavenConsole console;
     
     private EclipseCheckstyleConfigManager(final CheckstyleNature csNature) {
         this.csNature = csNature;
-        this.console = MavenPlugin.getDefault().getConsole();
     }
     
     public void configure(final IProgressMonitor monitor) throws CoreException {
@@ -93,17 +88,8 @@ public class EclipseCheckstyleConfigManager {
 
     private void deleteEclipseFiles(final IProgressMonitor monitor) throws CoreException {
         final IProject project = this.csNature.getProject();
-        //delete .checkstyle if any
-        this.console.logMessage(String.format(
-                "[%s]: Attempting to remove [%s] from project", 
-                LOG_PREFIX, ECLIPSE_CS_PREFS_FILE));
         final IResource checkstyleFile = project.getFile(ECLIPSE_CS_PREFS_FILE);
         checkstyleFile.delete(IResource.FORCE, monitor);
-
-        //delete checkstyle cache file if any
-        this.console.logMessage(String.format(
-                "[%s]: Attempting to remove [%s] from project", 
-                LOG_PREFIX, ECLIPSE_CS_CACHE_FILENAME));
         final IResource checkstyleCacheFileResource = project
             .getFile(ECLIPSE_CS_CACHE_FILENAME);
         checkstyleCacheFileResource.delete(IResource.FORCE, monitor);

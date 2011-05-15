@@ -41,11 +41,10 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.maven.ide.eclipse.MavenPlugin;
-import org.maven.ide.eclipse.core.MavenConsole;
-import org.maven.ide.eclipse.extensions.shared.util.AbstractMavenPluginProjectConfigurator;
-import org.maven.ide.eclipse.extensions.shared.util.MavenPluginWrapper;
-import org.maven.ide.eclipse.extensions.shared.util.ResourceResolver;
+
+import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
+import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
+import com.basistech.m2e.code.quality.shared.ResourceResolver;
 
 /**
  * Utility class to get checkstyle plugin configuration.
@@ -56,12 +55,10 @@ public class MavenPluginConfigurationTranslator {
     private static final Map<String, String> PATTERNS_CACHE =
         new HashMap<String, String>();
 
-    private final MavenConsole console;
     private final MavenProject mavenProject;
     private final IProject project;
     private final URI basedirUri;
     private final AbstractMavenPluginProjectConfigurator configurator;
-    private final String prefix;
     private final ResourceResolver resourceResolver;
     private final MavenSession session;
     private final MojoExecution execution;
@@ -71,15 +68,12 @@ public class MavenPluginConfigurationTranslator {
     		final MavenSession session,
     		final MavenProject mavenProject,
     		final MavenPluginWrapper pluginWrapper,
-    		final IProject project,
-    		final String prefix) throws CoreException {
-        	this.console = MavenPlugin.getDefault().getConsole();
+    		final IProject project) throws CoreException {
         	this.mavenProject = mavenProject;
         	this.project = project;
         	this.basedirUri = this.project.getLocationURI();
-        	this.prefix = prefix;
         	this.resourceResolver = ResourceResolver.newInstance(configurator.getPluginClassRealm(session, 
-        			pluginWrapper.getMojoExecution()), prefix);
+        			pluginWrapper.getMojoExecution()));
         	this.session = session;
         	this.execution = pluginWrapper.getMojoExecution();
         	this.configurator = configurator;
@@ -286,9 +280,6 @@ public class MavenPluginConfigurationTranslator {
             } else {
                 csPattern = this.convertAntStylePatternToCheckstylePattern(p);
                 PATTERNS_CACHE.put(p, csPattern);
-                this.console.logMessage(String.format(
-                        "[%s]: Transformed plugin pattern [%s] to [%s]", 
-                            this.prefix, p, csPattern));
             }
             transformedPatterns.add(csPattern);
         }
@@ -373,14 +364,12 @@ public class MavenPluginConfigurationTranslator {
     		MavenSession session,
             final MavenProject mavenProject,
             final MavenPluginWrapper mavenPlugin,
-            final IProject project,
-            final String prefix) throws CoreException {
+            final IProject project) throws CoreException {
         final MavenPluginConfigurationTranslator m2csConverter =
             new MavenPluginConfigurationTranslator(
                     configurator, session, mavenProject,
                     mavenPlugin,
-                    project, 
-                    prefix);
+                    project);
         return m2csConverter;
     }
 

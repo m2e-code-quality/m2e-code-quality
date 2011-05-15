@@ -200,8 +200,6 @@ Copyright (c) 2010 Basis Technology Corp.
 
    <requires>
       <import plugin="org.eclipse.core.runtime" version="3.4.0" match="greaterOrEqual"/>
-      <import plugin="org.maven.ide.eclipse" version="0.11.0" match="compatible"/>
-      <import plugin="org.maven.ide.eclipse.maven_embedder" version="0.11.0" match="compatible"/>
       <import plugin="org.eclipse.core.resources" version="3.4.0" match="greaterOrEqual"/>
       <import plugin="net.sf.eclipsecs.core" version="5.2.0" match="compatible"/>
       <import plugin="net.sf.eclipsecs.checkstyle" version="5.2.0" match="compatible"/>
