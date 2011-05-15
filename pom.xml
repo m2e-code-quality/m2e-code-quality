@@ -12,7 +12,7 @@
     <properties>
         <tycho-version>0.12.0</tycho-version>
         <m2eclipse-core.version>0.13.0/N/0.13.0.201104062205</m2eclipse-core.version>
-        <target.platform>m2e-e35</target.platform>
+        <target.platform>m2e-e37</target.platform>
         <target.platform.version>0.13.0-SNAPSHOT</target.platform.version>
     </properties>
     <modules>
@@ -25,20 +25,28 @@
     </modules>
     <repositories>
         <repository>
-            <id>rso</id>
-            <url>http://repository.sonatype.org/content/groups/sonatype-public-grid</url>
-        </repository>
-        <repository>
-            <id>helios</id>
-            <layout>p2</layout>
-            <url>http://download.eclipse.org/releases/helios</url>
-        </repository>
-        <repository>
-            <id>m2e</id>
-            <layout>p2</layout>
-            <url>http://repository.sonatype.org/content/sites/forge-sites/m2e/${m2eclipse-core.version}</url>
+	  <releases>
+	    <enabled>true</enabled>
+	  </releases>
+	  <snapshots>
+	    <enabled>true</enabled>
+	  </snapshots>
+	  <id>rso</id>
+	  <url>http://repository.sonatype.org/content/groups/sonatype-public-grid</url>
         </repository>
     </repositories>
+    <pluginRepositories>
+      <pluginRepository>
+	<id>sonatype-public</id>
+	<url>http://repository.sonatype.org/content/groups/sonatype-public-grid</url>
+	<snapshots>
+	  <enabled>true</enabled>
+	</snapshots>
+	<releases>
+	  <enabled>true</enabled>
+	</releases>
+      </pluginRepository>
+    </pluginRepositories>
     <build>
         <defaultGoal>install</defaultGoal>
         <plugins>
@@ -54,7 +62,6 @@
                 <version>${tycho-version}</version>
                 <configuration>
                     <resolver>p2</resolver>
-                    <pomDependencies>consider</pomDependencies>
                     <target>
                         <artifact>
                             <groupId>org.eclipse.m2e</groupId>
