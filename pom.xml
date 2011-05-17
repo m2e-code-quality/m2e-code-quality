@@ -20,7 +20,6 @@
         <module>com.basistech.m2e.code.quality.checkstyle.feature</module>
         <module>com.basistech.m2e.code.quality.pmd</module>
         <module>com.basistech.m2e.code.quality.pmd.feature</module>
-        <module>com.basistech.m2e.code.quality.findbugs</module>
 	<module>com.basistech.m2e.code.quality.site</module>
     </modules>
     <repositories>
