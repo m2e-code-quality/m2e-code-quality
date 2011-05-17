@@ -272,8 +272,18 @@ public class MavenPluginConfigurationTranslator {
         final List<String> folders = new ArrayList<String>();
         //No null check as internally we *know*
         for (File f: sources) {
-	    String relativePath = URIUtils.resolve(this.basedirUri,f.toURI()).getPath();
+	    String relativePath;
+	    if (!f.isAbsolute()) {
+		relativePath = URIUtils.resolve(this.basedirUri,f.toURI()).getPath();
                 //TODO this.basedirUri.relativize(f.toURI()).getPath();
+	    } else {
+		relativePath = f.getAbsolutePath();
+	    }
+
+	    if ("\\".equals(File.separator)) {
+	    	relativePath = relativePath.replace("\\","/");
+	    }
+	
             if (relativePath.endsWith("/")) {
                 relativePath = relativePath.substring(0, relativePath.length() - 1);
             } 
