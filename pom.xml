@@ -70,7 +70,7 @@
                         <artifact>
                             <groupId>org.eclipse.m2e</groupId>
                             <artifactId>target-platform</artifactId>
-                            <version>${project.version}</version>
+                            <version>${target.platform.version}</version>
                             <classifier>${target.platform}</classifier>
                         </artifact>
                     </target>
