@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.2"?>
+<?eclipse version="3.4"?>
 <plugin>
    <extension
-         id="com.basistech.m2e.code.quality.checkstyle"
+         point="org.eclipse.m2e.core.projectConfigurators">
+       <configurator 
+         id="com.basistech.m2e.code.quality.checkstyleConfigurator"
          name="M2Eclipse maven-checkstyle-plugin project configurator"
-         point="org.maven.ide.eclipse.projectConfigurators">
-       <configurator id="com.basistech.m2e.code.quality.checkstyle"
-        class="org.maven.ide.eclipse.extensions.project.configurators.checkstyle.EclipseCheckstyleProjectConfigurator"
-        name="M2E-CS"/>         
+        class="com.basistech.m2e.code.quality.checkstyle.EclipseCheckstyleProjectConfigurator"
+        />
+   </extension>
+   <extension
+         point="org.eclipse.m2e.core.lifecycleMappingMetadataSource">
    </extension>
 </plugin>

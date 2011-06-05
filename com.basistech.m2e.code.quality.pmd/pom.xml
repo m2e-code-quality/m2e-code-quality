@@ -1,25 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-
-  <parent>
-    <groupId>com.basistech.m2e-code-quality</groupId>
-    <artifactId>m2e-code-quality-plugins</artifactId>
-    <version>0.12.0-SNAPSHOT</version>
-  </parent>
-
-  <artifactId>com.basistech.m2e.code.quality.pmd</artifactId>
-  <packaging>eclipse-plugin</packaging>
-
-  <name>M2Eclipse Project Configurator for Eclipse PMD</name>
-
-  <repositories>
-    <repository>
-      <id>cs</id>
-      <layout>p2</layout>
-      <url>file:/${basedir}/pmd-p2-repository</url>
-    </repository>
-
-  </repositories>
-
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.basistech.m2e-code-quality</groupId>
+        <artifactId>m2e-code-quality-plugins</artifactId>
+        <version>0.13.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>com.basistech.m2e.code.quality.pmd</artifactId>
+    <packaging>eclipse-plugin</packaging>
+    <name>M2Eclipse Project Configurator for Eclipse PMD</name>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!--TODO TEXT. This plugin's configuration is used in m2e only.-->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+  										org.sonatype.tycho
+  									</groupId>
+                                        <artifactId>
+  										maven-osgi-source-plugin
+  									</artifactId>
+                                        <versionRange>
+  										[0.10.0,)
+  									</versionRange>
+                                        <goals>
+                                            <goal>plugin-source</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore/>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

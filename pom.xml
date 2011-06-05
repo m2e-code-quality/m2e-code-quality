@@ -3,16 +3,16 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.basistech.m2e-code-quality</groupId>
     <artifactId>m2e-code-quality-plugins</artifactId>
-    <version>0.12.0-SNAPSHOT</version>
+    <version>0.13.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-
- <scm>
+    <scm>
         <connection>scm:git:git://github.com/bimargulies/m2e-code-quality.git</connection>
         <url>scm:git:git://github.com/bimargulies/m2e-code-quality.git</url>
     </scm>
-
     <properties>
-        <tycho-version>0.10.0</tycho-version>
+        <tycho-version>0.12.0</tycho-version>
+        <orbit.version>R20110523182458</orbit.version>
+        <main.basedir>${basedir}</main.basedir>
     </properties>
     <modules>
         <module>com.basistech.m2e.code.quality.shared</module>
@@ -24,57 +24,70 @@
     </modules>
     <repositories>
         <repository>
-            <id>galileo</id>
-            <layout>p2</layout>
-            <url>http://download.eclipse.org/releases/galileo</url>
-        </repository>
-        <repository>
             <id>m2e</id>
             <layout>p2</layout>
-            <url>http://m2eclipse.sonatype.org/sites/m2e/0.12.0.20101115-1102</url>
+            <url>http://download.eclipse.org/technology/m2e/milestones/1.0</url>
+        </repository>
+        <repository>
+            <id>helios</id>
+            <layout>p2</layout>
+            <url>http://download.eclipse.org/releases/helios</url>
+        </repository>
+        <repository>
+            <id>orbit</id>
+            <layout>p2</layout>
+            <url>http://download.eclipse.org/tools/orbit/downloads/drops/${orbit.version}/repository</url>
+        </repository>
+        <repository>
+            <id>cs</id>
+            <layout>p2</layout>
+            <url>http://bimargulies.github.com/m2e-code-quality/checkstyle-p2-repository</url>
+        </repository>
+        <repository>
+            <id>pmd</id>
+            <layout>p2</layout>
+            <url>http://bimargulies.github.com/m2e-code-quality/pmd-p2-repository</url>
         </repository>
     </repositories>
     <build>
         <defaultGoal>install</defaultGoal>
         <plugins>
             <plugin>
-                <groupId>org.sonatype.tycho</groupId>
+                <groupId>org.eclipse.tycho</groupId>
                 <artifactId>tycho-maven-plugin</artifactId>
                 <version>${tycho-version}</version>
                 <extensions>true</extensions>
             </plugin>
-            <plugin>
-                <groupId>org.sonatype.tycho</groupId>
-                <artifactId>target-platform-configuration</artifactId>
-                <version>${tycho-version}</version>
-                <configuration>
-                    <resolver>p2</resolver>
-                    <ignoreTychoRepositories>true</ignoreTychoRepositories>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.tycho</groupId>
-                <artifactId>maven-osgi-source-plugin</artifactId>
-                <version>${tycho-version}</version>
-                <executions>
-                    <execution>
-                        <id>plugin-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>plugin-source</goal>
-                        </goals>
-                        <configuration>
-                            <useDefaultManifestFile>true</useDefaultManifestFile>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+	    <plugin>
+	      <groupId>org.eclipse.tycho</groupId>
+	      <artifactId>target-platform-configuration</artifactId>
+	      <version>${tycho-version}</version>
+	      <configuration>
+		<resolver>p2</resolver>
+		<pomDependencies>consider</pomDependencies>
+		<ignoreTychoRepositories>true</ignoreTychoRepositories>
+	      </configuration>
+	    </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>org.sonatype.tycho</groupId>
-                    <artifactId>maven-osgi-test-plugin</artifactId>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>maven-osgi-lifecycle-plugin</artifactId>
+                    <version>${tycho-version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-packaging-plugin</artifactId>
+                    <version>${tycho-version}</version>
+                    <configuration>
+                        <!-- workaround for TYCHO-349 or TYCHO-313 -->
+                        <strictVersions>false</strictVersions>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-surefire-plugin</artifactId>
                     <version>${tycho-version}</version>
                     <configuration>
                         <useUIHarness>true</useUIHarness>
@@ -82,21 +95,29 @@
                             <include>**/*Test.java</include>
                         </includes>
                         <argLine>${tycho.test.jvmArgs}</argLine>
-                        <!-- kill test JVM it tests take more than 10 minutes (600 seconds) 
-              to finish -->
                         <forkedProcessTimeoutInSeconds>7200</forkedProcessTimeoutInSeconds>
                     </configuration>
                 </plugin>
-		<plugin>
-		  <groupId>org.sonatype.tycho</groupId>
-		  <artifactId>maven-osgi-packaging-plugin</artifactId>
-		  <version>0.10.0</version>
-		</plugin>
-		<plugin>
-		  <groupId>org.sonatype.tycho</groupId>
-		  <artifactId>tycho-p2-plugin</artifactId>
-		  <version>0.10.0</version>
-		</plugin>
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-compiler-plugin</artifactId>
+                    <version>${tycho-version}</version>
+                    <configuration>
+                        <source>1.5</source>
+                        <target>1.5</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-p2-plugin</artifactId>
+                    <version>${tycho-version}</version>
+                </plugin>
+                <!-- important for self-hosting -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.4.3</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
