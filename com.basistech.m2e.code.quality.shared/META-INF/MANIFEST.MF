@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Shared Code for M2 Code Quality Plugin Extensions
 Bundle-SymbolicName: com.basistech.m2e.code.quality.shared
  ;singleton:=true
-Bundle-Version: 0.13.0.qualifier
+Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: J2SE-1.5,
  JavaSE-1.6
 Bundle-Vendor: BasisTech

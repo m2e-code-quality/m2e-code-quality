@@ -2,7 +2,7 @@
 <feature
       id="com.basistech.m2e.code.quality.site"
       label="Code Quality Plugins Eclipse Update Site"
-      version="0.13.0.qualifier"
+      version="1.0.0.qualifier"
       provider-name="Basis Technology Corp.">
 
    <description url="http://bimargulies.github.com/m2e-code-quality">
