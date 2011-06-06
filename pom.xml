@@ -44,6 +44,18 @@
             <url>http://bimargulies.github.com/m2e-code-quality/pmd-p2-repository</url>
         </repository>
     </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>sonatype-public</id>
+      <url>http://repository.sonatype.org/content/groups/sonatype-public-grid</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </pluginRepository>
+  </pluginRepositories>
     <build>
         <defaultGoal>install</defaultGoal>
         <plugins>
