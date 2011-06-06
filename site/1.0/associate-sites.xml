@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<associateSites>
+  <associateSite url="http://eclipse-cs.sf.net/update" label="eclipse checkstyle" />
+  <associateSite url="http://pmd.sourceforge.net/eclipse" label="eclipse pmd" />
+</associateSites>
