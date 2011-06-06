@@ -10,7 +10,7 @@
         <url>scm:git:git://github.com/bimargulies/m2e-code-quality.git</url>
     </scm>
     <properties>
-        <tycho-version>0.12.0</tycho-version>
+        <tycho-version>0.13.0-SNAPSHOT</tycho-version>
         <orbit.version>R20110523182458</orbit.version>
         <main.basedir>${basedir}</main.basedir>
     </properties>
@@ -32,11 +32,6 @@
             <id>helios</id>
             <layout>p2</layout>
             <url>http://download.eclipse.org/releases/helios</url>
-        </repository>
-        <repository>
-            <id>orbit</id>
-            <layout>p2</layout>
-            <url>http://download.eclipse.org/tools/orbit/downloads/drops/${orbit.version}/repository</url>
         </repository>
         <repository>
             <id>cs</id>

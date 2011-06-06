@@ -9,37 +9,11 @@
   </parent>
 
   <artifactId>com.basistech.m2e.code.quality.site</artifactId>
-  <packaging>eclipse-feature</packaging>
+  <packaging>eclipse-update-site</packaging>
   <name>M2Eclipse Code Quality Plugins Update Site</name>
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-packaging-plugin</artifactId>
-        <configuration>
-          <deployableFeature>true</deployableFeature>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-p2-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>categorization</id>
-            <phase>package</phase>
-            <goals>
-              <goal>category-p2-metadata</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <metadataRepositoryName>Maven Code Quality Plugins Integration for Eclipse</metadataRepositoryName>
-          <artifactRepositoryName>Maven Code Quality Plugins Integration for Eclipse</artifactRepositoryName>
-          <compressRepository>true</compressRepository>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
