@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site associateSitesURL="associate-sites.xml">
-   <description url="http://bimargulies.github.org/m2e-code-quality/siteee">
-      
+   <description url="http://bimargulies.github.org/m2e-code-quality/site">
+     Code Quality Plugin Configuration for M2Eclipse
    </description>
-   <feature url="features/com.basistech.m2e.code.quality.checkstyle.feature_1.0.0.201106061641.jar" id="com.basistech.m2e.code.quality.checkstyle.feature" version="1.0.0.201106061641">
+   <feature url="features/com.basistech.m2e.code.quality.checkstyle.feature_1.0.0.201106081737.jar" id="com.basistech.m2e.code.quality.checkstyle.feature" version="1.0.0.201106081737">
       <category name="com.basistech.m2e.code.quality"/>
    </feature>
-   <feature url="features/com.basistech.m2e.code.quality.pmd.feature_1.0.0.201106061641.jar" id="com.basistech.m2e.code.quality.pmd.feature" version="1.0.0.201106061641">
+   <feature url="features/com.basistech.m2e.code.quality.pmd.feature_1.0.0.201106081737.jar" id="com.basistech.m2e.code.quality.pmd.feature" version="1.0.0.201106081737">
       <category name="com.basistech.m2e.code.quality"/>
    </feature>
    <category-def name="com.basistech.m2e.code.quality" label="Code Quality Plugin Configuration for M2Eclipse"/>
