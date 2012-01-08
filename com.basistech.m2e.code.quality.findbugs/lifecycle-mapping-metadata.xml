@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lifecycleMappingMetadata>
+	<pluginExecutions>
+		<pluginExecution>
+			<pluginExecutionFilter>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<versionRange>[2.3.3,)</versionRange>
+				<goals>
+					<goal>findbugs</goal>
+				</goals>
+			</pluginExecutionFilter>
+			<action>
+				<configurator>
+					<id>com.basistech.m2e.code.quality.findbugsConfigurator</id>
+				</configurator>
+			</action>
+		</pluginExecution>
+		<!-- add in the other findbugs plugin goal? -->
+	</pluginExecutions>
+</lifecycleMappingMetadata>

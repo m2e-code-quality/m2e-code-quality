@@ -18,9 +18,11 @@
         <module>com.basistech.m2e.code.quality.shared</module>
         <module>com.basistech.m2e.code.quality.checkstyle</module>
         <module>com.basistech.m2e.code.quality.checkstyle.feature</module>
+		<module>com.basistech.m2e.code.quality.findbugs</module>
+        <module>com.basistech.m2e.code.quality.findbugs.feature</module>
         <module>com.basistech.m2e.code.quality.pmd</module>
         <module>com.basistech.m2e.code.quality.pmd.feature</module>
-	<module>com.basistech.m2e.code.quality.site</module>
+		<module>com.basistech.m2e.code.quality.site</module>
     </modules>
     <repositories>
         <repository>
@@ -42,6 +44,11 @@
             <id>pmd</id>
             <layout>p2</layout>
             <url>http://bimargulies.github.com/m2e-code-quality/pmd-p2-repository</url>
+        </repository>
+		<repository>
+            <id>findbugs</id>
+            <layout>p2</layout>
+            <url>http://bimargulies.github.com/m2e-code-quality/findbugs-p2-repository</url>
         </repository>
     </repositories>
   <pluginRepositories>
