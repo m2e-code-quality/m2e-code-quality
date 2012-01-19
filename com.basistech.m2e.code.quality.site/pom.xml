@@ -72,7 +72,7 @@
                 </goals>
                 <configuration>
                   <file>${project.build.directory}/site</file>
-                  <repositoryUrl>gitsite:git@github.com/bimargulies/m2e-code-quality.git</repositoryUrl>
+                  <repositoryUrl>gitsite:git@github.com/m2e-code-quality/m2e-code-quality.git</repositoryUrl>
                   <repositoryPath>update-site/${unqualifiedVersion}/S/${unqualifiedVersion}.${buildQualifier}</repositoryPath>
                 </configuration>
               </execution>
