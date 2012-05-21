@@ -9,7 +9,7 @@
    <feature url="features/com.basistech.m2e.code.quality.pmd.feature_1.0.0.201201191547.jar" id="com.basistech.m2e.code.quality.pmd.feature" version="1.0.0.201201191547">
       <category name="com.basistech.m2e.code.quality"/>
    </feature>
-   <feature url="features/com.basistech.m2e.code.quality.findbugs.feature_1.0.0.201201191547.jar" id="com.basistech.m2e.code.quality.findbugs.feature" version="1.0.0.201201191547">
+   <feature url="features/com.basistech.m2e.code.quality.findbugs.feature_1.0.0.201205211636.jar" id="com.basistech.m2e.code.quality.findbugs.feature" version="1.0.0.201205211636">
       <category name="com.basistech.m2e.code.quality"/>
    </feature>
    <category-def name="com.basistech.m2e.code.quality" label="Code Quality Plugin Configuration for M2Eclipse"/>
