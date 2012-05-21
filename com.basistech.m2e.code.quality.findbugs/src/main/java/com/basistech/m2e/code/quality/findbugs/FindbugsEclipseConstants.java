@@ -37,6 +37,7 @@ public final class FindbugsEclipseConstants {
 	public static final String BUG_CATEGORIES = "bugCategories";
 	public static final String EXCLUDE_FILTER_FILE = "excludeFilterFile";
 	public static final String INCLUDE_FILTER_FILE = "includeFilterFile";
+	public static final String MAX_RANK = "maxRank";
 
 	private FindbugsEclipseConstants() {
 		// no instantiation.

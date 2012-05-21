@@ -104,8 +104,8 @@ public class EclipseFindbugsConfigManager {
 			throws CoreException {
 		log.debug("entering deleteEclipseFiles");
 		final IProject project = this.fbNature.getProject();
-		final IResource checkstyleFile = project.getFile(ECLIPSE_FB_PREFS_FILE);
-		checkstyleFile.delete(IResource.FORCE, monitor);
+		final IResource findbugsFile = project.getFile(ECLIPSE_FB_PREFS_FILE);
+		findbugsFile.delete(IResource.FORCE, monitor);
 
 	}
 

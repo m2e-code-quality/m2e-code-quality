@@ -108,6 +108,7 @@ public class EclipseFindbugsProjectConfigurator extends
 		pluginCfgTranslator.setExcludeFilterFiles(prefs);
 		//pluginCfgTranslator.setBugCatagories(prefs);
 		pluginCfgTranslator.setEffort(prefs);
+		pluginCfgTranslator.setMinRank(prefs);
 		pluginCfgTranslator.setVisitors(prefs);
 		pluginCfgTranslator.setOmitVisitors(prefs);
 		pluginCfgTranslator.setPriority(prefs);
