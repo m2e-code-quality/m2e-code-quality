@@ -28,6 +28,7 @@ import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.P
 import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.THRESHOLD;
 import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.VISITORS;
 import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.DEBUG;
+import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.MAX_RANK;
 
 import java.io.File;
 import java.io.IOException;
@@ -195,7 +196,7 @@ public class MavenPluginConfigurationTranslator {
     }
 
     public void setMinRank(final UserPreferences prefs) throws CoreException {
-        Integer minRank = this.configurator.getParameterValue(EFFORT, Integer.class, session, execution);
+        Integer minRank = this.configurator.getParameterValue(MAX_RANK, Integer.class, session, execution);
         if (minRank == null) {
             log.debug("max rank is null");
             return;
