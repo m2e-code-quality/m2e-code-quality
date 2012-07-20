@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.basistech.m2e-code-quality</groupId>
     <artifactId>m2e-code-quality-plugins</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <scm>
         <connection>scm:git:git://github.com/m2e-code-quality/m2e-code-quality.git</connection>
@@ -28,12 +28,12 @@
         <repository>
             <id>m2e</id>
             <layout>p2</layout>
-            <url>http://download.eclipse.org/technology/m2e/milestones/1.0</url>
+            <url>http://download.eclipse.org/technology/m2e/releases</url>
         </repository>
         <repository>
-            <id>helios</id>
+            <id>juno</id>
             <layout>p2</layout>
-            <url>http://download.eclipse.org/releases/helios</url>
+            <url>http://download.eclipse.org/releases/juno</url>
         </repository>
         <repository>
             <id>cs</id>
