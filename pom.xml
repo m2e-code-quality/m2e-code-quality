@@ -31,9 +31,9 @@
             <url>http://download.eclipse.org/technology/m2e/releases</url>
         </repository>
         <repository>
-            <id>helios</id>
+            <id>juno</id>
             <layout>p2</layout>
-            <url>http://download.eclipse.org/releases/helios</url>
+            <url>http://download.eclipse.org/releases/juno</url>
         </repository>
         <repository>
             <id>cs</id>
