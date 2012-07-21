@@ -28,7 +28,7 @@
         <repository>
             <id>m2e</id>
             <layout>p2</layout>
-            <url>http://download.eclipse.org/technology/m2e/milestones/1.0</url>
+            <url>http://download.eclipse.org/technology/m2e/releases</url>
         </repository>
         <repository>
             <id>helios</id>
