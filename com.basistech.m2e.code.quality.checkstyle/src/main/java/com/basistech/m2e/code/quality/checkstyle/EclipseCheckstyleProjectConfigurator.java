@@ -122,6 +122,7 @@ public class EclipseCheckstyleProjectConfigurator
             new ProjectConfigurationWorkingCopy(ProjectConfigurationFactory
                     .getConfiguration(project));
         pcWorkingCopy.setUseSimpleConfig(false);
+        pcWorkingCopy.setSyncFormatter(Activator.getDefault().getPreferenceStore().getBoolean(CheckstyleEclipseConstants.ECLIPSE_CS_GENERATE_FORMATTER_SETTINGS));
         //build or get the checkconfig
         final ICheckConfiguration checkCfg = 
             this.createOrGetCheckstyleConfig(pcWorkingCopy, ruleset);
