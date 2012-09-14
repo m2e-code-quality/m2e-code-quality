@@ -12,4 +12,11 @@
    <extension
          point="org.eclipse.m2e.core.lifecycleMappingMetadataSource">
    </extension>
+      <extension point="org.eclipse.ui.preferencePages">
+       <page id="com.basistech.m2e.code.quality.checkstyle.EclipseCheckstylereferencePage"
+	    category="org.eclipse.m2e.core.preferences.Maven2PreferencePage"
+	    class="com.basistech.m2e.code.quality.checkstyle.EclipseCheckstylereferencePage"
+            name="Checkstyle">
+       </page>
+   </extension>
 </plugin>
