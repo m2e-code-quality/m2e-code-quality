@@ -138,6 +138,11 @@ public class EclipseCheckstyleProjectConfigurator
         //get Properties from propertiesLocation
         final Properties props = cfgTranslator.getConfiguredProperties();
         cfgTranslator.updatePropertiesWithPropertyExpansion(props);
+        //add the header file location to the props.
+        String headerFile = cfgTranslator.getHeaderFile();
+        if (headerFile != null) {
+            props.setProperty("checkstyle.header.file", headerFile);
+        }
         //add the cache file location to the props.
         props.setProperty("checkstyle.cache.file", ECLIPSE_CS_CACHE_FILENAME);
         //Load all properties in the checkConfig

@@ -38,6 +38,7 @@ import net.sf.eclipsecs.core.util.CheckstylePluginException;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -88,6 +89,21 @@ public class MavenPluginConfigurationTranslator {
                "Failed to resolve RuleSet from configLocation,SKIPPING Eclipse checkstyle configuration"));
         }
         return ruleset;
+    }
+
+    public String getHeaderFile()
+    	throws CheckstylePluginException, CoreException {
+        final URL headerResource = this.resourceResolver.resolveLocation(
+            getHeaderLocation());
+        if (headerResource == null) {
+        	return null;
+        }
+
+        String outDir = mavenProject.getBuild().getDirectory();
+        File headerFile = new File(outDir, "checkstyle-header.txt");
+        copyOut(headerResource, headerFile);
+
+        return headerFile.getAbsolutePath();
     }
 
     public void updateCheckConfigWithIncludeExcludePatterns(
@@ -156,7 +172,18 @@ public class MavenPluginConfigurationTranslator {
         }
         return configLocation;
     }
-    
+
+    private String getHeaderLocation() throws CoreException {
+        String configLocation = getConfigLocation();
+        String headerLocation = configurator.getParameterValue("headerLocation",
+        		String.class, session, execution);
+        if ( "config/maven_checks.xml".equals( configLocation )
+          && "LICENSE.txt".equals( headerLocation ) ) {
+            headerLocation = "config/maven-header.txt";
+        }
+        return headerLocation;
+    }
+
     private List<String> getIncludes() throws CoreException {
         return this.getPatterns("includes");
     }
@@ -165,6 +192,15 @@ public class MavenPluginConfigurationTranslator {
         return this.getPatterns("excludes");
     }
     
+    private void copyOut(URL src, File dest) throws CheckstylePluginException {
+    	try {
+            FileUtils.copyURLToFile(src, dest);
+    	} catch (IOException e) {
+    		throw new CheckstylePluginException(
+              "Failed to resolve header file from configHeader, SKIPPING Eclipse checkstyle configuration");
+    	}
+    }
+
     /**
      * 
      * @return                           A list of {@code FileMatchPattern}'s.
