@@ -1,0 +1,54 @@
+<catalog>
+  <catalogItems>
+    <!-- https://bugs.eclipse.org/bugs/show_bug.cgi?id=347556 -->
+    <catalogItem>
+      <categoryId>org.eclipse.m2e.discovery.category.lifecycles</categoryId>
+      <description>applies configuration from the maven-checkstyle-plugin to the eclipse Checkstyle plugin. 
+      Disables execution of the maven-checkstyle-plugin within Eclipse in favor of the Eclipse plugin.</description>
+      <groupId>lifecycles</groupId>
+      <id>org.eclipse.m2e.discovery.lifecycles.m2echeckstype</id>
+      <kind>lifecycles</kind>
+      <license>ASL</license>
+      <name>Checkstyle M2E</name>
+      <provider>Benson Margulies etc @ m2e-code-quality.github.com</provider>
+      <p2>
+        <repositoryUrl>http://me2-code-quality.github.com/m2e-code-quality/site/1.0/</repositoryUrl>
+        <iuId>com.basistech.m2e.code.quality.checkstyle.feature.feature.group</iuId>
+        <iuVersion>1.0.0.201209141747</iuVersion>
+        <lifecycleMappingIU>
+          <iuId>com.basistech.m2e.code.quality.checkstyle</iuId>
+        </lifecycleMappingIU>
+      </p2>
+      <overview>
+        <summary>m2e support for the maven-checkstyle-plugin.</summary>
+        <url>https://m2e-code-quality.github.com/m2e-code-quality</url>
+      </overview>
+    </catalogItem>
+    
+    <catalogItem>
+      <categoryId>org.eclipse.m2e.discovery.category.lifecycles</categoryId>
+      <description>applies configuration from the maven-checkstyle-plugin to the
+        eclipse Checkstyle plugin. Disables execution of the maven-checkstyle-plugin
+        within Eclipse in favor of the Eclipse plugin.
+      </description>
+      <groupId>lifecycles</groupId>
+      <id>org.eclipse.m2e.discovery.lifecycles.m2epmd</id>
+      <kind>lifecycles</kind>
+      <license>ASL</license>
+      <name>PMD m2e</name>
+      <provider>Benson Margulies etc @ m2e-code-quality.github.com</provider>
+      <p2>
+        <repositoryUrl>http://m2e-code-quality.github.com/m2e-code-quality/site/1.0/</repositoryUrl>
+        <iuId>com.basistech.m2e.code.quality.pmd.feature.feature.group</iuId>
+        <iuVersion>1.0.0.201209141747</iuVersion>
+        <lifecycleMappingIU>
+          <iuId>com.basistech.m2e.code.quality.pmd</iuId>
+        </lifecycleMappingIU>
+      </p2>
+      <overview>
+        <summary>m2e support for the maven-pmd-plugin.</summary>
+        <url>https://m2e-code-quality.github.com/m2e-code-quality</url>
+      </overview>
+    </catalogItem>
+  </catalogItems>
+</catalog>
