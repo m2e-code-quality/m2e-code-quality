@@ -89,13 +89,18 @@ public class EclipseCheckstyleProjectConfigurator
                              project);
 
         try {
-            this.buildCheckstyleConfiguration(
+        	final EclipseCheckstyleConfigManager csPluginNature =
+        			EclipseCheckstyleConfigManager.newInstance(project);
+
+        	if (mavenCheckstyleConfig.isActive()) {
+                this.buildCheckstyleConfiguration(
                     project, 
                     mavenCheckstyleConfig);
-            final EclipseCheckstyleConfigManager csPluginNature =
-                EclipseCheckstyleConfigManager.newInstance(project);
-            // Add the builder and nature
-            csPluginNature.configure(monitor);
+                // Add the builder and nature
+                csPluginNature.configure(monitor);
+            } else {
+                csPluginNature.deconfigure(monitor);
+            }
         } catch (CheckstylePluginException ex) {
             //MavenLogger.log("CheckstylePluginException", ex);
         }

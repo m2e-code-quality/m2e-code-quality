@@ -80,6 +80,12 @@ public class MavenPluginConfigurationTranslator {
         	this.configurator = configurator;
     }
 
+    public boolean isActive() throws CoreException {
+        Boolean isSkip = configurator.getParameterValue("skip",
+        		Boolean.class, session, execution);
+        return (isSkip != null) ? !isSkip: true;
+    }
+
     public URL getRuleset() 
         throws CheckstylePluginException, CoreException {
         final URL ruleset = this.resourceResolver.resolveLocation(
