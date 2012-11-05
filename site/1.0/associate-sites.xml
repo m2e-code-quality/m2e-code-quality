@@ -2,4 +2,5 @@
 <associateSites>
   <associateSite url="http://eclipse-cs.sf.net/update" label="eclipse checkstyle" />
   <associateSite url="http://pmd.sourceforge.net/eclipse" label="eclipse pmd" />
+  <associateSite url="http://findbugs.cs.umd.edu/eclipse" label="eclipse findbugs" />
 </associateSites>
