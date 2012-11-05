@@ -24,5 +24,8 @@ you may have to match up commits.
 
 (There's also a web site for the organization; it's the me2-code-quality.github.com repo.)
 
+However, it turns out that Sonatype is not yet pulling and building us, so we still need
+to make releases by pushing them to the github pages of the repo.
 
+This happens by cd-ing to the site project and running mvn -PpublishSite.
 
