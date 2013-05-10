@@ -26,16 +26,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import net.sourceforge.pmd.Rule;
-import net.sourceforge.pmd.RuleReference;
+import net.sourceforge.pmd.lang.rule.RuleReference;
 import net.sourceforge.pmd.RuleSet;
 import net.sourceforge.pmd.RuleSetFactory;
+import net.sourceforge.pmd.RuleSetNotFoundException;
 import net.sourceforge.pmd.RuleSetReference;
+import net.sourceforge.pmd.RuleSetReferenceId;
 import net.sourceforge.pmd.eclipse.plugin.PMDPlugin;
 import net.sourceforge.pmd.eclipse.runtime.builder.PMDNature;
 import net.sourceforge.pmd.eclipse.runtime.properties.IProjectProperties;
@@ -211,25 +214,38 @@ public class EclipsePmdProjectConfigurator extends
 		final RuleSet ruleSet = new RuleSet();
 		ruleSet.setName("M2Eclipse PMD RuleSet");
 
-		final List<String> rulesetStringLocations = pluginCfgTranslator
-				.getRulesets();
+		final List<String> rulesetStringLocations = pluginCfgTranslator.getRulesets();
 		if (rulesetStringLocations.size() > 0) {
-			for (String loc : rulesetStringLocations) {
-				final URL resolvedLocation = resourceResolver
-						.resolveLocation(loc);
+			for (final String loc : rulesetStringLocations) {
+				final URL resolvedLocation = resourceResolver.resolveLocation(loc);
 				RuleSet ruleSetAtLocations;
 				try {
-					ruleSetAtLocations = this.factory
-							.createRuleSet(resolvedLocation.openStream());
-					ruleSet.addRuleSet(ruleSetAtLocations);
-				} catch (IOException ex) {
-					// ignore them.
+					if (resolvedLocation != null) {
+						RuleSetReferenceId ruleSetReferenceId = new RuleSetReferenceId(loc) {
+							@Override
+							public InputStream getInputStream(ClassLoader arg0) throws RuleSetNotFoundException {
+								try {
+									return resolvedLocation.openStream();
+								} catch (IOException e) {
+									// ignore them.
+								}
+								log.warn("No ruleset found for {}", loc);
+								return null;
+							}
+						};
+						ruleSetAtLocations = this.factory.createRuleSet(ruleSetReferenceId);
+						ruleSet.addRuleSet(ruleSetAtLocations);
+					} else {
+						ruleSet.addRule(this.createRuleReference(loc));
+					}
+				} catch (RuleSetNotFoundException e) {
+					log.error("Couldn't find ruleset {}", loc, e);
 				}
 			}
 		} else {
-			ruleSet.addRule(this.createRuleReference("rulesets/basic.xml"));
-			ruleSet.addRule(this.createRuleReference("rulesets/unusedcode.xml"));
-			ruleSet.addRule(this.createRuleReference("rulesets/imports.xml"));
+			ruleSet.addRule(this.createRuleReference("java-basic"));
+			ruleSet.addRule(this.createRuleReference("java-unusedcode"));
+			ruleSet.addRule(this.createRuleReference("java-imports"));
 		}
 
 		return ruleSet;

@@ -43,7 +43,7 @@
         <repository>
             <id>pmd</id>
             <layout>p2</layout>
-            <url>http://m2e-code-quality.github.com/m2e-code-quality/pmd-p2-repository</url>
+            <url>http://pmd.sourceforge.net/eclipse</url>
         </repository>
         <repository>
             <id>findbugs</id>
