@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.sourceforge.pmd.PMDException;
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleReference;
 import net.sourceforge.pmd.RuleSet;
@@ -43,6 +44,7 @@ import net.sourceforge.pmd.eclipse.runtime.properties.IProjectPropertiesManager;
 import net.sourceforge.pmd.eclipse.runtime.properties.PropertiesException;
 import net.sourceforge.pmd.eclipse.runtime.writer.WriterException;
 
+import org.apache.maven.cli.MavenLoggerManager;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.codehaus.plexus.util.StringUtils;
@@ -179,34 +181,38 @@ public class EclipsePmdProjectConfigurator extends
 		ResourceResolver resourceResolver = ResourceResolver
 				.newInstance(getPluginClassRealm(session,
 						pluginWrapper.getMojoExecution()));
-		final RuleSet ruleset = this.createPmdRuleSet(pluginCfgTranslator,
-				resourceResolver);
-
-		this.buildAndAddPmdExcludeAndIncludePatternToRuleSet(
-				pluginCfgTranslator, ruleset);
-
-		// persist the ruleset to a file under the project.
-		final File rulesetFile = writeRuleSet(
-				project.getFile(PMD_RULESET_FILE), ruleset, monitor);
-
 		try {
-			final IProjectPropertiesManager mgr = PMDPlugin.getDefault()
-					.getPropertiesManager();
-			final IProjectProperties projectProperties = mgr
-					.loadProjectProperties(project);
-			projectProperties.setPmdEnabled(true);
-			projectProperties.setRuleSetFile(rulesetFile.getAbsolutePath());
-			projectProperties.setRuleSetStoredInProject(true);
-			mgr.storeProjectProperties(projectProperties);
-		} catch (PropertiesException ex) {
-			// remove the files
-			this.unconfigureEclipsePlugin(project, monitor);
+			RuleSet ruleset = this.createPmdRuleSet(pluginCfgTranslator,
+					resourceResolver);
+			
+			this.buildAndAddPmdExcludeAndIncludePatternToRuleSet(
+					pluginCfgTranslator, ruleset);
+
+			// persist the ruleset to a file under the project.
+			final File rulesetFile = writeRuleSet(
+					project.getFile(PMD_RULESET_FILE), ruleset, monitor);
+
+			try {
+				final IProjectPropertiesManager mgr = PMDPlugin.getDefault()
+						.getPropertiesManager();
+				final IProjectProperties projectProperties = mgr
+						.loadProjectProperties(project);
+				projectProperties.setPmdEnabled(true);
+				projectProperties.setRuleSetFile(rulesetFile.getAbsolutePath());
+				projectProperties.setRuleSetStoredInProject(true);
+				mgr.storeProjectProperties(projectProperties);
+			} catch (PropertiesException ex) {
+				// remove the files
+				this.unconfigureEclipsePlugin(project, monitor);
+			}
+		} catch (PMDException ex) {
+			//nothing to do, skip configuration
 		}
 	}
 
 	private RuleSet createPmdRuleSet(
 			final MavenPluginConfigurationTranslator pluginCfgTranslator,
-			final ResourceResolver resourceResolver) throws CoreException {
+			final ResourceResolver resourceResolver) throws CoreException, PMDException {
 
 		final RuleSet ruleSet = new RuleSet();
 		ruleSet.setName("M2Eclipse PMD RuleSet");
@@ -217,6 +223,12 @@ public class EclipsePmdProjectConfigurator extends
 			for (String loc : rulesetStringLocations) {
 				final URL resolvedLocation = resourceResolver
 						.resolveLocation(loc);
+				
+				
+				if(resolvedLocation == null) {
+					throw new PMDException(String.format("Failed to resolve RuleSet from location [%s],SKIPPING Eclipse PMD configuration", loc));
+				}
+				
 				RuleSet ruleSetAtLocations;
 				try {
 					ruleSetAtLocations = this.factory
