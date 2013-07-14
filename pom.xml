@@ -10,8 +10,8 @@
         <url>scm:git:git://github.com/m2e-code-quality/m2e-code-quality.git</url>
     </scm>
     <properties>
-        <tycho-version>0.15.0</tycho-version>
-        <orbit.version>R20110523182458</orbit.version>
+        <tycho-version>0.18.0</tycho-version>
+        <orbit.version>R20120526062928</orbit.version>
         <main.basedir>${basedir}</main.basedir>
     </properties>
     <modules>
@@ -43,12 +43,17 @@
         <repository>
             <id>pmd</id>
             <layout>p2</layout>
-            <url>http://m2e-code-quality.github.com/m2e-code-quality/pmd-p2-repository</url>
+            <url>http://pmd.sourceforge.net/eclipse</url>
         </repository>
         <repository>
             <id>findbugs</id>
             <layout>p2</layout>
             <url>http://m2e-code-quality.github.com/m2e-code-quality/findbugs-p2-repository</url>
+        </repository>
+        <repository>
+            <id>orbit</id>
+            <layout>p2</layout>
+            <url>http://download.eclipse.org/tools/orbit/downloads/drops/${orbit.version}/repository/</url>
         </repository>
     </repositories>
     <pluginRepositories>

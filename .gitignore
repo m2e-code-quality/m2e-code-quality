@@ -4,3 +4,4 @@
 target
 bin
 .checkstyle
+.DS_Store
