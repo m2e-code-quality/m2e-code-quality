@@ -33,12 +33,9 @@ import java.util.List;
 import java.util.Set;
 
 import net.sourceforge.pmd.PMDException;
-import net.sourceforge.pmd.Rule;
-import net.sourceforge.pmd.lang.rule.RuleReference;
 import net.sourceforge.pmd.RuleSet;
 import net.sourceforge.pmd.RuleSetFactory;
 import net.sourceforge.pmd.RuleSetNotFoundException;
-import net.sourceforge.pmd.RuleSetReference;
 import net.sourceforge.pmd.RuleSetReferenceId;
 import net.sourceforge.pmd.eclipse.plugin.PMDPlugin;
 import net.sourceforge.pmd.eclipse.runtime.builder.PMDNature;
@@ -47,7 +44,6 @@ import net.sourceforge.pmd.eclipse.runtime.properties.IProjectPropertiesManager;
 import net.sourceforge.pmd.eclipse.runtime.properties.PropertiesException;
 import net.sourceforge.pmd.eclipse.runtime.writer.WriterException;
 
-import org.apache.maven.cli.MavenLoggerManager;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.codehaus.plexus.util.StringUtils;
@@ -221,42 +217,41 @@ public class EclipsePmdProjectConfigurator extends
 		ruleSet.setName("M2Eclipse PMD RuleSet");
 
 		final List<String> rulesetStringLocations = pluginCfgTranslator.getRulesets();
-		if (rulesetStringLocations.size() > 0) {
-			for (final String loc : rulesetStringLocations) {
-				final URL resolvedLocation = resourceResolver.resolveLocation(loc);
 
-				if(resolvedLocation == null) {
-					throw new PMDException(String.format("Failed to resolve RuleSet from location [%s],SKIPPING Eclipse PMD configuration", loc));
-				}
+		// no special rulesets configured - use the same defaults as the maven-pmd-plugin does
+		if (rulesetStringLocations.isEmpty()) {
+			rulesetStringLocations.add("java-basic");
+			rulesetStringLocations.add("java-unusedcode");
+			rulesetStringLocations.add("java-imports");
+		}
 
-				RuleSet ruleSetAtLocations;
-				try {
-					if (resolvedLocation != null) {
-						RuleSetReferenceId ruleSetReferenceId = new RuleSetReferenceId(loc) {
-							@Override
-							public InputStream getInputStream(ClassLoader arg0) throws RuleSetNotFoundException {
-								try {
-									return resolvedLocation.openStream();
-								} catch (IOException e) {
-									// ignore them.
-								}
-								log.warn("No ruleset found for {}", loc);
-								return null;
-							}
-						};
-						ruleSetAtLocations = this.factory.createRuleSet(ruleSetReferenceId);
-						ruleSet.addRuleSet(ruleSetAtLocations);
-					} else {
-						ruleSet.addRule(this.createRuleReference(loc));
-					}
-				} catch (RuleSetNotFoundException e) {
-					log.error("Couldn't find ruleset {}", loc, e);
-				}
+		for (final String loc : rulesetStringLocations) {
+			RuleSetReferenceId ruleSetReferenceId = new RuleSetReferenceId(loc);
+			final URL resolvedLocation = resourceResolver.resolveLocation(ruleSetReferenceId.getRuleSetFileName());
+
+			if(resolvedLocation == null) {
+				throw new PMDException(String.format("Failed to resolve RuleSet from location [%s],SKIPPING Eclipse PMD configuration", loc));
 			}
-		} else {
-			ruleSet.addRule(this.createRuleReference("java-basic"));
-			ruleSet.addRule(this.createRuleReference("java-unusedcode"));
-			ruleSet.addRule(this.createRuleReference("java-imports"));
+
+			RuleSet ruleSetAtLocations;
+			try {
+				RuleSetReferenceId resolvedRuleSetReference = new RuleSetReferenceId(loc) {
+					@Override
+					public InputStream getInputStream(ClassLoader arg0) throws RuleSetNotFoundException {
+						try {
+							return resolvedLocation.openStream();
+						} catch (IOException e) {
+							// ignore them.
+						}
+						log.warn("No ruleset found for {}", loc);
+						return null;
+					}
+				};
+				ruleSetAtLocations = this.factory.createRuleSet(resolvedRuleSetReference);
+				ruleSet.addRuleSet(ruleSetAtLocations);
+			} catch (RuleSetNotFoundException e) {
+				log.error("Couldn't find ruleset {}", loc, e);
+			}
 		}
 
 		return ruleSet;
@@ -300,17 +295,6 @@ public class EclipsePmdProjectConfigurator extends
 			//
 		}
 		return rulesetFile.getLocation().toFile();
-	}
-
-	private Rule createRuleReference(String ruleSetFileName) {
-		RuleSetReference ruleSetReference = new RuleSetReference();
-		ruleSetReference.setRuleSetFileName(ruleSetFileName);
-		ruleSetReference.setAllRules(true);
-
-		RuleReference ref = new RuleReference();
-		ref.setRuleSetReference(ruleSetReference);
-
-		return ref;
 	}
 
 	private void buildAndAddPmdExcludeAndIncludePatternToRuleSet(
