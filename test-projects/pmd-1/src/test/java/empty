@@ -1,0 +1,1 @@
+Empty, but existing folder needed due to https://sourceforge.net/p/pmd/bugs/1116/ : PMD Eclipse plugin doesn't analyze project if it has non-existing source folders

@@ -43,7 +43,7 @@
         <repository>
             <id>pmd</id>
             <layout>p2</layout>
-            <url>http://pmd.sourceforge.net/eclipse</url>
+            <url>http://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site</url>
         </repository>
         <repository>
             <id>findbugs</id>

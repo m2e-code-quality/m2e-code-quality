@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <associateSites>
   <associateSite url="http://eclipse-cs.sf.net/update" label="eclipse checkstyle" />
-  <associateSite url="http://pmd.sourceforge.net/eclipse" label="eclipse pmd" />
+  <associateSite url="http://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site" label="eclipse pmd" />
   <associateSite url="http://findbugs.cs.umd.edu/eclipse" label="eclipse findbugs" />
 </associateSites>
