@@ -148,6 +148,11 @@ public class EclipseCheckstyleProjectConfigurator
         if (headerFile != null) {
             props.setProperty("checkstyle.header.file", headerFile);
         }
+        //add the suppressions file location to the props.
+        String suppressionsFile = cfgTranslator.getSuppressionsFile();
+        if (suppressionsFile != null) {
+        	props.setProperty(cfgTranslator.getSuppressionsFileExpression(), suppressionsFile);
+        }
         //add the cache file location to the props.
         props.setProperty("checkstyle.cache.file", ECLIPSE_CS_CACHE_FILENAME);
         //Load all properties in the checkConfig
