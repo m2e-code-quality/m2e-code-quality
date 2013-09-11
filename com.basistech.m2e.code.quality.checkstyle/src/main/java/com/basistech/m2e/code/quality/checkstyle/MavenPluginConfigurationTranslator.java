@@ -53,6 +53,7 @@ import com.basistech.m2e.code.quality.shared.ResourceResolver;
  */
 public class MavenPluginConfigurationTranslator {
     private static final String CHECKSTYLE_DEFAULT_CONFIG_LOCATION = "config/sun_checks.xml";
+    private static final String CHECKSTYLE_DEFAULT_SUPPRESSIONS_FILE_EXPRESSION = "checkstyle.suppressions.file";
     /** checkstyle maven plugin artifactId */
     private static final Map<String, String> PATTERNS_CACHE =
         new HashMap<String, String>();
@@ -113,6 +114,32 @@ public class MavenPluginConfigurationTranslator {
         return headerFile.getAbsolutePath();
     }
 
+	public String getSuppressionsFile() throws CheckstylePluginException, CoreException {
+		final String suppressionsLocation = getSuppressionsLocation();
+		if (suppressionsLocation == null) {
+			return null;
+		}
+		final URL suppressionsResource = this.resourceResolver.resolveLocation(suppressionsLocation);
+		if (suppressionsResource == null) {
+			return null;
+		}
+
+		String outDir = mavenProject.getBuild().getDirectory();
+		File suppressionsFile = new File(outDir, "checkstyle-suppressions.xml");
+		copyOut(suppressionsResource, suppressionsFile);
+
+		return suppressionsFile.getAbsolutePath();
+	}
+	
+	public String getSuppressionsFileExpression() throws CheckstylePluginException, CoreException {
+        String suppressionsFileExpression = configurator.getParameterValue("suppressionsFileExpression",
+                String.class, session, execution);
+        if (suppressionsFileExpression == null) {
+        	suppressionsFileExpression = CHECKSTYLE_DEFAULT_SUPPRESSIONS_FILE_EXPRESSION;
+        }
+        return suppressionsFileExpression;		
+	}
+    
     public void updateCheckConfigWithIncludeExcludePatterns(
             final ProjectConfigurationWorkingCopy pcWorkingCopy, final ICheckConfiguration checkCfg)
         throws CheckstylePluginException, CoreException {
@@ -191,6 +218,16 @@ public class MavenPluginConfigurationTranslator {
         return headerLocation;
     }
 
+    private String getSuppressionsLocation() throws CoreException {
+        String suppressionsLocation = configurator.getParameterValue("suppressionsLocation",
+                String.class, session, execution);
+        if (suppressionsLocation == null) {
+        	suppressionsLocation = configurator.getParameterValue("suppressionsFile",
+                    String.class, session, execution);
+        }
+        return suppressionsLocation;
+    }
+
     private List<String> getIncludes() throws CoreException {
         return this.getPatterns("includes");
     }
@@ -204,7 +241,7 @@ public class MavenPluginConfigurationTranslator {
             FileUtils.copyURLToFile(src, dest);
         } catch (IOException e) {
             throw new CheckstylePluginException(
-              "Failed to resolve header file from configHeader, SKIPPING Eclipse checkstyle configuration");
+              "Failed to copy file " + src.getFile() + ", SKIPPING Eclipse checkstyle configuration");
         }
     }
 
