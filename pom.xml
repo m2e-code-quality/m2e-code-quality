@@ -10,7 +10,7 @@
         <url>scm:git:git://github.com/m2e-code-quality/m2e-code-quality.git</url>
     </scm>
     <properties>
-        <tycho-version>0.18.0</tycho-version>
+        <tycho-version>0.18.1</tycho-version>
         <orbit.version>R20120526062928</orbit.version>
         <main.basedir>${basedir}</main.basedir>
     </properties>
