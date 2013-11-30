@@ -76,7 +76,8 @@ public class MavenPluginConfigurationTranslator {
         String[] rulesets = configurator.getParameterValue("rulesets", String[].class, session,
                                                            pmdGoalExecution);
         if (rulesets == null) {
-            return Collections.emptyList();
+            // no special rulesets configured - use the same defaults as the maven-pmd-plugin does
+            return Arrays.asList("java/basic", "java/unusedcode", "java/imports");
         }
         return Arrays.asList(rulesets);
     }
