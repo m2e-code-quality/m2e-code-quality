@@ -106,6 +106,7 @@ public class EclipseFindbugsProjectConfigurator extends
 				.createDefaultUserPreferences();
 		pluginCfgTranslator.setIncludeFilterFiles(prefs);
 		pluginCfgTranslator.setExcludeFilterFiles(prefs);
+		prefs.getFilterSettings().clearAllCategories();
 		//pluginCfgTranslator.setBugCatagories(prefs);
 		pluginCfgTranslator.setEffort(prefs);
 		pluginCfgTranslator.setMinRank(prefs);
