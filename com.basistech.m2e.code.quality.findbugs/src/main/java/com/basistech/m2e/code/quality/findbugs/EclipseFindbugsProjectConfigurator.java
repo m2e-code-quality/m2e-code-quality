@@ -59,7 +59,7 @@ public class EclipseFindbugsProjectConfigurator extends
 
 	@Override
 	protected String[] getMavenPluginGoal() {
-		return new String[] { "findbugs" };
+		return new String[] { "findbugs", "check" };
 	}
 
 	@Override
