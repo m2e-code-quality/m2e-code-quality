@@ -218,13 +218,6 @@ public class EclipsePmdProjectConfigurator extends
 
 		final List<String> rulesetStringLocations = pluginCfgTranslator.getRulesets();
 
-		// no special rulesets configured - use the same defaults as the maven-pmd-plugin does
-		if (rulesetStringLocations.isEmpty()) {
-			rulesetStringLocations.add("java-basic");
-			rulesetStringLocations.add("java-unusedcode");
-			rulesetStringLocations.add("java-imports");
-		}
-
 		for (final String loc : rulesetStringLocations) {
 			RuleSetReferenceId ruleSetReferenceId = new RuleSetReferenceId(loc);
 			final URL resolvedLocation = resourceResolver.resolveLocation(ruleSetReferenceId.getRuleSetFileName());
