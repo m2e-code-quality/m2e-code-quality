@@ -259,6 +259,7 @@ public class MavenPluginConfigurationTranslator {
     public void setVisitors(final UserPreferences prefs) throws CoreException {
         final String visitors = this.configurator.getParameterValue(VISITORS, String.class, session, execution);
         if (visitors == null) {
+            prefs.enableAllDetectors(true);
             return;
         }
         List<String> detectorsList = Arrays.asList(StringUtils.split(visitors, ","));
