@@ -32,7 +32,6 @@ import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigura
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
 
 import de.tobject.findbugs.FindbugsPlugin;
-import de.tobject.findbugs.preferences.FindBugsPreferenceInitializer;
 import edu.umd.cs.findbugs.config.UserPreferences;
 
 /**
@@ -102,11 +101,10 @@ public class EclipseFindbugsProjectConfigurator extends
 			final MavenSession session, final MojoExecution execution)
 			throws CoreException {
 		log.debug("entering buildFindbugsPreferences");
-		final UserPreferences prefs = FindBugsPreferenceInitializer
+		final UserPreferences prefs = UserPreferences
 				.createDefaultUserPreferences();
 		pluginCfgTranslator.setIncludeFilterFiles(prefs);
 		pluginCfgTranslator.setExcludeFilterFiles(prefs);
-		prefs.getFilterSettings().clearAllCategories();
 		//pluginCfgTranslator.setBugCatagories(prefs);
 		pluginCfgTranslator.setEffort(prefs);
 		pluginCfgTranslator.setMinRank(prefs);
