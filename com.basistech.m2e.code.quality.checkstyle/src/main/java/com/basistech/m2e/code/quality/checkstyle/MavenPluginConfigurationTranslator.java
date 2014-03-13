@@ -496,7 +496,12 @@ public class MavenPluginConfigurationTranslator {
                 sb.append(curChar);
             }
         }
-        return sb.toString();
+        // cleanup the resulting regex pattern
+        String result = sb.toString();
+        while(result.contains(".*.*")) {
+        	result = result.replace(".*.*", ".*");
+        }
+        return result;
     }
 
     public Properties getConfiguredProperties() throws CoreException, CheckstylePluginException {
