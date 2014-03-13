@@ -37,6 +37,7 @@ import net.sf.eclipsecs.core.util.CheckstylePluginException;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
@@ -191,6 +192,26 @@ public class MavenPluginConfigurationTranslator {
             return false;
         }
     }
+    
+    public boolean getIncludeResourcesDirectory() throws CoreException {
+        Boolean includeTestSourceDirectory = configurator.getParameterValue(
+                "includeResources", Boolean.class, session, execution);
+        if (includeTestSourceDirectory != null) {
+            return includeTestSourceDirectory.booleanValue();
+        } else {
+            return false;
+        }
+    }
+
+    public boolean getIncludeTestResourcesDirectory() throws CoreException {
+        Boolean includeTestSourceDirectory = configurator.getParameterValue(
+                "includeTestResources", Boolean.class, session, execution);
+        if (includeTestSourceDirectory != null) {
+            return includeTestSourceDirectory.booleanValue();
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Get the {@literal configLocation} element if present in the configuration.
@@ -234,6 +255,14 @@ public class MavenPluginConfigurationTranslator {
 
     private List<String> getExcludes() throws CoreException {
         return this.getPatterns("excludes");
+    }
+
+    private List<String> getResourceIncludes() throws CoreException {
+        return this.getPatterns("resourceIncludes");
+    }
+
+    private List<String> getResourceExcludes() throws CoreException {
+        return this.getPatterns("resourceExcludes");
     }
 
     private void copyOut(URL src, File dest) throws CheckstylePluginException {
@@ -304,6 +333,68 @@ public class MavenPluginConfigurationTranslator {
                     excludePatterns,
                     this.convertToEclipseCheckstyleRegExpPath(folderRelativePath),
                     false));
+        }
+        
+        if (this.getIncludeResourcesDirectory()) {
+            final List<String> resourceIncludePatterns = this
+                    .getResourceIncludes();
+            for (Resource resource : this.mavenProject.getBuild()
+                    .getResources()) {
+                String folderRelativePath = this.basedirUri.relativize(
+                        new File(resource.getDirectory()).toURI()).getPath();
+                patterns.addAll(this
+                        .normalizePatternsToCheckstyleFileMatchPattern(
+                                resourceIncludePatterns, folderRelativePath,
+                                true));
+            }
+
+            final List<String> resourceExcludePatterns = this
+                    .getResourceExcludes();
+            for (Resource resource : this.mavenProject.getBuild()
+                    .getResources()) {
+                String folderRelativePath = this.basedirUri.relativize(
+                        new File(resource.getDirectory()).toURI()).getPath();
+                patterns.addAll(this
+                        .normalizePatternsToCheckstyleFileMatchPattern(
+                                resourceExcludePatterns, folderRelativePath,
+                                false));
+            }
+        }
+
+        if (this.getIncludeTestResourcesDirectory()) {
+            final List<String> resourceIncludePatterns = this
+                    .getResourceIncludes();
+            for (Resource resource : this.mavenProject.getBuild()
+                    .getTestResources()) {
+            	if (resource.getExcludes().size() > 0
+						|| resource.getIncludes().size() > 0) {
+					// ignore resources that have ex/includes for now
+					continue;
+				}
+                String folderRelativePath = this.basedirUri.relativize(
+                        new File(resource.getDirectory()).toURI()).getPath();
+                patterns.addAll(this
+                        .normalizePatternsToCheckstyleFileMatchPattern(
+                                resourceIncludePatterns, folderRelativePath,
+                                true));
+            }
+
+            final List<String> resourceExcludePatterns = this
+                    .getResourceExcludes();
+            for (Resource resource : this.mavenProject.getBuild()
+                    .getTestResources()) {
+            	if (resource.getExcludes().size() > 0
+						|| resource.getIncludes().size() > 0) {
+					// ignore resources that have ex/includes for now
+					continue;
+				}
+                String folderRelativePath = this.basedirUri.relativize(
+                        new File(resource.getDirectory()).toURI()).getPath();
+                patterns.addAll(this
+                        .normalizePatternsToCheckstyleFileMatchPattern(
+                                resourceExcludePatterns, folderRelativePath,
+                                false));
+            }
         }
 
         return patterns;
