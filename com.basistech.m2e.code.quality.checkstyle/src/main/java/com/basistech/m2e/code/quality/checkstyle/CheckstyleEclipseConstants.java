@@ -15,22 +15,26 @@
  ******************************************************************************/
 package com.basistech.m2e.code.quality.checkstyle;
 
-
 /**
  * Constants as it relates to eclipse checkstyle plugin
  */
 public final class CheckstyleEclipseConstants {
-   
+
     public static final String LOG_PREFIX = "M2E-CS";
-    public static final String MAVEN_PLUGIN_GROUPID = "org.apache.maven.plugins";
-    public static final String MAVEN_PLUGIN_ARTIFACTID = "maven-checkstyle-plugin";
+    public static final String MAVEN_PLUGIN_GROUPID =
+            "org.apache.maven.plugins";
+    public static final String MAVEN_PLUGIN_ARTIFACTID =
+            "maven-checkstyle-plugin";
     public static final String ECLIPSE_CS_PREFS_FILE = ".checkstyle";
-    public static final String ECLIPSE_CS_PREFS_CONFIG_NAME = "maven-checkstyle-plugin";
-    public static final String ECLIPSE_CS_CACHE_FILENAME = "${project_loc}/target/checkstyle-cachefile";
-    public static final String ECLIPSE_CS_GENERATE_FORMATTER_SETTINGS = "eclipseCheckstyleGenerateFormatterSettings";
-    
+    public static final String ECLIPSE_CS_PREFS_CONFIG_NAME =
+            "maven-checkstyle-plugin";
+    public static final String ECLIPSE_CS_CACHE_FILENAME =
+            "${project_loc}/target/checkstyle-cachefile";
+    public static final String ECLIPSE_CS_GENERATE_FORMATTER_SETTINGS =
+            "eclipseCheckstyleGenerateFormatterSettings";
+
     private CheckstyleEclipseConstants() {
-        //no instantiation.
+        // no instantiation.
     }
-    
+
 }

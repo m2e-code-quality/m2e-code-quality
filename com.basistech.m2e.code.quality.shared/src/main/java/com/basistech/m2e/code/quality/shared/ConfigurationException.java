@@ -16,19 +16,18 @@
 package com.basistech.m2e.code.quality.shared;
 
 /**
- * A convenient wrapper around {@link RuntimeException} thrown when any
- * time a configuration fails.
+ * A convenient wrapper around {@link RuntimeException} thrown when any time a
+ * configuration fails.
  * 
  */
-public class ConfigurationException
-        extends RuntimeException {
+public class ConfigurationException extends RuntimeException {
 
     private static final long serialVersionUID = 685082554934520727L;
 
     public ConfigurationException(final String message) {
         super(message);
     }
-    
+
     public ConfigurationException(final Throwable cause) {
         super(cause);
     }

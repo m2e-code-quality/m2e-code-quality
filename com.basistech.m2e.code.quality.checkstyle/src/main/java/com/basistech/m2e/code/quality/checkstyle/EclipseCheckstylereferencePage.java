@@ -6,7 +6,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class EclipseCheckstylereferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class EclipseCheckstylereferencePage extends FieldEditorPreferencePage
+        implements IWorkbenchPreferencePage {
 
     private Composite parent;
 
@@ -15,6 +16,7 @@ public class EclipseCheckstylereferencePage extends FieldEditorPreferencePage im
         setPreferenceStore(Activator.getDefault().getPreferenceStore());
     }
 
+    @Override
     public void init(IWorkbench workbench) {
     }
 
@@ -23,12 +25,15 @@ public class EclipseCheckstylereferencePage extends FieldEditorPreferencePage im
      * GUI blocks needed to manipulate various types of preferences. Each field
      * editor knows how to save and restore itself.
      */
+    @Override
     public void createFieldEditors() {
         parent = getFieldEditorParent();
         String text;
 
         text = Messages.EclipseCheckstylereferencePage_0;
-        addField(new BooleanFieldEditor(CheckstyleEclipseConstants.ECLIPSE_CS_GENERATE_FORMATTER_SETTINGS, text, parent));
+        addField(new BooleanFieldEditor(
+                CheckstyleEclipseConstants.ECLIPSE_CS_GENERATE_FORMATTER_SETTINGS,
+                text, parent));
 
     }
 

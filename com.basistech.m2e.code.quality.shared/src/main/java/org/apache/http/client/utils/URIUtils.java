@@ -34,50 +34,45 @@ import java.util.Stack;
 //
 //import org.apache.http.HttpHost;
 
-
 /**
- * A collection of utilities for {@link URI URIs}, to workaround
- * bugs within the class or for ease-of-use features.
- *
+ * A collection of utilities for {@link URI URIs}, to workaround bugs within the
+ * class or for ease-of-use features.
+ * 
  * @since 4.0
  */
-//@Immutable
+// @Immutable
 public class URIUtils {
 
-     /**
-         * Constructs a {@link URI} using all the parameters. This should be
-         * used instead of
-         * {@link URI#URI(String, String, String, int, String, String, String)}
-         * or any of the other URI multi-argument URI constructors.
-         * 
-         * @param scheme
-         *            Scheme name
-         * @param host
-         *            Host name
-         * @param port
-         *            Port number
-         * @param path
-         *            Path
-         * @param query
-         *            Query
-         * @param fragment
-         *            Fragment
-         * 
-         * @throws URISyntaxException
-         *             If both a scheme and a path are given but the path is
-         *             relative, if the URI string constructed from the given
-         *             components violates RFC&nbsp;2396, or if the authority
-         *             component of the string is present but cannot be parsed
-         *             as a server-based authority
-         */
-    public static URI createURI(
-            final String scheme,
-            final String host,
-            int port,
-            final String path,
-            final String query,
+    /**
+     * Constructs a {@link URI} using all the parameters. This should be used
+     * instead of
+     * {@link URI#URI(String, String, String, int, String, String, String)} or
+     * any of the other URI multi-argument URI constructors.
+     * 
+     * @param scheme
+     *            Scheme name
+     * @param host
+     *            Host name
+     * @param port
+     *            Port number
+     * @param path
+     *            Path
+     * @param query
+     *            Query
+     * @param fragment
+     *            Fragment
+     * 
+     * @throws URISyntaxException
+     *             If both a scheme and a path are given but the path is
+     *             relative, if the URI string constructed from the given
+     *             components violates RFC&nbsp;2396, or if the authority
+     *             component of the string is present but cannot be parsed as a
+     *             server-based authority
+     */
+    public static URI createURI(final String scheme, final String host,
+            int port, final String path, final String query,
             final String fragment) throws URISyntaxException {
-        
+
         StringBuilder buffer = new StringBuilder();
         if (host != null) {
             if (scheme != null) {
@@ -123,49 +118,52 @@ public class URIUtils {
      * @throws URISyntaxException
      *             If the resulting URI is invalid.
      */
-//    public static URI rewriteURI(
-//            final URI uri, 
-//            final HttpHost target,
-//            boolean dropFragment) throws URISyntaxException {
-//        if (uri == null) {
-//            throw new IllegalArgumentException("URI may nor be null");
-//        }
-//        if (target != null) {
-//            return URIUtils.createURI(
-//                    target.getSchemeName(), 
-//                    target.getHostName(), 
-//                    target.getPort(), 
-//                    uri.getRawPath(), 
-//                    uri.getRawQuery(), 
-//                    dropFragment ? null : uri.getRawFragment());
-//        } else {
-//            return URIUtils.createURI(
-//                    null, 
-//                    null, 
-//                    -1, 
-//                    uri.getRawPath(), 
-//                    uri.getRawQuery(), 
-//                    dropFragment ? null : uri.getRawFragment());
-//        }
-//    }
-    
+    // public static URI rewriteURI(
+    // final URI uri,
+    // final HttpHost target,
+    // boolean dropFragment) throws URISyntaxException {
+    // if (uri == null) {
+    // throw new IllegalArgumentException("URI may nor be null");
+    // }
+    // if (target != null) {
+    // return URIUtils.createURI(
+    // target.getSchemeName(),
+    // target.getHostName(),
+    // target.getPort(),
+    // uri.getRawPath(),
+    // uri.getRawQuery(),
+    // dropFragment ? null : uri.getRawFragment());
+    // } else {
+    // return URIUtils.createURI(
+    // null,
+    // null,
+    // -1,
+    // uri.getRawPath(),
+    // uri.getRawQuery(),
+    // dropFragment ? null : uri.getRawFragment());
+    // }
+    // }
+
     /**
      * A convenience method for
      * {@link URIUtils#rewriteURI(URI, HttpHost, boolean)} that always keeps the
      * fragment.
      */
-//    public static URI rewriteURI(
-//            final URI uri, 
-//            final HttpHost target) throws URISyntaxException {
-//        return rewriteURI(uri, target, false);
-//    }
-    
+    // public static URI rewriteURI(
+    // final URI uri,
+    // final HttpHost target) throws URISyntaxException {
+    // return rewriteURI(uri, target, false);
+    // }
+
     /**
      * Resolves a URI reference against a base URI. Work-around for bug in
-     * java.net.URI (<http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4708535>)
-     *
-     * @param baseURI the base URI
-     * @param reference the URI reference
+     * java.net.URI
+     * (<http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4708535>)
+     * 
+     * @param baseURI
+     *            the base URI
+     * @param reference
+     *            the URI reference
      * @return the resulting URI
      */
     public static URI resolve(final URI baseURI, final String reference) {
@@ -174,13 +172,16 @@ public class URIUtils {
 
     /**
      * Resolves a URI reference against a base URI. Work-around for bugs in
-     * java.net.URI (e.g. <http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4708535>)
-     *
-     * @param baseURI the base URI
-     * @param reference the URI reference
+     * java.net.URI (e.g.
+     * <http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4708535>)
+     * 
+     * @param baseURI
+     *            the base URI
+     * @param reference
+     *            the URI reference
      * @return the resulting URI
      */
-    public static URI resolve(final URI baseURI, URI reference){
+    public static URI resolve(final URI baseURI, URI reference) {
         if (baseURI == null) {
             throw new IllegalArgumentException("Base URI may nor be null");
         }
@@ -198,8 +199,9 @@ public class URIUtils {
         URI resolved = baseURI.resolve(reference);
         if (emptyReference) {
             String resolvedString = resolved.toString();
-            resolved = URI.create(resolvedString.substring(0,
-                resolvedString.indexOf('#')));
+            resolved =
+                    URI.create(resolvedString.substring(0,
+                            resolvedString.indexOf('#')));
         }
         return removeDotSegments(resolved);
     }
@@ -207,22 +209,26 @@ public class URIUtils {
     /**
      * Resolves a reference starting with a query string.
      * 
-     * @param baseURI the base URI
-     * @param reference the URI reference starting with a query string
+     * @param baseURI
+     *            the base URI
+     * @param reference
+     *            the URI reference starting with a query string
      * @return the resulting URI
      */
     private static URI resolveReferenceStartingWithQueryString(
             final URI baseURI, final URI reference) {
         String baseUri = baseURI.toString();
-        baseUri = baseUri.indexOf('?') > -1 ?
-            baseUri.substring(0, baseUri.indexOf('?')) : baseUri;
+        baseUri =
+                baseUri.indexOf('?') > -1 ? baseUri.substring(0,
+                        baseUri.indexOf('?')) : baseUri;
         return URI.create(baseUri + reference.toString());
     }
 
     /**
      * Removes dot segments according to RFC 3986, section 5.2.4
      * 
-     * @param uri the original URI
+     * @param uri
+     *            the original URI
      * @return the URI without dot segments
      */
     private static URI removeDotSegments(URI uri) {
@@ -235,7 +241,7 @@ public class URIUtils {
         Stack<String> outputSegments = new Stack<String>();
         for (int i = 0; i < inputSegments.length; i++) {
             if ((inputSegments[i].length() == 0)
-                || (".".equals(inputSegments[i]))) {
+                    || (".".equals(inputSegments[i]))) {
                 // Do nothing
             } else if ("..".equals(inputSegments[i])) {
                 if (!outputSegments.isEmpty()) {
@@ -251,7 +257,7 @@ public class URIUtils {
         }
         try {
             return new URI(uri.getScheme(), uri.getAuthority(),
-                outputBuffer.toString(), uri.getQuery(), uri.getFragment());
+                    outputBuffer.toString(), uri.getQuery(), uri.getFragment());
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(e);
         }

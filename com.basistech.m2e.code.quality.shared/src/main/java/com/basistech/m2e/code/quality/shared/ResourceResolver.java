@@ -31,65 +31,68 @@ import org.codehaus.plexus.classworlds.realm.ClassRealm;
  */
 public final class ResourceResolver {
 
-    private ClassRealm pluginRealm;
-    
+    private final ClassRealm pluginRealm;
+
     private ResourceResolver(ClassRealm pluginRealm) {
-    	this.pluginRealm = pluginRealm;
+        this.pluginRealm = pluginRealm;
     }
 
     /**
      * Resolve the resource location as per the maven pluginWrapper spec.
      * <ol>
-     *  <li>As a resource.</li>
-     *  <li>As a URL.</li>
-     *  <li>As a filesystem resource.</li>
+     * <li>As a resource.</li>
+     * <li>As a URL.</li>
+     * <li>As a filesystem resource.</li>
      * </ol>
      * 
-     * @param location the resource location as a string.
+     * @param location
+     *            the resource location as a string.
      * @return the {@code URL} of the resolved location or {@code null}.
      */
     public URL resolveLocation(final String location) {
         URL url = null;
-        //1. Try it as a resource first.
+        // 1. Try it as a resource first.
         // not that class loaders don't want leading slashes.
         String urlLocation = location;
         if (urlLocation.startsWith("/")) {
-        	urlLocation = urlLocation.substring(1);
+            urlLocation = urlLocation.substring(1);
         }
         url = pluginRealm.getResource(urlLocation);
         if (url == null) {
-          try {
-              //2. Try it as a remote resource.
-              url = new URL(location);
-              //check if valid.
-              url.openStream();
-          } catch (MalformedURLException ex) {
-              //ignored, try next
-          } catch (Exception ex) {
-              //ignored, try next
-          }
-          if (url == null) {
-              //3. Try to see if it exists as a filesystem resource.
-              final File f = new File(location);
-              if (f.exists()) {
-                  try {
-                      url = f.toURI().toURL();
-                  } catch (MalformedURLException ex) {
-                      //ignored, try next
-                  }
-              }
-          }
+            try {
+                // 2. Try it as a remote resource.
+                url = new URL(location);
+                // check if valid.
+                url.openStream();
+            } catch (MalformedURLException ex) {
+                // ignored, try next
+            } catch (Exception ex) {
+                // ignored, try next
+            }
+            if (url == null) {
+                // 3. Try to see if it exists as a filesystem resource.
+                final File f = new File(location);
+                if (f.exists()) {
+                    try {
+                        url = f.toURI().toURL();
+                    } catch (MalformedURLException ex) {
+                        // ignored, try next
+                    }
+                }
+            }
         }
         return url;
-        
+
     }
 
     /**
      * Factory to create a new instance of {@link ResourceResolver}.
      * 
-     * @param pluginWrapper The {@code MavenPluginWrapper} instance.
-     * @param prefix        A prefix string for console log messages.
-     * @return              new instance of {@link ResourceResolver}.
+     * @param pluginWrapper
+     *            The {@code MavenPluginWrapper} instance.
+     * @param prefix
+     *            A prefix string for console log messages.
+     * @return new instance of {@link ResourceResolver}.
      */
     public static ResourceResolver newInstance(ClassRealm pluginRealm) {
         return new ResourceResolver(pluginRealm);
