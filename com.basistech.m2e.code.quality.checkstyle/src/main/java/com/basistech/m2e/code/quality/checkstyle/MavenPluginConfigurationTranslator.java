@@ -474,15 +474,19 @@ public class MavenPluginConfigurationTranslator {
         }
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < pattern.length(); ++i) {
-            final int nextCharIndex = i + 1;
-            //mark the end so we can append the last char of string
+        	final char curChar = pattern.charAt(i);
             char nextChar = '\0';
-            if (nextCharIndex != pattern.length()) {
-                nextChar = pattern.charAt(nextCharIndex);
+            char nextNextChar = '\0';
+            if (i + 1 < pattern.length()) {
+            	nextChar = pattern.charAt(i + 1);
             }
-            final char curChar = pattern.charAt(i);
-            if (curChar == '*' && nextChar == '*') {
+            if (i + 2 < pattern.length()) {
+            	nextNextChar = pattern.charAt(i + 2);
+            }
+
+            if (curChar == '*' && nextChar == '*' && nextNextChar == '/') {
                 sb.append(".*");
+                ++i;
                 ++i;
             } else if (curChar == '*') {
                 sb.append(".*");
