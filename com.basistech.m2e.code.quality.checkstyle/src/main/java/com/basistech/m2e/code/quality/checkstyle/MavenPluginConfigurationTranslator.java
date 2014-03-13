@@ -366,6 +366,11 @@ public class MavenPluginConfigurationTranslator {
                     .getResourceIncludes();
             for (Resource resource : this.mavenProject.getBuild()
                     .getTestResources()) {
+            	if (resource.getExcludes().size() > 0
+						|| resource.getIncludes().size() > 0) {
+					// ignore resources that have ex/includes for now
+					continue;
+				}
                 String folderRelativePath = this.basedirUri.relativize(
                         new File(resource.getDirectory()).toURI()).getPath();
                 patterns.addAll(this
@@ -378,6 +383,11 @@ public class MavenPluginConfigurationTranslator {
                     .getResourceExcludes();
             for (Resource resource : this.mavenProject.getBuild()
                     .getTestResources()) {
+            	if (resource.getExcludes().size() > 0
+						|| resource.getIncludes().size() > 0) {
+					// ignore resources that have ex/includes for now
+					continue;
+				}
                 String folderRelativePath = this.basedirUri.relativize(
                         new File(resource.getDirectory()).toURI()).getPath();
                 patterns.addAll(this
