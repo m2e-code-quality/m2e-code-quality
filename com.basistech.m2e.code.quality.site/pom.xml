@@ -1,86 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>com.basistech.m2e-code-quality</groupId>
-    <artifactId>m2e-code-quality-plugins</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-  </parent>
+    <parent>
+        <groupId>com.basistech.m2e-code-quality</groupId>
+        <artifactId>m2e-code-quality-plugins</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
 
-  <artifactId>com.basistech.m2e.code.quality.site</artifactId>
-  <packaging>eclipse-update-site</packaging>
-  <name>M2Eclipse Code Quality Plugins Update Site</name>
+    <artifactId>com.basistech.m2e.code.quality.site</artifactId>
+    <packaging>eclipse-update-site</packaging>
+    <name>M2Eclipse Code Quality Plugins Update Site</name>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2</version>
-        <configuration>
-          <descriptors>
-            <descriptor>src/main/assembly/assembly.xml</descriptor>
-          </descriptors>
-        </configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id> 
-            <phase>package</phase> 
-            <goals>
-              <goal>single</goal> 
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-    </plugins>
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.scm</groupId>
-        <artifactId>maven-scm-provider-gitexe</artifactId>
-        <version>1.3</version>
-      </extension>
-      <extension>
-        <groupId>org.apache.maven.scm</groupId>
-        <artifactId>maven-scm-manager-plexus</artifactId>
-        <version>1.3</version>
-      </extension>
-      <extension>
-        <groupId>org.kathrynhuxtable.maven.wagon</groupId>
-        <artifactId>wagon-gitsite</artifactId>
-        <version>0.2</version>
-      </extension>
-    </extensions>
-  </build>
-
-  <profiles>
-    <profile>
-      <id>publish-site</id>
-      <build>
+    <build>
         <plugins>
-          <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>maven-upload-plugin</artifactId>
-            <version>0.0.1</version>
-            <executions>
-              <execution>
-                <id>publish-site</id>
-                <phase>install</phase>
-                <goals>
-                  <goal>upload-file</goal>
-                </goals>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2</version>
                 <configuration>
-                  <file>${project.build.directory}/site</file>
-                  <repositoryUrl>gitsite:git@github.com/m2e-code-quality/m2e-code-quality.git</repositoryUrl>
-                  <repositoryPath>update-site/${unqualifiedVersion}/S/${unqualifiedVersion}.${buildQualifier}</repositoryPath>
+                    <descriptors>
+                        <descriptor>src/main/assembly/assembly.xml</descriptor>
+                    </descriptors>
                 </configuration>
-              </execution>
-            </executions>
-          </plugin>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
-      </build>
-    </profile>
-  </profiles>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.scm</groupId>
+                <artifactId>maven-scm-provider-gitexe</artifactId>
+                <version>1.3</version>
+            </extension>
+            <extension>
+                <groupId>org.apache.maven.scm</groupId>
+                <artifactId>maven-scm-manager-plexus</artifactId>
+                <version>1.3</version>
+            </extension>
+            <extension>
+                <groupId>org.kathrynhuxtable.maven.wagon</groupId>
+                <artifactId>wagon-gitsite</artifactId>
+                <version>0.2</version>
+            </extension>
+        </extensions>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>publish-site</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>maven-upload-plugin</artifactId>
+                        <version>0.0.1</version>
+                        <executions>
+                            <execution>
+                                <id>publish-site</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>upload-file</goal>
+                                </goals>
+                                <configuration>
+                                    <file>${project.build.directory}/site</file>
+                                    <repositoryUrl>gitsite:git@github.com/m2e-code-quality/m2e-code-quality.git</repositoryUrl>
+                                    <repositoryPath>update-site/${unqualifiedVersion}/S/${unqualifiedVersion}.${buildQualifier}</repositoryPath>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
 

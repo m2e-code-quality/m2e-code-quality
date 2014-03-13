@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.basistech.m2e-code-quality</groupId>
     <artifactId>m2e-code-quality-plugins</artifactId>
@@ -150,7 +151,7 @@
                 </property>
             </activation>
             <properties>
-                <tycho.test.jvmArgs>-Xmx800m -XX:MaxPermSize=256m</tycho.test.jvmArgs>
+                <tycho.test.jvmArgs><![CDATA[-Xmx800m -XX:MaxPermSize=256m]]></tycho.test.jvmArgs>
             </properties>
         </profile>
         <profile>
@@ -162,7 +163,7 @@
                 </property>
             </activation>
             <properties>
-                <tycho.test.jvmArgs>-Xmx800m -XX:MaxPermSize=256m -Dosgi.ws=cocoa -XstartOnFirstThread</tycho.test.jvmArgs>
+                <tycho.test.jvmArgs><![CDATA[-Xmx800m -XX:MaxPermSize=256m -Dosgi.ws=cocoa -XstartOnFirstThread]]></tycho.test.jvmArgs>
                 <osgi.ws>cocoa</osgi.ws>
             </properties>
         </profile>
