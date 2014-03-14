@@ -499,14 +499,17 @@ public class MavenPluginConfigurationTranslator {
      *            the maven-checkstyle-plugin pattern.
      * @return the converted checkstyle eclipse pattern.
      */
-    private String convertAntStylePatternToCheckstylePattern(
-            final String pattern) {
+    private String convertAntStylePatternToCheckstylePattern(String pattern) {
         if (pattern == null) {
             throw new NullPointerException("pattern cannot be null");
         }
         if (pattern.length() == 0) {
             throw new IllegalArgumentException("pattern cannot empty");
         }
+
+        pattern =
+                pattern.replace(File.separatorChar == '/' ? '\\' : '/',
+                        File.separatorChar);
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < pattern.length(); ++i) {
             final char curChar = pattern.charAt(i);
@@ -519,7 +522,8 @@ public class MavenPluginConfigurationTranslator {
                 nextNextChar = pattern.charAt(i + 2);
             }
 
-            if (curChar == '*' && nextChar == '*' && nextNextChar == '/') {
+            if (curChar == '*' && nextChar == '*'
+                    && nextNextChar == File.separatorChar) {
                 sb.append(".*");
                 ++i;
                 ++i;
@@ -531,11 +535,16 @@ public class MavenPluginConfigurationTranslator {
                 sb.append(curChar);
             }
         }
-        // cleanup the resulting regex pattern
         String result = sb.toString();
+        if (result.endsWith(File.separator)) {
+            result += ".*";
+        }
+
+        // cleanup the resulting regex pattern
         while (result.contains(".*.*")) {
             result = result.replace(".*.*", ".*");
         }
+
         return result;
     }
 
