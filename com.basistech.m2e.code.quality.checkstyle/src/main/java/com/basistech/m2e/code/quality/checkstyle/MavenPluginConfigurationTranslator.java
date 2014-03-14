@@ -510,6 +510,11 @@ public class MavenPluginConfigurationTranslator {
         pattern =
                 pattern.replace(File.separatorChar == '/' ? '\\' : '/',
                         File.separatorChar);
+        String dupeSeperatorChar = File.separator + File.separator;
+        while (pattern.contains(dupeSeperatorChar)) {
+            pattern = pattern.replace(dupeSeperatorChar, File.separator);
+        }
+
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < pattern.length(); ++i) {
             final char curChar = pattern.charAt(i);
