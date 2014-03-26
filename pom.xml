@@ -25,6 +25,9 @@
         <module>com.basistech.m2e.code.quality.pmd.feature</module>
         <module>com.basistech.m2e.code.quality.site</module>
     </modules>
+    <prerequisites>
+        <maven>3.0</maven>
+    </prerequisites>
     <repositories>
         <repository>
             <id>m2e</id>
