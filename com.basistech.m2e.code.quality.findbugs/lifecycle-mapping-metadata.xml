@@ -7,6 +7,7 @@
 				<artifactId>findbugs-maven-plugin</artifactId>
 				<versionRange>[2.3.3,)</versionRange>
 				<goals>
+                    <goal>check</goal>
 					<goal>findbugs</goal>
 				</goals>
 			</pluginExecutionFilter>
