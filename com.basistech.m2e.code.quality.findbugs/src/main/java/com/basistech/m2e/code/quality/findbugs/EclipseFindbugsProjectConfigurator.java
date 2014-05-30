@@ -19,6 +19,8 @@ package com.basistech.m2e.code.quality.findbugs;
 import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.MAVEN_PLUGIN_ARTIFACTID;
 import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.MAVEN_PLUGIN_GROUPID;
 
+import java.util.List;
+
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.eclipse.core.resources.IProject;
@@ -74,8 +76,13 @@ public class EclipseFindbugsProjectConfigurator extends
 						mavenPluginWrapper, project);
 		UserPreferences prefs;
 		try {
+			final List<MojoExecution> mojoExecutions = mavenPluginWrapper.getMojoExecutions();
+			if (mojoExecutions.size() != 1) {
+				log.error("Wrong number of executions. Expected 1. Found " + mojoExecutions.size());
+				return;
+			}
 			prefs = this.buildFindbugsPreferences(project, mavenFindbugsConfig,
-					session, mavenPluginWrapper.getMojoExecution());
+					session, mojoExecutions.get(0));
 			final EclipseFindbugsConfigManager fbPluginNature = EclipseFindbugsConfigManager
 					.newInstance(project);
 			// Add the builder and nature

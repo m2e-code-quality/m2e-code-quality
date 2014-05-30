@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -73,16 +74,16 @@ public class MavenPluginConfigurationTranslator {
     private MavenPluginConfigurationTranslator(
             final AbstractMavenPluginProjectConfigurator configurator,
             final MavenSession session, final MavenProject mavenProject,
-            final MavenPluginWrapper pluginWrapper, final IProject project)
+            final MojoExecution mojoExecution, final IProject project)
             throws CoreException {
         this.mavenProject = mavenProject;
         this.project = project;
         this.basedirUri = this.project.getLocationURI();
         this.resourceResolver =
                 ResourceResolver.newInstance(configurator.getPluginClassRealm(
-                        session, pluginWrapper.getMojoExecution()));
+                        session, mojoExecution));
         this.session = session;
-        this.execution = pluginWrapper.getMojoExecution();
+        this.execution = mojoExecution;
         this.configurator = configurator;
     }
 
@@ -151,14 +152,13 @@ public class MavenPluginConfigurationTranslator {
 
     public void updateCheckConfigWithIncludeExcludePatterns(
             final ProjectConfigurationWorkingCopy pcWorkingCopy,
-            final ICheckConfiguration checkCfg)
+            final ICheckConfiguration checkCfg, String executionId)
             throws CheckstylePluginException, CoreException {
-        final FileSet fs = new FileSet("java-sources", checkCfg);
+		final FileSet fs = new FileSet("java-sources " + executionId, checkCfg);
         fs.setEnabled(true);
         // add fileset includes/excludes
         fs.setFileMatchPatterns(this.getIncludesExcludesFileMatchPatterns());
         // now add the config
-        pcWorkingCopy.getFileSets().clear();
         pcWorkingCopy.getFileSets().add(fs);
     }
 
@@ -225,6 +225,10 @@ public class MavenPluginConfigurationTranslator {
             return false;
         }
     }
+    
+    public String getExecutionId() {
+    	return execution.getExecutionId();
+    }
 
     /**
      * Get the {@literal configLocation} element if present in the
@@ -265,6 +269,16 @@ public class MavenPluginConfigurationTranslator {
                             String.class, session, execution);
         }
         return suppressionsLocation;
+    }
+    
+    private String getSourceDirectory() throws CoreException {
+		return configurator.getParameterValue("sourceDirectory", String.class,
+				session, execution);
+    }
+    
+    private String getTestSourceDirectory() throws CoreException {
+    	return configurator.getParameterValue("testSourceDirectory", String.class,
+    			session, execution);
     }
 
     private List<String> getIncludes() throws CoreException {
@@ -311,11 +325,10 @@ public class MavenPluginConfigurationTranslator {
          * enabled).
          */
         Set<String> sourceFolders = new HashSet<String>();
-        sourceFolders.add(this.mavenProject.getBuild().getSourceDirectory());
+        sourceFolders.add(this.getSourceDirectory());
 
         if (getIncludeTestSourceDirectory()) {
-            sourceFolders.add(this.mavenProject.getBuild()
-                    .getTestSourceDirectory());
+            sourceFolders.add(this.getTestSourceDirectory());
         }
 
         /**
@@ -595,15 +608,17 @@ public class MavenPluginConfigurationTranslator {
         }
     }
 
-    public static MavenPluginConfigurationTranslator newInstance(
+    public static List<MavenPluginConfigurationTranslator> newInstance(
             AbstractMavenPluginProjectConfigurator configurator,
             MavenSession session, final MavenProject mavenProject,
             final MavenPluginWrapper mavenPlugin, final IProject project)
             throws CoreException {
-        final MavenPluginConfigurationTranslator m2csConverter =
-                new MavenPluginConfigurationTranslator(configurator, session,
-                        mavenProject, mavenPlugin, project);
-        return m2csConverter;
+		final List<MavenPluginConfigurationTranslator> m2csConverters = new ArrayList<MavenPluginConfigurationTranslator>();
+		for (final MojoExecution execution : mavenPlugin.getMojoExecutions()) {
+			m2csConverters.add(new MavenPluginConfigurationTranslator(
+					configurator, session, mavenProject, execution, project));
+		}
+		return m2csConverters;
     }
 
 }

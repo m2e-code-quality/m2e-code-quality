@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.basistech.m2e.code.quality.pmd;
 
+import org.osgi.framework.FrameworkUtil;
+
 
 /**
  * Constants as it relates to eclipse PMD plugin
@@ -27,6 +29,8 @@ public final class PmdEclipseConstants {
 
     public static final String PMD_RULESET_FILE = ".pmdruleset.xml"; // must end with xml
     public static final String PMD_SETTINGS_FILE = ".pmd";
+    
+    public static final String PLUGIN_ID = FrameworkUtil.getBundle(PmdEclipseConstants.class).getSymbolicName();
    
     private PmdEclipseConstants() {
         //no instantiation.
