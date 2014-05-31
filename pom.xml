@@ -38,9 +38,9 @@
             <url>http://download.eclipse.org/technology/m2e/releases</url>
         </repository>
         <repository>
-            <id>helios</id>
+            <id>kepler</id>
             <layout>p2</layout>
-            <url>http://download.eclipse.org/releases/helios</url>
+            <url>http://download.eclipse.org/releases/kepler</url>
         </repository>
         <repository>
             <id>cs</id>
