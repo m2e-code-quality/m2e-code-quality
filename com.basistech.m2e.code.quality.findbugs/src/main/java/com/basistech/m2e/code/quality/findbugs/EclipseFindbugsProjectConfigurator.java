@@ -20,7 +20,6 @@ import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.M
 import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.MAVEN_PLUGIN_GROUPID;
 
 import org.apache.maven.execution.MavenSession;
-import org.apache.maven.plugin.MojoExecution;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -70,12 +69,10 @@ public class EclipseFindbugsProjectConfigurator extends
 		log.debug("entering handleProjectConfigurationChange");
 		final MavenPluginConfigurationTranslator mavenFindbugsConfig = MavenPluginConfigurationTranslator
 				.newInstance(this, session,
-						mavenProjectFacade.getMavenProject(monitor),
 						mavenPluginWrapper, project);
 		UserPreferences prefs;
 		try {
-			prefs = this.buildFindbugsPreferences(project, mavenFindbugsConfig,
-					session, mavenPluginWrapper.getMojoExecution());
+			prefs = this.buildFindbugsPreferences(mavenFindbugsConfig);
 			final EclipseFindbugsConfigManager fbPluginNature = EclipseFindbugsConfigManager
 					.newInstance(project);
 			// Add the builder and nature
@@ -97,9 +94,8 @@ public class EclipseFindbugsProjectConfigurator extends
 
 	}
 
-	private UserPreferences buildFindbugsPreferences(final IProject project,
-			final MavenPluginConfigurationTranslator pluginCfgTranslator,
-			final MavenSession session, final MojoExecution execution)
+	private UserPreferences buildFindbugsPreferences(
+			final MavenPluginConfigurationTranslator pluginCfgTranslator)
 			throws CoreException {
 		log.debug("entering buildFindbugsPreferences");
 		final UserPreferences prefs = FindBugsPreferenceInitializer

@@ -43,7 +43,6 @@ import java.util.Set;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
-import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.io.URLInputStreamFacade;
@@ -77,7 +76,7 @@ public class MavenPluginConfigurationTranslator {
     private final MojoExecution execution;
 
     private MavenPluginConfigurationTranslator(final AbstractMavenPluginProjectConfigurator configurator,
-            final MavenSession session, final MavenProject mavenProject, final MavenPluginWrapper pluginWrapper,
+            final MavenSession session, final MavenPluginWrapper pluginWrapper,
             final IProject project) throws CoreException {
         this.project = project;
         this.resourceResolver = ResourceResolver.newInstance(configurator.getPluginClassRealm(session,
@@ -306,10 +305,10 @@ public class MavenPluginConfigurationTranslator {
     }
 
     public static MavenPluginConfigurationTranslator newInstance(AbstractMavenPluginProjectConfigurator configurator,
-            MavenSession session, final MavenProject mavenProject, final MavenPluginWrapper mavenPlugin,
+            MavenSession session, final MavenPluginWrapper mavenPlugin,
             final IProject project) throws CoreException {
         final MavenPluginConfigurationTranslator m2csConverter = new MavenPluginConfigurationTranslator(configurator,
-            session, mavenProject, mavenPlugin, project);
+            session, mavenPlugin, project);
         return m2csConverter;
     }
 }
