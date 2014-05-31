@@ -236,10 +236,10 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 
     public ClassRealm getPluginClassRealm(MavenSession session,
             MojoExecution mojoExecution) throws CoreException {
-        IMaven maven = MavenPlugin.getMaven();
+        IMaven mvn = MavenPlugin.getMaven();
         // call for side effect of ensuring that the realm is set in the
         // descriptor.
-        maven.getConfiguredMojo(session, mojoExecution, Mojo.class);
+        mvn.getConfiguredMojo(session, mojoExecution, Mojo.class);
         MojoDescriptor mojoDescriptor = mojoExecution.getMojoDescriptor();
         return mojoDescriptor.getPluginDescriptor().getClassRealm();
     }
