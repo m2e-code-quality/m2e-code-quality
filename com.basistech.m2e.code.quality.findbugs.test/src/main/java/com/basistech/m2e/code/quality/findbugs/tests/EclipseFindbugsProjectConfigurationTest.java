@@ -28,8 +28,17 @@ public class EclipseFindbugsProjectConfigurationTest extends
 	private static final String FINDBUGS_MARKER =
 	        "edu.umd.cs.findbugs.plugin.eclipse.findbugsMarker";
 
-	public void testFindBugs1() throws Exception {
-		IProject p = importProject("projects/findbugs-1/pom.xml");
+	public void testFindbugsCheck() throws Exception {
+		runFindBugsAndFindMarkers("projects/findbugs-check/pom.xml", 2);
+	}
+
+	public void testFindbugsFindbugs() throws Exception {
+		runFindBugsAndFindMarkers("projects/findbugs-findbugs/pom.xml", 2);
+	}
+
+	private void runFindBugsAndFindMarkers(String path, int markerCount)
+	        throws Exception {
+		IProject p = importProject(path);
 
 		p.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
 		waitForJobsToComplete();
@@ -44,8 +53,11 @@ public class EclipseFindbugsProjectConfigurationTest extends
 			worker.work(e.getValue());
 		}
 
+		waitForJobsToComplete();
+
 		IMarker[] markers =
 		        p.findMarkers(FINDBUGS_MARKER, true, IResource.DEPTH_INFINITE);
-		assertEquals(2, markers.length);
+		assertEquals(markerCount, markers.length);
 	}
+
 }
