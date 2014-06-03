@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: M2Eclipse Project Configurator for Eclipse Checkstyle Tests
+Bundle-SymbolicName: com.basistech.m2e.code.quality.checkstyle.test
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Basis Technology Corp.
+Fragment-Host: com.basistech.m2e.code.quality.checkstyle;bundle-version="[1.0.0,2.0.0)"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.junit

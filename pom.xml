@@ -22,6 +22,7 @@
         <module>com.basistech.m2e.code.quality.shared</module>
         <module>com.basistech.m2e.code.quality.checkstyle</module>
         <module>com.basistech.m2e.code.quality.checkstyle.feature</module>
+        <module>com.basistech.m2e.code.quality.checkstyle.test</module>
         <module>com.basistech.m2e.code.quality.findbugs</module>
         <module>com.basistech.m2e.code.quality.findbugs.feature</module>
         <module>com.basistech.m2e.code.quality.findbugs.test</module>
