@@ -143,8 +143,7 @@ public class EclipseCheckstyleProjectConfigurator extends
                     String.format("Failed to construct CheckConfig,SKIPPING checkstyle configuration"));
         }
         // update filesets (include and exclude patterns)
-        cfgTranslator.updateCheckConfigWithIncludeExcludePatterns(
-                pcWorkingCopy, checkCfg, cfgTranslator.getExecutionId());
+        cfgTranslator.updateCheckConfigWithIncludeExcludePatterns(pcWorkingCopy, checkCfg);
         /**
          * 2. Load all properties
          */

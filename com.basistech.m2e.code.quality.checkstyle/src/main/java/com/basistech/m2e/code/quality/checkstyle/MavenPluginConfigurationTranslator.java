@@ -151,10 +151,9 @@ public class MavenPluginConfigurationTranslator {
     }
 
     public void updateCheckConfigWithIncludeExcludePatterns(
-            final ProjectConfigurationWorkingCopy pcWorkingCopy,
-            final ICheckConfiguration checkCfg, String executionId)
+            final ProjectConfigurationWorkingCopy pcWorkingCopy, final ICheckConfiguration checkCfg)
             throws CheckstylePluginException, CoreException {
-		final FileSet fs = new FileSet("java-sources-" + executionId, checkCfg);
+		final FileSet fs = new FileSet("java-sources-" + getExecutionId(), checkCfg);
         fs.setEnabled(true);
         // add fileset includes/excludes
         fs.setFileMatchPatterns(this.getIncludesExcludesFileMatchPatterns());
