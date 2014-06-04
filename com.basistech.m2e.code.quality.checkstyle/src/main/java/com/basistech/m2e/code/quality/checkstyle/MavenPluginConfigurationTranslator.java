@@ -113,7 +113,7 @@ public class MavenPluginConfigurationTranslator {
         }
 
         String outDir = mavenProject.getBuild().getDirectory();
-        File headerFile = new File(outDir, "checkstyle-header.txt");
+        File headerFile = new File(outDir, "checkstyle-header-" + getExecutionId() + ".txt");
         copyOut(headerResource, headerFile);
 
         return headerFile.getAbsolutePath();
@@ -132,7 +132,7 @@ public class MavenPluginConfigurationTranslator {
         }
 
         String outDir = mavenProject.getBuild().getDirectory();
-        File suppressionsFile = new File(outDir, "checkstyle-suppressions.xml");
+        File suppressionsFile = new File(outDir, "checkstyle-suppressions-" + getExecutionId() + ".xml");
         copyOut(suppressionsResource, suppressionsFile);
 
         return suppressionsFile.getAbsolutePath();
@@ -154,7 +154,7 @@ public class MavenPluginConfigurationTranslator {
             final ProjectConfigurationWorkingCopy pcWorkingCopy,
             final ICheckConfiguration checkCfg, String executionId)
             throws CheckstylePluginException, CoreException {
-		final FileSet fs = new FileSet("java-sources " + executionId, checkCfg);
+		final FileSet fs = new FileSet("java-sources-" + executionId, checkCfg);
         fs.setEnabled(true);
         // add fileset includes/excludes
         fs.setFileMatchPatterns(this.getIncludesExcludesFileMatchPatterns());
