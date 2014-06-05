@@ -17,68 +17,32 @@
 package com.basistech.m2e.code.quality.shared;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.MojoExecution;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 
 public class MavenPluginWrapper {
 
     private final String key; // for toString
-    private final MojoExecution execution;
+    private final List<MojoExecution> executions;
 
-    private MavenPluginWrapper(final String key, final MojoExecution execution) {
+    private MavenPluginWrapper(final String key, final List<MojoExecution> executions) {
         this.key = key;
-        this.execution = execution;
+        this.executions = executions;
     }
 
     public boolean isPluginConfigured() {
-        return this.execution == null ? false : true;
+		return this.executions == null && !this.executions.isEmpty() ? false
+				: true;
     }
 
-    public MojoExecution getMojoExecution() {
-        return execution;
-    }
-
-    /**
-     * Return a list of dependencies of the plugin as configured in the
-     * {@code <dependencies>} element of the plugin configuration
-     * <em>including</em> the plugin itself, which will the always be the first
-     * element of the returned list of dependencies.
-     * 
-     * <p>
-     * This is mainly to build an isolated classpath for the plugin.
-     * </p>
-     * 
-     * @return a {@code List} of the plugin dependencies, if the plugin was
-     *         actually configured in the project interpolated {@code <build>}
-     *         elements, else returns an {@code empty list}.
-     */
-    public List<Dependency> getDependenciesIncludingSelf() {
-        if (this.execution == null) {
-            return Collections.emptyList();
-        }
-        List<Dependency> dl = new ArrayList<Dependency>();
-        dl.add(this.getPluginAsDependency());
-        dl.addAll(execution.getPlugin().getDependencies());
-        return ImmutableList.copyOf(dl);
-    }
-
-    private Dependency getPluginAsDependency() {
-        final Dependency d = new Dependency();
-        d.setGroupId(execution.getPlugin().getGroupId());
-        d.setArtifactId(execution.getPlugin().getArtifactId());
-        d.setVersion(execution.getPlugin().getVersion());
-        d.setType("maven-plugin");
-        d.setClassifier(null);
-        return d;
+    public List<MojoExecution> getMojoExecutions() {
+        return executions;
     }
 
     public static boolean mojoExecutionForPlugin(MojoExecution mojoExecution,
@@ -88,7 +52,7 @@ public class MavenPluginWrapper {
                 && (goal == null || goal.equals(mojoExecution.getGoal()));
     }
 
-    public static MojoExecution findMojoExecution(IProgressMonitor monitor,
+    public static List<MojoExecution> findMojoExecutions(IProgressMonitor monitor,
             IMavenProjectFacade mavenProjectFacade, final String pluginGroupId,
             final String pluginArtifactId, final String[] pluginGoal)
             throws CoreException {
@@ -100,25 +64,26 @@ public class MavenPluginWrapper {
                 mojoExecutions);
     }//
 
-    private static MojoExecution searchExecutions(final String pluginGroupId,
+    private static List<MojoExecution> searchExecutions(final String pluginGroupId,
             final String pluginArtifactId, final String[] pluginGoal,
             List<MojoExecution> mojoExecutions) {
+    	final List<MojoExecution> foundMojoExections = new ArrayList<MojoExecution>();
         for (MojoExecution mojoExecution : mojoExecutions) {
             if (pluginGoal != null) {
                 for (String goal : pluginGoal) {
                     if (mojoExecutionForPlugin(mojoExecution, pluginGroupId,
                             pluginArtifactId, goal)) {
-                        return mojoExecution;
+                    	foundMojoExections.add(mojoExecution);
                     }
                 }
             } else {
                 if (mojoExecutionForPlugin(mojoExecution, pluginGroupId,
                         pluginArtifactId, null)) {
-                    return mojoExecution;
+                	foundMojoExections.add(mojoExecution);
                 }
             }
         }
-        return null;
+        return foundMojoExections;
     }
 
     public static MavenPluginWrapper newInstance(IProgressMonitor monitor,
@@ -126,18 +91,20 @@ public class MavenPluginWrapper {
             final String[] pluginGoal, IMavenProjectFacade mavenProjectFacade)
             throws CoreException {
         Preconditions.checkNotNull(mavenProjectFacade);
-        final MojoExecution execution =
-                findMojoExecution(monitor, mavenProjectFacade, pluginGroupId,
+        final List<MojoExecution> executions =
+                findMojoExecutions(monitor, mavenProjectFacade, pluginGroupId,
                         pluginArtifactId, pluginGoal);
         String key = pluginGroupId + ":" + pluginArtifactId;
-        return new MavenPluginWrapper(key, execution);
+        return new MavenPluginWrapper(key, executions);
     }
 
     @Override
     public String toString() {
         String s = "[MavenPluginWrapper " + key;
-        if (execution == null) {
+        if (executions == null) {
             s = s + " null wrapper]";
+        } else if (executions.isEmpty()) {
+        	s = s + " empty wrapper]";
         }
         return s;
     }
