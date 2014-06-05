@@ -72,7 +72,6 @@ public class EclipseFindbugsProjectConfigurator extends
 		log.debug("entering handleProjectConfigurationChange");
 		final MavenPluginConfigurationTranslator mavenFindbugsConfig = MavenPluginConfigurationTranslator
 				.newInstance(this, session,
-						mavenProjectFacade.getMavenProject(monitor),
 						mavenPluginWrapper, project);
 		UserPreferences prefs;
 		try {
@@ -81,8 +80,7 @@ public class EclipseFindbugsProjectConfigurator extends
 				log.error("Wrong number of executions. Expected 1. Found " + mojoExecutions.size());
 				return;
 			}
-			prefs = this.buildFindbugsPreferences(project, mavenFindbugsConfig,
-					session, mojoExecutions.get(0));
+			prefs = this.buildFindbugsPreferences(mavenFindbugsConfig);
 			final EclipseFindbugsConfigManager fbPluginNature = EclipseFindbugsConfigManager
 					.newInstance(project);
 			// Add the builder and nature
@@ -104,9 +102,7 @@ public class EclipseFindbugsProjectConfigurator extends
 
 	}
 
-	private UserPreferences buildFindbugsPreferences(final IProject project,
-			final MavenPluginConfigurationTranslator pluginCfgTranslator,
-			final MavenSession session, final MojoExecution execution)
+	private UserPreferences buildFindbugsPreferences(final MavenPluginConfigurationTranslator pluginCfgTranslator)
 			throws CoreException {
 		log.debug("entering buildFindbugsPreferences");
 		final UserPreferences prefs = FindBugsPreferenceInitializer

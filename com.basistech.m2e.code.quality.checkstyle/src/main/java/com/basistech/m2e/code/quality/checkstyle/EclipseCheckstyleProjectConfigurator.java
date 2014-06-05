@@ -99,7 +99,7 @@ public class EclipseCheckstyleProjectConfigurator extends
             
 			for (final MavenPluginConfigurationTranslator mavenCheckstyleConfig : mavenCheckstyleConfigs) {
 				if (mavenCheckstyleConfig.isActive()) {
-					this.buildCheckstyleConfiguration(project, pcWorkingCopy,
+					this.buildCheckstyleConfiguration(pcWorkingCopy,
 							mavenCheckstyleConfig);
 					// Add the builder and nature
 					csPluginNature.configure(monitor);
@@ -129,8 +129,7 @@ public class EclipseCheckstyleProjectConfigurator extends
 
     }
 
-	private void buildCheckstyleConfiguration(final IProject project,
-			ProjectConfigurationWorkingCopy pcWorkingCopy,
+	private void buildCheckstyleConfiguration(ProjectConfigurationWorkingCopy pcWorkingCopy,
 			final MavenPluginConfigurationTranslator cfgTranslator)
 			throws CheckstylePluginException, CoreException {
         // get the ruleset from configLocation

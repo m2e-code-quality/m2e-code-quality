@@ -43,7 +43,6 @@ import java.util.Set;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
-import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.io.URLInputStreamFacade;
@@ -80,7 +79,7 @@ public class MavenPluginConfigurationTranslator {
     private final MojoExecution execution;
 
     private MavenPluginConfigurationTranslator(final AbstractMavenPluginProjectConfigurator configurator,
-            final MavenSession session, final MavenProject mavenProject, final MojoExecution execution,
+            final MavenSession session, final MojoExecution execution,
             final IProject project) throws CoreException {
         this.project = project;
 		this.resourceResolver = ResourceResolver.newInstance(configurator
@@ -309,7 +308,7 @@ public class MavenPluginConfigurationTranslator {
     }
 
     public static MavenPluginConfigurationTranslator newInstance(AbstractMavenPluginProjectConfigurator configurator,
-            MavenSession session, final MavenProject mavenProject, final MavenPluginWrapper mavenPlugin,
+            MavenSession session, final MavenPluginWrapper mavenPlugin,
             final IProject project) throws CoreException {
     	final List<MojoExecution> mojoExecutions = mavenPlugin.getMojoExecutions();
 		if (mojoExecutions.size() != 1) {
@@ -320,7 +319,7 @@ public class MavenPluginConfigurationTranslator {
 							+ mojoExecutions.size()));
 		}
         final MavenPluginConfigurationTranslator m2csConverter = new MavenPluginConfigurationTranslator(configurator,
-            session, mavenProject, mojoExecutions.get(0), project);
+            session, mojoExecutions.get(0), project);
         return m2csConverter;
     }
 }
