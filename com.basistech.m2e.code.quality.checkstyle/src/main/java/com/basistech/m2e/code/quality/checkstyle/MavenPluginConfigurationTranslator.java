@@ -274,10 +274,20 @@ public class MavenPluginConfigurationTranslator {
 		return configurator.getParameterValue("sourceDirectory", String.class,
 				session, execution);
     }
-    
+
+    // since maven-checkstyle-plugin 2.13
+    private List<String> getSourceDirectories() throws CoreException {
+        return configurator.getParameterValue("sourceDirectories", List.class, session, execution);
+    }
+
     private String getTestSourceDirectory() throws CoreException {
     	return configurator.getParameterValue("testSourceDirectory", String.class,
     			session, execution);
+    }
+
+    // since maven-checkstyle-plugin 2.13
+    private List<String> getTestSourceDirectories() throws CoreException {
+        return configurator.getParameterValue("testSourceDirectories", List.class, session, execution);
     }
 
     private List<String> getIncludes() throws CoreException {
@@ -324,10 +334,24 @@ public class MavenPluginConfigurationTranslator {
          * enabled).
          */
         Set<String> sourceFolders = new HashSet<String>();
-        sourceFolders.add(this.getSourceDirectory());
+        String sourceDirectory = this.getSourceDirectory();
+        if (sourceDirectory != null) {
+            sourceFolders.add(sourceDirectory);
+        }
+        List<String> sourceDirectories = this.getSourceDirectories();
+        if (sourceDirectories != null) {
+            sourceFolders.addAll(sourceDirectories);
+        }
 
         if (getIncludeTestSourceDirectory()) {
-            sourceFolders.add(this.getTestSourceDirectory());
+            String testSourceDirectory = this.getTestSourceDirectory();
+            if (testSourceDirectory != null) {
+                sourceFolders.add(testSourceDirectory);
+            }
+            List<String> testSourceDirectories = this.getTestSourceDirectories();
+            if (testSourceDirectories != null) {
+                sourceFolders.addAll(testSourceDirectories);
+            }
         }
 
         /**
