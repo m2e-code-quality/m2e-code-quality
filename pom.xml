@@ -44,12 +44,12 @@
         <repository>
             <id>kepler</id>
             <layout>p2</layout>
-            <url>http://download.eclipse.org/releases/kepler</url>
+            <url>http://download.eclipse.org/releases/juno</url>
         </repository>
         <repository>
             <id>cs</id>
             <layout>p2</layout>
-            <url>http://m2e-code-quality.github.com/m2e-code-quality/checkstyle-p2-repository</url>
+            <url>http://eclipse-cs.sf.net/update</url>
         </repository>
         <repository>
             <id>pmd</id>
