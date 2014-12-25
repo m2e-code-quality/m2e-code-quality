@@ -49,7 +49,7 @@
         <repository>
             <id>cs</id>
             <layout>p2</layout>
-            <url>http://m2e-code-quality.github.com/m2e-code-quality/checkstyle-p2-repository</url>
+            <url>http://eclipse-cs.sf.net/update</url>
         </repository>
         <repository>
             <id>pmd</id>
