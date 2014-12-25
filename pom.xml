@@ -11,7 +11,7 @@
         <url>scm:git:git://github.com/m2e-code-quality/m2e-code-quality.git</url>
     </scm>
     <properties>
-        <tycho-version>0.20.0</tycho-version>
+        <tycho-version>0.22.0</tycho-version>
         <orbit.version>R20140525021250</orbit.version>
         <main.basedir>${basedir}</main.basedir>
 
