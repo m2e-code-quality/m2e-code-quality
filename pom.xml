@@ -14,9 +14,9 @@
         <tycho-version>0.20.0</tycho-version>
         <orbit.version>R20120526062928</orbit.version>
         <main.basedir>${basedir}</main.basedir>
-        
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        
+
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
     </properties>
