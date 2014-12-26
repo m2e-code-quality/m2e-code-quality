@@ -57,7 +57,9 @@ public final class ResourceResolver {
 		if (urlLocation.startsWith("/")) {
 			urlLocation = urlLocation.substring(1);
 		}
-		url = pluginRealm.getResource(urlLocation);
+		if (pluginRealm != null) {
+			url = pluginRealm.getResource(urlLocation);
+		}
 		if (url == null) {
 			try {
 				// 2. Try it as a remote resource.
