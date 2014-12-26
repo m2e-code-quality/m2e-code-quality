@@ -81,7 +81,7 @@ public class EclipseCheckstyleProjectConfigurator extends
 		final List<MavenPluginConfigurationTranslator> mavenCheckstyleConfigs =
 		        MavenPluginConfigurationTranslator.newInstance(this, session,
 		                mavenProjectFacade.getMavenProject(monitor),
-		                mavenPluginWrapper, project);
+		                mavenPluginWrapper, project, monitor);
 
 		try {
 			final EclipseCheckstyleConfigManager csPluginNature =
