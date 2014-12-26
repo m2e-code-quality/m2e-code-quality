@@ -130,39 +130,33 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 	        final IProgressMonitor monitor) throws CoreException {
 		final IMavenProjectFacade mavenProjectFacade =
 		        mavenProjectChangedEvent.getMavenProject();
+		final MavenProject mavenProject =
+		        mavenProjectFacade.getMavenProject(monitor);
+		final MavenPluginWrapper pluginWrapper =
+		        this.getMavenPlugin(monitor, mavenProjectFacade);
+		final IProject project = mavenProjectFacade.getProject();
 
-		if (mavenProjectFacade != null) {
-			final MavenProject mavenProject =
-			        mavenProjectFacade.getMavenProject();
-			if (mavenProject == null) {
-				return;
-			}
-			final MavenPluginWrapper pluginWrapper =
-			        this.getMavenPlugin(monitor, mavenProjectFacade);
-			final IProject project = mavenProjectFacade.getProject();
-			if (this.checkUnconfigurationRequired(monitor, mavenProjectFacade,
-			        mavenProjectChangedEvent.getOldMavenProject())) {
-				this.unconfigureEclipsePlugin(project, monitor);
-				return;
-			}
-			if (pluginWrapper.isPluginConfigured()) {
-				// only call handler if maven plugin is configured or found.
-				// we need a session.
-				MavenExecutionRequest request =
-				        maven.createExecutionRequest(monitor);
-				MavenSession session =
-				        maven.createSession(request, mavenProject);
-				this.handleProjectConfigurationChange(session,
-				        mavenProjectFacade, project, monitor, pluginWrapper);
-			} else {
-				// TODO: redirect to eclipse logger.
-				// this.console.logMessage(String.format(
-				// "Will not configure the Eclipse Plugin for Maven Plugin [%s:%s],"
-				// +
-				// "(Could not find maven plugin instance or configuration in pom)",
-				// this.getMavenPluginGroupId(),
-				// this.getMavenPluginArtifactId()));
-			}
+		if (this.checkUnconfigurationRequired(monitor, mavenProjectFacade,
+		        mavenProjectChangedEvent.getOldMavenProject())) {
+			this.unconfigureEclipsePlugin(project, monitor);
+			return;
+		}
+		if (pluginWrapper.isPluginConfigured()) {
+			// only call handler if maven plugin is configured or found.
+			// we need a session.
+			MavenExecutionRequest request =
+			        maven.createExecutionRequest(monitor);
+			MavenSession session = maven.createSession(request, mavenProject);
+			this.handleProjectConfigurationChange(session, mavenProjectFacade,
+			        project, monitor, pluginWrapper);
+		} else {
+			// TODO: redirect to eclipse logger.
+			// this.console.logMessage(String.format(
+			// "Will not configure the Eclipse Plugin for Maven Plugin [%s:%s],"
+			// +
+			// "(Could not find maven plugin instance or configuration in pom)",
+			// this.getMavenPluginGroupId(),
+			// this.getMavenPluginArtifactId()));
 		}
 	}
 
