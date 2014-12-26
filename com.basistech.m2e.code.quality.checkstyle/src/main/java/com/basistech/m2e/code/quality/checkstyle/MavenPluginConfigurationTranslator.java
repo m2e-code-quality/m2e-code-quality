@@ -69,7 +69,6 @@ public class MavenPluginConfigurationTranslator {
 	private final URI basedirUri;
 	private final AbstractMavenPluginProjectConfigurator configurator;
 	private final ResourceResolver resourceResolver;
-	private final MavenSession session;
 	private final MojoExecution execution;
 	private final IProgressMonitor monitor;
 
@@ -85,15 +84,14 @@ public class MavenPluginConfigurationTranslator {
 		this.resourceResolver =
 		        ResourceResolver.newInstance(configurator.getPluginClassRealm(
 		                session, mojoExecution));
-		this.session = session;
 		this.execution = mojoExecution;
 		this.configurator = configurator;
 	}
 
 	public boolean isActive() throws CoreException {
 		Boolean isSkip =
-		        configurator.getParameterValue("skip", Boolean.class, session,
-		                execution);
+		        configurator.getParameterValue(mavenProject, "skip",
+		                Boolean.class, execution, monitor);
 		return isSkip != null ? !isSkip : true;
 	}
 
@@ -148,8 +146,9 @@ public class MavenPluginConfigurationTranslator {
 	public String getSuppressionsFileExpression()
 	        throws CheckstylePluginException, CoreException {
 		String suppressionsFileExpression =
-		        configurator.getParameterValue("suppressionsFileExpression",
-		                String.class, session, execution);
+		        configurator.getParameterValue(mavenProject,
+		                "suppressionsFileExpression", String.class, execution,
+		                monitor);
 		if (suppressionsFileExpression == null) {
 			suppressionsFileExpression =
 			        CHECKSTYLE_DEFAULT_SUPPRESSIONS_FILE_EXPRESSION;
@@ -179,8 +178,8 @@ public class MavenPluginConfigurationTranslator {
 	 *             if an error occurs
 	 */
 	protected String getPropertiesLocation() throws CoreException {
-		return configurator.getParameterValue("propertiesLocation",
-		        String.class, session, execution);
+		return configurator.getParameterValue(mavenProject,
+		        "propertiesLocation", String.class, execution, monitor);
 	}
 
 	/**
@@ -192,8 +191,8 @@ public class MavenPluginConfigurationTranslator {
 	 *             if an error occurs
 	 */
 	protected String getPropertyExpansion() throws CoreException {
-		return configurator.getParameterValue("propertyExpansion",
-		        String.class, session, execution);
+		return configurator.getParameterValue(mavenProject,
+		        "propertyExpansion", String.class, execution, monitor);
 	}
 
 	/**
@@ -206,8 +205,9 @@ public class MavenPluginConfigurationTranslator {
 	 */
 	public boolean getIncludeTestSourceDirectory() throws CoreException {
 		Boolean includeTestSourceDirectory =
-		        configurator.getParameterValue("includeTestSourceDirectory",
-		                Boolean.class, session, execution);
+		        configurator.getParameterValue(mavenProject,
+		                "includeTestSourceDirectory", Boolean.class, execution,
+		                monitor);
 		if (includeTestSourceDirectory != null) {
 			return includeTestSourceDirectory.booleanValue();
 		} else {
@@ -217,8 +217,8 @@ public class MavenPluginConfigurationTranslator {
 
 	public boolean getIncludeResourcesDirectory() throws CoreException {
 		Boolean includeTestSourceDirectory =
-		        configurator.getParameterValue("includeResources",
-		                Boolean.class, session, execution);
+		        configurator.getParameterValue(mavenProject,
+		                "includeResources", Boolean.class, execution, monitor);
 		if (includeTestSourceDirectory != null) {
 			return includeTestSourceDirectory.booleanValue();
 		} else {
@@ -228,8 +228,9 @@ public class MavenPluginConfigurationTranslator {
 
 	public boolean getIncludeTestResourcesDirectory() throws CoreException {
 		Boolean includeTestSourceDirectory =
-		        configurator.getParameterValue("includeTestResources",
-		                Boolean.class, session, execution);
+		        configurator.getParameterValue(mavenProject,
+		                "includeTestResources", Boolean.class, execution,
+		                monitor);
 		if (includeTestSourceDirectory != null) {
 			return includeTestSourceDirectory.booleanValue();
 		} else {
@@ -250,8 +251,8 @@ public class MavenPluginConfigurationTranslator {
 	 */
 	private String getConfigLocation() throws CoreException {
 		String configLocation =
-		        configurator.getParameterValue("configLocation", String.class,
-		                session, execution);
+		        configurator.getParameterValue(mavenProject, "configLocation",
+		                String.class, execution, monitor);
 		if (configLocation == null) {
 			configLocation = CHECKSTYLE_DEFAULT_CONFIG_LOCATION;
 		}
@@ -261,8 +262,8 @@ public class MavenPluginConfigurationTranslator {
 	private String getHeaderLocation() throws CoreException {
 		String configLocation = getConfigLocation();
 		String headerLocation =
-		        configurator.getParameterValue("headerLocation", String.class,
-		                session, execution);
+		        configurator.getParameterValue(mavenProject, "headerLocation",
+		                String.class, execution, monitor);
 		if ("config/maven_checks.xml".equals(configLocation)
 		        && "LICENSE.txt".equals(headerLocation)) {
 			headerLocation = "config/maven-header.txt";
@@ -272,24 +273,26 @@ public class MavenPluginConfigurationTranslator {
 
 	private String getSuppressionsLocation() throws CoreException {
 		String suppressionsLocation =
-		        configurator.getParameterValue("suppressionsLocation",
-		                String.class, session, execution);
+		        configurator.getParameterValue(mavenProject,
+		                "suppressionsLocation", String.class, execution,
+		                monitor);
 		if (suppressionsLocation == null) {
 			suppressionsLocation =
-			        configurator.getParameterValue("suppressionsFile",
-			                String.class, session, execution);
+			        configurator.getParameterValue(mavenProject,
+			                "suppressionsFile", String.class, execution,
+			                monitor);
 		}
 		return suppressionsLocation;
 	}
 
 	private String getSourceDirectory() throws CoreException {
-		return configurator.getParameterValue("sourceDirectory", String.class,
-		        session, execution);
+		return configurator.getParameterValue(mavenProject, "sourceDirectory",
+		        String.class, execution, monitor);
 	}
 
 	private String getTestSourceDirectory() throws CoreException {
-		return configurator.getParameterValue("testSourceDirectory",
-		        String.class, session, execution);
+		return configurator.getParameterValue(mavenProject,
+		        "testSourceDirectory", String.class, execution, monitor);
 	}
 
 	private List<String> getIncludes() throws CoreException {
@@ -492,8 +495,8 @@ public class MavenPluginConfigurationTranslator {
 	private List<String> getPatterns(String elemName) throws CoreException {
 		List<String> transformedPatterns = new LinkedList<String>();
 		final String patternsString =
-		        configurator.getParameterValue(elemName, String.class, session,
-		                execution);
+		        configurator.getParameterValue(mavenProject, elemName,
+		                String.class, execution, monitor);
 		if (patternsString == null || patternsString.length() == 0) {
 			return transformedPatterns;
 		}

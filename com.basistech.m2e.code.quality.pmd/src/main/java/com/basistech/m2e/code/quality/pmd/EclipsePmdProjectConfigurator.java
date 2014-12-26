@@ -101,9 +101,9 @@ public class EclipsePmdProjectConfigurator extends
 		        findForkedExecution(execution, "org.apache.maven.plugins",
 		                "maven-pmd-plugin", "pmd");
 		final MavenPluginConfigurationTranslator pluginCfgTranslator =
-		        MavenPluginConfigurationTranslator.newInstance(this, session,
+		        MavenPluginConfigurationTranslator.newInstance(this,
 		                mavenProjectFacade.getMavenProject(monitor),
-		                pmdGoalExecution, project);
+		                pmdGoalExecution, project, monitor);
 
 		this.createOrUpdateEclipsePmdConfiguration(session, mavenPluginWrapper,
 		        project, pluginCfgTranslator, monitor);

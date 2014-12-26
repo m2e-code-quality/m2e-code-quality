@@ -78,7 +78,6 @@ public class MavenPluginConfigurationTranslator {
 	private final IProject project;
 	private final AbstractMavenPluginProjectConfigurator configurator;
 	private final ResourceResolver resourceResolver;
-	private final MavenSession session;
 	private final MojoExecution execution;
 	private final IProgressMonitor monitor;
 	private final MavenProject mavenProject;
@@ -94,7 +93,6 @@ public class MavenPluginConfigurationTranslator {
 		this.resourceResolver =
 		        ResourceResolver.newInstance(configurator.getPluginClassRealm(
 		                session, execution));
-		this.session = session;
 		this.execution = execution;
 		this.configurator = configurator;
 	}
@@ -102,8 +100,8 @@ public class MavenPluginConfigurationTranslator {
 	public void setIncludeFilterFiles(final UserPreferences prefs)
 	        throws CoreException {
 		final String includeFilterFile =
-		        this.configurator.getParameterValue(INCLUDE_FILTER_FILE,
-		                String.class, session, execution);
+		        this.configurator.getParameterValue(mavenProject,
+		                INCLUDE_FILTER_FILE, String.class, execution, monitor);
 		// don't do anything if null
 		if (includeFilterFile == null) {
 			log.debug("includeFilterFile is null");
@@ -172,8 +170,8 @@ public class MavenPluginConfigurationTranslator {
 	        throws CoreException {
 		final ProjectFilterSettings pfs = prefs.getFilterSettings();
 		final String bugCatagories =
-		        this.configurator.getParameterValue(BUG_CATEGORIES,
-		                String.class, session, execution);
+		        this.configurator.getParameterValue(mavenProject,
+		                BUG_CATEGORIES, String.class, execution, monitor);
 		if (bugCatagories == null) {
 			log.debug("bugCatagories is null");
 			return;
@@ -204,14 +202,14 @@ public class MavenPluginConfigurationTranslator {
 	}
 
 	public boolean debugEnabled() throws CoreException {
-		return this.configurator.getParameterValue(DEBUG, Boolean.class,
-		        session, execution);
+		return this.configurator.getParameterValue(mavenProject, DEBUG,
+		        Boolean.class, execution, monitor);
 	}
 
 	public void setEffort(final UserPreferences prefs) throws CoreException {
 		String effort =
-		        this.configurator.getParameterValue(EFFORT, String.class,
-		                session, execution);
+		        this.configurator.getParameterValue(mavenProject, EFFORT,
+		                String.class, execution, monitor);
 		if (effort == null) {
 			log.debug("effort is null");
 			return;
@@ -229,8 +227,8 @@ public class MavenPluginConfigurationTranslator {
 
 	public void setMinRank(final UserPreferences prefs) throws CoreException {
 		Integer minRank =
-		        this.configurator.getParameterValue(MAX_RANK, Integer.class,
-		                session, execution);
+		        this.configurator.getParameterValue(mavenProject, MAX_RANK,
+		                Integer.class, execution, monitor);
 		if (minRank == null) {
 			log.debug("max rank is null");
 			return;
@@ -246,8 +244,8 @@ public class MavenPluginConfigurationTranslator {
 
 	public void setPriority(final UserPreferences prefs) throws CoreException {
 		final String priority =
-		        this.configurator.getParameterValue(PRIORITY, String.class,
-		                session, execution);
+		        this.configurator.getParameterValue(mavenProject, PRIORITY,
+		                String.class, execution, monitor);
 		if (priority == null) {
 			log.debug("priority is null");
 			return;
@@ -264,8 +262,8 @@ public class MavenPluginConfigurationTranslator {
 	public void setOmitVisitors(final UserPreferences prefs)
 	        throws CoreException {
 		final String omitVisitors =
-		        this.configurator.getParameterValue(OMIT_VISITORS,
-		                String.class, session, execution);
+		        this.configurator.getParameterValue(mavenProject,
+		                OMIT_VISITORS, String.class, execution, monitor);
 		if (omitVisitors == null) {
 			log.debug("omitVisitors is null");
 			return;
@@ -287,8 +285,8 @@ public class MavenPluginConfigurationTranslator {
 
 	public void setThreshold(final UserPreferences prefs) throws CoreException {
 		final String threshold =
-		        this.configurator.getParameterValue(THRESHOLD, String.class,
-		                session, execution);
+		        this.configurator.getParameterValue(mavenProject, THRESHOLD,
+		                String.class, execution, monitor);
 		if (threshold == null) {
 			log.debug("threshold is null");
 			return;
@@ -304,8 +302,8 @@ public class MavenPluginConfigurationTranslator {
 
 	public void setVisitors(final UserPreferences prefs) throws CoreException {
 		final String visitors =
-		        this.configurator.getParameterValue(VISITORS, String.class,
-		                session, execution);
+		        this.configurator.getParameterValue(mavenProject, VISITORS,
+		                String.class, execution, monitor);
 		if (visitors == null) {
 			return;
 		}
