@@ -51,6 +51,14 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
         AbstractProjectConfigurator {
 
 	@Override
+	public <T> T getParameterValue(MavenProject project, String parameter,
+	        Class<T> asType, MojoExecution mojoExecution,
+	        IProgressMonitor monitor) throws CoreException {
+		return super.getParameterValue(project, parameter, asType,
+		        mojoExecution, monitor);
+	}
+
+	@Override
 	@Deprecated
 	public <T> T getParameterValue(String parameter, Class<T> asType,
 	        MavenSession session, MojoExecution mojoExecution)
