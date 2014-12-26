@@ -43,11 +43,13 @@ import java.util.Set;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
+import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.io.URLInputStreamFacade;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.FrameworkUtil;
@@ -78,12 +80,17 @@ public class MavenPluginConfigurationTranslator {
 	private final ResourceResolver resourceResolver;
 	private final MavenSession session;
 	private final MojoExecution execution;
+	private final IProgressMonitor monitor;
+	private final MavenProject mavenProject;
 
 	private MavenPluginConfigurationTranslator(
 	        final AbstractMavenPluginProjectConfigurator configurator,
 	        final MavenSession session, final MojoExecution execution,
-	        final IProject project) throws CoreException {
+	        final IProject project, final MavenProject mavenProject,
+	        final IProgressMonitor monitor) throws CoreException {
 		this.project = project;
+		this.mavenProject = mavenProject;
+		this.monitor = monitor;
 		this.resourceResolver =
 		        ResourceResolver.newInstance(configurator.getPluginClassRealm(
 		                session, execution));
@@ -362,7 +369,9 @@ public class MavenPluginConfigurationTranslator {
 	public static MavenPluginConfigurationTranslator newInstance(
 	        AbstractMavenPluginProjectConfigurator configurator,
 	        MavenSession session, final MavenPluginWrapper mavenPlugin,
-	        final IProject project) throws CoreException {
+	        final IProject project, final MavenProject mavenProject,
+	        final IProgressMonitor monitor) throws CoreException {
+
 		final List<MojoExecution> mojoExecutions =
 		        mavenPlugin.getMojoExecutions();
 		if (mojoExecutions.size() != 1) {
@@ -374,7 +383,7 @@ public class MavenPluginConfigurationTranslator {
 		}
 		final MavenPluginConfigurationTranslator m2csConverter =
 		        new MavenPluginConfigurationTranslator(configurator, session,
-		                mojoExecutions.get(0), project);
+		                mojoExecutions.get(0), project, mavenProject, monitor);
 		return m2csConverter;
 	}
 }

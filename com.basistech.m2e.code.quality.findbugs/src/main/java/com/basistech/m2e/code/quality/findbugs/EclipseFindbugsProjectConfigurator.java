@@ -72,7 +72,8 @@ public class EclipseFindbugsProjectConfigurator extends
 		log.debug("entering handleProjectConfigurationChange");
 		final MavenPluginConfigurationTranslator mavenFindbugsConfig =
 		        MavenPluginConfigurationTranslator.newInstance(this, session,
-		                mavenPluginWrapper, project);
+		                mavenPluginWrapper, project,
+		                mavenProjectFacade.getMavenProject(monitor), monitor);
 		UserPreferences prefs;
 		try {
 			final List<MojoExecution> mojoExecutions =
