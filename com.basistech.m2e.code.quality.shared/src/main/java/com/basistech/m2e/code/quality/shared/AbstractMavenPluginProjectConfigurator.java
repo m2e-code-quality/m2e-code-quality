@@ -154,7 +154,6 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 				// this.getMavenPluginArtifactId()));
 			}
 		}
-		super.mavenProjectChanged(mavenProjectChangedEvent, monitor);
 	}
 
 	protected abstract void handleProjectConfigurationChange(
