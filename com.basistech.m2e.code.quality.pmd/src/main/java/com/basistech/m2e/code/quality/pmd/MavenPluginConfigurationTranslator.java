@@ -35,7 +35,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
-import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -64,7 +63,6 @@ public class MavenPluginConfigurationTranslator {
 	private MavenPluginConfigurationTranslator(
 	        final AbstractMavenPluginProjectConfigurator configurator,
 	        final MavenSession session, final MavenProject mavenProject,
-	        final MavenPluginWrapper pluginWrapper,
 	        MojoExecution pmdGoalExecution, final IProject project)
 	        throws CoreException {
 		this.mavenProject = mavenProject;
@@ -327,12 +325,11 @@ public class MavenPluginConfigurationTranslator {
 	public static MavenPluginConfigurationTranslator newInstance(
 	        AbstractMavenPluginProjectConfigurator configurator,
 	        MavenSession session, final MavenProject mavenProject,
-	        final MavenPluginWrapper mavenPlugin,
 	        final MojoExecution pmdGoalExecution, final IProject project)
 	        throws CoreException {
 		final MavenPluginConfigurationTranslator m2csConverter =
 		        new MavenPluginConfigurationTranslator(configurator, session,
-		                mavenProject, mavenPlugin, pmdGoalExecution, project);
+		                mavenProject, pmdGoalExecution, project);
 		m2csConverter.initialize();
 		return m2csConverter;
 	}
