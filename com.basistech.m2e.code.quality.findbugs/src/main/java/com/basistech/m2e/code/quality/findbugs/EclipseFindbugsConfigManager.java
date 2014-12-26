@@ -40,8 +40,9 @@ import de.tobject.findbugs.nature.FindBugsNature;
  */
 public class EclipseFindbugsConfigManager {
 
-	private static final Logger log = LoggerFactory
-			.getLogger("com/basistech/m2e/code/quality/findbugs/EclipseFindbugsConfigManager");
+	private static final Logger log =
+	        LoggerFactory
+	                .getLogger("com/basistech/m2e/code/quality/findbugs/EclipseFindbugsConfigManager");
 
 	private final FindBugsNature fbNature;
 
@@ -57,7 +58,7 @@ public class EclipseFindbugsConfigManager {
 	}
 
 	public void deconfigure(final IProgressMonitor monitor)
-			throws CoreException {
+	        throws CoreException {
 		log.debug("entering deconfigure");
 		// this removes the builder only.
 		this.fbNature.deconfigure();
@@ -68,7 +69,7 @@ public class EclipseFindbugsConfigManager {
 	}
 
 	private void configureNature(final IProgressMonitor monitor)
-			throws CoreException {
+	        throws CoreException {
 		log.debug("entering configureNature");
 		final IProject project = this.fbNature.getProject();
 		// We have to explicitly add the nature.
@@ -82,7 +83,7 @@ public class EclipseFindbugsConfigManager {
 	}
 
 	private void deconfigureNature(final IProgressMonitor monitor)
-			throws CoreException {
+	        throws CoreException {
 		log.debug("entering deconfigureNature");
 		// remove the nature itself, by resetting the nature list.
 		final IProject project = this.fbNature.getProject();
@@ -90,18 +91,19 @@ public class EclipseFindbugsConfigManager {
 		final String natures[] = desc.getNatureIds();
 		final List<String> newNaturesList = new ArrayList<String>();
 		for (int i = 0; i < natures.length; i++) {
-			if (!ECLIPSE_FB_NATURE_ID.equals(natures[i]))
+			if (!ECLIPSE_FB_NATURE_ID.equals(natures[i])) {
 				newNaturesList.add(natures[i]);
+			}
 		}
 
-		final String newNatures[] = newNaturesList
-				.toArray(new String[newNaturesList.size()]);
+		final String newNatures[] =
+		        newNaturesList.toArray(new String[newNaturesList.size()]);
 		desc.setNatureIds(newNatures);
 		project.setDescription(desc, monitor);
 	}
 
 	private void deleteEclipseFiles(final IProgressMonitor monitor)
-			throws CoreException {
+	        throws CoreException {
 		log.debug("entering deleteEclipseFiles");
 		final IProject project = this.fbNature.getProject();
 		final IResource findbugsFile = project.getFile(ECLIPSE_FB_PREFS_FILE);
@@ -110,13 +112,13 @@ public class EclipseFindbugsConfigManager {
 	}
 
 	public static EclipseFindbugsConfigManager newInstance(
-			final IProject project) {
+	        final IProject project) {
 		log.debug("entering newInstance");
 		Preconditions.checkNotNull(project);
 		final FindBugsNature fbNature = new FindBugsNature();
 		fbNature.setProject(project);
-		final EclipseFindbugsConfigManager fbNatureExtended = new EclipseFindbugsConfigManager(
-				fbNature);
+		final EclipseFindbugsConfigManager fbNatureExtended =
+		        new EclipseFindbugsConfigManager(fbNature);
 		return fbNatureExtended;
 	}
 }
