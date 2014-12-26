@@ -102,8 +102,8 @@ public class EclipsePmdProjectConfigurator extends
 		                "maven-pmd-plugin", "pmd");
 		final MavenPluginConfigurationTranslator pluginCfgTranslator =
 		        MavenPluginConfigurationTranslator.newInstance(this, session,
-		                mavenProjectFacade.getMavenProject(),
-		                mavenPluginWrapper, pmdGoalExecution, project);
+		                mavenProjectFacade.getMavenProject(monitor),
+		                pmdGoalExecution, project);
 
 		this.createOrUpdateEclipsePmdConfiguration(session, mavenPluginWrapper,
 		        project, pluginCfgTranslator, monitor);
