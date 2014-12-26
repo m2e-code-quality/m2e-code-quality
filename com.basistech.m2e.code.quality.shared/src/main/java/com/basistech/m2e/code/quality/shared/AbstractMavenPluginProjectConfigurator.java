@@ -51,6 +51,7 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
         AbstractProjectConfigurator {
 
 	@Override
+	@Deprecated
 	public <T> T getParameterValue(String parameter, Class<T> asType,
 	        MavenSession session, MojoExecution mojoExecution)
 	        throws CoreException {
@@ -58,6 +59,7 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 		        mojoExecution);
 	}
 
+	@Deprecated
 	public List<String> getCommaSeparatedStringParameterValues(
 	        String parameter, MavenSession session, MojoExecution execution)
 	        throws CoreException {
