@@ -155,6 +155,12 @@
                     <artifactId>tycho-p2-plugin</artifactId>
                     <version>${tycho-version}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>target-platform-configuration</artifactId>
+                    <version>${tycho-version}</version>
+                </plugin>
+
                 <!-- important for self-hosting -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
