@@ -59,7 +59,7 @@
         <repository>
             <id>findbugs</id>
             <layout>p2</layout>
-            <url>http://findbugs.cs.umd.edu/eclipse</url>
+            <url>http://m2e-code-quality.github.com/m2e-code-quality/findbugs-p2-repository</url>
         </repository>
         <repository>
             <id>orbit</id>
