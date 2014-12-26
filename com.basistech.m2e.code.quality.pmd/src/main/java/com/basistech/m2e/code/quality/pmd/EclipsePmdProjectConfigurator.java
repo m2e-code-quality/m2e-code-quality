@@ -299,13 +299,20 @@ public class EclipsePmdProjectConfigurator extends
 			                "<exclude name=\"$1\"/>");
 
 			outputStream.write(fixedXml.getBytes());
-			outputStream.close();
 
 			rulesetFile.refreshLocal(IResource.DEPTH_ZERO, monitor);
 		} catch (IOException ex) {
 			//
 		} catch (WriterException ex) {
 			//
+		} finally {
+			if (outputStream != null) {
+				try {
+					outputStream.close();
+				} catch (IOException e) {
+					//
+				}
+			}
 		}
 		return rulesetFile.getLocation().toFile();
 	}
