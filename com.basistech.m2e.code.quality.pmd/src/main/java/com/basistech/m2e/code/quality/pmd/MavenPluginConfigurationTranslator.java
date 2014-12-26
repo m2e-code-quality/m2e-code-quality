@@ -143,6 +143,7 @@ public class MavenPluginConfigurationTranslator {
 	 * 
 	 * @return the value of the {@code includeTests} element.
 	 * @throws CoreException
+	 *             if an error occurs
 	 */
 	public boolean getIncludeTests() throws CoreException {
 		Boolean tests =
