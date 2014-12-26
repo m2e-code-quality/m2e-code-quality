@@ -16,8 +16,6 @@
  ******************************************************************************/
 package com.basistech.m2e.code.quality.shared;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -56,28 +54,6 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 	        IProgressMonitor monitor) throws CoreException {
 		return super.getParameterValue(project, parameter, asType,
 		        mojoExecution, monitor);
-	}
-
-	@Override
-	@Deprecated
-	public <T> T getParameterValue(String parameter, Class<T> asType,
-	        MavenSession session, MojoExecution mojoExecution)
-	        throws CoreException {
-		return super.getParameterValue(parameter, asType, session,
-		        mojoExecution);
-	}
-
-	@Deprecated
-	public List<String> getCommaSeparatedStringParameterValues(
-	        String parameter, MavenSession session, MojoExecution execution)
-	        throws CoreException {
-		String value =
-		        getParameterValue(parameter, String.class, session, execution);
-		if (value == null) {
-			return Collections.emptyList();
-		} else {
-			return Arrays.asList(value.split(","));
-		}
 	}
 
 	protected MojoExecution findForkedExecution(MojoExecution primary,
