@@ -37,7 +37,6 @@ import net.sf.eclipsecs.core.projectconfig.ProjectConfigurationWorkingCopy;
 import net.sf.eclipsecs.core.util.CheckstylePluginException;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
@@ -74,16 +73,16 @@ public class MavenPluginConfigurationTranslator {
 
 	private MavenPluginConfigurationTranslator(
 	        final AbstractMavenPluginProjectConfigurator configurator,
-	        final MavenSession session, final MavenProject mavenProject,
-	        final MojoExecution mojoExecution, final IProject project,
-	        final IProgressMonitor monitor) throws CoreException {
+	        final MavenProject mavenProject, final MojoExecution mojoExecution,
+	        final IProject project, final IProgressMonitor monitor)
+	        throws CoreException {
 		this.mavenProject = mavenProject;
 		this.project = project;
 		this.monitor = monitor;
 		this.basedirUri = this.project.getLocationURI();
 		this.resourceResolver =
-		        ResourceResolver.newInstance(configurator.getPluginClassRealm(
-		                session, mojoExecution));
+		        ResourceResolver.newInstance(configurator
+		                .getPluginClassRealm(mojoExecution));
 		this.execution = mojoExecution;
 		this.configurator = configurator;
 	}
@@ -624,15 +623,14 @@ public class MavenPluginConfigurationTranslator {
 
 	public static List<MavenPluginConfigurationTranslator> newInstance(
 	        AbstractMavenPluginProjectConfigurator configurator,
-	        MavenSession session, final MavenProject mavenProject,
+	        final MavenProject mavenProject,
 	        final MavenPluginWrapper mavenPlugin, final IProject project,
 	        final IProgressMonitor monitor) throws CoreException {
 		final List<MavenPluginConfigurationTranslator> m2csConverters =
 		        new ArrayList<MavenPluginConfigurationTranslator>();
 		for (final MojoExecution execution : mavenPlugin.getMojoExecutions()) {
 			m2csConverters.add(new MavenPluginConfigurationTranslator(
-			        configurator, session, mavenProject, execution, project,
-			        monitor));
+			        configurator, mavenProject, execution, project, monitor));
 		}
 		return m2csConverters;
 	}

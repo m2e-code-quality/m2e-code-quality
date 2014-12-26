@@ -19,18 +19,12 @@ package com.basistech.m2e.code.quality.shared;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.maven.execution.MavenExecutionRequest;
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecution;
-import org.apache.maven.plugin.descriptor.MojoDescriptor;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
@@ -95,9 +89,8 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 			return;
 		}
 
-		this.handleProjectConfigurationChange(request.getMavenSession(),
-		        request.getMavenProjectFacade(), project, monitor,
-		        pluginWrapper);
+		this.handleProjectConfigurationChange(request.getMavenProjectFacade(),
+		        project, monitor, pluginWrapper);
 	}
 
 	@Override
@@ -106,8 +99,6 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 	        final IProgressMonitor monitor) throws CoreException {
 		final IMavenProjectFacade mavenProjectFacade =
 		        mavenProjectChangedEvent.getMavenProject();
-		final MavenProject mavenProject =
-		        mavenProjectFacade.getMavenProject(monitor);
 		final MavenPluginWrapper pluginWrapper =
 		        this.getMavenPlugin(monitor, mavenProjectFacade);
 		final IProject project = mavenProjectFacade.getProject();
@@ -118,13 +109,8 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 			return;
 		}
 		if (pluginWrapper.isPluginConfigured()) {
-			// only call handler if maven plugin is configured or found.
-			// we need a session.
-			MavenExecutionRequest request =
-			        maven.createExecutionRequest(monitor);
-			MavenSession session = maven.createSession(request, mavenProject);
-			this.handleProjectConfigurationChange(session, mavenProjectFacade,
-			        project, monitor, pluginWrapper);
+			this.handleProjectConfigurationChange(mavenProjectFacade, project,
+			        monitor, pluginWrapper);
 		} else {
 			// TODO: redirect to eclipse logger.
 			// this.console.logMessage(String.format(
@@ -137,7 +123,6 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 	}
 
 	protected abstract void handleProjectConfigurationChange(
-	        final MavenSession session,
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final IProgressMonitor monitor,
 	        final MavenPluginWrapper mavenPluginWrapper) throws CoreException;
@@ -211,14 +196,10 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 		return false;
 	}
 
-	public ClassRealm getPluginClassRealm(MavenSession session,
-	        MojoExecution mojoExecution) throws CoreException {
-		IMaven mvn = MavenPlugin.getMaven();
-		// call for side effect of ensuring that the realm is set in the
-		// descriptor.
-		mvn.getConfiguredMojo(session, mojoExecution, Mojo.class);
-		MojoDescriptor mojoDescriptor = mojoExecution.getMojoDescriptor();
-		return mojoDescriptor.getPluginDescriptor().getClassRealm();
+	public ClassRealm getPluginClassRealm(MojoExecution mojoExecution)
+	        throws CoreException {
+		return mojoExecution.getMojoDescriptor().getPluginDescriptor()
+		        .getClassRealm();
 	}
 
 	private MavenPluginWrapper getMavenPlugin(IProgressMonitor monitor,

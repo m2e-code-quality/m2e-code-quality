@@ -44,7 +44,6 @@ import net.sourceforge.pmd.eclipse.runtime.properties.IProjectPropertiesManager;
 import net.sourceforge.pmd.eclipse.runtime.properties.PropertiesException;
 import net.sourceforge.pmd.eclipse.runtime.writer.WriterException;
 
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.core.resources.IFile;
@@ -91,7 +90,7 @@ public class EclipsePmdProjectConfigurator extends
 	}
 
 	@Override
-	protected void handleProjectConfigurationChange(final MavenSession session,
+	protected void handleProjectConfigurationChange(
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final IProgressMonitor monitor,
 	        final MavenPluginWrapper mavenPluginWrapper) throws CoreException {
@@ -105,8 +104,8 @@ public class EclipsePmdProjectConfigurator extends
 		                mavenProjectFacade.getMavenProject(monitor),
 		                pmdGoalExecution, project, monitor);
 
-		this.createOrUpdateEclipsePmdConfiguration(session, mavenPluginWrapper,
-		        project, pluginCfgTranslator, monitor);
+		this.createOrUpdateEclipsePmdConfiguration(mavenPluginWrapper, project,
+		        pluginCfgTranslator, monitor);
 
 		addPMDNature(project, monitor);
 	}
@@ -177,15 +176,13 @@ public class EclipsePmdProjectConfigurator extends
 	 *             if the creation failed.
 	 */
 	private void createOrUpdateEclipsePmdConfiguration(
-	        final MavenSession session, final MavenPluginWrapper pluginWrapper,
-	        final IProject project,
+	        final MavenPluginWrapper pluginWrapper, final IProject project,
 	        final MavenPluginConfigurationTranslator pluginCfgTranslator,
 	        final IProgressMonitor monitor) throws CoreException {
 
 		final MojoExecution execution = findMojoExecution(pluginWrapper);
 		ResourceResolver resourceResolver =
-		        ResourceResolver.newInstance(getPluginClassRealm(session,
-		                execution));
+		        ResourceResolver.newInstance(getPluginClassRealm(execution));
 		try {
 			final RuleSet ruleset =
 			        this.createPmdRuleSet(pluginCfgTranslator, resourceResolver);

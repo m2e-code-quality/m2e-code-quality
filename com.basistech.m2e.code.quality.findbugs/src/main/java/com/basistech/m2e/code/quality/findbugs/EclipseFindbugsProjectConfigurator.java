@@ -21,7 +21,6 @@ import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.M
 
 import java.util.List;
 
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -65,13 +64,13 @@ public class EclipseFindbugsProjectConfigurator extends
 	}
 
 	@Override
-	protected void handleProjectConfigurationChange(final MavenSession session,
+	protected void handleProjectConfigurationChange(
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final IProgressMonitor monitor,
 	        final MavenPluginWrapper mavenPluginWrapper) throws CoreException {
 		log.debug("entering handleProjectConfigurationChange");
 		final MavenPluginConfigurationTranslator mavenFindbugsConfig =
-		        MavenPluginConfigurationTranslator.newInstance(this, session,
+		        MavenPluginConfigurationTranslator.newInstance(this,
 		                mavenPluginWrapper, project,
 		                mavenProjectFacade.getMavenProject(monitor), monitor);
 		UserPreferences prefs;

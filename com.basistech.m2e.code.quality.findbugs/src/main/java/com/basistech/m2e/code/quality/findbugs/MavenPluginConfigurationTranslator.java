@@ -41,7 +41,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
@@ -84,15 +83,15 @@ public class MavenPluginConfigurationTranslator {
 
 	private MavenPluginConfigurationTranslator(
 	        final AbstractMavenPluginProjectConfigurator configurator,
-	        final MavenSession session, final MojoExecution execution,
-	        final IProject project, final MavenProject mavenProject,
-	        final IProgressMonitor monitor) throws CoreException {
+	        final MojoExecution execution, final IProject project,
+	        final MavenProject mavenProject, final IProgressMonitor monitor)
+	        throws CoreException {
 		this.project = project;
 		this.mavenProject = mavenProject;
 		this.monitor = monitor;
 		this.resourceResolver =
-		        ResourceResolver.newInstance(configurator.getPluginClassRealm(
-		                session, execution));
+		        ResourceResolver.newInstance(configurator
+		                .getPluginClassRealm(execution));
 		this.execution = execution;
 		this.configurator = configurator;
 	}
@@ -368,9 +367,9 @@ public class MavenPluginConfigurationTranslator {
 
 	public static MavenPluginConfigurationTranslator newInstance(
 	        AbstractMavenPluginProjectConfigurator configurator,
-	        MavenSession session, final MavenPluginWrapper mavenPlugin,
-	        final IProject project, final MavenProject mavenProject,
-	        final IProgressMonitor monitor) throws CoreException {
+	        final MavenPluginWrapper mavenPlugin, final IProject project,
+	        final MavenProject mavenProject, final IProgressMonitor monitor)
+	        throws CoreException {
 
 		final List<MojoExecution> mojoExecutions =
 		        mavenPlugin.getMojoExecutions();
@@ -382,7 +381,7 @@ public class MavenPluginConfigurationTranslator {
 			                + mojoExecutions.size()));
 		}
 		final MavenPluginConfigurationTranslator m2csConverter =
-		        new MavenPluginConfigurationTranslator(configurator, session,
+		        new MavenPluginConfigurationTranslator(configurator,
 		                mojoExecutions.get(0), project, mavenProject, monitor);
 		return m2csConverter;
 	}
