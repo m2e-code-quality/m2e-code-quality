@@ -181,12 +181,10 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 	protected abstract String getMavenPluginArtifactId();
 
 	/**
-	 * Return the specific goals that this class works on, or null if it all
-	 * goals apply. Null may lead to chaotic overlaying of multiple
-	 * configurations. If more than one, this will process in order looking for
-	 * an execution.
-	 * 
-	 * @return
+	 * @return the specific goals that this class works on, or null if it all
+	 *         goals apply. Null may lead to chaotic overlaying of multiple
+	 *         configurations. If more than one, this will process in order
+	 *         looking for an execution.
 	 */
 	protected String[] getMavenPluginGoal() {
 		return null;

@@ -173,6 +173,7 @@ public class MavenPluginConfigurationTranslator {
 	 * 
 	 * @return the value of the {@code propertyExpansion} element.
 	 * @throws CoreException
+	 *             if an error occurs
 	 */
 	protected String getPropertiesLocation() throws CoreException {
 		return configurator.getParameterValue("propertiesLocation",
@@ -185,6 +186,7 @@ public class MavenPluginConfigurationTranslator {
 	 * 
 	 * @return the value of the {@code propertyExpansion} element.
 	 * @throws CoreException
+	 *             if an error occurs
 	 */
 	protected String getPropertyExpansion() throws CoreException {
 		return configurator.getParameterValue("propertyExpansion",
@@ -197,6 +199,7 @@ public class MavenPluginConfigurationTranslator {
 	 * 
 	 * @return the value of the {@code includeTestSourceDirectory} element.
 	 * @throws CoreException
+	 *             if an error occurs
 	 */
 	public boolean getIncludeTestSourceDirectory() throws CoreException {
 		Boolean includeTestSourceDirectory =

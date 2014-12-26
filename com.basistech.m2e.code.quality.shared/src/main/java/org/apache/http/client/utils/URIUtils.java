@@ -44,11 +44,6 @@ import java.util.Stack;
 public class URIUtils {
 
 	/**
-	 * Constructs a {@link URI} using all the parameters. This should be used
-	 * instead of
-	 * {@link URI#URI(String, String, String, int, String, String, String)} or
-	 * any of the other URI multi-argument URI constructors.
-	 * 
 	 * @param scheme
 	 *            Scheme name
 	 * @param host
@@ -61,6 +56,10 @@ public class URIUtils {
 	 *            Query
 	 * @param fragment
 	 *            Fragment
+	 * @return a {@link URI} using all the parameters. This should be used
+	 *         instead of
+	 *         {@link URI#URI(String, String, String, int, String, String, String)}
+	 *         or any of the other URI multi-argument URI constructors.
 	 * 
 	 * @throws URISyntaxException
 	 *             If both a scheme and a path are given but the path is

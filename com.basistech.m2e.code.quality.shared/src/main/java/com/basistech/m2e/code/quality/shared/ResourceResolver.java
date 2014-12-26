@@ -86,13 +86,10 @@ public final class ResourceResolver {
 	}
 
 	/**
-	 * Factory to create a new instance of {@link ResourceResolver}.
+	 * @param pluginRealm
+	 *            the pluginRealm
+	 * @return a new instance of {@link ResourceResolver}.
 	 * 
-	 * @param pluginWrapper
-	 *            The {@code MavenPluginWrapper} instance.
-	 * @param prefix
-	 *            A prefix string for console log messages.
-	 * @return new instance of {@link ResourceResolver}.
 	 */
 	public static ResourceResolver newInstance(ClassRealm pluginRealm) {
 		return new ResourceResolver(pluginRealm);

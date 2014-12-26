@@ -165,6 +165,8 @@ public class MavenPluginConfigurationTranslator {
 	 * 
 	 * @param prefs
 	 *            the {@link UserPreferences} instance.
+	 * @throws CoreException
+	 *             if an error occurs
 	 */
 	public void setBugCatagories(final UserPreferences prefs)
 	        throws CoreException {
