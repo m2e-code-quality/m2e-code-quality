@@ -126,8 +126,8 @@ public class MavenPluginConfigurationTranslator {
 	        throws CoreException {
 		log.debug("entering setExcludeFilterFiles");
 		final String excludeFilterFile =
-		        this.configurator.getParameterValue(EXCLUDE_FILTER_FILE,
-		                String.class, session, execution);
+		        this.configurator.getParameterValue(mavenProject,
+		                EXCLUDE_FILTER_FILE, String.class, execution, monitor);
 		// don't do anything if null
 		if (excludeFilterFile == null) {
 			log.debug("excludeFilterFile is null");
