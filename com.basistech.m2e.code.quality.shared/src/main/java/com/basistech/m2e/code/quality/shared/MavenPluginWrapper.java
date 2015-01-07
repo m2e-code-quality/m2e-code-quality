@@ -38,8 +38,7 @@ public class MavenPluginWrapper {
 	}
 
 	public boolean isPluginConfigured() {
-		return this.executions == null && !this.executions.isEmpty() ? false
-		        : true;
+		return this.executions != null && !this.executions.isEmpty();
 	}
 
 	public List<MojoExecution> getMojoExecutions() {
