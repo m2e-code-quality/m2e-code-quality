@@ -9,32 +9,32 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class EclipseCheckstylereferencePage extends FieldEditorPreferencePage
         implements IWorkbenchPreferencePage {
 
-    private Composite parent;
+	private Composite parent;
 
-    public EclipseCheckstylereferencePage() {
-        super(GRID);
-        setPreferenceStore(Activator.getDefault().getPreferenceStore());
-    }
+	public EclipseCheckstylereferencePage() {
+		super(GRID);
+		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+	}
 
-    @Override
-    public void init(IWorkbench workbench) {
-    }
+	@Override
+	public void init(IWorkbench workbench) {
+	}
 
-    /*
-     * Creates the field editors. Field editors are abstractions of the common
-     * GUI blocks needed to manipulate various types of preferences. Each field
-     * editor knows how to save and restore itself.
-     */
-    @Override
-    public void createFieldEditors() {
-        parent = getFieldEditorParent();
-        String text;
+	/*
+	 * Creates the field editors. Field editors are abstractions of the common
+	 * GUI blocks needed to manipulate various types of preferences. Each field
+	 * editor knows how to save and restore itself.
+	 */
+	@Override
+	public void createFieldEditors() {
+		parent = getFieldEditorParent();
+		String text;
 
-        text = Messages.EclipseCheckstylereferencePage_0;
-        addField(new BooleanFieldEditor(
-                CheckstyleEclipseConstants.ECLIPSE_CS_GENERATE_FORMATTER_SETTINGS,
-                text, parent));
+		text = Messages.EclipseCheckstylereferencePage_0;
+		addField(new BooleanFieldEditor(
+		        CheckstyleEclipseConstants.ECLIPSE_CS_GENERATE_FORMATTER_SETTINGS,
+		        text, parent));
 
-    }
+	}
 
 }

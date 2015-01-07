@@ -3,16 +3,21 @@
     xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.basistech.m2e-code-quality</groupId>
         <artifactId>m2e-code-quality-plugins</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
+
     <artifactId>com.basistech.m2e.code.quality.checkstyle.test</artifactId>
     <packaging>eclipse-test-plugin</packaging>
     <name>M2Eclipse Project Configurator for Eclipse Checkstyle Tests</name>
+
     <properties>
         <maven.test.skip>true</maven.test.skip>
     </properties>
+
 </project>

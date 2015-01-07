@@ -16,23 +16,15 @@
  ******************************************************************************/
 package com.basistech.m2e.code.quality.shared;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.maven.execution.MavenExecutionRequest;
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecution;
-import org.apache.maven.plugin.descriptor.MojoDescriptor;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
@@ -50,206 +42,172 @@ import com.google.common.base.Preconditions;
 public abstract class AbstractMavenPluginProjectConfigurator extends
         AbstractProjectConfigurator {
 
-    @Override
-    public <T> T getParameterValue(String parameter, Class<T> asType,
-            MavenSession session, MojoExecution mojoExecution)
-            throws CoreException {
-        return super.getParameterValue(parameter, asType, session,
-                mojoExecution);
-    }
+	@Override
+	public <T> T getParameterValue(MavenProject project, String parameter,
+	        Class<T> asType, MojoExecution mojoExecution,
+	        IProgressMonitor monitor) throws CoreException {
+		return super.getParameterValue(project, parameter, asType,
+		        mojoExecution, monitor);
+	}
 
-    public List<String> getCommaSeparatedStringParameterValues(
-            String parameter, MavenSession session, MojoExecution execution)
-            throws CoreException {
-        String value =
-                getParameterValue(parameter, String.class, session, execution);
-        if (value == null) {
-            return Collections.emptyList();
-        } else {
-            return Arrays.asList(value.split(","));
-        }
-    }
+	protected MojoExecution findForkedExecution(MojoExecution primary,
+	        String groupId, String artifactId, String goal) {
+		Map<String, List<MojoExecution>> forkedExecutions =
+		        primary.getForkedExecutions();
+		MojoExecution goalExecution = null;
+		for (List<MojoExecution> possibleExecutionList : forkedExecutions
+		        .values()) {
+			for (MojoExecution possibleExecution : possibleExecutionList) {
+				if (groupId.equals(possibleExecution.getGroupId())
+				        && artifactId.equals(possibleExecution.getArtifactId())
+				        && goal.equals(possibleExecution.getGoal())) {
+					goalExecution = possibleExecution;
+					break;
+				}
+			}
+			if (goalExecution != null) {
+				break;
+			}
+		}
+		return goalExecution;
+	}
 
-    protected MojoExecution findForkedExecution(MojoExecution primary,
-            String groupId, String artifactId, String goal) {
-        Map<String, List<MojoExecution>> forkedExecutions =
-                primary.getForkedExecutions();
-        MojoExecution goalExecution = null;
-        for (List<MojoExecution> possibleExecutionList : forkedExecutions
-                .values()) {
-            for (MojoExecution possibleExecution : possibleExecutionList) {
-                if (groupId.equals(possibleExecution.getGroupId())
-                        && artifactId.equals(possibleExecution.getArtifactId())
-                        && goal.equals(possibleExecution.getGoal())) {
-                    goalExecution = possibleExecution;
-                    break;
-                }
-            }
-            if (goalExecution != null) {
-                break;
-            }
-        }
-        return goalExecution;
-    }
+	@Override
+	public void configure(final ProjectConfigurationRequest request,
+	        final IProgressMonitor monitor) throws CoreException {
 
-    @Override
-    public void configure(final ProjectConfigurationRequest request,
-            final IProgressMonitor monitor) throws CoreException {
+		final MavenProject mavenProject = request.getMavenProject();
+		if (mavenProject == null) {
+			return;
+		}
 
-        final MavenProject mavenProject = request.getMavenProject();
-        if (mavenProject == null) {
-            return;
-        }
+		final MavenPluginWrapper pluginWrapper =
+		        this.getMavenPlugin(monitor, request.getMavenProjectFacade());
+		final IProject project = request.getProject();
 
-        final MavenPluginWrapper pluginWrapper =
-                this.getMavenPlugin(monitor, request.getMavenProjectFacade());
-        final IProject project = request.getProject();
+		if (!pluginWrapper.isPluginConfigured()) {
+			return;
+		}
 
-        if (!pluginWrapper.isPluginConfigured()) {
-            return;
-        }
+		this.handleProjectConfigurationChange(request.getMavenProjectFacade(),
+		        project, monitor, pluginWrapper);
+	}
 
-        this.handleProjectConfigurationChange(request.getMavenSession(),
-                request.getMavenProjectFacade(), project, monitor,
-                pluginWrapper);
-    }
+	@Override
+	public void mavenProjectChanged(
+	        final MavenProjectChangedEvent mavenProjectChangedEvent,
+	        final IProgressMonitor monitor) throws CoreException {
+		final IMavenProjectFacade mavenProjectFacade =
+		        mavenProjectChangedEvent.getMavenProject();
+		final MavenPluginWrapper pluginWrapper =
+		        this.getMavenPlugin(monitor, mavenProjectFacade);
+		final IProject project = mavenProjectFacade.getProject();
 
-    @Override
-    public void mavenProjectChanged(
-            final MavenProjectChangedEvent mavenProjectChangedEvent,
-            final IProgressMonitor monitor) throws CoreException {
-        final IMavenProjectFacade mavenProjectFacade =
-                mavenProjectChangedEvent.getMavenProject();
+		if (this.checkUnconfigurationRequired(monitor, mavenProjectFacade,
+		        mavenProjectChangedEvent.getOldMavenProject())) {
+			this.unconfigureEclipsePlugin(project, monitor);
+			return;
+		}
+		if (pluginWrapper.isPluginConfigured()) {
+			this.handleProjectConfigurationChange(mavenProjectFacade, project,
+			        monitor, pluginWrapper);
+		} else {
+			// TODO: redirect to eclipse logger.
+			// this.console.logMessage(String.format(
+			// "Will not configure the Eclipse Plugin for Maven Plugin [%s:%s],"
+			// +
+			// "(Could not find maven plugin instance or configuration in pom)",
+			// this.getMavenPluginGroupId(),
+			// this.getMavenPluginArtifactId()));
+		}
+	}
 
-        if (mavenProjectFacade != null) {
-            final MavenProject mavenProject =
-                    mavenProjectFacade.getMavenProject();
-            if (mavenProject == null) {
-                return;
-            }
-            final MavenPluginWrapper pluginWrapper =
-                    this.getMavenPlugin(monitor, mavenProjectFacade);
-            final IProject project = mavenProjectFacade.getProject();
-            if (this.checkUnconfigurationRequired(monitor, mavenProjectFacade,
-                    mavenProjectChangedEvent.getOldMavenProject())) {
-                this.unconfigureEclipsePlugin(project, monitor);
-                return;
-            }
-            if (pluginWrapper.isPluginConfigured()) {
-                // only call handler if maven plugin is configured or found.
-                // we need a session.
-                MavenExecutionRequest request =
-                        maven.createExecutionRequest(monitor);
-                MavenSession session =
-                        maven.createSession(request, mavenProject);
-                this.handleProjectConfigurationChange(session,
-                        mavenProjectFacade, project, monitor, pluginWrapper);
-            } else {
-                // TODO: redirect to eclipse logger.
-                // this.console.logMessage(String.format(
-                // "Will not configure the Eclipse Plugin for Maven Plugin [%s:%s],"
-                // +
-                // "(Could not find maven plugin instance or configuration in pom)",
-                // this.getMavenPluginGroupId(),
-                // this.getMavenPluginArtifactId()));
-            }
-        }
-        super.mavenProjectChanged(mavenProjectChangedEvent, monitor);
-    }
+	protected abstract void handleProjectConfigurationChange(
+	        final IMavenProjectFacade mavenProjectFacade,
+	        final IProject project, final IProgressMonitor monitor,
+	        final MavenPluginWrapper mavenPluginWrapper) throws CoreException;
 
-    protected abstract void handleProjectConfigurationChange(
-            final MavenSession session,
-            final IMavenProjectFacade mavenProjectFacade,
-            final IProject project, final IProgressMonitor monitor,
-            final MavenPluginWrapper mavenPluginWrapper) throws CoreException;
+	/**
+	 * Get the maven plugin {@code groupId}.
+	 * 
+	 * @return the {@code artifactId}.
+	 */
+	protected abstract String getMavenPluginGroupId();
 
-    /**
-     * Get the maven plugin {@code groupId}.
-     * 
-     * @return the {@code artifactId}.
-     */
-    protected abstract String getMavenPluginGroupId();
+	/**
+	 * Get the maven plugin {@code artifactId}.
+	 * 
+	 * @return the {@code groupId}.
+	 */
+	protected abstract String getMavenPluginArtifactId();
 
-    /**
-     * Get the maven plugin {@code artifactId}.
-     * 
-     * @return the {@code groupId}.
-     */
-    protected abstract String getMavenPluginArtifactId();
+	/**
+	 * @return the specific goals that this class works on, or null if it all
+	 *         goals apply. Null may lead to chaotic overlaying of multiple
+	 *         configurations. If more than one, this will process in order
+	 *         looking for an execution.
+	 */
+	protected String[] getMavenPluginGoal() {
+		return null;
+	}
 
-    /**
-     * Return the specific goals that this class works on, or null if it all
-     * goals apply. Null may lead to chaotic overlaying of multiple
-     * configurations. If more than one, this will process in order looking for
-     * an execution.
-     * 
-     * @return
-     */
-    protected String[] getMavenPluginGoal() {
-        return null;
-    }
+	/**
+	 * Unconfigure the associated Eclipse plugin.
+	 * 
+	 * @param project
+	 *            the {@link IProject} instance.
+	 * @param monitor
+	 *            the {@link IProgressMonitor} instance.
+	 * @throws CoreException
+	 *             if unconfiguring the eclipse plugin fails.
+	 */
+	protected abstract void unconfigureEclipsePlugin(final IProject project,
+	        final IProgressMonitor monitor) throws CoreException;
 
-    /**
-     * Unconfigure the associated Eclipse plugin.
-     * 
-     * @param project
-     *            the {@link IProject} instance.
-     * @param monitor
-     *            the {@link IProgressMonitor} instance.
-     * @throws CoreException
-     *             if unconfiguring the eclipse plugin fails.
-     */
-    protected abstract void unconfigureEclipsePlugin(final IProject project,
-            final IProgressMonitor monitor) throws CoreException;
+	/**
+	 * Helper to check if a Eclipse plugin unconfiguration is needed. This
+	 * usually happens if the maven plugin has been unconfigured.
+	 * 
+	 * @param curMavenProjectFacade
+	 *            the current {@code IMavenProjectFacade}.
+	 * @param oldMavenProjectFacade
+	 *            the previous {@code IMavenProjectFacade}.
+	 * @return {@code true} if the Eclipse plugin configuration needs to be
+	 *         deleted.
+	 * @throws CoreException
+	 */
+	private boolean checkUnconfigurationRequired(IProgressMonitor monitor,
+	        final IMavenProjectFacade curMavenProjectFacade,
+	        final IMavenProjectFacade oldMavenProjectFacade)
+	        throws CoreException {
+		Preconditions.checkNotNull(curMavenProjectFacade);
 
-    /**
-     * Helper to check if a Eclipse plugin unconfiguration is needed. This
-     * usually happens if the maven plugin has been unconfigured.
-     * 
-     * @param curMavenProjectFacade
-     *            the current {@code IMavenProjectFacade}.
-     * @param oldMavenProjectFacade
-     *            the previous {@code IMavenProjectFacade}.
-     * @return {@code true} if the Eclipse plugin configuration needs to be
-     *         deleted.
-     * @throws CoreException
-     */
-    private boolean checkUnconfigurationRequired(IProgressMonitor monitor,
-            final IMavenProjectFacade curMavenProjectFacade,
-            final IMavenProjectFacade oldMavenProjectFacade)
-            throws CoreException {
-        Preconditions.checkNotNull(curMavenProjectFacade);
+		if (oldMavenProjectFacade == null) {
+			return false;
+		}
+		final MavenPluginWrapper newMavenPlugin =
+		        this.getMavenPlugin(monitor, curMavenProjectFacade);
+		final MavenPluginWrapper oldMavenPlugin =
+		        this.getMavenPlugin(monitor, oldMavenProjectFacade);
+		if (!newMavenPlugin.isPluginConfigured()
+		        && oldMavenPlugin.isPluginConfigured()) {
+			return true;
+		}
+		return false;
+	}
 
-        if (oldMavenProjectFacade == null) {
-            return false;
-        }
-        final MavenPluginWrapper newMavenPlugin =
-                this.getMavenPlugin(monitor, curMavenProjectFacade);
-        final MavenPluginWrapper oldMavenPlugin =
-                this.getMavenPlugin(monitor, oldMavenProjectFacade);
-        if (!newMavenPlugin.isPluginConfigured()
-                && oldMavenPlugin.isPluginConfigured()) {
-            return true;
-        }
-        return false;
-    }
+	public ClassRealm getPluginClassRealm(MojoExecution mojoExecution)
+	        throws CoreException {
+		return mojoExecution.getMojoDescriptor().getPluginDescriptor()
+		        .getClassRealm();
+	}
 
-    public ClassRealm getPluginClassRealm(MavenSession session,
-            MojoExecution mojoExecution) throws CoreException {
-        IMaven mvn = MavenPlugin.getMaven();
-        // call for side effect of ensuring that the realm is set in the
-        // descriptor.
-        mvn.getConfiguredMojo(session, mojoExecution, Mojo.class);
-        MojoDescriptor mojoDescriptor = mojoExecution.getMojoDescriptor();
-        return mojoDescriptor.getPluginDescriptor().getClassRealm();
-    }
-
-    private MavenPluginWrapper getMavenPlugin(IProgressMonitor monitor,
-            final IMavenProjectFacade projectFacade) throws CoreException {
-        return MavenPluginWrapper
-                .newInstance(monitor, getMavenPluginGroupId(),
-                        getMavenPluginArtifactId(), getMavenPluginGoal(),
-                        projectFacade);
-    }
+	private MavenPluginWrapper getMavenPlugin(IProgressMonitor monitor,
+	        final IMavenProjectFacade projectFacade) throws CoreException {
+		return MavenPluginWrapper
+		        .newInstance(monitor, getMavenPluginGroupId(),
+		                getMavenPluginArtifactId(), getMavenPluginGoal(),
+		                projectFacade);
+	}
 
 }

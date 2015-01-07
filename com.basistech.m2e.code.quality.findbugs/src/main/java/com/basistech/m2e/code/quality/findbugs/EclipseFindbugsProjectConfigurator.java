@@ -21,7 +21,6 @@ import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.M
 
 import java.util.List;
 
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -39,10 +38,11 @@ import edu.umd.cs.findbugs.config.UserPreferences;
 /**
  */
 public class EclipseFindbugsProjectConfigurator extends
-		AbstractMavenPluginProjectConfigurator {
+        AbstractMavenPluginProjectConfigurator {
 
-	private static final Logger log = LoggerFactory
-			.getLogger("com/basistech/m2e/code/quality/findbugs/EclipseFindbugsProjectConfigurator");
+	private static final Logger log =
+	        LoggerFactory
+	                .getLogger("com/basistech/m2e/code/quality/findbugs/EclipseFindbugsProjectConfigurator");
 
 	public EclipseFindbugsProjectConfigurator() {
 		super();
@@ -60,28 +60,31 @@ public class EclipseFindbugsProjectConfigurator extends
 
 	@Override
 	protected String[] getMavenPluginGoal() {
-		return new String[] { "findbugs", "check" };
+		return new String[] {"findbugs", "check"};
 	}
 
 	@Override
-	protected void handleProjectConfigurationChange(final MavenSession session,
-			final IMavenProjectFacade mavenProjectFacade,
-			final IProject project, final IProgressMonitor monitor,
-			final MavenPluginWrapper mavenPluginWrapper) throws CoreException {
+	protected void handleProjectConfigurationChange(
+	        final IMavenProjectFacade mavenProjectFacade,
+	        final IProject project, final IProgressMonitor monitor,
+	        final MavenPluginWrapper mavenPluginWrapper) throws CoreException {
 		log.debug("entering handleProjectConfigurationChange");
-		final MavenPluginConfigurationTranslator mavenFindbugsConfig = MavenPluginConfigurationTranslator
-				.newInstance(this, session,
-						mavenPluginWrapper, project);
+		final MavenPluginConfigurationTranslator mavenFindbugsConfig =
+		        MavenPluginConfigurationTranslator.newInstance(this,
+		                mavenPluginWrapper, project,
+		                mavenProjectFacade.getMavenProject(monitor), monitor);
 		UserPreferences prefs;
 		try {
-			final List<MojoExecution> mojoExecutions = mavenPluginWrapper.getMojoExecutions();
+			final List<MojoExecution> mojoExecutions =
+			        mavenPluginWrapper.getMojoExecutions();
 			if (mojoExecutions.size() != 1) {
-				log.error("Wrong number of executions. Expected 1. Found " + mojoExecutions.size());
+				log.error("Wrong number of executions. Expected 1. Found "
+				        + mojoExecutions.size());
 				return;
 			}
 			prefs = this.buildFindbugsPreferences(mavenFindbugsConfig);
-			final EclipseFindbugsConfigManager fbPluginNature = EclipseFindbugsConfigManager
-					.newInstance(project);
+			final EclipseFindbugsConfigManager fbPluginNature =
+			        EclipseFindbugsConfigManager.newInstance(project);
 			// Add the builder and nature
 			fbPluginNature.configure(monitor);
 			FindbugsPlugin.saveUserPreferences(project, prefs);
@@ -93,29 +96,30 @@ public class EclipseFindbugsProjectConfigurator extends
 
 	@Override
 	protected void unconfigureEclipsePlugin(final IProject project,
-			final IProgressMonitor monitor) throws CoreException {
+	        final IProgressMonitor monitor) throws CoreException {
 		log.debug("entering unconfigureEclipsePlugin");
-		final EclipseFindbugsConfigManager fbPluginNature = EclipseFindbugsConfigManager
-				.newInstance(project);
+		final EclipseFindbugsConfigManager fbPluginNature =
+		        EclipseFindbugsConfigManager.newInstance(project);
 		fbPluginNature.deconfigure(monitor);
 
 	}
 
-	private UserPreferences buildFindbugsPreferences(final MavenPluginConfigurationTranslator pluginCfgTranslator)
-			throws CoreException {
+	private UserPreferences buildFindbugsPreferences(
+	        final MavenPluginConfigurationTranslator pluginCfgTranslator)
+	        throws CoreException {
 		log.debug("entering buildFindbugsPreferences");
-		final UserPreferences prefs = UserPreferences
-				.createDefaultUserPreferences();
+		final UserPreferences prefs =
+		        UserPreferences.createDefaultUserPreferences();
 		pluginCfgTranslator.setIncludeFilterFiles(prefs);
 		pluginCfgTranslator.setExcludeFilterFiles(prefs);
-		//pluginCfgTranslator.setBugCatagories(prefs);
+		// pluginCfgTranslator.setBugCatagories(prefs);
 		pluginCfgTranslator.setEffort(prefs);
 		pluginCfgTranslator.setMinRank(prefs);
 		pluginCfgTranslator.setVisitors(prefs);
 		pluginCfgTranslator.setOmitVisitors(prefs);
 		pluginCfgTranslator.setPriority(prefs);
 		pluginCfgTranslator.setThreshold(prefs);
-		
+
 		FindbugsPlugin.DEBUG = pluginCfgTranslator.debugEnabled();
 		return prefs;
 	}
