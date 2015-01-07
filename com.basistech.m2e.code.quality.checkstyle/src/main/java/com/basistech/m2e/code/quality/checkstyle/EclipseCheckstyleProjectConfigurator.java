@@ -141,10 +141,6 @@ public class EclipseCheckstyleProjectConfigurator extends
 		final ICheckConfiguration checkCfg =
 		        this.createOrGetCheckstyleConfig(pcWorkingCopy, ruleset,
 		                cfgTranslator.getExecutionId());
-		if (checkCfg == null) {
-			throw new CheckstylePluginException(
-			        String.format("Failed to construct CheckConfig,SKIPPING checkstyle configuration"));
-		}
 		// update filesets (include and exclude patterns)
 		cfgTranslator.updateCheckConfigWithIncludeExcludePatterns(
 		        pcWorkingCopy, checkCfg);
