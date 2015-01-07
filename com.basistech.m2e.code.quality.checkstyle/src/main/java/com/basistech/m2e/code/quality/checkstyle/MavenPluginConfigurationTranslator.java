@@ -284,14 +284,34 @@ public class MavenPluginConfigurationTranslator {
 		return suppressionsLocation;
 	}
 
-	private String getSourceDirectory() throws CoreException {
-		return configurator.getParameterValue(mavenProject, "sourceDirectory",
+	private List<String> getSourceDirectories() throws CoreException {
+		List<String> result = new ArrayList<String>();
+		String sourceDirectory = configurator.getParameterValue(mavenProject, "sourceDirectory",
 		        String.class, execution, monitor);
+		if (sourceDirectory != null) {
+			result.add(sourceDirectory);
+		}
+		@SuppressWarnings("unchecked")
+		List<String> sourceDirectories = configurator.getParameterValue(mavenProject, "sourceDirectories", List.class, execution, monitor);
+		if (sourceDirectories != null) {
+			result.addAll(sourceDirectories);
+		}
+		return result;
 	}
 
-	private String getTestSourceDirectory() throws CoreException {
-		return configurator.getParameterValue(mavenProject,
-		        "testSourceDirectory", String.class, execution, monitor);
+	private List<String> getTestSourceDirectories() throws CoreException {
+		List<String> result = new ArrayList<String>();
+		String sourceDirectory = configurator.getParameterValue(mavenProject, "testSourceDirectory",
+		        String.class, execution, monitor);
+		if (sourceDirectory != null) {
+			result.add(sourceDirectory);
+		}
+		@SuppressWarnings("unchecked")
+		List<String> sourceDirectories = configurator.getParameterValue(mavenProject, "testSourceDirectories", List.class, execution, monitor);
+		if (sourceDirectories != null) {
+			result.addAll(sourceDirectories);
+		}
+		return result;
 	}
 
 	private List<String> getIncludes() throws CoreException {
@@ -338,10 +358,10 @@ public class MavenPluginConfigurationTranslator {
 		 * enabled).
 		 */
 		Set<String> sourceFolders = new HashSet<String>();
-		sourceFolders.add(this.getSourceDirectory());
+		sourceFolders.addAll(this.getSourceDirectories());
 
 		if (getIncludeTestSourceDirectory()) {
-			sourceFolders.add(this.getTestSourceDirectory());
+			sourceFolders.addAll(this.getTestSourceDirectories());
 		}
 
 		/**
