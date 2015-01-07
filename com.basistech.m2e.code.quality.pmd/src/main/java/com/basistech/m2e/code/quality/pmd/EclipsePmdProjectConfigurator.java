@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -291,11 +292,11 @@ public class EclipsePmdProjectConfigurator extends
 
 			// ..and now we have two problems
 			String fixedXml =
-			        byteArrayStream.toString().replaceAll(
+			        byteArrayStream.toString("UTF-8").replaceAll(
 			                "\\<exclude\\>(.*)\\</exclude\\>",
 			                "<exclude name=\"$1\"/>");
 
-			outputStream.write(fixedXml.getBytes());
+			outputStream.write(fixedXml.getBytes(Charset.forName("UTF-8")));
 
 			rulesetFile.refreshLocal(IResource.DEPTH_ZERO, monitor);
 		} catch (IOException ex) {
