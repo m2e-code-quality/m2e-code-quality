@@ -232,6 +232,21 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>local-findbugs-p2</id>
+            <activation>
+              <file>
+                <exists>../com.basistech.m2e.code.quality.findbugs/findbugs.p2/content.xml</exists>
+              </file>
+            </activation>
+            <repositories>
+              <repository>
+                <id>findbugs</id>
+                <layout>p2</layout>
+                <url>file:${project.basedir}/../com.basistech.m2e.code.quality.findbugs/findbugs.p2</url>
+              </repository>
+            </repositories>
+        </profile>
     </profiles>
 
 </project>
