@@ -13,7 +13,7 @@
     </parent>
 
     <artifactId>com.basistech.m2e.code.quality.site</artifactId>
-    <packaging>eclipse-update-site</packaging>
+    <packaging>eclipse-repository</packaging>
     <name>M2Eclipse Code Quality Plugins Update Site</name>
 
 </project>
