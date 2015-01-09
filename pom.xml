@@ -17,6 +17,8 @@
     </scm>
 
     <properties>
+        <target.platform>mars</target.platform>
+
         <tycho-version>0.22.0</tycho-version>
         <orbit.version>R20140525021250</orbit.version>
         <main.basedir>${basedir}</main.basedir>
@@ -104,6 +106,13 @@
                 <groupId>org.eclipse.tycho</groupId>
                 <artifactId>target-platform-configuration</artifactId>
                 <configuration>
+                    <target>
+                        <artifact>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>${target.platform}</artifactId>
+                            <version>${project.version}</version>
+                        </artifact>
+                    </target>
                     <resolver>p2</resolver>
                     <pomDependencies>consider</pomDependencies>
                     <ignoreTychoRepositories>true</ignoreTychoRepositories>
