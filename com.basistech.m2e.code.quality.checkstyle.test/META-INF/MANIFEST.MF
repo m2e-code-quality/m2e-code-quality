@@ -5,5 +5,5 @@ Bundle-SymbolicName: com.basistech.m2e.code.quality.checkstyle.test
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Basis Technology Corp.
 Fragment-Host: com.basistech.m2e.code.quality.checkstyle;bundle-version="[1.0.0,2.0.0)"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.junit

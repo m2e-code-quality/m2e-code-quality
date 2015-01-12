@@ -5,6 +5,6 @@ Bundle-SymbolicName: com.basistech.m2e.code.quality.findbugs.test
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Basis Technology Corp.
 Fragment-Host: com.basistech.m2e.code.quality.findbugs;bundle-version="[1.0.0,2.0.0)"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.junit,
  org.eclipse.m2e.tests.common

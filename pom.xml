@@ -17,14 +17,16 @@
     </scm>
 
     <properties>
+        <target.platform>mars</target.platform>
+
         <tycho-version>0.22.0</tycho-version>
         <orbit.version>R20140525021250</orbit.version>
         <main.basedir>${basedir}</main.basedir>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <maven.compiler.source>1.6</maven.compiler.source>
-        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
 
     <modules>
@@ -38,6 +40,8 @@
         <module>com.basistech.m2e.code.quality.pmd</module>
         <module>com.basistech.m2e.code.quality.pmd.feature</module>
         <module>com.basistech.m2e.code.quality.site</module>
+        <module>mars</module>
+        <module>luna</module>
     </modules>
 
     <prerequisites>
@@ -58,7 +62,7 @@
         <repository>
             <id>cs</id>
             <layout>p2</layout>
-            <url>http://eclipse-cs.sf.net/update</url>
+            <url>http://eclipse-cs.sourceforge.net/update</url>
         </repository>
         <repository>
             <id>pmd</id>
@@ -91,7 +95,6 @@
     </pluginRepositories>
 
     <build>
-        <defaultGoal>install</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.eclipse.tycho</groupId>
@@ -103,6 +106,13 @@
                 <groupId>org.eclipse.tycho</groupId>
                 <artifactId>target-platform-configuration</artifactId>
                 <configuration>
+                    <target>
+                        <artifact>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>${target.platform}</artifactId>
+                            <version>${project.version}</version>
+                        </artifact>
+                    </target>
                     <resolver>p2</resolver>
                     <pomDependencies>consider</pomDependencies>
                     <ignoreTychoRepositories>true</ignoreTychoRepositories>
@@ -231,6 +241,21 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <id>local-findbugs-p2</id>
+            <activation>
+                <file>
+                    <exists>../com.basistech.m2e.code.quality.findbugs/findbugs.p2/content.xml</exists>
+                </file>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>findbugs</id>
+                    <layout>p2</layout>
+                    <url>file:${project.basedir}/../com.basistech.m2e.code.quality.findbugs/findbugs.p2</url>
+                </repository>
+            </repositories>
         </profile>
     </profiles>
 

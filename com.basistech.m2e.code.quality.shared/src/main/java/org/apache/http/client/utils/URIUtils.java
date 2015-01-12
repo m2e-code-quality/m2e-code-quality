@@ -237,7 +237,7 @@ public class URIUtils {
 			return uri;
 		}
 		String[] inputSegments = path.split("/");
-		Stack<String> outputSegments = new Stack<String>();
+		Stack<String> outputSegments = new Stack<>();
 		for (String inputSegment : inputSegments) {
 			if (inputSegment.length() == 0 || ".".equals(inputSegment)) {
 				// Do nothing

@@ -195,7 +195,7 @@ Copyright (c) 2010 Basis Technology Corp.
    </license>
 
    <url>
-      <update label="Update Site at Github" url="http://m2e-code-quality.github.com/m2e-code-quality/site/"/>
+      <update label="Update Site at Github" url="http://m2e-code-quality.github.io/m2e-code-quality/site/"/>
    </url>
 
    <requires>

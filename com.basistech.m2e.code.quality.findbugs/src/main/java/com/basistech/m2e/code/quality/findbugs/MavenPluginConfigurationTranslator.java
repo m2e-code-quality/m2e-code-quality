@@ -110,7 +110,7 @@ public class MavenPluginConfigurationTranslator {
 		final Map<String, Boolean> curIncludeFilteredFiles =
 		        prefs.getIncludeFilterFiles();
 		final Map<String, Boolean> newIncludeFilteredFiles =
-		        new HashMap<String, Boolean>();
+		        new HashMap<>();
 		// Make sure we add it only once.
 		if (!curIncludeFilteredFiles.containsKey(FB_INCLUDE_FILTER_FILE)) {
 			newIncludeFilteredFiles.put(FB_INCLUDE_FILTER_FILE, Boolean.TRUE);
@@ -134,7 +134,7 @@ public class MavenPluginConfigurationTranslator {
 		final Map<String, Boolean> curExcludeFilteredFiles =
 		        prefs.getExcludeFilterFiles();
 		final Map<String, Boolean> newExcludeFilteredFiles =
-		        new HashMap<String, Boolean>();
+		        new HashMap<>();
 		// Make sure we add it only once.
 		if (!curExcludeFilteredFiles.containsKey(FB_EXCLUDE_FILTER_FILE)) {
 			newExcludeFilteredFiles.put(FB_EXCLUDE_FILTER_FILE, Boolean.TRUE);
@@ -178,14 +178,14 @@ public class MavenPluginConfigurationTranslator {
 		List<String> addBugCatagoriesList =
 		        Arrays.asList(StringUtils.split(bugCatagories, ","));
 		List<String> availableBugCategories =
-		        new LinkedList<String>(DetectorFactoryCollection.instance()
+		        new LinkedList<>(DetectorFactoryCollection.instance()
 		                .getBugCategories());
 		if (addBugCatagoriesList.size() > 0) {
 			for (String removeBugCategory : availableBugCategories) {
 				pfs.removeCategory(removeBugCategory);
 			}
 		}
-		final Set<String> removeBugCategoriesSet = new HashSet<String>();
+		final Set<String> removeBugCategoriesSet = new HashSet<>();
 		for (String bc : addBugCatagoriesList) {
 			final String bcUpper = bc.toUpperCase();
 			if (availableBugCategories.contains(bcUpper)) {

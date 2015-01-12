@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -281,35 +282,24 @@ public class EclipsePmdProjectConfigurator extends
 	        final IProgressMonitor monitor) throws CoreException {
 		final PMDPlugin pmdPlugin = PMDPlugin.getDefault();
 
-		BufferedOutputStream outputStream = null;
 		ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
-		try {
-			outputStream =
-			        new BufferedOutputStream(new FileOutputStream(rulesetFile
-			                .getLocation().toFile()));
+		try (BufferedOutputStream outputStream =
+		        new BufferedOutputStream(new FileOutputStream(rulesetFile
+		                .getLocation().toFile()));) {
+
 			pmdPlugin.getRuleSetWriter().write(byteArrayStream, ruleSet);
 
 			// ..and now we have two problems
 			String fixedXml =
-			        byteArrayStream.toString().replaceAll(
+			        byteArrayStream.toString("UTF-8").replaceAll(
 			                "\\<exclude\\>(.*)\\</exclude\\>",
 			                "<exclude name=\"$1\"/>");
 
-			outputStream.write(fixedXml.getBytes());
+			outputStream.write(fixedXml.getBytes(Charset.forName("UTF-8")));
 
 			rulesetFile.refreshLocal(IResource.DEPTH_ZERO, monitor);
-		} catch (IOException ex) {
+		} catch (IOException | WriterException ex) {
 			//
-		} catch (WriterException ex) {
-			//
-		} finally {
-			if (outputStream != null) {
-				try {
-					outputStream.close();
-				} catch (IOException e) {
-					//
-				}
-			}
 		}
 		return rulesetFile.getLocation().toFile();
 	}
@@ -325,7 +315,7 @@ public class EclipsePmdProjectConfigurator extends
 		// to line up with the behavior of maven-pmd-plugin, excludes
 		// don't make any sense at all or more specifically it is (ignored).
 		final boolean includesSpecified = includePatterns.size() > 0;
-		final Set<String> excludeRootsSet = new HashSet<String>();
+		final Set<String> excludeRootsSet = new HashSet<>();
 		excludeRootsSet.addAll(excludeRoots);
 
 		if (includesSpecified) {

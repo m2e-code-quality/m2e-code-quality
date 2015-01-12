@@ -61,7 +61,7 @@ public class MavenPluginConfigurationTranslator {
 	        "checkstyle.suppressions.file";
 	/** checkstyle maven plugin artifactId */
 	private static final Map<String, String> PATTERNS_CACHE =
-	        new HashMap<String, String>();
+	        new HashMap<>();
 
 	private final MavenProject mavenProject;
 	private final IProject project;
@@ -284,14 +284,34 @@ public class MavenPluginConfigurationTranslator {
 		return suppressionsLocation;
 	}
 
-	private String getSourceDirectory() throws CoreException {
-		return configurator.getParameterValue(mavenProject, "sourceDirectory",
+	private List<String> getSourceDirectories() throws CoreException {
+		List<String> result = new ArrayList<>();
+		String sourceDirectory = configurator.getParameterValue(mavenProject, "sourceDirectory",
 		        String.class, execution, monitor);
+		if (sourceDirectory != null) {
+			result.add(sourceDirectory);
+		}
+		@SuppressWarnings("unchecked")
+		List<String> sourceDirectories = configurator.getParameterValue(mavenProject, "sourceDirectories", List.class, execution, monitor);
+		if (sourceDirectories != null) {
+			result.addAll(sourceDirectories);
+		}
+		return result;
 	}
 
-	private String getTestSourceDirectory() throws CoreException {
-		return configurator.getParameterValue(mavenProject,
-		        "testSourceDirectory", String.class, execution, monitor);
+	private List<String> getTestSourceDirectories() throws CoreException {
+		List<String> result = new ArrayList<>();
+		String sourceDirectory = configurator.getParameterValue(mavenProject, "testSourceDirectory",
+		        String.class, execution, monitor);
+		if (sourceDirectory != null) {
+			result.add(sourceDirectory);
+		}
+		@SuppressWarnings("unchecked")
+		List<String> sourceDirectories = configurator.getParameterValue(mavenProject, "testSourceDirectories", List.class, execution, monitor);
+		if (sourceDirectories != null) {
+			result.addAll(sourceDirectories);
+		}
+		return result;
 	}
 
 	private List<String> getIncludes() throws CoreException {
@@ -331,17 +351,17 @@ public class MavenPluginConfigurationTranslator {
 	        throws CheckstylePluginException, CoreException {
 
 		final List<FileMatchPattern> patterns =
-		        new LinkedList<FileMatchPattern>();
+		        new LinkedList<>();
 
 		/**
 		 * Step 1). Get all the source roots (including test sources root, if
 		 * enabled).
 		 */
-		Set<String> sourceFolders = new HashSet<String>();
-		sourceFolders.add(this.getSourceDirectory());
+		Set<String> sourceFolders = new HashSet<>();
+		sourceFolders.addAll(this.getSourceDirectories());
 
 		if (getIncludeTestSourceDirectory()) {
-			sourceFolders.add(this.getTestSourceDirectory());
+			sourceFolders.addAll(this.getTestSourceDirectories());
 		}
 
 		/**
@@ -470,7 +490,7 @@ public class MavenPluginConfigurationTranslator {
 	        final boolean setIsIncludePatternFlag)
 	        throws CheckstylePluginException {
 		List<FileMatchPattern> fileMatchPatterns =
-		        new LinkedList<FileMatchPattern>();
+		        new LinkedList<>();
 		for (String p : patterns) {
 			final FileMatchPattern fmp =
 			        new FileMatchPattern(String.format("%s%s", relativePath, p));
@@ -492,7 +512,7 @@ public class MavenPluginConfigurationTranslator {
 	 * @throws CoreException
 	 */
 	private List<String> getPatterns(String elemName) throws CoreException {
-		List<String> transformedPatterns = new LinkedList<String>();
+		List<String> transformedPatterns = new LinkedList<>();
 		final String patternsString =
 		        configurator.getParameterValue(mavenProject, elemName,
 		                String.class, execution, monitor);
@@ -627,7 +647,7 @@ public class MavenPluginConfigurationTranslator {
 	        final MavenPluginWrapper mavenPlugin, final IProject project,
 	        final IProgressMonitor monitor) throws CoreException {
 		final List<MavenPluginConfigurationTranslator> m2csConverters =
-		        new ArrayList<MavenPluginConfigurationTranslator>();
+		        new ArrayList<>();
 		for (final MojoExecution execution : mavenPlugin.getMojoExecutions()) {
 			m2csConverters.add(new MavenPluginConfigurationTranslator(
 			        configurator, mavenProject, execution, project, monitor));

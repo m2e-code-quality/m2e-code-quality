@@ -89,7 +89,7 @@ public class EclipseFindbugsConfigManager {
 		final IProject project = this.fbNature.getProject();
 		final IProjectDescription desc = project.getDescription();
 		final String natures[] = desc.getNatureIds();
-		final List<String> newNaturesList = new ArrayList<String>();
+		final List<String> newNaturesList = new ArrayList<>();
 		for (int i = 0; i < natures.length; i++) {
 			if (!ECLIPSE_FB_NATURE_ID.equals(natures[i])) {
 				newNaturesList.add(natures[i]);
