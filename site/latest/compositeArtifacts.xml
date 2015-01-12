@@ -7,5 +7,6 @@
   </properties>
   <children size='1'>
     <child location='1.0.0.201501061739'/>
+    <child location='1.0.0.201501120825'/>
   </children>
 </repository>
