@@ -282,12 +282,11 @@ public class EclipsePmdProjectConfigurator extends
 	        final IProgressMonitor monitor) throws CoreException {
 		final PMDPlugin pmdPlugin = PMDPlugin.getDefault();
 
-		BufferedOutputStream outputStream = null;
 		ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
-		try {
-			outputStream =
-			        new BufferedOutputStream(new FileOutputStream(rulesetFile
-			                .getLocation().toFile()));
+		try (BufferedOutputStream outputStream =
+		        new BufferedOutputStream(new FileOutputStream(rulesetFile
+		                .getLocation().toFile()));) {
+
 			pmdPlugin.getRuleSetWriter().write(byteArrayStream, ruleSet);
 
 			// ..and now we have two problems
@@ -299,18 +298,8 @@ public class EclipsePmdProjectConfigurator extends
 			outputStream.write(fixedXml.getBytes(Charset.forName("UTF-8")));
 
 			rulesetFile.refreshLocal(IResource.DEPTH_ZERO, monitor);
-		} catch (IOException ex) {
+		} catch (IOException | WriterException ex) {
 			//
-		} catch (WriterException ex) {
-			//
-		} finally {
-			if (outputStream != null) {
-				try {
-					outputStream.close();
-				} catch (IOException e) {
-					//
-				}
-			}
 		}
 		return rulesetFile.getLocation().toFile();
 	}
