@@ -326,7 +326,7 @@ public class EclipsePmdProjectConfigurator extends
 		// to line up with the behavior of maven-pmd-plugin, excludes
 		// don't make any sense at all or more specifically it is (ignored).
 		final boolean includesSpecified = includePatterns.size() > 0;
-		final Set<String> excludeRootsSet = new HashSet<String>();
+		final Set<String> excludeRootsSet = new HashSet<>();
 		excludeRootsSet.addAll(excludeRoots);
 
 		if (includesSpecified) {

@@ -43,14 +43,14 @@ import com.google.common.collect.ImmutableList;
 public class MavenPluginConfigurationTranslator {
 
 	private static final Map<String, String> PATTERNS_CACHE =
-	        new HashMap<String, String>();
+	        new HashMap<>();
 
 	private final MavenProject mavenProject;
 	private final URI basedirUri;
-	private final List<String> excludeSourceRoots = new ArrayList<String>();
-	private final List<String> includeSourceRoots = new ArrayList<String>();
-	private final List<String> includePatterns = new ArrayList<String>();
-	private final List<String> excludePatterns = new ArrayList<String>();
+	private final List<String> excludeSourceRoots = new ArrayList<>();
+	private final List<String> includeSourceRoots = new ArrayList<>();
+	private final List<String> includePatterns = new ArrayList<>();
+	private final List<String> excludePatterns = new ArrayList<>();
 
 	private final IProject project;
 
@@ -91,7 +91,7 @@ public class MavenPluginConfigurationTranslator {
 		String[] excludes =
 		        configurator.getParameterValue(mavenProject, "excludes",
 		                String[].class, pmdGoalExecution, monitor);
-		final List<String> transformedPatterns = new LinkedList<String>();
+		final List<String> transformedPatterns = new LinkedList<>();
 		if (excludes != null && excludes.length > 0) {
 			for (String p : excludes) {
 				p = StringUtils.strip(p);
@@ -121,7 +121,7 @@ public class MavenPluginConfigurationTranslator {
 		String[] includes =
 		        configurator.getParameterValue(mavenProject, "includes",
 		                String[].class, pmdGoalExecution, monitor);
-		final List<String> transformedPatterns = new LinkedList<String>();
+		final List<String> transformedPatterns = new LinkedList<>();
 		if (includes != null && includes.length > 0) {
 			for (String p : includes) {
 				p = StringUtils.strip(p);
@@ -214,14 +214,14 @@ public class MavenPluginConfigurationTranslator {
 	}
 
 	private void buildExcludeAndIncludeSourceRoots() throws CoreException {
-		final List<File> includeRoots = new ArrayList<File>();
-		final List<File> excludeRoots = new ArrayList<File>();
+		final List<File> includeRoots = new ArrayList<>();
+		final List<File> excludeRoots = new ArrayList<>();
 
 		includeRoots.addAll(this
 		        .transformResourceStringsToFiles(this.mavenProject
 		                .getCompileSourceRoots()));
 
-		List<String> targetDirectories = new ArrayList<String>();
+		List<String> targetDirectories = new ArrayList<>();
 		targetDirectories.add(this.mavenProject.getBuild().getDirectory());
 		excludeRoots.addAll(this
 		        .transformResourceStringsToFiles(targetDirectories));
@@ -247,7 +247,7 @@ public class MavenPluginConfigurationTranslator {
 			excludeRootsFromConfig = Arrays.asList(excludeRootsArray);
 		}
 		// do the filtering
-		List<File> filteredIncludeRoots = new LinkedList<File>();
+		List<File> filteredIncludeRoots = new LinkedList<>();
 		for (File f : includeRoots) {
 			int idx = excludeRootsFromConfig.indexOf(f);
 			/**
@@ -269,7 +269,7 @@ public class MavenPluginConfigurationTranslator {
 
 	private List<String> convertFileFoldersToRelativePathStrings(
 	        final Iterable<? extends File> sources) {
-		final List<String> folders = new ArrayList<String>();
+		final List<String> folders = new ArrayList<>();
 		// No null check as internally we *know*
 		for (File f : sources) {
 			String relativePath;
@@ -298,7 +298,7 @@ public class MavenPluginConfigurationTranslator {
 	private List<File> transformResourceStringsToFiles(
 	        final List<String> srcDirNames) {
 		final File basedir = this.mavenProject.getBasedir();
-		final List<File> sourceDirectories = new ArrayList<File>();
+		final List<File> sourceDirectories = new ArrayList<>();
 		if (srcDirNames != null) {
 			for (String srcDirName : srcDirNames) {
 				File srcDir = new File(srcDirName);

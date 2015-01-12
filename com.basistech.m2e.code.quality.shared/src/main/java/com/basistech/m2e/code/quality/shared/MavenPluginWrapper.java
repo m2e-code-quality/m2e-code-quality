@@ -68,7 +68,7 @@ public class MavenPluginWrapper {
 	        final String pluginGroupId, final String pluginArtifactId,
 	        final String[] pluginGoal, List<MojoExecution> mojoExecutions) {
 		final List<MojoExecution> foundMojoExections =
-		        new ArrayList<MojoExecution>();
+		        new ArrayList<>();
 		for (MojoExecution mojoExecution : mojoExecutions) {
 			if (pluginGoal != null) {
 				for (String goal : pluginGoal) {
