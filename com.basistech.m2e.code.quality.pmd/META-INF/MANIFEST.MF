@@ -15,5 +15,5 @@ Require-Bundle: org.eclipse.m2e.jdt;bundle-version="[1.0.0,1.7.0)",
  com.basistech.m2e.code.quality.shared;bundle-version="0.13.0",
  net.sourceforge.pmd.eclipse.plugin;bundle-version="[4.0.0,5.0.0)",
  org.slf4j.api;bundle-version="1.6.1"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: Basis Technology Corp.

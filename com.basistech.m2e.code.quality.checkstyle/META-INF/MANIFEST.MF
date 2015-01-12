@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.m2e.jdt;bundle-version="[1.0.0,1.7.0)",
  net.sf.eclipsecs.core;bundle-version="5.2.0",
  net.sf.eclipsecs.checkstyle;bundle-version="5.2.0",
  com.basistech.m2e.code.quality.shared;bundle-version="0.13.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: Basis Technology Corp.
 Import-Package: org.eclipse.jface.preference,
  org.eclipse.swt.widgets,
