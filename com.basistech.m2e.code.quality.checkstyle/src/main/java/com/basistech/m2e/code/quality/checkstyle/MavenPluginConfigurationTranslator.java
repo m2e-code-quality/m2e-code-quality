@@ -81,8 +81,9 @@ public class MavenPluginConfigurationTranslator {
 		this.monitor = monitor;
 		this.basedirUri = this.project.getLocationURI();
 		this.resourceResolver =
-		        ResourceResolver.newInstance(configurator
-		                .getPluginClassRealm(mojoExecution));
+		        new ResourceResolver(
+		                configurator.getPluginClassRealm(mojoExecution),
+		                project.getLocation());
 		this.execution = mojoExecution;
 		this.configurator = configurator;
 	}
