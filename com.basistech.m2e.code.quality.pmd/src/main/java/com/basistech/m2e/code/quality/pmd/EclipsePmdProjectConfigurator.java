@@ -183,7 +183,8 @@ public class EclipsePmdProjectConfigurator extends
 
 		final MojoExecution execution = findMojoExecution(pluginWrapper);
 		ResourceResolver resourceResolver =
-		        ResourceResolver.newInstance(getPluginClassRealm(execution));
+		        new ResourceResolver(getPluginClassRealm(execution),
+		                project.getLocation());
 		try {
 			final RuleSet ruleset =
 			        this.createPmdRuleSet(pluginCfgTranslator, resourceResolver);
