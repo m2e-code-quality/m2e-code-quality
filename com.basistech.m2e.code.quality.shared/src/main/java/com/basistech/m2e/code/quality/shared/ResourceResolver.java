@@ -21,6 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
+import org.eclipse.core.runtime.IPath;
 
 /**
  * A utility class to resolve resources, which includes searching in resources
@@ -32,9 +33,11 @@ import org.codehaus.plexus.classworlds.realm.ClassRealm;
 public final class ResourceResolver {
 
 	private final ClassRealm pluginRealm;
+	private final IPath projectLocation;
 
-	private ResourceResolver(ClassRealm pluginRealm) {
+	public ResourceResolver(ClassRealm pluginRealm, IPath projectLocation) {
 		this.pluginRealm = pluginRealm;
+		this.projectLocation = projectLocation;
 	}
 
 	/**
