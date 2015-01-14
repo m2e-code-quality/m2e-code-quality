@@ -90,13 +90,4 @@ public final class ResourceResolver {
 
 	}
 
-	/**
-	 * @param pluginRealm
-	 *            the pluginRealm
-	 * @return a new instance of {@link ResourceResolver}.
-	 * 
-	 */
-	public static ResourceResolver newInstance(ClassRealm pluginRealm) {
-		return new ResourceResolver(pluginRealm);
-	}
 }
