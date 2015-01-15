@@ -37,6 +37,7 @@ import net.sf.eclipsecs.core.projectconfig.ProjectConfigurationWorkingCopy;
 import net.sf.eclipsecs.core.util.CheckstylePluginException;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
@@ -74,16 +75,13 @@ public class MavenPluginConfigurationTranslator {
 	private MavenPluginConfigurationTranslator(
 	        final AbstractMavenPluginProjectConfigurator configurator,
 	        final MavenProject mavenProject, final MojoExecution mojoExecution,
-	        final IProject project, final IProgressMonitor monitor)
-	        throws CoreException {
+	        final IProject project, final IProgressMonitor monitor,
+	        ResourceResolver resourceResolver) throws CoreException {
 		this.mavenProject = mavenProject;
 		this.project = project;
 		this.monitor = monitor;
 		this.basedirUri = this.project.getLocationURI();
-		this.resourceResolver =
-		        new ResourceResolver(
-		                configurator.getPluginClassRealm(mojoExecution),
-		                project.getLocation());
+		this.resourceResolver = resourceResolver;
 		this.execution = mojoExecution;
 		this.configurator = configurator;
 	}
@@ -646,12 +644,17 @@ public class MavenPluginConfigurationTranslator {
 	        AbstractMavenPluginProjectConfigurator configurator,
 	        final MavenProject mavenProject,
 	        final MavenPluginWrapper mavenPlugin, final IProject project,
-	        final IProgressMonitor monitor) throws CoreException {
+	        final IProgressMonitor monitor, MavenSession session)
+	        throws CoreException {
 		final List<MavenPluginConfigurationTranslator> m2csConverters =
 		        new ArrayList<>();
 		for (final MojoExecution execution : mavenPlugin.getMojoExecutions()) {
+			ResourceResolver resourceResolver =
+			        configurator.getResourceResolver(execution, session,
+			                project.getLocation());
 			m2csConverters.add(new MavenPluginConfigurationTranslator(
-			        configurator, mavenProject, execution, project, monitor));
+			        configurator, mavenProject, execution, project, monitor,
+			        resourceResolver));
 		}
 		return m2csConverters;
 	}
