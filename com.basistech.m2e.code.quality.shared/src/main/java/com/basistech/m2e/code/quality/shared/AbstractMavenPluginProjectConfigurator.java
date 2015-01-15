@@ -19,12 +19,17 @@ package com.basistech.m2e.code.quality.shared;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.execution.MavenExecutionRequest;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
@@ -89,8 +94,11 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 			return;
 		}
 
+		@SuppressWarnings("deprecation")
+		MavenSession mavenSession = request.getMavenSession();
+
 		this.handleProjectConfigurationChange(request.getMavenProjectFacade(),
-		        project, monitor, pluginWrapper);
+		        project, monitor, pluginWrapper, mavenSession);
 	}
 
 	@Override
@@ -109,8 +117,15 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 			return;
 		}
 		if (pluginWrapper.isPluginConfigured()) {
+			@SuppressWarnings("deprecation")
+			MavenExecutionRequest request =
+			        maven.createExecutionRequest(monitor);
+			@SuppressWarnings("deprecation")
+			MavenSession session =
+			        maven.createSession(request, mavenProjectChangedEvent
+			                .getMavenProject().getMavenProject(monitor));
 			this.handleProjectConfigurationChange(mavenProjectFacade, project,
-			        monitor, pluginWrapper);
+			        monitor, pluginWrapper, session);
 		} else {
 			// TODO: redirect to eclipse logger.
 			// this.console.logMessage(String.format(
@@ -125,7 +140,8 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 	protected abstract void handleProjectConfigurationChange(
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final IProgressMonitor monitor,
-	        final MavenPluginWrapper mavenPluginWrapper) throws CoreException;
+	        final MavenPluginWrapper mavenPluginWrapper, MavenSession session)
+	        throws CoreException;
 
 	/**
 	 * Get the maven plugin {@code groupId}.
@@ -196,10 +212,16 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 		return false;
 	}
 
-	public ClassRealm getPluginClassRealm(MojoExecution mojoExecution)
-	        throws CoreException {
-		return mojoExecution.getMojoDescriptor().getPluginDescriptor()
-		        .getClassRealm();
+	public ResourceResolver getResourceResolver(MojoExecution mojoExecution,
+	        MavenSession session, IPath projectLocation) throws CoreException {
+		// call for side effect of ensuring that the realm is set in the
+		// descriptor.
+		IMaven mvn = MavenPlugin.getMaven();
+		Mojo configuredMojo =
+		        mvn.getConfiguredMojo(session, mojoExecution, Mojo.class);
+		mvn.releaseMojo(configuredMojo, mojoExecution);
+		return new ResourceResolver(mojoExecution.getMojoDescriptor()
+		        .getPluginDescriptor().getClassRealm(), projectLocation);
 	}
 
 	private MavenPluginWrapper getMavenPlugin(IProgressMonitor monitor,
