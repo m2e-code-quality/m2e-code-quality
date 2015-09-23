@@ -26,6 +26,8 @@ import org.apache.maven.plugin.MojoExecution;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +73,11 @@ public class EclipseFindbugsProjectConfigurator extends
 	        final MavenPluginWrapper mavenPluginWrapper, MavenSession session)
 	        throws CoreException {
 		log.debug("entering handleProjectConfigurationChange");
+		IJavaProject javaProject = JavaCore.create(project);
+		if (javaProject == null || !javaProject.exists()
+				|| !javaProject.getProject().isOpen()) {
+			return;
+		}
 		final MavenPluginConfigurationTranslator mavenFindbugsConfig =
 		        MavenPluginConfigurationTranslator.newInstance(this,
 		                mavenPluginWrapper, project,
