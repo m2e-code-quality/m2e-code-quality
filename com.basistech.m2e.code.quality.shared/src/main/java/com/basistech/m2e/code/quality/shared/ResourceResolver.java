@@ -21,6 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
+import org.eclipse.core.runtime.IPath;
 
 /**
  * A utility class to resolve resources, which includes searching in resources
@@ -32,9 +33,11 @@ import org.codehaus.plexus.classworlds.realm.ClassRealm;
 public final class ResourceResolver {
 
 	private final ClassRealm pluginRealm;
+	private final IPath projectLocation;
 
-	private ResourceResolver(ClassRealm pluginRealm) {
+	public ResourceResolver(ClassRealm pluginRealm, IPath projectLocation) {
 		this.pluginRealm = pluginRealm;
+		this.projectLocation = projectLocation;
 	}
 
 	/**
@@ -50,50 +53,52 @@ public final class ResourceResolver {
 	 * @return the {@code URL} of the resolved location or {@code null}.
 	 */
 	public URL resolveLocation(final String location) {
-		URL url = null;
 		// 1. Try it as a resource first.
-		// not that class loaders don't want leading slashes.
-		String urlLocation = location;
-		if (urlLocation.startsWith("/")) {
-			urlLocation = urlLocation.substring(1);
-		}
 		if (pluginRealm != null) {
-			url = pluginRealm.getResource(urlLocation);
+			String urlLocation = location;
+			// note that class loaders don't want leading slashes.
+			if (urlLocation.startsWith("/")) {
+				urlLocation = urlLocation.substring(1);
+			}
+			URL url = pluginRealm.getResource(urlLocation);
+			if (url != null) {
+				return url;
+			}
 		}
-		if (url == null) {
+
+		// 2. Try it as a remote resource.
+		try {
+			URL url = new URL(location);
+			// check if valid.
+			url.openStream();
+			return url;
+		} catch (MalformedURLException ex) {
+			// ignored, try next
+		} catch (Exception ex) {
+			// ignored, try next
+		}
+
+		// 3. Try to see if it exists as a filesystem resource.
+		File file = new File(location);
+		if (file.exists()) {
 			try {
-				// 2. Try it as a remote resource.
-				url = new URL(location);
-				// check if valid.
-				url.openStream();
+				return file.toURI().toURL();
 			} catch (MalformedURLException ex) {
 				// ignored, try next
-			} catch (Exception ex) {
-				// ignored, try next
-			}
-			if (url == null) {
-				// 3. Try to see if it exists as a filesystem resource.
-				final File f = new File(location);
-				if (f.exists()) {
-					try {
-						url = f.toURI().toURL();
-					} catch (MalformedURLException ex) {
-						// ignored, try next
-					}
-				}
 			}
 		}
-		return url;
 
+		File projectFile = projectLocation.append(location).toFile();
+		if (projectFile.exists()) {
+			try {
+				return projectFile.toURI().toURL();
+			} catch (MalformedURLException ex) {
+				// ignored, try next
+			}
+		}
+
+		// 4. null
+		return null;
 	}
 
-	/**
-	 * @param pluginRealm
-	 *            the pluginRealm
-	 * @return a new instance of {@link ResourceResolver}.
-	 * 
-	 */
-	public static ResourceResolver newInstance(ClassRealm pluginRealm) {
-		return new ResourceResolver(pluginRealm);
-	}
 }

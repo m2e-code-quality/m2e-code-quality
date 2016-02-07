@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
@@ -84,14 +85,12 @@ public class MavenPluginConfigurationTranslator {
 	private MavenPluginConfigurationTranslator(
 	        final AbstractMavenPluginProjectConfigurator configurator,
 	        final MojoExecution execution, final IProject project,
-	        final MavenProject mavenProject, final IProgressMonitor monitor)
-	        throws CoreException {
+	        final MavenProject mavenProject, final IProgressMonitor monitor,
+	        ResourceResolver resourceResolver) throws CoreException {
 		this.project = project;
 		this.mavenProject = mavenProject;
 		this.monitor = monitor;
-		this.resourceResolver =
-		        ResourceResolver.newInstance(configurator
-		                .getPluginClassRealm(execution));
+		this.resourceResolver = resourceResolver;
 		this.execution = execution;
 		this.configurator = configurator;
 	}
@@ -368,8 +367,8 @@ public class MavenPluginConfigurationTranslator {
 	public static MavenPluginConfigurationTranslator newInstance(
 	        AbstractMavenPluginProjectConfigurator configurator,
 	        final MavenPluginWrapper mavenPlugin, final IProject project,
-	        final MavenProject mavenProject, final IProgressMonitor monitor)
-	        throws CoreException {
+	        final MavenProject mavenProject, final IProgressMonitor monitor,
+	        MavenSession session) throws CoreException {
 
 		final List<MojoExecution> mojoExecutions =
 		        mavenPlugin.getMojoExecutions();
@@ -380,9 +379,14 @@ public class MavenPluginConfigurationTranslator {
 			        "Wrong number of executions. Expected 1. Found "
 			                + mojoExecutions.size()));
 		}
+		MojoExecution execution = mojoExecutions.get(0);
+		ResourceResolver resourceResolver =
+		        configurator.getResourceResolver(execution, session,
+		                project.getLocation());
 		final MavenPluginConfigurationTranslator m2csConverter =
 		        new MavenPluginConfigurationTranslator(configurator,
-		                mojoExecutions.get(0), project, mavenProject, monitor);
+		                execution, project, mavenProject, monitor,
+		                resourceResolver);
 		return m2csConverter;
 	}
 }

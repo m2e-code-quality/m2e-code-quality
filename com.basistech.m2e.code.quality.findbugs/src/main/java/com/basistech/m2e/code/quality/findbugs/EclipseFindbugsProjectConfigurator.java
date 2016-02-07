@@ -21,10 +21,13 @@ import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.M
 
 import java.util.List;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,12 +70,19 @@ public class EclipseFindbugsProjectConfigurator extends
 	protected void handleProjectConfigurationChange(
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final IProgressMonitor monitor,
-	        final MavenPluginWrapper mavenPluginWrapper) throws CoreException {
+	        final MavenPluginWrapper mavenPluginWrapper, MavenSession session)
+	        throws CoreException {
 		log.debug("entering handleProjectConfigurationChange");
+		IJavaProject javaProject = JavaCore.create(project);
+		if (javaProject == null || !javaProject.exists()
+				|| !javaProject.getProject().isOpen()) {
+			return;
+		}
 		final MavenPluginConfigurationTranslator mavenFindbugsConfig =
 		        MavenPluginConfigurationTranslator.newInstance(this,
 		                mavenPluginWrapper, project,
-		                mavenProjectFacade.getMavenProject(monitor), monitor);
+		                mavenProjectFacade.getMavenProject(monitor), monitor,
+		                session);
 		UserPreferences prefs;
 		try {
 			final List<MojoExecution> mojoExecutions =
@@ -119,6 +129,7 @@ public class EclipseFindbugsProjectConfigurator extends
 		pluginCfgTranslator.setOmitVisitors(prefs);
 		pluginCfgTranslator.setPriority(prefs);
 		pluginCfgTranslator.setThreshold(prefs);
+		prefs.setRunAtFullBuild(false);
 
 		FindbugsPlugin.DEBUG = pluginCfgTranslator.debugEnabled();
 		return prefs;
