@@ -11,4 +11,9 @@
   <name>Java Code Quality Resources</name>
   <description>This project contains codestyle guidelines used by Maven and Eclipse</description>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+
 </project>
