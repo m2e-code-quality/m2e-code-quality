@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+
+
+
+<module name="Checker">
+
+  <property name="severity" value="${checkstyle.severity}"
+    default="error" />
+
+
+  <module name="FileLength" />
+  <module name="FileTabCharacter" />
+  <module name="RegexpMultiline">
+    <property name="severity" value="warning" />
+    <property name="format"
+      value="(System\.(out)|(err)\.print)|(\.printStackTrace)" />
+    <property name="message"
+      value="Use a logger instead of System.out.println()" />
+  </module>
+  <!-- <module name="RegexpSingleline"> -->
+  <!-- <property name="severity" value="info" /> -->
+  <!-- <property name="format" value="\s+$" /> -->
+  <!-- <property name="message" value="Line has trailing spaces." /> -->
+  <!-- </module> -->
+
+  <!-- enables filtering of checks with CHECKSTYLE:OFF ... CHECKSTYLE:ON -->
+  <module name="SuppressionCommentFilter" />
+  <module name="SuppressionFilter">
+    <property name="file" value="${config_loc}/checkstyle-suppressions.xml" />
+  </module>
+</module><!-- end of checker -->

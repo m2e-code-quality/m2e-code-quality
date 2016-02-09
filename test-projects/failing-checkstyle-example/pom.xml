@@ -1,0 +1,129 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>de.spiller.test</groupId>
+  <artifactId>failing-checkstyle-example-parent</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>m2e quality example parent</name>
+  <description>Parent for a m2e quality check example</description>
+  <modules>
+    <module>build-tools</module>
+    <module>failing-checkstyle-example-persistence</module>
+    <module>failing-checkstyle-example-core</module>
+  </modules>
+
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <compileSource>1.8</compileSource>
+    <checkstyle.failsOnError>true</checkstyle.failsOnError>
+    <pmd.failurePriority>2</pmd.failurePriority>
+
+    <maven.compiler.target>${compileSource}</maven.compiler.target>
+    <maven.compiler.source>${compileSource}</maven.compiler.source>
+
+    <build.tools.version>${project.version}</build.tools.version>
+    <maven.assembly.version>2.6</maven.assembly.version>
+    <maven.checkstyle.version>2.17</maven.checkstyle.version>
+    <maven.pmd.version>3.6</maven.pmd.version>
+  </properties>
+
+
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${maven.checkstyle.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-pmd-plugin</artifactId>
+          <version>${maven.pmd.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${maven.assembly.version}</version>
+          <configuration>
+            <descriptorRefs>
+              <descriptorRef>src</descriptorRef>
+            </descriptorRefs>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>build-tools</artifactId>
+            <version>${build.tools.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <consoleOutput>false</consoleOutput>
+          <propertyExpansion>basedir=${basedir}</propertyExpansion>
+          <propertiesLocation>checkstyle.properties</propertiesLocation>
+          <configLocation>checkstyle.xml</configLocation>
+          <excludes>target/generated-sources/*</excludes>
+          <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <goal>checkstyle</goal>
+            </goals>
+            <configuration>
+              <failsOnError>${checkstyle.failsOnError}</failsOnError>
+              <consoleOutput>false</consoleOutput>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>build-tools</artifactId>
+            <version>${build.tools.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <targetJdk>${compileSource}</targetJdk>
+          <rulesets>
+            <ruleset>PMDRules.xml</ruleset>
+          </rulesets>
+          <failurePriority>${pmd.failurePriority}</failurePriority>
+          <verbose>false</verbose>
+          <printFailingErrors>true</printFailingErrors>
+          <excludeRoots>
+            <excludeRoot>target/generated-sources</excludeRoot>
+          </excludeRoots>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <phase>compile</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
