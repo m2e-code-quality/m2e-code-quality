@@ -29,6 +29,6 @@
   <!-- enables filtering of checks with CHECKSTYLE:OFF ... CHECKSTYLE:ON -->
   <module name="SuppressionCommentFilter" />
   <module name="SuppressionFilter">
-    <property name="file" value="${config_loc}/checkstyle-suppressions.xml" />
+    <property name="file" value="${checkstyle.suppressions.file}" />
   </module>
 </module><!-- end of checker -->

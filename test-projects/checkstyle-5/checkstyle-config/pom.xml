@@ -2,18 +2,16 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-
-  <groupId>de.spiller.test</groupId>
-  <artifactId>build-tools</artifactId>
+  <groupId>com.basistech</groupId>
+  <artifactId>checkstyle-5-config</artifactId>
   <packaging>jar</packaging>
   <version>0.0.1-SNAPSHOT</version>
-
-  <name>Java Code Quality Resources</name>
-  <description>This project contains codestyle guidelines used by Maven and Eclipse</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
   </properties>
 
 </project>
