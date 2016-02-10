@@ -1,4 +1,5 @@
-package com.generated;
+package iampartofthesuppressions;
+
 public class App {
 
 	public static void main(String[] args) {

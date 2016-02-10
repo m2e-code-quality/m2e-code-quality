@@ -1,4 +1,5 @@
-package com.example;
+package ishouldthrowanerror;
+
 public class App {
 
 	public static void main(String[] args) {
