@@ -30,7 +30,6 @@
 				<configuration>
 					<failsOnError>true</failsOnError>
 					<configLocation>checkstyle.xml</configLocation>
-					<excludes>target/generated-sources/*</excludes>
 					<suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
 				</configuration>
 				<executions>
