@@ -22,7 +22,7 @@ These Eclipse plugins are built with the Tycho Maven plugin. The
 marriage of OSGi, Eclipse, and Maven is imperfect. In particular, it
 rarely works to run a build that does not start with 'clean'.
 
-See docs/release.md for information about how all of this is released.
+See [doc/release.md](doc/release.md) for information about how all of this is released.
 
 Activity here is 'coordinated' on a mailing list:
 `m2e-code-quality@googlegroups.com`.
