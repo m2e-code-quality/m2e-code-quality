@@ -70,8 +70,7 @@ public class EclipsePmdProjectConfigurator extends
 	// private static final String PMD_NATURE =
 	// "net.sourceforge.pmd.eclipse.plugin.pmdNature";
 	private static final String JAVA_NATURE = "org.eclipse.jdt.core.javanature";
-	private static final Logger log = LoggerFactory
-	        .getLogger(EclipsePmdProjectConfigurator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(EclipsePmdProjectConfigurator.class);
 
 	// create a rule set factory for instantiating rule sets
 	private final RuleSetFactory factory = new RuleSetFactory();
@@ -140,7 +139,7 @@ public class EclipsePmdProjectConfigurator extends
 			try {
 				PMDNature.addPMDNature(project, monitor);
 			} catch (CoreException pmdNatureProblem) {
-				log.error("PMD plugin threw exception adding PMD nature",
+				LOG.error("PMD plugin threw exception adding PMD nature",
 				        pmdNatureProblem);
 				throw pmdNatureProblem;
 			}
@@ -255,7 +254,7 @@ public class EclipsePmdProjectConfigurator extends
 						        } catch (IOException e) {
 							        // ignore them.
 						        }
-						        log.warn("No ruleset found for {}", loc);
+						        LOG.warn("No ruleset found for {}", loc);
 						        return null;
 					        }
 				        };
@@ -263,7 +262,7 @@ public class EclipsePmdProjectConfigurator extends
 				        this.factory.createRuleSet(resolvedRuleSetReference);
 				ruleSet.addRuleSet(ruleSetAtLocations);
 			} catch (RuleSetNotFoundException e) {
-				log.error("Couldn't find ruleset {}", loc, e);
+				LOG.error("Couldn't find ruleset {}", loc, e);
 			}
 		}
 

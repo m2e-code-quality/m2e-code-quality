@@ -72,10 +72,9 @@ import edu.umd.cs.findbugs.config.UserPreferences;
  */
 public class MavenPluginConfigurationTranslator {
 
-	private static final Logger log =
-	        LoggerFactory
-	                .getLogger(
-	                        "com/basistech/m2e/code/quality/findbugs/MavenPluginConfigurationTranslator");
+	private static final Logger LOG =
+	        LoggerFactory.getLogger(MavenPluginConfigurationTranslator.class);
+
 	private final IProject project;
 	private final AbstractMavenPluginProjectConfigurator configurator;
 	private final ResourceResolver resourceResolver;
@@ -103,7 +102,7 @@ public class MavenPluginConfigurationTranslator {
 		                INCLUDE_FILTER_FILE, String.class, execution, monitor);
 		// don't do anything if null
 		if (includeFilterFile == null) {
-			log.debug("includeFilterFile is null");
+			LOG.debug("includeFilterFile is null");
 			return;
 		}
 		this.copyUrlResourceToProject(includeFilterFile, FB_INCLUDE_FILTER_FILE);
@@ -121,13 +120,13 @@ public class MavenPluginConfigurationTranslator {
 
 	public void setExcludeFilterFiles(final UserPreferences prefs)
 	        throws CoreException {
-		log.debug("entering setExcludeFilterFiles");
+		LOG.debug("entering setExcludeFilterFiles");
 		final String excludeFilterFile =
 		        this.configurator.getParameterValue(mavenProject,
 		                EXCLUDE_FILTER_FILE, String.class, execution, monitor);
 		// don't do anything if null
 		if (excludeFilterFile == null) {
-			log.debug("excludeFilterFile is null");
+			LOG.debug("excludeFilterFile is null");
 			return;
 		}
 		this.copyUrlResourceToProject(excludeFilterFile, FB_EXCLUDE_FILTER_FILE);
@@ -172,7 +171,7 @@ public class MavenPluginConfigurationTranslator {
 		        this.configurator.getParameterValue(mavenProject,
 		                BUG_CATEGORIES, String.class, execution, monitor);
 		if (bugCatagories == null) {
-			log.debug("bugCatagories is null");
+			LOG.debug("bugCatagories is null");
 			return;
 		}
 		List<String> addBugCatagoriesList =
@@ -191,7 +190,7 @@ public class MavenPluginConfigurationTranslator {
 			if (availableBugCategories.contains(bcUpper)) {
 				pfs.addCategory(bcUpper);
 			} else {
-				log.debug(String.format("[%s]: Unknown Bug Catagory [%s]",
+				LOG.debug(String.format("[%s]: Unknown Bug Catagory [%s]",
 				        LOG_PREFIX, bc));
 			}
 			if (pfs.getActiveCategorySet().contains(bcUpper)) {
@@ -210,7 +209,7 @@ public class MavenPluginConfigurationTranslator {
 		        this.configurator.getParameterValue(mavenProject, EFFORT,
 		                String.class, execution, monitor);
 		if (effort == null) {
-			log.debug("effort is null");
+			LOG.debug("effort is null");
 			return;
 		}
 		// lowercase
@@ -218,7 +217,7 @@ public class MavenPluginConfigurationTranslator {
 		try {
 			prefs.setEffort(effort);
 		} catch (final IllegalArgumentException ex) {
-			log.error(String
+			LOG.error(String
 			        .format("[%s]: could not set <effort>, reason [%s], setting it to default [%s]",
 			                LOG_PREFIX, effort, UserPreferences.EFFORT_DEFAULT));
 		}
@@ -229,13 +228,13 @@ public class MavenPluginConfigurationTranslator {
 		        this.configurator.getParameterValue(mavenProject, MAX_RANK,
 		                Integer.class, execution, monitor);
 		if (minRank == null) {
-			log.debug("max rank is null");
+			LOG.debug("max rank is null");
 			return;
 		}
 		try {
 			prefs.getFilterSettings().setMinRank(minRank);
 		} catch (final IllegalArgumentException ex) {
-			log.error(String
+			LOG.error(String
 			        .format("[%s]: could not set <rank>, reason [%s], setting it to default [%s]",
 			                LOG_PREFIX, minRank, 15));
 		}
@@ -246,13 +245,13 @@ public class MavenPluginConfigurationTranslator {
 		        this.configurator.getParameterValue(mavenProject, PRIORITY,
 		                String.class, execution, monitor);
 		if (priority == null) {
-			log.debug("priority is null");
+			LOG.debug("priority is null");
 			return;
 		}
 		try {
 			prefs.getFilterSettings().setMinPriority(priority);
 		} catch (final Exception ex) {
-			log.error(String
+			LOG.error(String
 			        .format("[%s]: could not set <threshold>, reason [%s], leaving it alone",
 			                LOG_PREFIX, priority));
 		}
@@ -264,7 +263,7 @@ public class MavenPluginConfigurationTranslator {
 		        this.configurator.getParameterValue(mavenProject,
 		                OMIT_VISITORS, String.class, execution, monitor);
 		if (omitVisitors == null) {
-			log.debug("omitVisitors is null");
+			LOG.debug("omitVisitors is null");
 			return;
 		}
 		List<String> detectorsList =
@@ -274,7 +273,7 @@ public class MavenPluginConfigurationTranslator {
 		for (String d : detectorsList) {
 			final DetectorFactory df = dfc.getFactory(d);
 			if (df == null) {
-				log.error(String.format("[%s]: IGNORING unknown detector [%s]",
+				LOG.error(String.format("[%s]: IGNORING unknown detector [%s]",
 				        LOG_PREFIX, d));
 			} else {
 				prefs.enableDetector(df, false);
@@ -287,13 +286,13 @@ public class MavenPluginConfigurationTranslator {
 		        this.configurator.getParameterValue(mavenProject, THRESHOLD,
 		                String.class, execution, monitor);
 		if (threshold == null) {
-			log.debug("threshold is null");
+			LOG.debug("threshold is null");
 			return;
 		}
 		try {
 			prefs.getFilterSettings().setMinPriority(threshold);
 		} catch (final Exception ex) {
-			log.error(String
+			LOG.error(String
 			        .format("[%s]: could not set <threshold>, reason [%s], leaving it alone",
 			                LOG_PREFIX, threshold));
 		}
@@ -314,7 +313,7 @@ public class MavenPluginConfigurationTranslator {
 		for (String d : detectorsList) {
 			final DetectorFactory df = dfc.getFactory(d);
 			if (df == null) {
-				log.error(String.format("[%s]: IGNORING unknown detector [%s]",
+				LOG.error(String.format("[%s]: IGNORING unknown detector [%s]",
 				        LOG_PREFIX, d));
 			} else {
 				prefs.enableDetector(df, true);
@@ -342,7 +341,7 @@ public class MavenPluginConfigurationTranslator {
 	 */
 	private void copyUrlResourceToProject(final String resc,
 	        final String newLocation) {
-		log.debug("entering copyUrlResourceToProject");
+		LOG.debug("entering copyUrlResourceToProject");
 		Preconditions.checkNotNull(resc);
 		Preconditions.checkNotNull(newLocation);
 		final URL urlResc = this.resourceResolver.resolveLocation(resc);
