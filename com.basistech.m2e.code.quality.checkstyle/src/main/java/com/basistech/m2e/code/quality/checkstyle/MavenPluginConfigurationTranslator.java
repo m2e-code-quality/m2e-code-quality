@@ -96,8 +96,8 @@ public class MavenPluginConfigurationTranslator {
 		final URL ruleset =
 		        this.resourceResolver.resolveLocation(this.getConfigLocation());
 		if (ruleset == null) {
-			throw new CheckstylePluginException(String.format(
-			        "Failed to resolve RuleSet from configLocation,SKIPPING Eclipse checkstyle configuration"));
+			throw new CheckstylePluginException(
+			        "Failed to resolve RuleSet from configLocation,SKIPPING Eclipse checkstyle configuration");
 		}
 		return ruleset;
 	}
