@@ -9,8 +9,7 @@ Bundle-Vendor: BasisTech
 Export-Package: com.basistech.m2e.code.quality.shared,
  com.google.common.annotations,
  com.google.common.base,
- com.google.common.collect,
- org.apache.http.client.utils
+ com.google.common.collect
 Bundle-ClassPath: .,
  lib/google-collections-1.0.jar
 Require-Bundle: org.eclipse.m2e.jdt;bundle-version="[1.0.0,1.8.0)",
