@@ -23,10 +23,15 @@ import org.apache.maven.plugin.MojoExecution;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
 public class MavenPluginWrapper {
+
+	private static final Logger LOG =
+	        LoggerFactory.getLogger(MavenPluginWrapper.class);
 
 	private final String key; // for toString
 	private final List<MojoExecution> executions;
@@ -85,6 +90,9 @@ public class MavenPluginWrapper {
 					foundMojoExections.add(mojoExecution);
 				}
 			}
+		}
+		if (foundMojoExections.size() != mojoExecutions.size()) {
+			LOG.debug("They are different. Additional search is necessary.");
 		}
 		return foundMojoExections;
 	}
