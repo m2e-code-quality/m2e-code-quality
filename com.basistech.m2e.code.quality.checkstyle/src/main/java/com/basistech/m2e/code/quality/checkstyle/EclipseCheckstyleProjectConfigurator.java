@@ -187,7 +187,8 @@ public class EclipseCheckstyleProjectConfigurator extends
 	        final ProjectConfigurationWorkingCopy pcWorkingCopy,
 	        final URL ruleset, String executionId)
 	                throws CheckstylePluginException {
-
+		final String configName =
+		        ECLIPSE_CS_PREFS_CONFIG_NAME + " " + executionId;
 		final ICheckConfigurationWorkingSet workingSet =
 		        pcWorkingCopy.getLocalCheckConfigWorkingSet();
 
@@ -196,8 +197,6 @@ public class EclipseCheckstyleProjectConfigurator extends
 		// Try to retrieve an existing checkstyle configuration to be updated
 		CheckConfigurationWorkingCopy[] workingCopies =
 		        workingSet.getWorkingCopies();
-		final String configName =
-		        ECLIPSE_CS_PREFS_CONFIG_NAME + " " + executionId;
 		if (workingCopies != null) {
 			for (CheckConfigurationWorkingCopy copy : workingCopies) {
 				if (configName.equals(copy.getName())) {
