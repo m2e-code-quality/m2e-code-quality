@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.maven.execution.MavenSession;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -190,8 +189,10 @@ public class EclipseCheckstyleProjectConfigurator
 		// Try to retrieve an existing checkstyle configuration to be updated
 		CheckConfigurationWorkingCopy[] workingCopies =
 		        workingSet.getWorkingCopies();
-		workingCopies = (CheckConfigurationWorkingCopy[]) ArrayUtils
-		        .nullToEmpty(workingCopies);
+		if (workingCopies == null) {
+			LOG.error("The working copies are null");
+			workingCopies = new CheckConfigurationWorkingCopy[0];
+		}
 		for (final CheckConfigurationWorkingCopy copy : workingCopies) {
 			if (configName.equals(copy.getName())) {
 				if (REMOTE_CONFIGURATION_TYPE.equals(copy.getType())) {
