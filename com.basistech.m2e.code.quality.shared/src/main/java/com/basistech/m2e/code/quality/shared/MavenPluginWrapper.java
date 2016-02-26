@@ -62,7 +62,7 @@ public class MavenPluginWrapper {
 		// I don't think we need to re-search for site.
 		return searchExecutions(pluginGroupId, pluginArtifactId, pluginGoal,
 		        mojoExecutions);
-	}//
+	}
 
 	private static List<MojoExecution> searchExecutions(
 	        final String pluginGroupId, final String pluginArtifactId,
