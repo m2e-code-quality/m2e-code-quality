@@ -107,8 +107,6 @@ public class EclipseCheckstyleConfigManager {
 		Preconditions.checkNotNull(project);
 		final CheckstyleNature csNature = new CheckstyleNature();
 		csNature.setProject(project);
-		final EclipseCheckstyleConfigManager csNatureExtended =
-		        new EclipseCheckstyleConfigManager(csNature);
-		return csNatureExtended;
+		return new EclipseCheckstyleConfigManager(csNature);
 	}
 }
