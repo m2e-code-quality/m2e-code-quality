@@ -20,6 +20,7 @@ import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.E
 import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.ECLIPSE_FB_PREFS_FILE;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -74,8 +75,7 @@ public class EclipseFindbugsConfigManager {
 		// We have to explicitly add the nature.
 		final IProjectDescription desc = project.getDescription();
 		final String natures[] = desc.getNatureIds();
-		final String newNatures[] = new String[natures.length + 1];
-		System.arraycopy(natures, 0, newNatures, 0, natures.length);
+		final String newNatures[] = Arrays.copyOf(natures, natures.length + 1);
 		newNatures[natures.length] = ECLIPSE_FB_NATURE_ID;
 		desc.setNatureIds(newNatures);
 		project.setDescription(desc, monitor);
