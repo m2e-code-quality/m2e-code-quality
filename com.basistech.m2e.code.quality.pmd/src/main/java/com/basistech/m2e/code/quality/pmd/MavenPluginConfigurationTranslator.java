@@ -94,8 +94,7 @@ public class MavenPluginConfigurationTranslator {
 				if (StringUtils.isBlank(p)) {
 					continue;
 				}
-				transformedPatterns
-				        .add(this.getTransformedPattern(p, "EXCLUDE"));
+				transformedPatterns.add(this.getTransformedPattern(p));
 			}
 		}
 		return transformedPatterns;
@@ -123,8 +122,7 @@ public class MavenPluginConfigurationTranslator {
 				if (StringUtils.isBlank(p)) {
 					continue;
 				}
-				transformedPatterns
-				        .add(this.getTransformedPattern(p, "INCLUDE"));
+				transformedPatterns.add(this.getTransformedPattern(p));
 			}
 		}
 		return transformedPatterns;
@@ -160,8 +158,7 @@ public class MavenPluginConfigurationTranslator {
 		return ImmutableList.copyOf(this.excludePatterns);
 	}
 
-	private String getTransformedPattern(final String antStylePattern,
-	        final String msg) {
+	private String getTransformedPattern(final String antStylePattern) {
 		String newPattern;
 		if (PATTERNS_CACHE.containsKey(antStylePattern)) {
 			newPattern = PATTERNS_CACHE.get(antStylePattern);
