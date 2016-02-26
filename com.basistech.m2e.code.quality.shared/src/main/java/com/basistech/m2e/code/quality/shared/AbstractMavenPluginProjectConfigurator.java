@@ -164,9 +164,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 	 *         configurations. If more than one, this will process in order
 	 *         looking for an execution.
 	 */
-	protected String[] getMavenPluginGoal() {
-		return null;
-	}
+	protected abstract String[] getMavenPluginGoal();
 
 	/**
 	 * Unconfigure the associated Eclipse plugin.
