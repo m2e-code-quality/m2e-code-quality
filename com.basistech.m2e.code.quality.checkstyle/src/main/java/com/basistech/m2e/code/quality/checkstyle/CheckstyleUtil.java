@@ -5,10 +5,10 @@ import java.io.File;
 import com.google.common.base.Preconditions;
 
 public final class CheckstyleUtil {
-	
+
 	private CheckstyleUtil() {
 	}
-	
+
 	/**
 	 * Helper to convert the maven-checkstyle-plugin includes/excludes pattern
 	 * to eclipse checkstyle plugin pattern.
