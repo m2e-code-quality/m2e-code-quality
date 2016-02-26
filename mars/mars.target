@@ -20,7 +20,7 @@
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="net.sf.eclipsecs.feature.group" version="6.14.0.201601142217"/>
-<repository location="http://eclipse-cs.sourceforge.net/update"/>
+<repository location="http://eclipse-cs.sf.net/update"/>
 </location>
 </locations>
 <targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.6"/>
