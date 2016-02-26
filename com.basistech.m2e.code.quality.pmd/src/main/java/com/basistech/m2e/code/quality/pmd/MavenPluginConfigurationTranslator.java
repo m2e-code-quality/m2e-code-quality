@@ -26,7 +26,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.client.utils.URIUtils;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
@@ -275,8 +274,7 @@ public class MavenPluginConfigurationTranslator {
 			String relativePath;
 			if (!f.isAbsolute()) {
 				relativePath =
-				        URIUtils.resolve(this.basedirUri, f.toURI()).getPath();
-				// TODO this.basedirUri.relativize(f.toURI()).getPath();
+				        this.basedirUri.resolve(f.toURI()).getPath();
 			} else {
 				relativePath = f.getAbsolutePath();
 			}
