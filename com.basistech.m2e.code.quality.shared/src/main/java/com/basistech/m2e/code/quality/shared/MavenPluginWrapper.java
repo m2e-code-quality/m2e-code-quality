@@ -90,7 +90,7 @@ public class MavenPluginWrapper {
 	public static MavenPluginWrapper newInstance(IProgressMonitor monitor,
 	        final String pluginGroupId, final String pluginArtifactId,
 	        final String[] pluginGoal, IMavenProjectFacade mavenProjectFacade)
-	        throws CoreException {
+	                throws CoreException {
 		Preconditions.checkNotNull(mavenProjectFacade);
 		final List<MojoExecution> executions =
 		        findMojoExecutions(monitor, mavenProjectFacade, pluginGroupId,

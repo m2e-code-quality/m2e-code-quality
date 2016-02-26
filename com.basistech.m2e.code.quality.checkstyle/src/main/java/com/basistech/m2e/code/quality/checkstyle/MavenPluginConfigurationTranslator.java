@@ -157,7 +157,7 @@ public class MavenPluginConfigurationTranslator {
 	public void updateCheckConfigWithIncludeExcludePatterns(
 	        final ProjectConfigurationWorkingCopy pcWorkingCopy,
 	        final ICheckConfiguration checkCfg)
-	        throws CheckstylePluginException, CoreException {
+	                throws CheckstylePluginException, CoreException {
 		final FileSet fs =
 		        new FileSet("java-sources-" + getExecutionId(), checkCfg);
 		fs.setEnabled(true);
@@ -487,7 +487,7 @@ public class MavenPluginConfigurationTranslator {
 	private List<FileMatchPattern> normalizePatternsToCheckstyleFileMatchPattern(
 	        final List<String> patterns, final String relativePath,
 	        final boolean setIsIncludePatternFlag)
-	        throws CheckstylePluginException {
+	                throws CheckstylePluginException {
 		List<FileMatchPattern> fileMatchPatterns =
 		        new LinkedList<>();
 		for (String p : patterns) {
@@ -645,7 +645,7 @@ public class MavenPluginConfigurationTranslator {
 	        final MavenProject mavenProject,
 	        final MavenPluginWrapper mavenPlugin, final IProject project,
 	        final IProgressMonitor monitor, MavenSession session)
-	        throws CoreException {
+	                throws CoreException {
 		final List<MavenPluginConfigurationTranslator> m2csConverters =
 		        new ArrayList<>();
 		for (final MojoExecution execution : mavenPlugin.getMojoExecutions()) {

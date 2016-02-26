@@ -64,7 +64,7 @@ public class MavenPluginConfigurationTranslator {
 	        final AbstractMavenPluginProjectConfigurator configurator,
 	        final MavenProject mavenProject, MojoExecution pmdGoalExecution,
 	        final IProject project, IProgressMonitor monitor)
-	        throws CoreException {
+	                throws CoreException {
 		this.mavenProject = mavenProject;
 		this.project = project;
 		this.monitor = monitor;

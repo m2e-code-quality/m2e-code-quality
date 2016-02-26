@@ -141,7 +141,7 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final IProgressMonitor monitor,
 	        final MavenPluginWrapper mavenPluginWrapper, MavenSession session)
-	        throws CoreException;
+	                throws CoreException;
 
 	/**
 	 * Get the maven plugin {@code groupId}.
@@ -195,7 +195,7 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 	private boolean checkUnconfigurationRequired(IProgressMonitor monitor,
 	        final IMavenProjectFacade curMavenProjectFacade,
 	        final IMavenProjectFacade oldMavenProjectFacade)
-	        throws CoreException {
+	                throws CoreException {
 		Preconditions.checkNotNull(curMavenProjectFacade);
 
 		if (oldMavenProjectFacade == null) {

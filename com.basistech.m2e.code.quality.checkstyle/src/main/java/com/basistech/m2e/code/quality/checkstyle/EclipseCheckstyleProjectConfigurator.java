@@ -135,7 +135,7 @@ public class EclipseCheckstyleProjectConfigurator extends
 	private void buildCheckstyleConfiguration(
 	        ProjectConfigurationWorkingCopy pcWorkingCopy,
 	        final MavenPluginConfigurationTranslator cfgTranslator)
-	        throws CheckstylePluginException, CoreException {
+	                throws CheckstylePluginException, CoreException {
 		// get the ruleset from configLocation
 		final URL ruleset = cfgTranslator.getRuleset();
 		// build or get the checkconfig
@@ -182,7 +182,7 @@ public class EclipseCheckstyleProjectConfigurator extends
 	private ICheckConfiguration createOrGetCheckstyleConfig(
 	        final ProjectConfigurationWorkingCopy pcWorkingCopy,
 	        final URL ruleset, String executionId)
-	        throws CheckstylePluginException {
+	                throws CheckstylePluginException {
 
 		final ICheckConfigurationWorkingSet workingSet =
 		        pcWorkingCopy.getLocalCheckConfigWorkingSet();

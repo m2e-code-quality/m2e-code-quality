@@ -71,7 +71,7 @@ public class EclipseFindbugsProjectConfigurator extends
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final IProgressMonitor monitor,
 	        final MavenPluginWrapper mavenPluginWrapper, MavenSession session)
-	        throws CoreException {
+	                throws CoreException {
 		log.debug("entering handleProjectConfigurationChange");
 		IJavaProject javaProject = JavaCore.create(project);
 		if (javaProject == null || !javaProject.exists()
@@ -116,7 +116,7 @@ public class EclipseFindbugsProjectConfigurator extends
 
 	private UserPreferences buildFindbugsPreferences(
 	        final MavenPluginConfigurationTranslator pluginCfgTranslator)
-	        throws CoreException {
+	                throws CoreException {
 		log.debug("entering buildFindbugsPreferences");
 		final UserPreferences prefs =
 		        UserPreferences.createDefaultUserPreferences();
