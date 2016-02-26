@@ -18,8 +18,6 @@ package com.basistech.m2e.code.quality.checkstyle;
 
 import static com.basistech.m2e.code.quality.checkstyle.CheckstyleEclipseConstants.ECLIPSE_CS_CACHE_FILENAME;
 import static com.basistech.m2e.code.quality.checkstyle.CheckstyleEclipseConstants.ECLIPSE_CS_PREFS_CONFIG_NAME;
-import static com.basistech.m2e.code.quality.checkstyle.CheckstyleEclipseConstants.MAVEN_PLUGIN_ARTIFACTID;
-import static com.basistech.m2e.code.quality.checkstyle.CheckstyleEclipseConstants.MAVEN_PLUGIN_GROUPID;
 
 import java.net.URL;
 import java.util.List;
@@ -65,12 +63,12 @@ public class EclipseCheckstyleProjectConfigurator
 
 	@Override
 	protected String getMavenPluginArtifactId() {
-		return MAVEN_PLUGIN_ARTIFACTID;
+		return "maven-checkstyle-plugin";
 	}
 
 	@Override
 	protected String getMavenPluginGroupId() {
-		return MAVEN_PLUGIN_GROUPID;
+		return "org.apache.maven.plugins";
 	}
 
 	@Override
