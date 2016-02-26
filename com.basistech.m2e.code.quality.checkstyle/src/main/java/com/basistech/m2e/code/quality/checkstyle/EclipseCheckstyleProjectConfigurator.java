@@ -54,7 +54,7 @@ public class EclipseCheckstyleProjectConfigurator
 	private static final Logger LOG =
 	        LoggerFactory.getLogger(EclipseCheckstyleProjectConfigurator.class);
 
-	private final IConfigurationType remoteConfigurationType =
+	private static final IConfigurationType REMOTE_CONFIGURATION_TYPE =
 	        ConfigurationTypes.getByInternalName("remote");
 
 	public EclipseCheckstyleProjectConfigurator() {
@@ -196,7 +196,7 @@ public class EclipseCheckstyleProjectConfigurator
 		        .nullToEmpty(workingCopies);
 		for (final CheckConfigurationWorkingCopy copy : workingCopies) {
 			if (configName.equals(copy.getName())) {
-				if (this.remoteConfigurationType.equals(copy.getType())) {
+				if (REMOTE_CONFIGURATION_TYPE.equals(copy.getType())) {
 					workingCopy = copy;
 					break;
 				}
@@ -209,8 +209,7 @@ public class EclipseCheckstyleProjectConfigurator
 		// Nothing exist create a brand new one.
 		if (workingCopy == null) {
 			// Create a fresh check config
-			workingCopy =
-			        workingSet.newWorkingCopy(this.remoteConfigurationType);
+			workingCopy = workingSet.newWorkingCopy(REMOTE_CONFIGURATION_TYPE);
 			workingCopy.setName(configName);
 			workingSet.addCheckConfiguration(workingCopy);
 		}
