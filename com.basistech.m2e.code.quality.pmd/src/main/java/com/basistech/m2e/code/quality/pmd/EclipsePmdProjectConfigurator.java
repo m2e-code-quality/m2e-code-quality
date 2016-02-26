@@ -33,18 +33,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.sourceforge.pmd.PMDException;
-import net.sourceforge.pmd.RuleSet;
-import net.sourceforge.pmd.RuleSetFactory;
-import net.sourceforge.pmd.RuleSetNotFoundException;
-import net.sourceforge.pmd.RuleSetReferenceId;
-import net.sourceforge.pmd.eclipse.plugin.PMDPlugin;
-import net.sourceforge.pmd.eclipse.runtime.builder.PMDNature;
-import net.sourceforge.pmd.eclipse.runtime.properties.IProjectProperties;
-import net.sourceforge.pmd.eclipse.runtime.properties.IProjectPropertiesManager;
-import net.sourceforge.pmd.eclipse.runtime.properties.PropertiesException;
-import net.sourceforge.pmd.eclipse.runtime.writer.WriterException;
-
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.codehaus.plexus.util.StringUtils;
@@ -63,6 +51,18 @@ import org.slf4j.LoggerFactory;
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
 import com.basistech.m2e.code.quality.shared.ResourceResolver;
+
+import net.sourceforge.pmd.PMDException;
+import net.sourceforge.pmd.RuleSet;
+import net.sourceforge.pmd.RuleSetFactory;
+import net.sourceforge.pmd.RuleSetNotFoundException;
+import net.sourceforge.pmd.RuleSetReferenceId;
+import net.sourceforge.pmd.eclipse.plugin.PMDPlugin;
+import net.sourceforge.pmd.eclipse.runtime.builder.PMDNature;
+import net.sourceforge.pmd.eclipse.runtime.properties.IProjectProperties;
+import net.sourceforge.pmd.eclipse.runtime.properties.IProjectPropertiesManager;
+import net.sourceforge.pmd.eclipse.runtime.properties.PropertiesException;
+import net.sourceforge.pmd.eclipse.runtime.writer.WriterException;
 
 public class EclipsePmdProjectConfigurator extends
         AbstractMavenPluginProjectConfigurator {

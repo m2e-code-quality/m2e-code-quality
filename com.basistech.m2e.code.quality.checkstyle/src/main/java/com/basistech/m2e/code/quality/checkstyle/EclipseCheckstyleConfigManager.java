@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.eclipsecs.core.nature.CheckstyleNature;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
@@ -32,6 +30,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.google.common.base.Preconditions;
+
+import net.sf.eclipsecs.core.nature.CheckstyleNature;
 
 /**
  * An extension of the {@code Checkstyle} class to add missing functionality.

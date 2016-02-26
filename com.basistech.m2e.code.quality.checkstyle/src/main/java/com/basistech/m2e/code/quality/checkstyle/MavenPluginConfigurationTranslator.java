@@ -30,12 +30,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import net.sf.eclipsecs.core.config.ICheckConfiguration;
-import net.sf.eclipsecs.core.projectconfig.FileMatchPattern;
-import net.sf.eclipsecs.core.projectconfig.FileSet;
-import net.sf.eclipsecs.core.projectconfig.ProjectConfigurationWorkingCopy;
-import net.sf.eclipsecs.core.util.CheckstylePluginException;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
@@ -50,6 +44,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
 import com.basistech.m2e.code.quality.shared.ResourceResolver;
+
+import net.sf.eclipsecs.core.config.ICheckConfiguration;
+import net.sf.eclipsecs.core.projectconfig.FileMatchPattern;
+import net.sf.eclipsecs.core.projectconfig.FileSet;
+import net.sf.eclipsecs.core.projectconfig.ProjectConfigurationWorkingCopy;
+import net.sf.eclipsecs.core.util.CheckstylePluginException;
 
 /**
  * Utility class to get checkstyle plugin configuration.
