@@ -44,6 +44,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
 import com.basistech.m2e.code.quality.shared.ResourceResolver;
+import com.google.common.base.Preconditions;
 
 import net.sf.eclipsecs.core.config.ICheckConfiguration;
 import net.sf.eclipsecs.core.projectconfig.FileMatchPattern;
@@ -548,12 +549,8 @@ public class MavenPluginConfigurationTranslator {
 	 * @return the converted checkstyle eclipse pattern.
 	 */
 	private String convertAntStylePatternToCheckstylePattern(String pattern) {
-		if (pattern == null) {
-			throw new NullPointerException("pattern cannot be null");
-		}
-		if (pattern.length() == 0) {
-			throw new IllegalArgumentException("pattern cannot empty");
-		}
+		Preconditions.checkNotNull(pattern, "pattern cannot be null");
+		Preconditions.checkArgument(pattern.isEmpty(), "pattern cannot empty");
 
 		pattern =
 		        pattern.replace(File.separatorChar == '/' ? '\\' : '/',
