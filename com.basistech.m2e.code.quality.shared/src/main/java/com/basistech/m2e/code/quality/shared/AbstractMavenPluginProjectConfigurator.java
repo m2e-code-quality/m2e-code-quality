@@ -34,6 +34,8 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
@@ -46,6 +48,9 @@ import com.google.common.base.Preconditions;
  */
 public abstract class AbstractMavenPluginProjectConfigurator
         extends AbstractProjectConfigurator {
+
+	private static final Logger LOG = LoggerFactory
+	        .getLogger(AbstractMavenPluginProjectConfigurator.class);
 
 	@Override
 	public <T> T getParameterValue(final MavenProject project,
@@ -81,6 +86,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 	@Override
 	public void configure(final ProjectConfigurationRequest request,
 	        final IProgressMonitor monitor) throws CoreException {
+		LOG.error("configure {} {}", request, monitor);
 
 		final MavenProject mavenProject = request.getMavenProject();
 		if (mavenProject == null) {
@@ -106,6 +112,25 @@ public abstract class AbstractMavenPluginProjectConfigurator
 	public void mavenProjectChanged(
 	        final MavenProjectChangedEvent mavenProjectChangedEvent,
 	        final IProgressMonitor monitor) throws CoreException {
+		if (LOG.isDebugEnabled()) {
+			switch (mavenProjectChangedEvent.getKind()) {
+				case MavenProjectChangedEvent.KIND_ADDED:
+					LOG.debug("mavenProjectChanged KIND_ADDED");
+					break;
+				case MavenProjectChangedEvent.KIND_CHANGED:
+					LOG.debug("mavenProjectChanged KIND_CHANGED");
+					break;
+				case MavenProjectChangedEvent.KIND_REMOVED:
+					LOG.debug("mavenProjectChanged KIND_REMOVED");
+					break;
+				default:
+					LOG.debug("mavenProjectChanged {}",
+					        mavenProjectChangedEvent.getKind());
+			}
+		}
+
+
+
 		final IMavenProjectFacade mavenProjectFacade =
 		        mavenProjectChangedEvent.getMavenProject();
 		final MavenPluginWrapper pluginWrapper =
