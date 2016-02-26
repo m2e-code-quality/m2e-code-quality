@@ -214,9 +214,9 @@ public class MavenPluginConfigurationTranslator {
 		try {
 			prefs.setEffort(effort);
 		} catch (final IllegalArgumentException ex) {
-			LOG.error(String.format(
-			        "[%s]: could not set <effort>, reason [%s], setting it to default [%s]",
-			        LOG_PREFIX, effort, UserPreferences.EFFORT_DEFAULT));
+			LOG.error(
+			        "{}: could not set <effort>, reason {}, setting it to default {}",
+			        LOG_PREFIX, effort, UserPreferences.EFFORT_DEFAULT, ex);
 		}
 	}
 
@@ -230,9 +230,9 @@ public class MavenPluginConfigurationTranslator {
 		try {
 			prefs.getFilterSettings().setMinRank(minRank);
 		} catch (final IllegalArgumentException ex) {
-			LOG.error(String.format(
-			        "[%s]: could not set <rank>, reason [%s], setting it to default [%s]",
-			        LOG_PREFIX, minRank, 15));
+			LOG.error(
+			        "{}: could not set <rank>, reason {}, setting it to default {}",
+			        LOG_PREFIX, minRank, 15, ex);
 		}
 	}
 
@@ -246,9 +246,9 @@ public class MavenPluginConfigurationTranslator {
 		try {
 			prefs.getFilterSettings().setMinPriority(priority);
 		} catch (final Exception ex) {
-			LOG.error(String.format(
-			        "[%s]: could not set <threshold>, reason [%s], leaving it alone",
-			        LOG_PREFIX, priority));
+			LOG.error(
+			        "{}: could not set <threshold>, reason {}, leaving it alone",
+			        LOG_PREFIX, priority, ex);
 		}
 	}
 
@@ -285,9 +285,9 @@ public class MavenPluginConfigurationTranslator {
 		try {
 			prefs.getFilterSettings().setMinPriority(threshold);
 		} catch (final Exception ex) {
-			LOG.error(String.format(
-			        "[%s]: could not set <threshold>, reason [%s], leaving it alone",
-			        LOG_PREFIX, threshold));
+			LOG.error(
+			        "{}: could not set <threshold>, reason {}, leaving it alone",
+			        LOG_PREFIX, threshold, ex);
 		}
 	}
 
