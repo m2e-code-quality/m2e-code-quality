@@ -127,11 +127,9 @@ public class EclipseCheckstyleProjectConfigurator
 	@Override
 	protected void unconfigureEclipsePlugin(final IProject project,
 	        final IProgressMonitor monitor) throws CoreException {
-
 		final EclipseCheckstyleConfigManager csPluginNature =
 		        EclipseCheckstyleConfigManager.newInstance(project);
 		csPluginNature.deconfigure(monitor);
-
 	}
 
 	private void buildCheckstyleConfiguration(
