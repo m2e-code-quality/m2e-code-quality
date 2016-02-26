@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.maven.execution.MavenSession;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -195,20 +196,18 @@ public class EclipseCheckstyleProjectConfigurator extends
 		CheckConfigurationWorkingCopy workingCopy = null;
 
 		// Try to retrieve an existing checkstyle configuration to be updated
-		CheckConfigurationWorkingCopy[] workingCopies =
-		        workingSet.getWorkingCopies();
-		if (workingCopies != null) {
-			for (CheckConfigurationWorkingCopy copy : workingCopies) {
-				if (configName.equals(copy.getName())) {
-					if (this.remoteConfigurationType.equals(copy.getType())) {
-						workingCopy = copy;
-						break;
-					}
-					throw new CheckstylePluginException(String.format(
-					        "A local Checkstyle configuration allready exists with name "
-					                + " [%s] with incompatible type [%s]",
-					        configName, copy.getType()));
+		CheckConfigurationWorkingCopy[] workingCopies = workingSet.getWorkingCopies();
+		workingCopies = (CheckConfigurationWorkingCopy[]) ArrayUtils.nullToEmpty(workingCopies);
+		for (CheckConfigurationWorkingCopy copy : workingCopies) {
+			if (configName.equals(copy.getName())) {
+				if (this.remoteConfigurationType.equals(copy.getType())) {
+					workingCopy = copy;
+					break;
 				}
+				throw new CheckstylePluginException(String.format(
+				        "A local Checkstyle configuration already exists with name "
+				                + " [%s] with incompatible type [%s]",
+				        configName, copy.getType()));
 			}
 		}
 		// Nothing exist create a brand new one.
