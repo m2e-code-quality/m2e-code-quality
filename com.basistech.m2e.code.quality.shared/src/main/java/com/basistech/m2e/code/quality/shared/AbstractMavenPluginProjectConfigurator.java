@@ -164,7 +164,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 	 *         configurations. If more than one, this will process in order
 	 *         looking for an execution.
 	 */
-	protected abstract String[] getMavenPluginGoal();
+	protected abstract String[] getMavenPluginGoals();
 
 	/**
 	 * Unconfigure the associated Eclipse plugin.
@@ -227,7 +227,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 	private MavenPluginWrapper getMavenPlugin(final IProgressMonitor monitor,
 	        final IMavenProjectFacade projectFacade) throws CoreException {
 		return MavenPluginWrapper.newInstance(monitor, getMavenPluginGroupId(),
-		        getMavenPluginArtifactId(), getMavenPluginGoal(),
+		        getMavenPluginArtifactId(), getMavenPluginGoals(),
 		        projectFacade);
 	}
 

@@ -87,7 +87,7 @@ public class EclipsePmdProjectConfigurator
 	}
 
 	@Override
-	protected String[] getMavenPluginGoal() {
+	protected String[] getMavenPluginGoals() {
 		return new String[] {"check"};
 	}
 

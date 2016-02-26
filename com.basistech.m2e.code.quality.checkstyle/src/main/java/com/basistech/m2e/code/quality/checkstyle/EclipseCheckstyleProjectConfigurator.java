@@ -72,7 +72,7 @@ public class EclipseCheckstyleProjectConfigurator
 	}
 
 	@Override
-	protected String[] getMavenPluginGoal() {
+	protected String[] getMavenPluginGoals() {
 		return new String[] {"checkstyle", "check"};
 	}
 
