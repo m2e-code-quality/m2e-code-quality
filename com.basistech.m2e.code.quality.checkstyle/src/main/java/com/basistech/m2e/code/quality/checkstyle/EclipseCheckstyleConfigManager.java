@@ -57,7 +57,6 @@ public class EclipseCheckstyleConfigManager {
 		this.deconfigureNature(monitor);
 		// remove all eclipse checkstyle files.
 		this.deleteEclipseFiles(monitor);
-
 	}
 
 	private void configureNature(final IProgressMonitor monitor)
