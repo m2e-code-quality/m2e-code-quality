@@ -548,28 +548,28 @@ public class MavenPluginConfigurationTranslator {
 	 *            the maven-checkstyle-plugin pattern.
 	 * @return the converted checkstyle eclipse pattern.
 	 */
-	private String convertAntStylePatternToCheckstylePattern(String pattern) {
+	private String convertAntStylePatternToCheckstylePattern(final String pattern) {
 		Preconditions.checkNotNull(pattern, "pattern cannot be null");
 		Preconditions.checkArgument(pattern.isEmpty(), "pattern cannot empty");
 
-		pattern =
+		String sanitizedPattern =
 		        pattern.replace(File.separatorChar == '/' ? '\\' : '/',
 		                File.separatorChar);
 		String dupeSeperatorChar = File.separator + File.separator;
-		while (pattern.contains(dupeSeperatorChar)) {
-			pattern = pattern.replace(dupeSeperatorChar, File.separator);
+		while (sanitizedPattern.contains(dupeSeperatorChar)) {
+			sanitizedPattern = sanitizedPattern.replace(dupeSeperatorChar, File.separator);
 		}
 
 		final StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < pattern.length(); ++i) {
-			final char curChar = pattern.charAt(i);
+		for (int i = 0; i < sanitizedPattern.length(); ++i) {
+			final char curChar = sanitizedPattern.charAt(i);
 			char nextChar = '\0';
 			char nextNextChar = '\0';
-			if (i + 1 < pattern.length()) {
-				nextChar = pattern.charAt(i + 1);
+			if (i + 1 < sanitizedPattern.length()) {
+				nextChar = sanitizedPattern.charAt(i + 1);
 			}
-			if (i + 2 < pattern.length()) {
-				nextNextChar = pattern.charAt(i + 2);
+			if (i + 2 < sanitizedPattern.length()) {
+				nextNextChar = sanitizedPattern.charAt(i + 2);
 			}
 
 			if (curChar == '*' && nextChar == '*'
