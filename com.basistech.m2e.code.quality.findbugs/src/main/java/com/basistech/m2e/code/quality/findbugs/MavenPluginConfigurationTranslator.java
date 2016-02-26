@@ -351,7 +351,7 @@ public class MavenPluginConfigurationTranslator {
 			throw new ConfigurationException(String.format(
 			        "[%s]: could not copy resource [%s] to [%s], reason [%s]",
 			        LOG_PREFIX, resc, newLocationFile,
-			        ex.getLocalizedMessage()));
+			        ex.getLocalizedMessage()), ex);
 		}
 	}
 
