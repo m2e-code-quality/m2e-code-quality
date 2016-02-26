@@ -86,7 +86,7 @@ public class MavenPluginConfigurationTranslator {
 	        final AbstractMavenPluginProjectConfigurator configurator,
 	        final MojoExecution execution, final IProject project,
 	        final MavenProject mavenProject, final IProgressMonitor monitor,
-	        ResourceResolver resourceResolver) throws CoreException {
+	        final ResourceResolver resourceResolver) throws CoreException {
 		this.project = project;
 		this.mavenProject = mavenProject;
 		this.monitor = monitor;
@@ -173,17 +173,17 @@ public class MavenPluginConfigurationTranslator {
 			LOG.debug("bugCatagories is null");
 			return;
 		}
-		List<String> addBugCatagoriesList =
+		final List<String> addBugCatagoriesList =
 		        Arrays.asList(StringUtils.split(bugCatagories, ","));
-		List<String> availableBugCategories = new LinkedList<>(
+		final List<String> availableBugCategories = new LinkedList<>(
 		        DetectorFactoryCollection.instance().getBugCategories());
 		if (!addBugCatagoriesList.isEmpty()) {
-			for (String removeBugCategory : availableBugCategories) {
+			for (final String removeBugCategory : availableBugCategories) {
 				pfs.removeCategory(removeBugCategory);
 			}
 		}
 		final Set<String> removeBugCategoriesSet = new HashSet<>();
-		for (String bc : addBugCatagoriesList) {
+		for (final String bc : addBugCatagoriesList) {
 			final String bcUpper = bc.toUpperCase();
 			if (availableBugCategories.contains(bcUpper)) {
 				pfs.addCategory(bcUpper);
@@ -221,8 +221,8 @@ public class MavenPluginConfigurationTranslator {
 	}
 
 	public void setMinRank(final UserPreferences prefs) throws CoreException {
-		Integer minRank = this.configurator.getParameterValue(mavenProject,
-		        MAX_RANK, Integer.class, execution, monitor);
+		final Integer minRank = this.configurator.getParameterValue(
+		        mavenProject, MAX_RANK, Integer.class, execution, monitor);
 		if (minRank == null) {
 			LOG.debug("max rank is null");
 			return;
@@ -260,11 +260,11 @@ public class MavenPluginConfigurationTranslator {
 			LOG.debug("omitVisitors is null");
 			return;
 		}
-		List<String> detectorsList =
+		final List<String> detectorsList =
 		        Arrays.asList(StringUtils.split(omitVisitors, ","));
 		final DetectorFactoryCollection dfc =
 		        DetectorFactoryCollection.instance();
-		for (String d : detectorsList) {
+		for (final String d : detectorsList) {
 			final DetectorFactory df = dfc.getFactory(d);
 			if (df == null) {
 				LOG.error(String.format("[%s]: IGNORING unknown detector [%s]",
@@ -297,12 +297,12 @@ public class MavenPluginConfigurationTranslator {
 		if (visitors == null) {
 			return;
 		}
-		List<String> detectorsList =
+		final List<String> detectorsList =
 		        Arrays.asList(StringUtils.split(visitors, ","));
 		prefs.enableAllDetectors(false);
 		final DetectorFactoryCollection dfc =
 		        DetectorFactoryCollection.instance();
-		for (String d : detectorsList) {
+		for (final String d : detectorsList) {
 			final DetectorFactory df = dfc.getFactory(d);
 			if (df == null) {
 				LOG.error(String.format("[%s]: IGNORING unknown detector [%s]",
@@ -347,7 +347,7 @@ public class MavenPluginConfigurationTranslator {
 		try {
 			FileUtils.copyStreamToFile(new URLInputStreamFacade(urlResc),
 			        newLocationFile);
-		} catch (IOException ex) {
+		} catch (final IOException ex) {
 			throw new ConfigurationException(String.format(
 			        "[%s]: could not copy resource [%s] to [%s], reason [%s]",
 			        LOG_PREFIX, resc, newLocationFile,
@@ -356,10 +356,10 @@ public class MavenPluginConfigurationTranslator {
 	}
 
 	public static MavenPluginConfigurationTranslator newInstance(
-	        AbstractMavenPluginProjectConfigurator configurator,
+	        final AbstractMavenPluginProjectConfigurator configurator,
 	        final MavenPluginWrapper mavenPlugin, final IProject project,
 	        final MavenProject mavenProject, final IProgressMonitor monitor,
-	        MavenSession session) throws CoreException {
+	        final MavenSession session) throws CoreException {
 
 		final List<MojoExecution> mojoExecutions =
 		        mavenPlugin.getMojoExecutions();
@@ -373,8 +373,8 @@ public class MavenPluginConfigurationTranslator {
 			                "Wrong number of executions. Expected 1. Found "
 			                        + mojoExecutions.size()));
 		}
-		MojoExecution execution = mojoExecutions.get(0);
-		ResourceResolver resourceResolver = configurator
+		final MojoExecution execution = mojoExecutions.get(0);
+		final ResourceResolver resourceResolver = configurator
 		        .getResourceResolver(execution, session, project.getLocation());
 		final MavenPluginConfigurationTranslator m2csConverter =
 		        new MavenPluginConfigurationTranslator(configurator, execution,

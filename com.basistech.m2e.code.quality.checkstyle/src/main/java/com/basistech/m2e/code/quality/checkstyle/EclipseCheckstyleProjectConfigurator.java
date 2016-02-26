@@ -82,8 +82,8 @@ public class EclipseCheckstyleProjectConfigurator
 	protected void handleProjectConfigurationChange(
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final IProgressMonitor monitor,
-	        final MavenPluginWrapper mavenPluginWrapper, MavenSession session)
-	                throws CoreException {
+	        final MavenPluginWrapper mavenPluginWrapper,
+	        final MavenSession session) throws CoreException {
 
 		final List<MavenPluginConfigurationTranslator> mavenCheckstyleConfigs =
 		        MavenPluginConfigurationTranslator.newInstance(this,
@@ -121,7 +121,7 @@ public class EclipseCheckstyleProjectConfigurator
 				pcWorkingCopy.store();
 			}
 
-		} catch (CheckstylePluginException ex) {
+		} catch (final CheckstylePluginException ex) {
 			LOG.error("CheckstylePluginException", ex);
 		}
 	}
@@ -137,7 +137,7 @@ public class EclipseCheckstyleProjectConfigurator
 	}
 
 	private void buildCheckstyleConfiguration(
-	        ProjectConfigurationWorkingCopy pcWorkingCopy,
+	        final ProjectConfigurationWorkingCopy pcWorkingCopy,
 	        final MavenPluginConfigurationTranslator cfgTranslator)
 	                throws CheckstylePluginException, CoreException {
 		// get the ruleset from configLocation
@@ -153,12 +153,12 @@ public class EclipseCheckstyleProjectConfigurator
 		final Properties props = cfgTranslator.getConfiguredProperties();
 		cfgTranslator.updatePropertiesWithPropertyExpansion(props);
 		// add the header file location to the props.
-		String headerFile = cfgTranslator.getHeaderFile();
+		final String headerFile = cfgTranslator.getHeaderFile();
 		if (headerFile != null) {
 			props.setProperty("checkstyle.header.file", headerFile);
 		}
 		// add the suppressions file location to the props.
-		String suppressionsFile = cfgTranslator.getSuppressionsFile();
+		final String suppressionsFile = cfgTranslator.getSuppressionsFile();
 		if (suppressionsFile != null) {
 			props.setProperty(cfgTranslator.getSuppressionsFileExpression(),
 			        suppressionsFile);
@@ -169,7 +169,7 @@ public class EclipseCheckstyleProjectConfigurator
 		final List<ResolvableProperty> csProps =
 		        checkCfg.getResolvableProperties();
 		csProps.clear();
-		for (Map.Entry<Object, Object> entry : props.entrySet()) {
+		for (final Map.Entry<Object, Object> entry : props.entrySet()) {
 			csProps.add(new ResolvableProperty((String) entry.getKey(),
 			        (String) entry.getValue()));
 		}
@@ -182,7 +182,7 @@ public class EclipseCheckstyleProjectConfigurator
 	 */
 	private ICheckConfiguration createOrGetCheckstyleConfig(
 	        final ProjectConfigurationWorkingCopy pcWorkingCopy,
-	        final URL ruleset, String executionId)
+	        final URL ruleset, final String executionId)
 	                throws CheckstylePluginException {
 		final String configName =
 		        ECLIPSE_CS_PREFS_CONFIG_NAME + " " + executionId;
@@ -196,7 +196,7 @@ public class EclipseCheckstyleProjectConfigurator
 		        workingSet.getWorkingCopies();
 		workingCopies = (CheckConfigurationWorkingCopy[]) ArrayUtils
 		        .nullToEmpty(workingCopies);
-		for (CheckConfigurationWorkingCopy copy : workingCopies) {
+		for (final CheckConfigurationWorkingCopy copy : workingCopies) {
 			if (configName.equals(copy.getName())) {
 				if (this.remoteConfigurationType.equals(copy.getType())) {
 					workingCopy = copy;

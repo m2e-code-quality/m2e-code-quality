@@ -48,21 +48,22 @@ public abstract class AbstractMavenPluginProjectConfigurator
         extends AbstractProjectConfigurator {
 
 	@Override
-	public <T> T getParameterValue(MavenProject project, String parameter,
-	        Class<T> asType, MojoExecution mojoExecution,
-	        IProgressMonitor monitor) throws CoreException {
+	public <T> T getParameterValue(final MavenProject project,
+	        final String parameter, final Class<T> asType,
+	        final MojoExecution mojoExecution, final IProgressMonitor monitor)
+	                throws CoreException {
 		return super.getParameterValue(project, parameter, asType,
 		        mojoExecution, monitor);
 	}
 
-	protected MojoExecution findForkedExecution(MojoExecution primary,
-	        String groupId, String artifactId, String goal) {
-		Map<String, List<MojoExecution>> forkedExecutions =
+	protected MojoExecution findForkedExecution(final MojoExecution primary,
+	        final String groupId, final String artifactId, final String goal) {
+		final Map<String, List<MojoExecution>> forkedExecutions =
 		        primary.getForkedExecutions();
 		MojoExecution goalExecution = null;
-		for (List<MojoExecution> possibleExecutionList : forkedExecutions
+		for (final List<MojoExecution> possibleExecutionList : forkedExecutions
 		        .values()) {
-			for (MojoExecution possibleExecution : possibleExecutionList) {
+			for (final MojoExecution possibleExecution : possibleExecutionList) {
 				if (groupId.equals(possibleExecution.getGroupId())
 				        && artifactId.equals(possibleExecution.getArtifactId())
 				        && goal.equals(possibleExecution.getGoal())) {
@@ -95,7 +96,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 		}
 
 		@SuppressWarnings("deprecation")
-		MavenSession mavenSession = request.getMavenSession();
+		final MavenSession mavenSession = request.getMavenSession();
 
 		this.handleProjectConfigurationChange(request.getMavenProjectFacade(),
 		        project, monitor, pluginWrapper, mavenSession);
@@ -118,10 +119,10 @@ public abstract class AbstractMavenPluginProjectConfigurator
 		}
 		if (pluginWrapper.isPluginConfigured()) {
 			@SuppressWarnings("deprecation")
-			MavenExecutionRequest request =
+			final MavenExecutionRequest request =
 			        maven.createExecutionRequest(monitor);
 			@SuppressWarnings("deprecation")
-			MavenSession session =
+			final MavenSession session =
 			        maven.createSession(request, mavenProjectChangedEvent
 			                .getMavenProject().getMavenProject(monitor));
 			this.handleProjectConfigurationChange(mavenProjectFacade, project,
@@ -192,7 +193,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 	 *         deleted.
 	 * @throws CoreException
 	 */
-	private boolean checkUnconfigurationRequired(IProgressMonitor monitor,
+	private boolean checkUnconfigurationRequired(final IProgressMonitor monitor,
 	        final IMavenProjectFacade curMavenProjectFacade,
 	        final IMavenProjectFacade oldMavenProjectFacade)
 	                throws CoreException {
@@ -212,19 +213,20 @@ public abstract class AbstractMavenPluginProjectConfigurator
 		return false;
 	}
 
-	public ResourceResolver getResourceResolver(MojoExecution mojoExecution,
-	        MavenSession session, IPath projectLocation) throws CoreException {
+	public ResourceResolver getResourceResolver(
+	        final MojoExecution mojoExecution, final MavenSession session,
+	        final IPath projectLocation) throws CoreException {
 		// call for side effect of ensuring that the realm is set in the
 		// descriptor.
-		IMaven mvn = MavenPlugin.getMaven();
-		Mojo configuredMojo =
+		final IMaven mvn = MavenPlugin.getMaven();
+		final Mojo configuredMojo =
 		        mvn.getConfiguredMojo(session, mojoExecution, Mojo.class);
 		mvn.releaseMojo(configuredMojo, mojoExecution);
 		return new ResourceResolver(mojoExecution.getMojoDescriptor()
 		        .getPluginDescriptor().getClassRealm(), projectLocation);
 	}
 
-	private MavenPluginWrapper getMavenPlugin(IProgressMonitor monitor,
+	private MavenPluginWrapper getMavenPlugin(final IProgressMonitor monitor,
 	        final IMavenProjectFacade projectFacade) throws CoreException {
 		return MavenPluginWrapper.newInstance(monitor, getMavenPluginGroupId(),
 		        getMavenPluginArtifactId(), getMavenPluginGoal(),

@@ -69,10 +69,10 @@ public class EclipseFindbugsProjectConfigurator
 	protected void handleProjectConfigurationChange(
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final IProgressMonitor monitor,
-	        final MavenPluginWrapper mavenPluginWrapper, MavenSession session)
-	                throws CoreException {
+	        final MavenPluginWrapper mavenPluginWrapper,
+	        final MavenSession session) throws CoreException {
 		LOG.debug("entering handleProjectConfigurationChange");
-		IJavaProject javaProject = JavaCore.create(project);
+		final IJavaProject javaProject = JavaCore.create(project);
 		if (javaProject == null || !javaProject.exists()
 		        || !javaProject.getProject().isOpen()) {
 			return;

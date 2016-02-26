@@ -17,7 +17,7 @@ public class EclipseCheckstylereferencePage extends FieldEditorPreferencePage
 	}
 
 	@Override
-	public void init(IWorkbench workbench) {
+	public void init(final IWorkbench workbench) {
 	}
 
 	/*

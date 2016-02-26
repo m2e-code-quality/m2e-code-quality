@@ -95,11 +95,11 @@ public class EclipsePmdProjectConfigurator
 	protected void handleProjectConfigurationChange(
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final IProgressMonitor monitor,
-	        final MavenPluginWrapper mavenPluginWrapper, MavenSession session)
-	                throws CoreException {
+	        final MavenPluginWrapper mavenPluginWrapper,
+	        final MavenSession session) throws CoreException {
 
 		final MojoExecution execution = findMojoExecution(mavenPluginWrapper);
-		MojoExecution pmdGoalExecution = findForkedExecution(execution,
+		final MojoExecution pmdGoalExecution = findForkedExecution(execution,
 		        "org.apache.maven.plugins", "maven-pmd-plugin", "pmd");
 		final MavenPluginConfigurationTranslator pluginCfgTranslator =
 		        MavenPluginConfigurationTranslator.newInstance(this,
@@ -138,7 +138,7 @@ public class EclipsePmdProjectConfigurator
 		if (project.hasNature(JAVA_NATURE)) {
 			try {
 				PMDNature.addPMDNature(project, monitor);
-			} catch (CoreException pmdNatureProblem) {
+			} catch (final CoreException pmdNatureProblem) {
 				LOG.error("PMD plugin threw exception adding PMD nature",
 				        pmdNatureProblem);
 				throw pmdNatureProblem;
@@ -149,15 +149,15 @@ public class EclipsePmdProjectConfigurator
 	@Override
 	protected void unconfigureEclipsePlugin(final IProject project,
 	        final IProgressMonitor monitor) throws CoreException {
-		IProjectPropertiesManager mgr =
+		final IProjectPropertiesManager mgr =
 		        PMDPlugin.getDefault().getPropertiesManager();
 		try {
-			IProjectProperties projectProperties =
+			final IProjectProperties projectProperties =
 			        mgr.loadProjectProperties(project);
 			projectProperties.setPmdEnabled(false);
 			projectProperties.setRuleSetStoredInProject(false);
 			mgr.storeProjectProperties(projectProperties);
-		} catch (PropertiesException ex) {
+		} catch (final PropertiesException ex) {
 		}
 
 		PMDNature.removePMDNature(project, monitor);
@@ -180,12 +180,12 @@ public class EclipsePmdProjectConfigurator
 	private void createOrUpdateEclipsePmdConfiguration(
 	        final MavenPluginWrapper pluginWrapper, final IProject project,
 	        final MavenPluginConfigurationTranslator pluginCfgTranslator,
-	        final IProgressMonitor monitor, MavenSession session)
+	        final IProgressMonitor monitor, final MavenSession session)
 	                throws CoreException {
 
 		final MojoExecution execution = findMojoExecution(pluginWrapper);
-		ResourceResolver resourceResolver = this.getResourceResolver(execution,
-		        session, project.getLocation());
+		final ResourceResolver resourceResolver = this
+		        .getResourceResolver(execution, session, project.getLocation());
 		try {
 			final RuleSet ruleset = this.createPmdRuleSet(pluginCfgTranslator,
 			        resourceResolver);
@@ -206,11 +206,11 @@ public class EclipsePmdProjectConfigurator
 				projectProperties.setRuleSetFile(rulesetFile.getAbsolutePath());
 				projectProperties.setRuleSetStoredInProject(true);
 				mgr.storeProjectProperties(projectProperties);
-			} catch (PropertiesException ex) {
+			} catch (final PropertiesException ex) {
 				// remove the files
 				this.unconfigureEclipsePlugin(project, monitor);
 			}
-		} catch (PMDException ex) {
+		} catch (final PMDException ex) {
 			// nothing to do, skip configuration
 		}
 	}
@@ -227,7 +227,8 @@ public class EclipsePmdProjectConfigurator
 		        pluginCfgTranslator.getRulesets();
 
 		for (final String loc : rulesetStringLocations) {
-			RuleSetReferenceId ruleSetReferenceId = new RuleSetReferenceId(loc);
+			final RuleSetReferenceId ruleSetReferenceId =
+			        new RuleSetReferenceId(loc);
 			final URL resolvedLocation = resourceResolver
 			        .resolveLocation(ruleSetReferenceId.getRuleSetFileName());
 
@@ -239,15 +240,16 @@ public class EclipsePmdProjectConfigurator
 
 			RuleSet ruleSetAtLocations;
 			try {
-				RuleSetReferenceId resolvedRuleSetReference =
+				final RuleSetReferenceId resolvedRuleSetReference =
 				        new RuleSetReferenceId(loc) {
 
 					        @Override
-					        public InputStream getInputStream(ClassLoader arg0)
-				                    throws RuleSetNotFoundException {
+					        public InputStream getInputStream(
+				                    final ClassLoader arg0)
+				                            throws RuleSetNotFoundException {
 						        try {
 							        return resolvedLocation.openStream();
-						        } catch (IOException e) {
+						        } catch (final IOException e) {
 							        // ignore them.
 						        }
 						        LOG.warn("No ruleset found for {}", loc);
@@ -257,7 +259,7 @@ public class EclipsePmdProjectConfigurator
 				ruleSetAtLocations =
 				        this.factory.createRuleSet(resolvedRuleSetReference);
 				ruleSet.addRuleSet(ruleSetAtLocations);
-			} catch (RuleSetNotFoundException e) {
+			} catch (final RuleSetNotFoundException e) {
 				LOG.error("Couldn't find ruleset {}", loc, e);
 			}
 		}
@@ -281,16 +283,17 @@ public class EclipsePmdProjectConfigurator
 	        final IProgressMonitor monitor) throws CoreException {
 		final PMDPlugin pmdPlugin = PMDPlugin.getDefault();
 
-		ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
+		final ByteArrayOutputStream byteArrayStream =
+		        new ByteArrayOutputStream();
 		try (BufferedOutputStream outputStream = new BufferedOutputStream(
 		        new FileOutputStream(rulesetFile.getLocation().toFile()));) {
 
 			pmdPlugin.getRuleSetWriter().write(byteArrayStream, ruleSet);
 
 			// ..and now we have two problems
-			String fixedXml = byteArrayStream.toString("UTF-8").replaceAll(
-			        "\\<exclude\\>(.*)\\</exclude\\>",
-			        "<exclude name=\"$1\"/>");
+			final String fixedXml = byteArrayStream.toString("UTF-8")
+			        .replaceAll("\\<exclude\\>(.*)\\</exclude\\>",
+			                "<exclude name=\"$1\"/>");
 
 			outputStream.write(fixedXml.getBytes(Charset.forName("UTF-8")));
 
@@ -323,22 +326,22 @@ public class EclipsePmdProjectConfigurator
 			final List<String> excludePatterns =
 			        pluginCfgTranslator.getExcludes();
 			// 2.) As per spec. add excludes pattern to all *includeRoots*.
-			for (String ir : includeRoots) {
-				for (String ep : excludePatterns) {
-					String fullPattern = ".*" + ir + ep;
+			for (final String ir : includeRoots) {
+				for (final String ep : excludePatterns) {
+					final String fullPattern = ".*" + ir + ep;
 					ruleset.addExcludePattern(
 					        StringUtils.replace(fullPattern, ".*.*", ".*"));
 				}
 			}
 		}
 		// 1.) Do the excludeRoots first
-		for (String er : excludeRootsSet) {
+		for (final String er : excludeRootsSet) {
 			ruleset.addExcludePattern(".*" + er);
 		}
 		// 3.) Now all includes
-		for (String ir : includeRoots) {
-			for (String ip : includePatterns) {
-				String fullPattern = ".*" + ir + ip;
+		for (final String ir : includeRoots) {
+			for (final String ip : includePatterns) {
+				final String fullPattern = ".*" + ir + ip;
 				ruleset.addIncludePattern(
 				        StringUtils.replace(fullPattern, ".*.*", ".*"));
 			}

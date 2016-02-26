@@ -36,7 +36,8 @@ public final class ResourceResolver {
 	private final ClassRealm pluginRealm;
 	private final IPath projectLocation;
 
-	public ResourceResolver(ClassRealm pluginRealm, IPath projectLocation) {
+	public ResourceResolver(final ClassRealm pluginRealm,
+	        final IPath projectLocation) {
 		this.pluginRealm = pluginRealm;
 		this.projectLocation = projectLocation;
 	}
@@ -61,7 +62,7 @@ public final class ResourceResolver {
 			if (urlLocation.startsWith("/")) {
 				urlLocation = urlLocation.substring(1);
 			}
-			URL url = pluginRealm.getResource(urlLocation);
+			final URL url = pluginRealm.getResource(urlLocation);
 			if (url != null) {
 				return url;
 			}
@@ -69,29 +70,29 @@ public final class ResourceResolver {
 
 		// 2. Try it as a remote resource.
 		try {
-			URL url = new URL(location);
+			final URL url = new URL(location);
 			// check if valid.
 			url.openStream();
 			return url;
-		} catch (IOException ex) {
+		} catch (final IOException ex) {
 			// ignored, try next
 		}
 
 		// 3. Try to see if it exists as a filesystem resource.
-		File file = new File(location);
+		final File file = new File(location);
 		if (file.exists()) {
 			try {
 				return file.toURI().toURL();
-			} catch (MalformedURLException ex) {
+			} catch (final MalformedURLException ex) {
 				// ignored, try next
 			}
 		}
 
-		File projectFile = projectLocation.append(location).toFile();
+		final File projectFile = projectLocation.append(location).toFile();
 		if (projectFile.exists()) {
 			try {
 				return projectFile.toURI().toURL();
-			} catch (MalformedURLException ex) {
+			} catch (final MalformedURLException ex) {
 				// ignored, try next
 			}
 		}
