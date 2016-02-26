@@ -65,8 +65,8 @@ public class EclipseCheckstyleConfigManager {
 		final IProject project = this.csNature.getProject();
 		// We have to explicitly add the nature.
 		final IProjectDescription desc = project.getDescription();
-		final String natures[] = desc.getNatureIds();
-		final String newNatures[] = new String[natures.length + 1];
+		final String[] natures = desc.getNatureIds();
+		final String[] newNatures = new String[natures.length + 1];
 		System.arraycopy(natures, 0, newNatures, 0, natures.length);
 		newNatures[natures.length] = CheckstyleNature.NATURE_ID;
 		desc.setNatureIds(newNatures);
@@ -78,7 +78,7 @@ public class EclipseCheckstyleConfigManager {
 		// remove the nature itself, by resetting the nature list.
 		final IProject project = this.csNature.getProject();
 		final IProjectDescription desc = project.getDescription();
-		final String natures[] = desc.getNatureIds();
+		final String[] natures = desc.getNatureIds();
 		final List<String> newNaturesList = new ArrayList<>();
 		for (int i = 0; i < natures.length; i++) {
 			if (!CheckstyleNature.NATURE_ID.equals(natures[i])) {
@@ -86,7 +86,7 @@ public class EclipseCheckstyleConfigManager {
 			}
 		}
 
-		final String newNatures[] =
+		final String[] newNatures =
 		        newNaturesList.toArray(new String[newNaturesList.size()]);
 		desc.setNatureIds(newNatures);
 		project.setDescription(desc, monitor);
