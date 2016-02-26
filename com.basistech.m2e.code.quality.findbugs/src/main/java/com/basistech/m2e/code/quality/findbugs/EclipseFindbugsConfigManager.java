@@ -116,8 +116,6 @@ public class EclipseFindbugsConfigManager {
 		Preconditions.checkNotNull(project);
 		final FindBugsNature fbNature = new FindBugsNature();
 		fbNature.setProject(project);
-		final EclipseFindbugsConfigManager fbNatureExtended =
-		        new EclipseFindbugsConfigManager(fbNature);
-		return fbNatureExtended;
+		return new EclipseFindbugsConfigManager(fbNature);
 	}
 }
