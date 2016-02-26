@@ -145,9 +145,7 @@ public class EclipseCheckstyleProjectConfigurator extends
 		// update filesets (include and exclude patterns)
 		cfgTranslator.updateCheckConfigWithIncludeExcludePatterns(
 		        pcWorkingCopy, checkCfg);
-		/**
-		 * 2. Load all properties
-		 */
+		// 2. Load all properties
 		// get Properties from propertiesLocation
 		final Properties props = cfgTranslator.getConfiguredProperties();
 		cfgTranslator.updatePropertiesWithPropertyExpansion(props);
