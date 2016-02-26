@@ -377,7 +377,7 @@ public class MavenPluginConfigurationTranslator {
 		for (final String folder : sourceFolders) {
 			final String folderRelativePath = this.basedirUri
 			        .relativize(new File(folder).toURI()).getPath();
-			if (includePatterns.size() != 0) {
+			if (!includePatterns.isEmpty()) {
 				patterns.addAll(
 				        this.normalizePatternsToCheckstyleFileMatchPattern(
 				                includePatterns, folderRelativePath, true));
