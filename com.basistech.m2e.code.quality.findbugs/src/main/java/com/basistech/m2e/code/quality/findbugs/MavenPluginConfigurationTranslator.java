@@ -179,7 +179,7 @@ public class MavenPluginConfigurationTranslator {
 		List<String> availableBugCategories =
 		        new LinkedList<>(DetectorFactoryCollection.instance()
 		                .getBugCategories());
-		if (addBugCatagoriesList.size() > 0) {
+		if (!addBugCatagoriesList.isEmpty()) {
 			for (String removeBugCategory : availableBugCategories) {
 				pfs.removeCategory(removeBugCategory);
 			}
