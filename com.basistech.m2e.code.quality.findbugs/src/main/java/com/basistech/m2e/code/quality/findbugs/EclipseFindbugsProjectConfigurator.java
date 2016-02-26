@@ -75,7 +75,7 @@ public class EclipseFindbugsProjectConfigurator extends
 		log.debug("entering handleProjectConfigurationChange");
 		IJavaProject javaProject = JavaCore.create(project);
 		if (javaProject == null || !javaProject.exists()
-				|| !javaProject.getProject().isOpen()) {
+		        || !javaProject.getProject().isOpen()) {
 			return;
 		}
 		final MavenPluginConfigurationTranslator mavenFindbugsConfig =
