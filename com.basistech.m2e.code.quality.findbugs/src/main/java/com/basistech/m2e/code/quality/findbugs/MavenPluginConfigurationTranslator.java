@@ -105,7 +105,8 @@ public class MavenPluginConfigurationTranslator {
 			LOG.debug("includeFilterFile is null");
 			return;
 		}
-		this.copyUrlResourceToProject(includeFilterFile, FB_INCLUDE_FILTER_FILE);
+		this.copyUrlResourceToProject(includeFilterFile,
+		        FB_INCLUDE_FILTER_FILE);
 		final Map<String, Boolean> curIncludeFilteredFiles =
 		        prefs.getIncludeFilterFiles();
 		final Map<String, Boolean> newIncludeFilteredFiles =
@@ -129,7 +130,8 @@ public class MavenPluginConfigurationTranslator {
 			LOG.debug("excludeFilterFile is null");
 			return;
 		}
-		this.copyUrlResourceToProject(excludeFilterFile, FB_EXCLUDE_FILTER_FILE);
+		this.copyUrlResourceToProject(excludeFilterFile,
+		        FB_EXCLUDE_FILTER_FILE);
 		final Map<String, Boolean> curExcludeFilteredFiles =
 		        prefs.getExcludeFilterFiles();
 		final Map<String, Boolean> newExcludeFilteredFiles =
@@ -219,7 +221,8 @@ public class MavenPluginConfigurationTranslator {
 		} catch (final IllegalArgumentException ex) {
 			LOG.error(String
 			        .format("[%s]: could not set <effort>, reason [%s], setting it to default [%s]",
-			                LOG_PREFIX, effort, UserPreferences.EFFORT_DEFAULT));
+			                LOG_PREFIX, effort,
+			                UserPreferences.EFFORT_DEFAULT));
 		}
 	}
 

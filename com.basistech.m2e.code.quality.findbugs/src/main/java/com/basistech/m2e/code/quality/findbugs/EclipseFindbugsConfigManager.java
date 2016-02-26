@@ -40,7 +40,8 @@ import de.tobject.findbugs.nature.FindBugsNature;
  */
 public class EclipseFindbugsConfigManager {
 
-	private static final Logger LOG = LoggerFactory.getLogger(EclipseFindbugsConfigManager.class);
+	private static final Logger LOG =
+	        LoggerFactory.getLogger(EclipseFindbugsConfigManager.class);
 
 	private final FindBugsNature fbNature;
 

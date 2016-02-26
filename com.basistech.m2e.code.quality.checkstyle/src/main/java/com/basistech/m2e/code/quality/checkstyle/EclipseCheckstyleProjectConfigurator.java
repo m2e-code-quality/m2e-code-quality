@@ -196,8 +196,10 @@ public class EclipseCheckstyleProjectConfigurator extends
 		CheckConfigurationWorkingCopy workingCopy = null;
 
 		// Try to retrieve an existing checkstyle configuration to be updated
-		CheckConfigurationWorkingCopy[] workingCopies = workingSet.getWorkingCopies();
-		workingCopies = (CheckConfigurationWorkingCopy[]) ArrayUtils.nullToEmpty(workingCopies);
+		CheckConfigurationWorkingCopy[] workingCopies =
+		        workingSet.getWorkingCopies();
+		workingCopies = (CheckConfigurationWorkingCopy[]) ArrayUtils
+		        .nullToEmpty(workingCopies);
 		for (CheckConfigurationWorkingCopy copy : workingCopies) {
 			if (configName.equals(copy.getName())) {
 				if (this.remoteConfigurationType.equals(copy.getType())) {

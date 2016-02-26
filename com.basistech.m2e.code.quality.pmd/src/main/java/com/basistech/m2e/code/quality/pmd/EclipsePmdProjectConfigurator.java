@@ -70,7 +70,8 @@ public class EclipsePmdProjectConfigurator extends
 	// private static final String PMD_NATURE =
 	// "net.sourceforge.pmd.eclipse.plugin.pmdNature";
 	private static final String JAVA_NATURE = "org.eclipse.jdt.core.javanature";
-	private static final Logger LOG = LoggerFactory.getLogger(EclipsePmdProjectConfigurator.class);
+	private static final Logger LOG =
+	        LoggerFactory.getLogger(EclipsePmdProjectConfigurator.class);
 
 	// create a rule set factory for instantiating rule sets
 	private final RuleSetFactory factory = new RuleSetFactory();
@@ -189,7 +190,8 @@ public class EclipsePmdProjectConfigurator extends
 		                project.getLocation());
 		try {
 			final RuleSet ruleset =
-			        this.createPmdRuleSet(pluginCfgTranslator, resourceResolver);
+			        this.createPmdRuleSet(pluginCfgTranslator,
+			                resourceResolver);
 
 			this.buildAndAddPmdExcludeAndIncludePatternToRuleSet(
 			        pluginCfgTranslator, ruleset);

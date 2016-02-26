@@ -287,14 +287,16 @@ public class MavenPluginConfigurationTranslator {
 
 	private List<String> getSourceDirectories() throws CoreException {
 		List<String> result = new ArrayList<>();
-		String sourceDirectory = configurator.getParameterValue(mavenProject, "sourceDirectory",
-		        String.class, execution, monitor);
+		String sourceDirectory =
+		        configurator.getParameterValue(mavenProject, "sourceDirectory",
+		                String.class, execution, monitor);
 		if (sourceDirectory != null) {
 			result.add(sourceDirectory);
 		}
 		@SuppressWarnings("unchecked")
-		List<String> sourceDirectories = configurator.getParameterValue(mavenProject,
-		        "sourceDirectories", List.class, execution, monitor);
+		List<String> sourceDirectories =
+		        configurator.getParameterValue(mavenProject,
+		                "sourceDirectories", List.class, execution, monitor);
 		if (sourceDirectories != null) {
 			result.addAll(sourceDirectories);
 		}
@@ -303,14 +305,17 @@ public class MavenPluginConfigurationTranslator {
 
 	private List<String> getTestSourceDirectories() throws CoreException {
 		List<String> result = new ArrayList<>();
-		String sourceDirectory = configurator.getParameterValue(mavenProject, "testSourceDirectory",
+		String sourceDirectory = configurator.getParameterValue(mavenProject,
+		        "testSourceDirectory",
 		        String.class, execution, monitor);
 		if (sourceDirectory != null) {
 			result.add(sourceDirectory);
 		}
 		@SuppressWarnings("unchecked")
-		List<String> sourceDirectories = configurator.getParameterValue(mavenProject,
-		        "testSourceDirectories", List.class, execution, monitor);
+		List<String> sourceDirectories =
+		        configurator.getParameterValue(mavenProject,
+		                "testSourceDirectories", List.class, execution,
+		                monitor);
 		if (sourceDirectories != null) {
 			result.addAll(sourceDirectories);
 		}
@@ -401,7 +406,8 @@ public class MavenPluginConfigurationTranslator {
 			                .getPath();
 			patterns.addAll(this.normalizePatternsToCheckstyleFileMatchPattern(
 			        excludePatterns,
-			        this.convertToEclipseCheckstyleRegExpPath(folderRelativePath),
+			        this.convertToEclipseCheckstyleRegExpPath(
+			                folderRelativePath),
 			        false));
 		}
 
@@ -496,7 +502,8 @@ public class MavenPluginConfigurationTranslator {
 		        new LinkedList<>();
 		for (String p : patterns) {
 			final FileMatchPattern fmp =
-			        new FileMatchPattern(String.format("%s%s", relativePath, p));
+			        new FileMatchPattern(
+			                String.format("%s%s", relativePath, p));
 			fmp.setIsIncludePattern(setIsIncludePatternFlag);
 			fileMatchPatterns.add(fmp);
 		}
@@ -548,7 +555,8 @@ public class MavenPluginConfigurationTranslator {
 	 *            the maven-checkstyle-plugin pattern.
 	 * @return the converted checkstyle eclipse pattern.
 	 */
-	private String convertAntStylePatternToCheckstylePattern(final String pattern) {
+	private String convertAntStylePatternToCheckstylePattern(
+	        final String pattern) {
 		Preconditions.checkNotNull(pattern, "pattern cannot be null");
 		Preconditions.checkArgument(pattern.isEmpty(), "pattern cannot empty");
 
@@ -557,7 +565,8 @@ public class MavenPluginConfigurationTranslator {
 		                File.separatorChar);
 		String dupeSeperatorChar = File.separator + File.separator;
 		while (sanitizedPattern.contains(dupeSeperatorChar)) {
-			sanitizedPattern = sanitizedPattern.replace(dupeSeperatorChar, File.separator);
+			sanitizedPattern =
+			        sanitizedPattern.replace(dupeSeperatorChar, File.separator);
 		}
 
 		final StringBuilder sb = new StringBuilder();
