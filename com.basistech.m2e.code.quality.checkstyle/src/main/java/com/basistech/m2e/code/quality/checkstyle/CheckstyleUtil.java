@@ -20,7 +20,8 @@ public final class CheckstyleUtil {
 	public static String convertAntStylePatternToCheckstylePattern(
 	        final String pattern) {
 		Preconditions.checkNotNull(pattern, "pattern cannot be null");
-		Preconditions.checkArgument(!pattern.isEmpty(), "pattern cannot be empty");
+		Preconditions.checkArgument(!pattern.isEmpty(),
+		        "pattern cannot be empty");
 
 		String sanitizedPattern = pattern.replace(
 		        File.separatorChar == '/' ? '\\' : '/', File.separatorChar);

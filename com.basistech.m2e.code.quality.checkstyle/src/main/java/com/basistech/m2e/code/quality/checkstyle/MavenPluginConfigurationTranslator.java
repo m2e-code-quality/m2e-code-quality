@@ -523,7 +523,8 @@ public class MavenPluginConfigurationTranslator {
 			if (PATTERNS_CACHE.containsKey(p)) {
 				csPattern = PATTERNS_CACHE.get(p);
 			} else {
-				csPattern = CheckstyleUtil.convertAntStylePatternToCheckstylePattern(p);
+				csPattern = CheckstyleUtil
+				        .convertAntStylePatternToCheckstylePattern(p);
 				PATTERNS_CACHE.put(p, csPattern);
 			}
 			transformedPatterns.add(csPattern);
