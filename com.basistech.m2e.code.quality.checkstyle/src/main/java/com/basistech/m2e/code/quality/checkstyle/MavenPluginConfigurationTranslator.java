@@ -40,6 +40,8 @@ import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
@@ -56,6 +58,9 @@ import net.sf.eclipsecs.core.util.CheckstylePluginException;
  * Utility class to get checkstyle plugin configuration.
  */
 public class MavenPluginConfigurationTranslator {
+
+	private static final Logger LOG =
+	        LoggerFactory.getLogger(MavenPluginConfigurationTranslator.class);
 
 	private static final String CHECKSTYLE_DEFAULT_CONFIG_LOCATION =
 	        "config/sun_checks.xml";
