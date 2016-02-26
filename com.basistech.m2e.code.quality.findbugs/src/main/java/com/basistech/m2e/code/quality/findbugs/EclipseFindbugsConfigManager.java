@@ -74,8 +74,8 @@ public class EclipseFindbugsConfigManager {
 		final IProject project = this.fbNature.getProject();
 		// We have to explicitly add the nature.
 		final IProjectDescription desc = project.getDescription();
-		final String natures[] = desc.getNatureIds();
-		final String newNatures[] = Arrays.copyOf(natures, natures.length + 1);
+		final String[] natures = desc.getNatureIds();
+		final String[] newNatures = Arrays.copyOf(natures, natures.length + 1);
 		newNatures[natures.length] = ECLIPSE_FB_NATURE_ID;
 		desc.setNatureIds(newNatures);
 		project.setDescription(desc, monitor);
@@ -87,7 +87,7 @@ public class EclipseFindbugsConfigManager {
 		// remove the nature itself, by resetting the nature list.
 		final IProject project = this.fbNature.getProject();
 		final IProjectDescription desc = project.getDescription();
-		final String natures[] = desc.getNatureIds();
+		final String[] natures = desc.getNatureIds();
 		final List<String> newNaturesList = new ArrayList<>();
 		for (int i = 0; i < natures.length; i++) {
 			if (!ECLIPSE_FB_NATURE_ID.equals(natures[i])) {
@@ -95,7 +95,7 @@ public class EclipseFindbugsConfigManager {
 			}
 		}
 
-		final String newNatures[] =
+		final String[] newNatures =
 		        newNaturesList.toArray(new String[newNaturesList.size()]);
 		desc.setNatureIds(newNatures);
 		project.setDescription(desc, monitor);
