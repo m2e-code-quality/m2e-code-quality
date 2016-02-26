@@ -99,7 +99,7 @@ public class EclipseFindbugsProjectConfigurator
 			FindbugsPlugin.saveUserPreferences(project, prefs);
 			FindbugsPlugin.setProjectSettingsEnabled(project, null, true);
 		} catch (final CoreException ex) {
-			LOG.error(ex.getLocalizedMessage());
+			LOG.error(ex.getLocalizedMessage(), ex);
 		}
 	}
 
