@@ -376,9 +376,7 @@ public class MavenPluginConfigurationTranslator {
 		final MojoExecution execution = mojoExecutions.get(0);
 		final ResourceResolver resourceResolver = configurator
 		        .getResourceResolver(execution, session, project.getLocation());
-		final MavenPluginConfigurationTranslator m2csConverter =
-		        new MavenPluginConfigurationTranslator(configurator, execution,
-		                project, mavenProject, monitor, resourceResolver);
-		return m2csConverter;
+		return new MavenPluginConfigurationTranslator(configurator, execution,
+		        project, mavenProject, monitor, resourceResolver);
 	}
 }
