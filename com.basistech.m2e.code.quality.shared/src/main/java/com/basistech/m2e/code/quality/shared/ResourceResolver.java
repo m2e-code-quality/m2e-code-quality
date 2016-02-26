@@ -72,8 +72,6 @@ public final class ResourceResolver {
 			// check if valid.
 			url.openStream();
 			return url;
-		} catch (MalformedURLException ex) {
-			// ignored, try next
 		} catch (Exception ex) {
 			// ignored, try next
 		}
