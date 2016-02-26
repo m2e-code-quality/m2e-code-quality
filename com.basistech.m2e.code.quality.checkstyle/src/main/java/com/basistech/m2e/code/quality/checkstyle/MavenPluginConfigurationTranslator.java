@@ -336,6 +336,7 @@ public class MavenPluginConfigurationTranslator {
 		try {
 			FileUtils.copyURLToFile(src, dest);
 		} catch (final IOException e) {
+			LOG.error("Could not copy file {}", src, e);
 			throw new CheckstylePluginException(
 			        "Failed to copy file " + src.getFile()
 			                + ", SKIPPING Eclipse checkstyle configuration");
