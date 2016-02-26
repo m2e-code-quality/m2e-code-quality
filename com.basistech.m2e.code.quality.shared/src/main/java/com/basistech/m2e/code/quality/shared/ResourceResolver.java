@@ -17,6 +17,7 @@
 package com.basistech.m2e.code.quality.shared;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -72,7 +73,7 @@ public final class ResourceResolver {
 			// check if valid.
 			url.openStream();
 			return url;
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			// ignored, try next
 		}
 
