@@ -80,9 +80,9 @@ public class EclipseCheckstyleConfigManager {
 		final IProjectDescription desc = project.getDescription();
 		final String[] natures = desc.getNatureIds();
 		final List<String> newNaturesList = new ArrayList<>();
-		for (int i = 0; i < natures.length; i++) {
-			if (!CheckstyleNature.NATURE_ID.equals(natures[i])) {
-				newNaturesList.add(natures[i]);
+		for (String nature : natures) {
+			if (!CheckstyleNature.NATURE_ID.equals(nature)) {
+				newNaturesList.add(nature);
 			}
 		}
 
