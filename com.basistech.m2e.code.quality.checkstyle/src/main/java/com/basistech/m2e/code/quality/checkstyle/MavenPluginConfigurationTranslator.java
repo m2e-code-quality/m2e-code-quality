@@ -62,8 +62,7 @@ public class MavenPluginConfigurationTranslator {
 	private static final String CHECKSTYLE_DEFAULT_SUPPRESSIONS_FILE_EXPRESSION =
 	        "checkstyle.suppressions.file";
 	/** checkstyle maven plugin artifactId */
-	private static final Map<String, String> PATTERNS_CACHE =
-	        new HashMap<>();
+	private static final Map<String, String> PATTERNS_CACHE = new HashMap<>();
 
 	private final MavenProject mavenProject;
 	private final IProject project;
@@ -88,9 +87,8 @@ public class MavenPluginConfigurationTranslator {
 	}
 
 	public boolean isActive() throws CoreException {
-		Boolean isSkip =
-		        configurator.getParameterValue(mavenProject, "skip",
-		                Boolean.class, execution, monitor);
+		Boolean isSkip = configurator.getParameterValue(mavenProject, "skip",
+		        Boolean.class, execution, monitor);
 		return isSkip != null ? !isSkip : true;
 	}
 
@@ -98,15 +96,14 @@ public class MavenPluginConfigurationTranslator {
 		final URL ruleset =
 		        this.resourceResolver.resolveLocation(this.getConfigLocation());
 		if (ruleset == null) {
-			throw new CheckstylePluginException(
-			        String.format(
-			                "Failed to resolve RuleSet from configLocation,SKIPPING Eclipse checkstyle configuration"));
+			throw new CheckstylePluginException(String.format(
+			        "Failed to resolve RuleSet from configLocation,SKIPPING Eclipse checkstyle configuration"));
 		}
 		return ruleset;
 	}
 
-	public String getHeaderFile() throws CheckstylePluginException,
-	        CoreException {
+	public String getHeaderFile()
+	        throws CheckstylePluginException, CoreException {
 		final URL headerResource =
 		        this.resourceResolver.resolveLocation(getHeaderLocation());
 		if (headerResource == null) {
@@ -114,16 +111,15 @@ public class MavenPluginConfigurationTranslator {
 		}
 
 		File outDir = project.getWorkingLocation(configurator.getId()).toFile();
-		File headerFile =
-		        new File(outDir, "checkstyle-header-" + getExecutionId()
-		                + ".txt");
+		File headerFile = new File(outDir,
+		        "checkstyle-header-" + getExecutionId() + ".txt");
 		copyOut(headerResource, headerFile);
 
 		return headerFile.getAbsolutePath();
 	}
 
-	public String getSuppressionsFile() throws CheckstylePluginException,
-	        CoreException {
+	public String getSuppressionsFile()
+	        throws CheckstylePluginException, CoreException {
 		final String suppressionsLocation = getSuppressionsLocation();
 		if (suppressionsLocation == null) {
 			return null;
@@ -135,9 +131,8 @@ public class MavenPluginConfigurationTranslator {
 		}
 
 		File outDir = project.getWorkingLocation(configurator.getId()).toFile();
-		File suppressionsFile =
-		        new File(outDir, "checkstyle-suppressions-" + getExecutionId()
-		                + ".xml");
+		File suppressionsFile = new File(outDir,
+		        "checkstyle-suppressions-" + getExecutionId() + ".xml");
 		copyOut(suppressionsResource, suppressionsFile);
 
 		return suppressionsFile.getAbsolutePath();
@@ -145,10 +140,9 @@ public class MavenPluginConfigurationTranslator {
 
 	public String getSuppressionsFileExpression()
 	        throws CheckstylePluginException, CoreException {
-		String suppressionsFileExpression =
-		        configurator.getParameterValue(mavenProject,
-		                "suppressionsFileExpression", String.class, execution,
-		                monitor);
+		String suppressionsFileExpression = configurator.getParameterValue(
+		        mavenProject, "suppressionsFileExpression", String.class,
+		        execution, monitor);
 		if (suppressionsFileExpression == null) {
 			suppressionsFileExpression =
 			        CHECKSTYLE_DEFAULT_SUPPRESSIONS_FILE_EXPRESSION;
@@ -191,8 +185,8 @@ public class MavenPluginConfigurationTranslator {
 	 *             if an error occurs
 	 */
 	protected String getPropertyExpansion() throws CoreException {
-		return configurator.getParameterValue(mavenProject,
-		        "propertyExpansion", String.class, execution, monitor);
+		return configurator.getParameterValue(mavenProject, "propertyExpansion",
+		        String.class, execution, monitor);
 	}
 
 	/**
@@ -204,10 +198,9 @@ public class MavenPluginConfigurationTranslator {
 	 *             if an error occurs
 	 */
 	public boolean getIncludeTestSourceDirectory() throws CoreException {
-		Boolean includeTestSourceDirectory =
-		        configurator.getParameterValue(mavenProject,
-		                "includeTestSourceDirectory", Boolean.class, execution,
-		                monitor);
+		Boolean includeTestSourceDirectory = configurator.getParameterValue(
+		        mavenProject, "includeTestSourceDirectory", Boolean.class,
+		        execution, monitor);
 		if (includeTestSourceDirectory != null) {
 			return includeTestSourceDirectory.booleanValue();
 		} else {
@@ -217,8 +210,8 @@ public class MavenPluginConfigurationTranslator {
 
 	public boolean getIncludeResourcesDirectory() throws CoreException {
 		Boolean includeTestSourceDirectory =
-		        configurator.getParameterValue(mavenProject,
-		                "includeResources", Boolean.class, execution, monitor);
+		        configurator.getParameterValue(mavenProject, "includeResources",
+		                Boolean.class, execution, monitor);
 		if (includeTestSourceDirectory != null) {
 			return includeTestSourceDirectory.booleanValue();
 		} else {
@@ -227,10 +220,9 @@ public class MavenPluginConfigurationTranslator {
 	}
 
 	public boolean getIncludeTestResourcesDirectory() throws CoreException {
-		Boolean includeTestSourceDirectory =
-		        configurator.getParameterValue(mavenProject,
-		                "includeTestResources", Boolean.class, execution,
-		                monitor);
+		Boolean includeTestSourceDirectory = configurator.getParameterValue(
+		        mavenProject, "includeTestResources", Boolean.class, execution,
+		        monitor);
 		if (includeTestSourceDirectory != null) {
 			return includeTestSourceDirectory.booleanValue();
 		} else {
@@ -250,9 +242,8 @@ public class MavenPluginConfigurationTranslator {
 	 * @throws CoreException
 	 */
 	private String getConfigLocation() throws CoreException {
-		String configLocation =
-		        configurator.getParameterValue(mavenProject, "configLocation",
-		                String.class, execution, monitor);
+		String configLocation = configurator.getParameterValue(mavenProject,
+		        "configLocation", String.class, execution, monitor);
 		if (configLocation == null) {
 			configLocation = CHECKSTYLE_DEFAULT_CONFIG_LOCATION;
 		}
@@ -261,9 +252,8 @@ public class MavenPluginConfigurationTranslator {
 
 	private String getHeaderLocation() throws CoreException {
 		String configLocation = getConfigLocation();
-		String headerLocation =
-		        configurator.getParameterValue(mavenProject, "headerLocation",
-		                String.class, execution, monitor);
+		String headerLocation = configurator.getParameterValue(mavenProject,
+		        "headerLocation", String.class, execution, monitor);
 		if ("config/maven_checks.xml".equals(configLocation)
 		        && "LICENSE.txt".equals(headerLocation)) {
 			headerLocation = "config/maven-header.txt";
@@ -272,24 +262,20 @@ public class MavenPluginConfigurationTranslator {
 	}
 
 	private String getSuppressionsLocation() throws CoreException {
-		String suppressionsLocation =
-		        configurator.getParameterValue(mavenProject,
-		                "suppressionsLocation", String.class, execution,
-		                monitor);
+		String suppressionsLocation = configurator.getParameterValue(
+		        mavenProject, "suppressionsLocation", String.class, execution,
+		        monitor);
 		if (suppressionsLocation == null) {
-			suppressionsLocation =
-			        configurator.getParameterValue(mavenProject,
-			                "suppressionsFile", String.class, execution,
-			                monitor);
+			suppressionsLocation = configurator.getParameterValue(mavenProject,
+			        "suppressionsFile", String.class, execution, monitor);
 		}
 		return suppressionsLocation;
 	}
 
 	private List<String> getSourceDirectories() throws CoreException {
 		List<String> result = new ArrayList<>();
-		String sourceDirectory =
-		        configurator.getParameterValue(mavenProject, "sourceDirectory",
-		                String.class, execution, monitor);
+		String sourceDirectory = configurator.getParameterValue(mavenProject,
+		        "sourceDirectory", String.class, execution, monitor);
 		if (sourceDirectory != null) {
 			result.add(sourceDirectory);
 		}
@@ -306,16 +292,14 @@ public class MavenPluginConfigurationTranslator {
 	private List<String> getTestSourceDirectories() throws CoreException {
 		List<String> result = new ArrayList<>();
 		String sourceDirectory = configurator.getParameterValue(mavenProject,
-		        "testSourceDirectory",
-		        String.class, execution, monitor);
+		        "testSourceDirectory", String.class, execution, monitor);
 		if (sourceDirectory != null) {
 			result.add(sourceDirectory);
 		}
 		@SuppressWarnings("unchecked")
-		List<String> sourceDirectories =
-		        configurator.getParameterValue(mavenProject,
-		                "testSourceDirectories", List.class, execution,
-		                monitor);
+		List<String> sourceDirectories = configurator.getParameterValue(
+		        mavenProject, "testSourceDirectories", List.class, execution,
+		        monitor);
 		if (sourceDirectories != null) {
 			result.addAll(sourceDirectories);
 		}
@@ -342,9 +326,9 @@ public class MavenPluginConfigurationTranslator {
 		try {
 			FileUtils.copyURLToFile(src, dest);
 		} catch (IOException e) {
-			throw new CheckstylePluginException("Failed to copy file "
-			        + src.getFile()
-			        + ", SKIPPING Eclipse checkstyle configuration");
+			throw new CheckstylePluginException(
+			        "Failed to copy file " + src.getFile()
+			                + ", SKIPPING Eclipse checkstyle configuration");
 		}
 	}
 
@@ -358,8 +342,7 @@ public class MavenPluginConfigurationTranslator {
 	private List<FileMatchPattern> getIncludesExcludesFileMatchPatterns()
 	        throws CheckstylePluginException, CoreException {
 
-		final List<FileMatchPattern> patterns =
-		        new LinkedList<>();
+		final List<FileMatchPattern> patterns = new LinkedList<>();
 
 		/**
 		 * Step 1). Get all the source roots (including test sources root, if
@@ -381,12 +364,11 @@ public class MavenPluginConfigurationTranslator {
 		 */
 		final List<String> includePatterns = this.getIncludes();
 		for (String folder : sourceFolders) {
-			final String folderRelativePath =
-			        this.basedirUri.relativize(new File(folder).toURI())
-			                .getPath();
+			final String folderRelativePath = this.basedirUri
+			        .relativize(new File(folder).toURI()).getPath();
 			if (includePatterns.size() != 0) {
-				patterns.addAll(this
-				        .normalizePatternsToCheckstyleFileMatchPattern(
+				patterns.addAll(
+				        this.normalizePatternsToCheckstyleFileMatchPattern(
 				                includePatterns, folderRelativePath, true));
 			} else {
 				patterns.add(new FileMatchPattern(folderRelativePath));
@@ -401,12 +383,10 @@ public class MavenPluginConfigurationTranslator {
 		 */
 		final List<String> excludePatterns = this.getExcludes();
 		for (String folder : sourceFolders) {
-			String folderRelativePath =
-			        this.basedirUri.relativize(new File(folder).toURI())
-			                .getPath();
+			String folderRelativePath = this.basedirUri
+			        .relativize(new File(folder).toURI()).getPath();
 			patterns.addAll(this.normalizePatternsToCheckstyleFileMatchPattern(
-			        excludePatterns,
-			        this.convertToEclipseCheckstyleRegExpPath(
+			        excludePatterns, this.convertToEclipseCheckstyleRegExpPath(
 			                folderRelativePath),
 			        false));
 		}
@@ -416,12 +396,11 @@ public class MavenPluginConfigurationTranslator {
 			        this.getResourceIncludes();
 			for (Resource resource : this.mavenProject.getBuild()
 			        .getResources()) {
-				String folderRelativePath =
-				        this.basedirUri.relativize(
-				                new File(resource.getDirectory()).toURI())
-				                .getPath();
-				patterns.addAll(this
-				        .normalizePatternsToCheckstyleFileMatchPattern(
+				String folderRelativePath = this.basedirUri
+				        .relativize(new File(resource.getDirectory()).toURI())
+				        .getPath();
+				patterns.addAll(
+				        this.normalizePatternsToCheckstyleFileMatchPattern(
 				                resourceIncludePatterns, folderRelativePath,
 				                true));
 			}
@@ -430,12 +409,11 @@ public class MavenPluginConfigurationTranslator {
 			        this.getResourceExcludes();
 			for (Resource resource : this.mavenProject.getBuild()
 			        .getResources()) {
-				String folderRelativePath =
-				        this.basedirUri.relativize(
-				                new File(resource.getDirectory()).toURI())
-				                .getPath();
-				patterns.addAll(this
-				        .normalizePatternsToCheckstyleFileMatchPattern(
+				String folderRelativePath = this.basedirUri
+				        .relativize(new File(resource.getDirectory()).toURI())
+				        .getPath();
+				patterns.addAll(
+				        this.normalizePatternsToCheckstyleFileMatchPattern(
 				                resourceExcludePatterns, folderRelativePath,
 				                false));
 			}
@@ -451,12 +429,11 @@ public class MavenPluginConfigurationTranslator {
 					// ignore resources that have ex/includes for now
 					continue;
 				}
-				String folderRelativePath =
-				        this.basedirUri.relativize(
-				                new File(resource.getDirectory()).toURI())
-				                .getPath();
-				patterns.addAll(this
-				        .normalizePatternsToCheckstyleFileMatchPattern(
+				String folderRelativePath = this.basedirUri
+				        .relativize(new File(resource.getDirectory()).toURI())
+				        .getPath();
+				patterns.addAll(
+				        this.normalizePatternsToCheckstyleFileMatchPattern(
 				                resourceIncludePatterns, folderRelativePath,
 				                true));
 			}
@@ -470,12 +447,11 @@ public class MavenPluginConfigurationTranslator {
 					// ignore resources that have ex/includes for now
 					continue;
 				}
-				String folderRelativePath =
-				        this.basedirUri.relativize(
-				                new File(resource.getDirectory()).toURI())
-				                .getPath();
-				patterns.addAll(this
-				        .normalizePatternsToCheckstyleFileMatchPattern(
+				String folderRelativePath = this.basedirUri
+				        .relativize(new File(resource.getDirectory()).toURI())
+				        .getPath();
+				patterns.addAll(
+				        this.normalizePatternsToCheckstyleFileMatchPattern(
 				                resourceExcludePatterns, folderRelativePath,
 				                false));
 			}
@@ -498,12 +474,10 @@ public class MavenPluginConfigurationTranslator {
 	        final List<String> patterns, final String relativePath,
 	        final boolean setIsIncludePatternFlag)
 	                throws CheckstylePluginException {
-		List<FileMatchPattern> fileMatchPatterns =
-		        new LinkedList<>();
+		List<FileMatchPattern> fileMatchPatterns = new LinkedList<>();
 		for (String p : patterns) {
-			final FileMatchPattern fmp =
-			        new FileMatchPattern(
-			                String.format("%s%s", relativePath, p));
+			final FileMatchPattern fmp = new FileMatchPattern(
+			        String.format("%s%s", relativePath, p));
 			fmp.setIsIncludePattern(setIsIncludePatternFlag);
 			fileMatchPatterns.add(fmp);
 		}
@@ -523,9 +497,8 @@ public class MavenPluginConfigurationTranslator {
 	 */
 	private List<String> getPatterns(String elemName) throws CoreException {
 		List<String> transformedPatterns = new LinkedList<>();
-		final String patternsString =
-		        configurator.getParameterValue(mavenProject, elemName,
-		                String.class, execution, monitor);
+		final String patternsString = configurator.getParameterValue(
+		        mavenProject, elemName, String.class, execution, monitor);
 		if (patternsString == null || patternsString.length() == 0) {
 			return transformedPatterns;
 		}
@@ -560,9 +533,8 @@ public class MavenPluginConfigurationTranslator {
 		Preconditions.checkNotNull(pattern, "pattern cannot be null");
 		Preconditions.checkArgument(pattern.isEmpty(), "pattern cannot empty");
 
-		String sanitizedPattern =
-		        pattern.replace(File.separatorChar == '/' ? '\\' : '/',
-		                File.separatorChar);
+		String sanitizedPattern = pattern.replace(
+		        File.separatorChar == '/' ? '\\' : '/', File.separatorChar);
 		String dupeSeperatorChar = File.separator + File.separator;
 		while (sanitizedPattern.contains(dupeSeperatorChar)) {
 			sanitizedPattern =
@@ -607,8 +579,8 @@ public class MavenPluginConfigurationTranslator {
 		return result;
 	}
 
-	public Properties getConfiguredProperties() throws CoreException,
-	        CheckstylePluginException {
+	public Properties getConfiguredProperties()
+	        throws CoreException, CheckstylePluginException {
 		String propertiesLocation = getPropertiesLocation();
 		Properties properties = new Properties();
 		if (propertiesLocation != null) {
@@ -622,10 +594,9 @@ public class MavenPluginConfigurationTranslator {
 			try {
 				properties.load(url.openStream());
 			} catch (IOException e) {
-				throw new CheckstylePluginException(
-				        String.format(
-				                "Failed to LOAD properties from propertiesLocation [%s]",
-				                propertiesLocation));
+				throw new CheckstylePluginException(String.format(
+				        "Failed to LOAD properties from propertiesLocation [%s]",
+				        propertiesLocation));
 			}
 		}
 		return properties;

@@ -109,8 +109,7 @@ public class MavenPluginConfigurationTranslator {
 		        FB_INCLUDE_FILTER_FILE);
 		final Map<String, Boolean> curIncludeFilteredFiles =
 		        prefs.getIncludeFilterFiles();
-		final Map<String, Boolean> newIncludeFilteredFiles =
-		        new HashMap<>();
+		final Map<String, Boolean> newIncludeFilteredFiles = new HashMap<>();
 		// Make sure we add it only once.
 		if (!curIncludeFilteredFiles.containsKey(FB_INCLUDE_FILTER_FILE)) {
 			newIncludeFilteredFiles.put(FB_INCLUDE_FILTER_FILE, Boolean.TRUE);
@@ -134,8 +133,7 @@ public class MavenPluginConfigurationTranslator {
 		        FB_EXCLUDE_FILTER_FILE);
 		final Map<String, Boolean> curExcludeFilteredFiles =
 		        prefs.getExcludeFilterFiles();
-		final Map<String, Boolean> newExcludeFilteredFiles =
-		        new HashMap<>();
+		final Map<String, Boolean> newExcludeFilteredFiles = new HashMap<>();
 		// Make sure we add it only once.
 		if (!curExcludeFilteredFiles.containsKey(FB_EXCLUDE_FILTER_FILE)) {
 			newExcludeFilteredFiles.put(FB_EXCLUDE_FILTER_FILE, Boolean.TRUE);
@@ -169,18 +167,16 @@ public class MavenPluginConfigurationTranslator {
 	public void setBugCatagories(final UserPreferences prefs)
 	        throws CoreException {
 		final ProjectFilterSettings pfs = prefs.getFilterSettings();
-		final String bugCatagories =
-		        this.configurator.getParameterValue(mavenProject,
-		                BUG_CATEGORIES, String.class, execution, monitor);
+		final String bugCatagories = this.configurator.getParameterValue(
+		        mavenProject, BUG_CATEGORIES, String.class, execution, monitor);
 		if (bugCatagories == null) {
 			LOG.debug("bugCatagories is null");
 			return;
 		}
 		List<String> addBugCatagoriesList =
 		        Arrays.asList(StringUtils.split(bugCatagories, ","));
-		List<String> availableBugCategories =
-		        new LinkedList<>(DetectorFactoryCollection.instance()
-		                .getBugCategories());
+		List<String> availableBugCategories = new LinkedList<>(
+		        DetectorFactoryCollection.instance().getBugCategories());
 		if (!addBugCatagoriesList.isEmpty()) {
 			for (String removeBugCategory : availableBugCategories) {
 				pfs.removeCategory(removeBugCategory);
@@ -207,9 +203,8 @@ public class MavenPluginConfigurationTranslator {
 	}
 
 	public void setEffort(final UserPreferences prefs) throws CoreException {
-		String effort =
-		        this.configurator.getParameterValue(mavenProject, EFFORT,
-		                String.class, execution, monitor);
+		String effort = this.configurator.getParameterValue(mavenProject,
+		        EFFORT, String.class, execution, monitor);
 		if (effort == null) {
 			LOG.debug("effort is null");
 			return;
@@ -219,17 +214,15 @@ public class MavenPluginConfigurationTranslator {
 		try {
 			prefs.setEffort(effort);
 		} catch (final IllegalArgumentException ex) {
-			LOG.error(String
-			        .format("[%s]: could not set <effort>, reason [%s], setting it to default [%s]",
-			                LOG_PREFIX, effort,
-			                UserPreferences.EFFORT_DEFAULT));
+			LOG.error(String.format(
+			        "[%s]: could not set <effort>, reason [%s], setting it to default [%s]",
+			        LOG_PREFIX, effort, UserPreferences.EFFORT_DEFAULT));
 		}
 	}
 
 	public void setMinRank(final UserPreferences prefs) throws CoreException {
-		Integer minRank =
-		        this.configurator.getParameterValue(mavenProject, MAX_RANK,
-		                Integer.class, execution, monitor);
+		Integer minRank = this.configurator.getParameterValue(mavenProject,
+		        MAX_RANK, Integer.class, execution, monitor);
 		if (minRank == null) {
 			LOG.debug("max rank is null");
 			return;
@@ -237,16 +230,15 @@ public class MavenPluginConfigurationTranslator {
 		try {
 			prefs.getFilterSettings().setMinRank(minRank);
 		} catch (final IllegalArgumentException ex) {
-			LOG.error(String
-			        .format("[%s]: could not set <rank>, reason [%s], setting it to default [%s]",
-			                LOG_PREFIX, minRank, 15));
+			LOG.error(String.format(
+			        "[%s]: could not set <rank>, reason [%s], setting it to default [%s]",
+			        LOG_PREFIX, minRank, 15));
 		}
 	}
 
 	public void setPriority(final UserPreferences prefs) throws CoreException {
-		final String priority =
-		        this.configurator.getParameterValue(mavenProject, PRIORITY,
-		                String.class, execution, monitor);
+		final String priority = this.configurator.getParameterValue(
+		        mavenProject, PRIORITY, String.class, execution, monitor);
 		if (priority == null) {
 			LOG.debug("priority is null");
 			return;
@@ -254,17 +246,16 @@ public class MavenPluginConfigurationTranslator {
 		try {
 			prefs.getFilterSettings().setMinPriority(priority);
 		} catch (final Exception ex) {
-			LOG.error(String
-			        .format("[%s]: could not set <threshold>, reason [%s], leaving it alone",
-			                LOG_PREFIX, priority));
+			LOG.error(String.format(
+			        "[%s]: could not set <threshold>, reason [%s], leaving it alone",
+			        LOG_PREFIX, priority));
 		}
 	}
 
 	public void setOmitVisitors(final UserPreferences prefs)
 	        throws CoreException {
-		final String omitVisitors =
-		        this.configurator.getParameterValue(mavenProject,
-		                OMIT_VISITORS, String.class, execution, monitor);
+		final String omitVisitors = this.configurator.getParameterValue(
+		        mavenProject, OMIT_VISITORS, String.class, execution, monitor);
 		if (omitVisitors == null) {
 			LOG.debug("omitVisitors is null");
 			return;
@@ -285,9 +276,8 @@ public class MavenPluginConfigurationTranslator {
 	}
 
 	public void setThreshold(final UserPreferences prefs) throws CoreException {
-		final String threshold =
-		        this.configurator.getParameterValue(mavenProject, THRESHOLD,
-		                String.class, execution, monitor);
+		final String threshold = this.configurator.getParameterValue(
+		        mavenProject, THRESHOLD, String.class, execution, monitor);
 		if (threshold == null) {
 			LOG.debug("threshold is null");
 			return;
@@ -295,16 +285,15 @@ public class MavenPluginConfigurationTranslator {
 		try {
 			prefs.getFilterSettings().setMinPriority(threshold);
 		} catch (final Exception ex) {
-			LOG.error(String
-			        .format("[%s]: could not set <threshold>, reason [%s], leaving it alone",
-			                LOG_PREFIX, threshold));
+			LOG.error(String.format(
+			        "[%s]: could not set <threshold>, reason [%s], leaving it alone",
+			        LOG_PREFIX, threshold));
 		}
 	}
 
 	public void setVisitors(final UserPreferences prefs) throws CoreException {
-		final String visitors =
-		        this.configurator.getParameterValue(mavenProject, VISITORS,
-		                String.class, execution, monitor);
+		final String visitors = this.configurator.getParameterValue(
+		        mavenProject, VISITORS, String.class, execution, monitor);
 		if (visitors == null) {
 			return;
 		}
@@ -359,11 +348,10 @@ public class MavenPluginConfigurationTranslator {
 			FileUtils.copyStreamToFile(new URLInputStreamFacade(urlResc),
 			        newLocationFile);
 		} catch (IOException ex) {
-			throw new ConfigurationException(
-			        String.format(
-			                "[%s]: could not copy resource [%s] to [%s], reason [%s]",
-			                LOG_PREFIX, resc, newLocationFile,
-			                ex.getLocalizedMessage()));
+			throw new ConfigurationException(String.format(
+			        "[%s]: could not copy resource [%s] to [%s], reason [%s]",
+			        LOG_PREFIX, resc, newLocationFile,
+			        ex.getLocalizedMessage()));
 		}
 	}
 
@@ -376,20 +364,21 @@ public class MavenPluginConfigurationTranslator {
 		final List<MojoExecution> mojoExecutions =
 		        mavenPlugin.getMojoExecutions();
 		if (mojoExecutions.size() != 1) {
-			throw new CoreException(new Status(IStatus.ERROR, FrameworkUtil
-			        .getBundle(MavenPluginConfigurationTranslator.class)
-			        .getSymbolicName(),
-			        "Wrong number of executions. Expected 1. Found "
-			                + mojoExecutions.size()));
+			throw new CoreException(
+			        new Status(IStatus.ERROR,
+			                FrameworkUtil
+			                        .getBundle(
+			                                MavenPluginConfigurationTranslator.class)
+			                        .getSymbolicName(),
+			                "Wrong number of executions. Expected 1. Found "
+			                        + mojoExecutions.size()));
 		}
 		MojoExecution execution = mojoExecutions.get(0);
-		ResourceResolver resourceResolver =
-		        configurator.getResourceResolver(execution, session,
-		                project.getLocation());
+		ResourceResolver resourceResolver = configurator
+		        .getResourceResolver(execution, session, project.getLocation());
 		final MavenPluginConfigurationTranslator m2csConverter =
-		        new MavenPluginConfigurationTranslator(configurator,
-		                execution, project, mavenProject, monitor,
-		                resourceResolver);
+		        new MavenPluginConfigurationTranslator(configurator, execution,
+		                project, mavenProject, monitor, resourceResolver);
 		return m2csConverter;
 	}
 }

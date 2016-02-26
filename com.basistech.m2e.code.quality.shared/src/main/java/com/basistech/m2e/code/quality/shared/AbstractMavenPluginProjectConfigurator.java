@@ -44,8 +44,8 @@ import com.google.common.base.Preconditions;
  * plugin configuration.
  * 
  */
-public abstract class AbstractMavenPluginProjectConfigurator extends
-        AbstractProjectConfigurator {
+public abstract class AbstractMavenPluginProjectConfigurator
+        extends AbstractProjectConfigurator {
 
 	@Override
 	public <T> T getParameterValue(MavenProject project, String parameter,
@@ -226,10 +226,9 @@ public abstract class AbstractMavenPluginProjectConfigurator extends
 
 	private MavenPluginWrapper getMavenPlugin(IProgressMonitor monitor,
 	        final IMavenProjectFacade projectFacade) throws CoreException {
-		return MavenPluginWrapper
-		        .newInstance(monitor, getMavenPluginGroupId(),
-		                getMavenPluginArtifactId(), getMavenPluginGoal(),
-		                projectFacade);
+		return MavenPluginWrapper.newInstance(monitor, getMavenPluginGroupId(),
+		        getMavenPluginArtifactId(), getMavenPluginGoal(),
+		        projectFacade);
 	}
 
 }

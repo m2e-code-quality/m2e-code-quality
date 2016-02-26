@@ -64,8 +64,8 @@ import net.sourceforge.pmd.eclipse.runtime.properties.IProjectPropertiesManager;
 import net.sourceforge.pmd.eclipse.runtime.properties.PropertiesException;
 import net.sourceforge.pmd.eclipse.runtime.writer.WriterException;
 
-public class EclipsePmdProjectConfigurator extends
-        AbstractMavenPluginProjectConfigurator {
+public class EclipsePmdProjectConfigurator
+        extends AbstractMavenPluginProjectConfigurator {
 
 	// private static final String PMD_NATURE =
 	// "net.sourceforge.pmd.eclipse.plugin.pmdNature";
@@ -99,9 +99,8 @@ public class EclipsePmdProjectConfigurator extends
 	                throws CoreException {
 
 		final MojoExecution execution = findMojoExecution(mavenPluginWrapper);
-		MojoExecution pmdGoalExecution =
-		        findForkedExecution(execution, "org.apache.maven.plugins",
-		                "maven-pmd-plugin", "pmd");
+		MojoExecution pmdGoalExecution = findForkedExecution(execution,
+		        "org.apache.maven.plugins", "maven-pmd-plugin", "pmd");
 		final MavenPluginConfigurationTranslator pluginCfgTranslator =
 		        MavenPluginConfigurationTranslator.newInstance(this,
 		                mavenProjectFacade.getMavenProject(monitor),
@@ -185,21 +184,18 @@ public class EclipsePmdProjectConfigurator extends
 	                throws CoreException {
 
 		final MojoExecution execution = findMojoExecution(pluginWrapper);
-		ResourceResolver resourceResolver =
-		        this.getResourceResolver(execution, session,
-		                project.getLocation());
+		ResourceResolver resourceResolver = this.getResourceResolver(execution,
+		        session, project.getLocation());
 		try {
-			final RuleSet ruleset =
-			        this.createPmdRuleSet(pluginCfgTranslator,
-			                resourceResolver);
+			final RuleSet ruleset = this.createPmdRuleSet(pluginCfgTranslator,
+			        resourceResolver);
 
 			this.buildAndAddPmdExcludeAndIncludePatternToRuleSet(
 			        pluginCfgTranslator, ruleset);
 
 			// persist the ruleset to a file under the project.
-			final File rulesetFile =
-			        writeRuleSet(project.getFile(PMD_RULESET_FILE), ruleset,
-			                monitor);
+			final File rulesetFile = writeRuleSet(
+			        project.getFile(PMD_RULESET_FILE), ruleset, monitor);
 
 			try {
 				final IProjectPropertiesManager mgr =
@@ -221,8 +217,8 @@ public class EclipsePmdProjectConfigurator extends
 
 	private RuleSet createPmdRuleSet(
 	        final MavenPluginConfigurationTranslator pluginCfgTranslator,
-	        final ResourceResolver resourceResolver) throws CoreException,
-	                PMDException {
+	        final ResourceResolver resourceResolver)
+	                throws CoreException, PMDException {
 
 		final RuleSet ruleSet = new RuleSet();
 		ruleSet.setName("M2Eclipse PMD RuleSet");
@@ -232,15 +228,13 @@ public class EclipsePmdProjectConfigurator extends
 
 		for (final String loc : rulesetStringLocations) {
 			RuleSetReferenceId ruleSetReferenceId = new RuleSetReferenceId(loc);
-			final URL resolvedLocation =
-			        resourceResolver.resolveLocation(ruleSetReferenceId
-			                .getRuleSetFileName());
+			final URL resolvedLocation = resourceResolver
+			        .resolveLocation(ruleSetReferenceId.getRuleSetFileName());
 
 			if (resolvedLocation == null) {
-				throw new PMDException(
-				        String.format(
-				                "Failed to resolve RuleSet from location [%s],SKIPPING Eclipse PMD configuration",
-				                loc));
+				throw new PMDException(String.format(
+				        "Failed to resolve RuleSet from location [%s],SKIPPING Eclipse PMD configuration",
+				        loc));
 			}
 
 			RuleSet ruleSetAtLocations;
@@ -288,17 +282,15 @@ public class EclipsePmdProjectConfigurator extends
 		final PMDPlugin pmdPlugin = PMDPlugin.getDefault();
 
 		ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
-		try (BufferedOutputStream outputStream =
-		        new BufferedOutputStream(new FileOutputStream(rulesetFile
-		                .getLocation().toFile()));) {
+		try (BufferedOutputStream outputStream = new BufferedOutputStream(
+		        new FileOutputStream(rulesetFile.getLocation().toFile()));) {
 
 			pmdPlugin.getRuleSetWriter().write(byteArrayStream, ruleSet);
 
 			// ..and now we have two problems
-			String fixedXml =
-			        byteArrayStream.toString("UTF-8").replaceAll(
-			                "\\<exclude\\>(.*)\\</exclude\\>",
-			                "<exclude name=\"$1\"/>");
+			String fixedXml = byteArrayStream.toString("UTF-8").replaceAll(
+			        "\\<exclude\\>(.*)\\</exclude\\>",
+			        "<exclude name=\"$1\"/>");
 
 			outputStream.write(fixedXml.getBytes(Charset.forName("UTF-8")));
 
@@ -334,8 +326,8 @@ public class EclipsePmdProjectConfigurator extends
 			for (String ir : includeRoots) {
 				for (String ep : excludePatterns) {
 					String fullPattern = ".*" + ir + ep;
-					ruleset.addExcludePattern(StringUtils.replace(fullPattern,
-					        ".*.*", ".*"));
+					ruleset.addExcludePattern(
+					        StringUtils.replace(fullPattern, ".*.*", ".*"));
 				}
 			}
 		}
@@ -347,8 +339,8 @@ public class EclipsePmdProjectConfigurator extends
 		for (String ir : includeRoots) {
 			for (String ip : includePatterns) {
 				String fullPattern = ".*" + ir + ip;
-				ruleset.addIncludePattern(StringUtils.replace(fullPattern,
-				        ".*.*", ".*"));
+				ruleset.addIncludePattern(
+				        StringUtils.replace(fullPattern, ".*.*", ".*"));
 			}
 		}
 	}
@@ -358,10 +350,10 @@ public class EclipsePmdProjectConfigurator extends
 		final List<MojoExecution> mojoExecutions =
 		        mavenPluginWrapper.getMojoExecutions();
 		if (mojoExecutions.size() != 1) {
-			throw new CoreException(new Status(IStatus.ERROR,
-			        PmdEclipseConstants.PLUGIN_ID,
-			        "Wrong number of executions. Expected 1. Found "
-			                + mojoExecutions.size()));
+			throw new CoreException(
+			        new Status(IStatus.ERROR, PmdEclipseConstants.PLUGIN_ID,
+			                "Wrong number of executions. Expected 1. Found "
+			                        + mojoExecutions.size()));
 		}
 		final MojoExecution execution = mojoExecutions.get(0);
 		return execution;

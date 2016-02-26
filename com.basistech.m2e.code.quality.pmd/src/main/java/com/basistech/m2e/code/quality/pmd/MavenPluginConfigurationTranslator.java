@@ -41,8 +41,7 @@ import com.google.common.collect.ImmutableList;
  */
 public class MavenPluginConfigurationTranslator {
 
-	private static final Map<String, String> PATTERNS_CACHE =
-	        new HashMap<>();
+	private static final Map<String, String> PATTERNS_CACHE = new HashMap<>();
 
 	private final MavenProject mavenProject;
 	private final URI basedirUri;
@@ -73,9 +72,8 @@ public class MavenPluginConfigurationTranslator {
 	}
 
 	public List<String> getRulesets() throws CoreException {
-		String[] rulesets =
-		        configurator.getParameterValue(mavenProject, "rulesets",
-		                String[].class, pmdGoalExecution, monitor);
+		String[] rulesets = configurator.getParameterValue(mavenProject,
+		        "rulesets", String[].class, pmdGoalExecution, monitor);
 		if (rulesets == null) {
 			// no special rulesets configured - use the same defaults as the
 			// maven-pmd-plugin does
@@ -87,9 +85,8 @@ public class MavenPluginConfigurationTranslator {
 	}
 
 	private List<String> getExcludePatterns() throws CoreException {
-		String[] excludes =
-		        configurator.getParameterValue(mavenProject, "excludes",
-		                String[].class, pmdGoalExecution, monitor);
+		String[] excludes = configurator.getParameterValue(mavenProject,
+		        "excludes", String[].class, pmdGoalExecution, monitor);
 		final List<String> transformedPatterns = new LinkedList<>();
 		if (excludes != null && excludes.length > 0) {
 			for (String p : excludes) {
@@ -97,8 +94,8 @@ public class MavenPluginConfigurationTranslator {
 				if (StringUtils.isBlank(p)) {
 					continue;
 				}
-				transformedPatterns.add(this
-				        .getTransformedPattern(p, "EXCLUDE"));
+				transformedPatterns
+				        .add(this.getTransformedPattern(p, "EXCLUDE"));
 			}
 		}
 		return transformedPatterns;
@@ -117,9 +114,8 @@ public class MavenPluginConfigurationTranslator {
 	 * @throws CoreException
 	 */
 	private List<String> getIncludePatterns() throws CoreException {
-		String[] includes =
-		        configurator.getParameterValue(mavenProject, "includes",
-		                String[].class, pmdGoalExecution, monitor);
+		String[] includes = configurator.getParameterValue(mavenProject,
+		        "includes", String[].class, pmdGoalExecution, monitor);
 		final List<String> transformedPatterns = new LinkedList<>();
 		if (includes != null && includes.length > 0) {
 			for (String p : includes) {
@@ -127,8 +123,8 @@ public class MavenPluginConfigurationTranslator {
 				if (StringUtils.isBlank(p)) {
 					continue;
 				}
-				transformedPatterns.add(this
-				        .getTransformedPattern(p, "INCLUDE"));
+				transformedPatterns
+				        .add(this.getTransformedPattern(p, "INCLUDE"));
 			}
 		}
 		return transformedPatterns;
@@ -143,9 +139,8 @@ public class MavenPluginConfigurationTranslator {
 	 *             if an error occurs
 	 */
 	public boolean getIncludeTests() throws CoreException {
-		Boolean tests =
-		        configurator.getParameterValue(mavenProject, "includeTests",
-		                Boolean.class, pmdGoalExecution, monitor);
+		Boolean tests = configurator.getParameterValue(mavenProject,
+		        "includeTests", Boolean.class, pmdGoalExecution, monitor);
 		return tests != null && tests.booleanValue();
 	}
 
@@ -216,19 +211,18 @@ public class MavenPluginConfigurationTranslator {
 		final List<File> includeRoots = new ArrayList<>();
 		final List<File> excludeRoots = new ArrayList<>();
 
-		includeRoots.addAll(this
-		        .transformResourceStringsToFiles(this.mavenProject
-		                .getCompileSourceRoots()));
+		includeRoots.addAll(this.transformResourceStringsToFiles(
+		        this.mavenProject.getCompileSourceRoots()));
 
 		List<String> targetDirectories = new ArrayList<>();
 		targetDirectories.add(this.mavenProject.getBuild().getDirectory());
-		excludeRoots.addAll(this
-		        .transformResourceStringsToFiles(targetDirectories));
+		excludeRoots.addAll(
+		        this.transformResourceStringsToFiles(targetDirectories));
 
 		// Get all the normalized test roots and add them to include or exclude.
 		final List<File> testCompileSourceRoots =
-		        this.transformResourceStringsToFiles(this.mavenProject
-		                .getTestCompileSourceRoots());
+		        this.transformResourceStringsToFiles(
+		                this.mavenProject.getTestCompileSourceRoots());
 		if (this.getIncludeTests()) {
 			includeRoots.addAll(testCompileSourceRoots);
 		} else {
@@ -237,9 +231,8 @@ public class MavenPluginConfigurationTranslator {
 
 		// now we need to filter out any excludeRoots from plugin configurations
 		List<File> excludeRootsFromConfig;
-		File[] excludeRootsArray =
-		        configurator.getParameterValue(mavenProject, "excludeRoots",
-		                File[].class, pmdGoalExecution, monitor);
+		File[] excludeRootsArray = configurator.getParameterValue(mavenProject,
+		        "excludeRoots", File[].class, pmdGoalExecution, monitor);
 		if (excludeRootsArray == null) {
 			excludeRootsFromConfig = Collections.emptyList();
 		} else {
@@ -262,8 +255,8 @@ public class MavenPluginConfigurationTranslator {
 		}
 		this.includeSourceRoots.addAll(this
 		        .convertFileFoldersToRelativePathStrings(filteredIncludeRoots));
-		this.excludeSourceRoots.addAll(this
-		        .convertFileFoldersToRelativePathStrings(excludeRoots));
+		this.excludeSourceRoots.addAll(
+		        this.convertFileFoldersToRelativePathStrings(excludeRoots));
 	}
 
 	private List<String> convertFileFoldersToRelativePathStrings(
@@ -273,8 +266,7 @@ public class MavenPluginConfigurationTranslator {
 		for (File f : sources) {
 			String relativePath;
 			if (!f.isAbsolute()) {
-				relativePath =
-				        this.basedirUri.resolve(f.toURI()).getPath();
+				relativePath = this.basedirUri.resolve(f.toURI()).getPath();
 			} else {
 				relativePath = f.getAbsolutePath();
 			}

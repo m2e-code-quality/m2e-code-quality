@@ -31,8 +31,8 @@ public final class PmdEclipseConstants {
 
 	public static final String PMD_SETTINGS_FILE = ".pmd";
 
-	public static final String PLUGIN_ID = FrameworkUtil.getBundle(
-	        PmdEclipseConstants.class).getSymbolicName();
+	public static final String PLUGIN_ID = FrameworkUtil
+	        .getBundle(PmdEclipseConstants.class).getSymbolicName();
 
 	private PmdEclipseConstants() {
 		// no instantiation.

@@ -40,8 +40,8 @@ import edu.umd.cs.findbugs.config.UserPreferences;
 
 /**
  */
-public class EclipseFindbugsProjectConfigurator extends
-        AbstractMavenPluginProjectConfigurator {
+public class EclipseFindbugsProjectConfigurator
+        extends AbstractMavenPluginProjectConfigurator {
 
 	private static final Logger LOG =
 	        LoggerFactory.getLogger(EclipseFindbugsProjectConfigurator.class);

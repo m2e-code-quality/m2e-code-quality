@@ -22,8 +22,8 @@ import de.tobject.findbugs.builder.ResourceUtils;
 import de.tobject.findbugs.builder.WorkItem;
 
 @SuppressWarnings("restriction")
-public class EclipseFindbugsProjectConfigurationTest extends
-        AbstractMavenProjectTestCase {
+public class EclipseFindbugsProjectConfigurationTest
+        extends AbstractMavenProjectTestCase {
 
 	private static final String FINDBUGS_MARKER =
 	        "edu.umd.cs.findbugs.plugin.eclipse.findbugsMarker";

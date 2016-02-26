@@ -50,8 +50,8 @@ import net.sf.eclipsecs.core.util.CheckstylePluginException;
 
 /**
  */
-public class EclipseCheckstyleProjectConfigurator extends
-        AbstractMavenPluginProjectConfigurator {
+public class EclipseCheckstyleProjectConfigurator
+        extends AbstractMavenPluginProjectConfigurator {
 
 	private static final Logger LOG =
 	        LoggerFactory.getLogger(EclipseCheckstyleProjectConfigurator.class);
@@ -100,12 +100,9 @@ public class EclipseCheckstyleProjectConfigurator extends
 			                ProjectConfigurationFactory
 			                        .getConfiguration(project));
 			pcWorkingCopy.setUseSimpleConfig(false);
-			pcWorkingCopy
-			        .setSyncFormatter(Activator
-			                .getDefault()
-			                .getPreferenceStore()
-			                .getBoolean(
-			                        CheckstyleEclipseConstants.ECLIPSE_CS_GENERATE_FORMATTER_SETTINGS));
+			pcWorkingCopy.setSyncFormatter(
+			        Activator.getDefault().getPreferenceStore().getBoolean(
+			                CheckstyleEclipseConstants.ECLIPSE_CS_GENERATE_FORMATTER_SETTINGS));
 			pcWorkingCopy.getFileSets().clear();
 
 			for (final MavenPluginConfigurationTranslator mavenCheckstyleConfig : mavenCheckstyleConfigs) {
@@ -146,12 +143,11 @@ public class EclipseCheckstyleProjectConfigurator extends
 		// get the ruleset from configLocation
 		final URL ruleset = cfgTranslator.getRuleset();
 		// build or get the checkconfig
-		final ICheckConfiguration checkCfg =
-		        this.createOrGetCheckstyleConfig(pcWorkingCopy, ruleset,
-		                cfgTranslator.getExecutionId());
+		final ICheckConfiguration checkCfg = this.createOrGetCheckstyleConfig(
+		        pcWorkingCopy, ruleset, cfgTranslator.getExecutionId());
 		// update filesets (include and exclude patterns)
-		cfgTranslator.updateCheckConfigWithIncludeExcludePatterns(
-		        pcWorkingCopy, checkCfg);
+		cfgTranslator.updateCheckConfigWithIncludeExcludePatterns(pcWorkingCopy,
+		        checkCfg);
 		// 2. Load all properties
 		// get Properties from propertiesLocation
 		final Properties props = cfgTranslator.getConfiguredProperties();
@@ -221,8 +217,8 @@ public class EclipseCheckstyleProjectConfigurator extends
 			workingSet.addCheckConfiguration(workingCopy);
 		}
 
-		workingCopy.setDescription("maven-checkstyle-plugin configuration "
-		        + executionId);
+		workingCopy.setDescription(
+		        "maven-checkstyle-plugin configuration " + executionId);
 		workingCopy.setLocation(ruleset.toExternalForm());
 		return workingCopy;
 	}
