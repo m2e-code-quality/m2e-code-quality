@@ -80,6 +80,8 @@
           name="org.eclipse.m2e.sdk.feature.feature.group"/>
       <requirement
           name="org.apache.commons.lang"/>
+      <requirement
+          name="org.eclipse.m2e.logback.feature.feature.group"/>
       <sourceLocator
           rootFolder="${git.clone.location}"
           locateNestedProjects="true"/>
