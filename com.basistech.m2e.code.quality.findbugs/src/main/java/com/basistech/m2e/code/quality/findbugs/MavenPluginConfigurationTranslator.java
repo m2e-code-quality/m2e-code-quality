@@ -74,7 +74,8 @@ public class MavenPluginConfigurationTranslator {
 
 	private static final Logger log =
 	        LoggerFactory
-	                .getLogger("com/basistech/m2e/code/quality/findbugs/MavenPluginConfigurationTranslator");
+	                .getLogger(
+	                        "com/basistech/m2e/code/quality/findbugs/MavenPluginConfigurationTranslator");
 	private final IProject project;
 	private final AbstractMavenPluginProjectConfigurator configurator;
 	private final ResourceResolver resourceResolver;

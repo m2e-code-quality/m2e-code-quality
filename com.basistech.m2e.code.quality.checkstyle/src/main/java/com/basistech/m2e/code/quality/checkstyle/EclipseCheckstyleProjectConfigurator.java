@@ -76,7 +76,8 @@ public class EclipseCheckstyleProjectConfigurator extends
 	protected void handleProjectConfigurationChange(
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final IProgressMonitor monitor,
-	        final MavenPluginWrapper mavenPluginWrapper, MavenSession session) throws CoreException {
+	        final MavenPluginWrapper mavenPluginWrapper, MavenSession session)
+	                throws CoreException {
 
 		final List<MavenPluginConfigurationTranslator> mavenCheckstyleConfigs =
 		        MavenPluginConfigurationTranslator.newInstance(this,

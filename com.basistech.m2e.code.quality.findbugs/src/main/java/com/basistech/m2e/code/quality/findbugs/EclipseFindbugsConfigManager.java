@@ -42,7 +42,8 @@ public class EclipseFindbugsConfigManager {
 
 	private static final Logger log =
 	        LoggerFactory
-	                .getLogger("com/basistech/m2e/code/quality/findbugs/EclipseFindbugsConfigManager");
+	                .getLogger(
+	                        "com/basistech/m2e/code/quality/findbugs/EclipseFindbugsConfigManager");
 
 	private final FindBugsNature fbNature;
 

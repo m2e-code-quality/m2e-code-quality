@@ -45,7 +45,8 @@ public class EclipseFindbugsProjectConfigurator extends
 
 	private static final Logger log =
 	        LoggerFactory
-	                .getLogger("com/basistech/m2e/code/quality/findbugs/EclipseFindbugsProjectConfigurator");
+	                .getLogger(
+	                        "com/basistech/m2e/code/quality/findbugs/EclipseFindbugsProjectConfigurator");
 
 	public EclipseFindbugsProjectConfigurator() {
 		super();

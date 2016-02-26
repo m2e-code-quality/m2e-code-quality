@@ -98,7 +98,8 @@ public class MavenPluginConfigurationTranslator {
 		        this.resourceResolver.resolveLocation(this.getConfigLocation());
 		if (ruleset == null) {
 			throw new CheckstylePluginException(
-			        String.format("Failed to resolve RuleSet from configLocation,SKIPPING Eclipse checkstyle configuration"));
+			        String.format(
+			                "Failed to resolve RuleSet from configLocation,SKIPPING Eclipse checkstyle configuration"));
 		}
 		return ruleset;
 	}
@@ -291,7 +292,8 @@ public class MavenPluginConfigurationTranslator {
 			result.add(sourceDirectory);
 		}
 		@SuppressWarnings("unchecked")
-		List<String> sourceDirectories = configurator.getParameterValue(mavenProject, "sourceDirectories", List.class, execution, monitor);
+		List<String> sourceDirectories = configurator.getParameterValue(mavenProject,
+		        "sourceDirectories", List.class, execution, monitor);
 		if (sourceDirectories != null) {
 			result.addAll(sourceDirectories);
 		}
@@ -306,7 +308,8 @@ public class MavenPluginConfigurationTranslator {
 			result.add(sourceDirectory);
 		}
 		@SuppressWarnings("unchecked")
-		List<String> sourceDirectories = configurator.getParameterValue(mavenProject, "testSourceDirectories", List.class, execution, monitor);
+		List<String> sourceDirectories = configurator.getParameterValue(mavenProject,
+		        "testSourceDirectories", List.class, execution, monitor);
 		if (sourceDirectories != null) {
 			result.addAll(sourceDirectories);
 		}
