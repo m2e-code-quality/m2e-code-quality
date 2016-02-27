@@ -18,8 +18,11 @@ package com.basistech.m2e.code.quality.shared;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.eclipse.core.runtime.IPath;
@@ -64,49 +67,63 @@ public final class ResourceResolver {
 	 * @return the {@code URL} of the resolved location or {@code null}.
 	 */
 	public URL resolveLocation(final String location) {
-		// 1. Try it as a resource first.
-		if (pluginRealm != null) {
-			String urlLocation = location;
-			// note that class loaders don't want leading slashes.
-			if (urlLocation.startsWith("/")) {
-				urlLocation = urlLocation.substring(1);
-			}
-			final URL url = pluginRealm.getResource(urlLocation);
-			if (url != null) {
-				return url;
-			}
+		if (location == null || location.isEmpty()) {
+			return null;
 		}
+		URL url = getResourceFromPluginRealm(location);
+		if (url == null) {
+			url = getResourceFromRemote(location);
+		}
+		if (url == null) {
+			url = getResourceFromFileSystem(location);
+		}
+		if (url == null) {
+			url = getResourceRelativeFromProjectLocation(location);
+		}
+		return url;
+	}
 
-		// 2. Try it as a remote resource.
+	public URL getResourceFromPluginRealm(final String resource) {
+		if (resource.startsWith("/")) {
+			// ClassLoaders don't want leading slashes
+			return pluginRealm.getResource(resource.substring(1));
+		} else {
+			return pluginRealm.getResource(resource);
+		}
+	}
+
+	public URL getResourceFromRemote(final String resource) {
 		try {
-			final URL url = new URL(location);
-			// check if valid.
-			url.openStream();
-			return url;
-		} catch (final IOException ex) {
-			// ignored, try next
+			return new URL(resource);
+		} catch (final IOException e) {
+			LOG.trace("Could not open resource {} from remote", resource, e);
 		}
+		return null;
+	}
 
-		// 3. Try to see if it exists as a filesystem resource.
-		final File file = new File(location);
-		if (file.exists()) {
-			try {
+	public URL getResourceFromFileSystem(final String resource) {
+		try {
+			final Path path = Paths.get(resource);
+			if (Files.exists(path)) {
+				return path.toUri().toURL();
+			}
+		} catch (InvalidPathException | IOException e) {
+			LOG.trace("Could not open resource {} from file system", resource,
+			        e);
+		}
+		return null;
+	}
+
+	public URL getResourceRelativeFromProjectLocation(final String resource) {
+		try {
+			final File file = projectLocation.append(resource).toFile();
+			if (file.exists()) {
 				return file.toURI().toURL();
-			} catch (final MalformedURLException ex) {
-				// ignored, try next
 			}
+		} catch (final IOException e) {
+			LOG.trace("Could not open resource {} relative to project location",
+			        resource, e);
 		}
-
-		final File projectFile = projectLocation.append(location).toFile();
-		if (projectFile.exists()) {
-			try {
-				return projectFile.toURI().toURL();
-			} catch (final MalformedURLException ex) {
-				// ignored, try next
-			}
-		}
-
-		// 4. null
 		return null;
 	}
 
