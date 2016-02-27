@@ -293,7 +293,6 @@ public class MavenPluginConfigurationTranslator
 	 */
 	private List<FileMatchPattern> getIncludesExcludesFileMatchPatterns()
 	        throws CheckstylePluginException, CoreException {
-
 		final List<FileMatchPattern> patterns = new LinkedList<>();
 
 		/**
