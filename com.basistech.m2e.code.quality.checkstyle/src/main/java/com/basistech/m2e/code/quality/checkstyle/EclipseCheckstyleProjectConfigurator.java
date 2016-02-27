@@ -86,7 +86,7 @@ public class EclipseCheckstyleProjectConfigurator
 	        final MavenSession session) throws CoreException {
 
 		final List<MavenPluginConfigurationTranslator> mavenCheckstyleConfigs =
-		        MavenPluginConfigurationTranslator.newInstance(this,
+		        MavenPluginConfigurationTranslator.newInstance(maven, this,
 		                mavenProjectFacade.getMavenProject(monitor),
 		                mavenPluginWrapper, project, monitor, session);
 
