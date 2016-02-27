@@ -213,7 +213,7 @@ public class MavenPluginConfigurationTranslator
 		        Boolean.TRUE);
 	}
 
-	public boolean getIncludeTestResourcesDirectory() throws CoreException {
+	public boolean isIncludeTestResources() throws CoreException {
 		return getParameterValue("includeTestResources", Boolean.class,
 		        Boolean.TRUE);
 	}
@@ -411,7 +411,7 @@ public class MavenPluginConfigurationTranslator
 			}
 		}
 
-		if (this.getIncludeTestResourcesDirectory()) {
+		if (this.isIncludeTestResources()) {
 			final List<String> resourceIncludePatterns =
 			        this.getResourceIncludes();
 			for (final Resource resource : this.mavenProject.getBuild()
