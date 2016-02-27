@@ -18,9 +18,13 @@ package com.basistech.m2e.code.quality.checkstyle;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,7 +39,6 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -72,22 +75,22 @@ public class MavenPluginConfigurationTranslator
 	private final MavenProject mavenProject;
 	private final IProject project;
 	private final URI basedirUri;
-	private final AbstractMavenPluginProjectConfigurator configurator;
 	private final ResourceResolver resourceResolver;
 	private final MojoExecution execution;
+	private final Path workingDirectory;
 
 	private MavenPluginConfigurationTranslator(final IMaven maven,
-	        final AbstractMavenPluginProjectConfigurator configurator,
 	        final MavenProject mavenProject, final MojoExecution mojoExecution,
 	        final IProject project, final IProgressMonitor monitor,
-	        final ResourceResolver resourceResolver) throws CoreException {
+	        final ResourceResolver resourceResolver,
+	        final Path workingDirectory) throws CoreException {
 		super(maven, mavenProject, mojoExecution, monitor);
 		this.mavenProject = mavenProject;
 		this.project = project;
+		this.workingDirectory = workingDirectory;
 		this.basedirUri = this.project.getLocationURI();
 		this.resourceResolver = resourceResolver;
 		this.execution = mojoExecution;
-		this.configurator = configurator;
 	}
 
 	public boolean isSkip() throws CoreException {
@@ -106,40 +109,44 @@ public class MavenPluginConfigurationTranslator
 
 	public String getHeaderFile()
 	        throws CheckstylePluginException, CoreException {
-		final URL headerResource =
-		        this.resourceResolver.resolveLocation(getHeaderLocation());
-		if (headerResource == null) {
+		final URL headerLocation =
+		        resourceResolver.resolveLocation(getHeaderLocation());
+		if (headerLocation == null) {
 			return null;
 		}
-
-		final File outDir =
-		        project.getWorkingLocation(configurator.getId()).toFile();
-		final File headerFile = new File(outDir,
-		        "checkstyle-header-" + getExecutionId() + ".txt");
-		copyOut(headerResource, headerFile);
-
-		return headerFile.getAbsolutePath();
+		final Path headerFile = workingDirectory
+		        .resolve("checkstyle-header-" + getExecutionId() + ".txt");
+		try (InputStream inputStream = headerLocation.openStream()) {
+			Files.copy(inputStream, headerFile,
+			        StandardCopyOption.REPLACE_EXISTING);
+		} catch (final IOException e) {
+			LOG.error("Could not copy header file {}", headerLocation, e);
+			throw new CheckstylePluginException(
+			        "Failed to resolve header file, SKIPPING Eclipse checkstyle configuration");
+		}
+		return headerFile.toAbsolutePath().toString();
 	}
 
 	public String getSuppressionsFile()
 	        throws CheckstylePluginException, CoreException {
-		final String suppressionsLocation = getSuppressionsLocation();
+		final URL suppressionsLocation = this.resourceResolver
+		        .resolveLocation(getSuppressionsLocation());
 		if (suppressionsLocation == null) {
 			return null;
 		}
-		final URL suppressionsResource =
-		        this.resourceResolver.resolveLocation(suppressionsLocation);
-		if (suppressionsResource == null) {
-			return null;
-		}
 
-		final File outDir =
-		        project.getWorkingLocation(configurator.getId()).toFile();
-		final File suppressionsFile = new File(outDir,
+		final Path suppressionsFile = workingDirectory.resolve(
 		        "checkstyle-suppressions-" + getExecutionId() + ".xml");
-		copyOut(suppressionsResource, suppressionsFile);
-
-		return suppressionsFile.getAbsolutePath();
+		try (InputStream inputStream = suppressionsLocation.openStream()) {
+			Files.copy(inputStream, suppressionsFile,
+			        StandardCopyOption.REPLACE_EXISTING);
+		} catch (final IOException e) {
+			LOG.error("Could not copy suppressions file {}",
+			        suppressionsLocation, e);
+			throw new CheckstylePluginException(
+			        "Failed to resolve suppressions file, SKIPPING Eclipse checkstyle configuration");
+		}
+		return suppressionsFile.toAbsolutePath().toString();
 	}
 
 	public String getSuppressionsFileExpression() throws CoreException {
@@ -279,18 +286,6 @@ public class MavenPluginConfigurationTranslator
 
 	private List<String> getResourceExcludes() throws CoreException {
 		return this.getPatterns("resourceExcludes");
-	}
-
-	private void copyOut(final URL src, final File dest)
-	        throws CheckstylePluginException {
-		try {
-			FileUtils.copyURLToFile(src, dest);
-		} catch (final IOException e) {
-			LOG.error("Could not copy file {}", src, e);
-			throw new CheckstylePluginException(
-			        "Failed to copy file " + src.getFile()
-			                + ", SKIPPING Eclipse checkstyle configuration");
-		}
 	}
 
 	/**
@@ -536,9 +531,11 @@ public class MavenPluginConfigurationTranslator
 			final ResourceResolver resourceResolver =
 			        AbstractMavenPluginProjectConfigurator.getResourceResolver(
 			                execution, session, project.getLocation());
+			final Path path = project.getWorkingLocation(configurator.getId())
+			        .toFile().toPath();
 			m2csConverters.add(new MavenPluginConfigurationTranslator(maven,
-			        configurator, mavenProject, execution, project, monitor,
-			        resourceResolver));
+			        mavenProject, execution, project, monitor, resourceResolver,
+			        path));
 		}
 		return m2csConverters;
 	}
