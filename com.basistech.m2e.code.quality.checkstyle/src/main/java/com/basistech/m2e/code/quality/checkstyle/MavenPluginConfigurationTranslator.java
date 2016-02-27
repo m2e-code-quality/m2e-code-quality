@@ -94,6 +94,10 @@ public class MavenPluginConfigurationTranslator
 		this.configurator = configurator;
 	}
 
+	public boolean isSkip() throws CoreException {
+		return getParameterValue("skip", Boolean.class, Boolean.FALSE);
+	}
+
 	public boolean isActive() throws CoreException {
 		final Boolean isSkip = configurator.getParameterValue(mavenProject,
 		        "skip", Boolean.class, execution, monitor);
