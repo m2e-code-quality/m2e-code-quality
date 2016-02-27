@@ -18,6 +18,7 @@ package com.basistech.m2e.code.quality.checkstyle;
 
 import static com.basistech.m2e.code.quality.checkstyle.CheckstyleEclipseConstants.ECLIPSE_CS_CACHE_FILENAME;
 import static com.basistech.m2e.code.quality.checkstyle.CheckstyleEclipseConstants.ECLIPSE_CS_PREFS_CONFIG_NAME;
+import static com.basistech.m2e.code.quality.checkstyle.CheckstyleEclipseConstants.ECLIPSE_CS_PREFS_FILE;
 
 import java.net.URL;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.Properties;
 
 import org.apache.maven.execution.MavenSession;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
@@ -121,6 +123,15 @@ public class EclipseCheckstyleProjectConfigurator
 		} catch (final CheckstylePluginException ex) {
 			LOG.error("CheckstylePluginException", ex);
 		}
+	}
+
+	private void deleteEclipseFiles(final IProject project,
+	        final IProgressMonitor monitor) throws CoreException {
+		final IResource checkstyleFile = project.getFile(ECLIPSE_CS_PREFS_FILE);
+		checkstyleFile.delete(IResource.FORCE, monitor);
+		final IResource checkstyleCacheFileResource =
+		        project.getFile(ECLIPSE_CS_CACHE_FILENAME);
+		checkstyleCacheFileResource.delete(IResource.FORCE, monitor);
 	}
 
 	@Override
