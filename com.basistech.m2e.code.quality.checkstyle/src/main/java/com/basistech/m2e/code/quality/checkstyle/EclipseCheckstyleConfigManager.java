@@ -45,12 +45,6 @@ public class EclipseCheckstyleConfigManager {
 		this.csNature = csNature;
 	}
 
-	public void configure(final IProgressMonitor monitor) throws CoreException {
-		// this adds the builder only.
-		this.csNature.configure();
-		this.configureNature(monitor);
-	}
-
 	public void deconfigure(final IProgressMonitor monitor)
 	        throws CoreException {
 		// this removes the builder only.
@@ -58,18 +52,6 @@ public class EclipseCheckstyleConfigManager {
 		this.deconfigureNature(monitor);
 		// remove all eclipse checkstyle files.
 		this.deleteEclipseFiles(monitor);
-	}
-
-	private void configureNature(final IProgressMonitor monitor)
-	        throws CoreException {
-		final IProject project = this.csNature.getProject();
-		// We have to explicitly add the nature.
-		final IProjectDescription desc = project.getDescription();
-		final String[] natures = desc.getNatureIds();
-		final String[] newNatures = Arrays.copyOf(natures, natures.length + 1);
-		newNatures[natures.length] = CheckstyleNature.NATURE_ID;
-		desc.setNatureIds(newNatures);
-		project.setDescription(desc, monitor);
 	}
 
 	private void deconfigureNature(final IProgressMonitor monitor)
