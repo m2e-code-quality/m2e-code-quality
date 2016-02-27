@@ -121,7 +121,7 @@ public class MavenPluginConfigurationTranslator
 		} catch (final IOException e) {
 			LOG.error("Could not copy header file {}", headerLocation, e);
 			throw new CheckstylePluginException(
-			        "Failed to resolve header file, SKIPPING Eclipse checkstyle configuration");
+			        "Failed to copy header file, SKIPPING Eclipse checkstyle configuration");
 		}
 		return headerFile.toAbsolutePath().toString();
 	}
@@ -142,7 +142,7 @@ public class MavenPluginConfigurationTranslator
 			LOG.error("Could not copy suppressions file {}",
 			        suppressionsLocation, e);
 			throw new CheckstylePluginException(
-			        "Failed to resolve suppressions file, SKIPPING Eclipse checkstyle configuration");
+			        "Failed to copy suppressions file, SKIPPING Eclipse checkstyle configuration");
 		}
 		return suppressionsFile.toAbsolutePath().toString();
 	}
