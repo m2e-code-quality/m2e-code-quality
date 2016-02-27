@@ -103,7 +103,7 @@ public class EclipseCheckstyleProjectConfigurator
 			pcWorkingCopy.getFileSets().clear();
 
 			for (final MavenPluginConfigurationTranslator mavenCheckstyleConfig : mavenCheckstyleConfigs) {
-				if (mavenCheckstyleConfig.isActive()) {
+				if (!mavenCheckstyleConfig.isSkip()) {
 					this.buildCheckstyleConfiguration(pcWorkingCopy,
 					        mavenCheckstyleConfig);
 					addNature(project, CheckstyleNature.NATURE_ID, monitor);
