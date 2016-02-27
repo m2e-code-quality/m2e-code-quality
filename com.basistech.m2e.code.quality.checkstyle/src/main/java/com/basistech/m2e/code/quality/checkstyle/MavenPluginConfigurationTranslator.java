@@ -461,8 +461,7 @@ public class MavenPluginConfigurationTranslator
 	private List<String> getPatterns(final String elemName)
 	        throws CoreException {
 		final List<String> transformedPatterns = new LinkedList<>();
-		final String patternsString = configurator.getParameterValue(
-		        mavenProject, elemName, String.class, execution, monitor);
+		final String patternsString = getParameterValue(elemName, String.class);
 		if (patternsString == null || patternsString.length() == 0) {
 			return transformedPatterns;
 		}
