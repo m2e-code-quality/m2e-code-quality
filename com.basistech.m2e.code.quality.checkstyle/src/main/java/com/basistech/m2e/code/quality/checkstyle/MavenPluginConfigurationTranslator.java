@@ -109,8 +109,7 @@ public class MavenPluginConfigurationTranslator
 
 	public String getHeaderFile()
 	        throws CheckstylePluginException, CoreException {
-		final URL headerLocation =
-		        resourceResolver.resolveLocation(getHeaderLocation());
+		final URL headerLocation = getHeaderLocation();
 		if (headerLocation == null) {
 			return null;
 		}
@@ -230,14 +229,14 @@ public class MavenPluginConfigurationTranslator
 		        CHECKSTYLE_DEFAULT_CONFIG_LOCATION);
 	}
 
-	private String getHeaderLocation() throws CoreException {
+	private URL getHeaderLocation() throws CoreException {
 		String headerLocation = getParameterValue("headerLocation",
 		        String.class, "LICENSE.txt");
 		if ("config/maven_checks.xml".equals(getConfigLocation())
 		        && "LICENSE.txt".equals(headerLocation)) {
 			headerLocation = "config/maven-header.txt";
 		}
-		return headerLocation;
+		return resourceResolver.resolveLocation(headerLocation);
 	}
 
 	private String getSuppressionsLocation() throws CoreException {
