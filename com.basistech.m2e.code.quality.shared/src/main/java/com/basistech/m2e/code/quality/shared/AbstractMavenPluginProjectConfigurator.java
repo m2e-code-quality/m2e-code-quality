@@ -16,6 +16,8 @@
  ******************************************************************************/
 package com.basistech.m2e.code.quality.shared;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +27,8 @@ import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -51,6 +55,27 @@ public abstract class AbstractMavenPluginProjectConfigurator
 
 	private static final Logger LOG = LoggerFactory
 	        .getLogger(AbstractMavenPluginProjectConfigurator.class);
+
+	public static void removeNature(final IProject project,
+	        final String natureId, final IProgressMonitor monitor)
+	        throws CoreException {
+		removeNature(project, natureId, IResource.KEEP_HISTORY, monitor);
+	}
+
+	public static void removeNature(final IProject project,
+	        final String natureId, final int updateFlags,
+	        final IProgressMonitor monitor) throws CoreException {
+		if (project.hasNature(natureId)) {
+			final IProjectDescription description = project.getDescription();
+			final String[] prevNatures = description.getNatureIds();
+			final List<String> natures =
+			        new ArrayList<>(Arrays.asList(prevNatures));
+			natures.remove(natureId);
+			final String[] newNatures = natures.toArray(new String[0]);
+			description.setNatureIds(newNatures);
+			project.setDescription(description, updateFlags, monitor);
+		}
+	}
 
 	@Override
 	public <T> T getParameterValue(final MavenProject project,
