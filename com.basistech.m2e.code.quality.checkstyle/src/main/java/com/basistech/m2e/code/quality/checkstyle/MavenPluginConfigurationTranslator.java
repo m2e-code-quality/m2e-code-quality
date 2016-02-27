@@ -194,8 +194,7 @@ public class MavenPluginConfigurationTranslator
 	 *             if an error occurs
 	 */
 	protected String getPropertyExpansion() throws CoreException {
-		return configurator.getParameterValue(mavenProject, "propertyExpansion",
-		        String.class, execution, monitor);
+		return getParameterValue("propertyExpansion", String.class);
 	}
 
 	/**
