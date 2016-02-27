@@ -299,11 +299,9 @@ public class MavenPluginConfigurationTranslator
 		 * Step 1). Get all the source roots (including test sources root, if
 		 * enabled).
 		 */
-		final Set<String> sourceFolders = new HashSet<>();
-		sourceFolders.addAll(this.getSourceDirectories());
-
+		final Set<String> sourceFolders = new HashSet<>(getSourceDirectories());
 		if (isIncludeTestSourceDirectory()) {
-			sourceFolders.addAll(this.getTestSourceDirectories());
+			sourceFolders.addAll(getTestSourceDirectories());
 		}
 
 		/**
