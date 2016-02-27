@@ -181,7 +181,7 @@ public class EclipsePmdProjectConfigurator
 	        final MavenPluginWrapper pluginWrapper, final IProject project,
 	        final MavenPluginConfigurationTranslator pluginCfgTranslator,
 	        final IProgressMonitor monitor, final MavenSession session)
-	                throws CoreException {
+	        throws CoreException {
 
 		final MojoExecution execution = findMojoExecution(pluginWrapper);
 		final ResourceResolver resourceResolver = this
@@ -218,7 +218,7 @@ public class EclipsePmdProjectConfigurator
 	private RuleSet createPmdRuleSet(
 	        final MavenPluginConfigurationTranslator pluginCfgTranslator,
 	        final ResourceResolver resourceResolver)
-	                throws CoreException, PMDException {
+	        throws CoreException, PMDException {
 
 		final RuleSet ruleSet = new RuleSet();
 		ruleSet.setName("M2Eclipse PMD RuleSet");
@@ -246,7 +246,7 @@ public class EclipsePmdProjectConfigurator
 					        @Override
 					        public InputStream getInputStream(
 				                    final ClassLoader arg0)
-				                            throws RuleSetNotFoundException {
+				                    throws RuleSetNotFoundException {
 						        try {
 							        return resolvedLocation.openStream();
 						        } catch (final IOException e) {

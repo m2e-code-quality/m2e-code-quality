@@ -115,7 +115,7 @@ public class EclipseFindbugsProjectConfigurator
 
 	private UserPreferences buildFindbugsPreferences(
 	        final MavenPluginConfigurationTranslator pluginCfgTranslator)
-	                throws CoreException {
+	        throws CoreException {
 		LOG.debug("entering buildFindbugsPreferences");
 		final UserPreferences prefs =
 		        UserPreferences.createDefaultUserPreferences();

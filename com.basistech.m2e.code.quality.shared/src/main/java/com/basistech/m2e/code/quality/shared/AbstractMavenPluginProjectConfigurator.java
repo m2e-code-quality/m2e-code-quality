@@ -56,7 +56,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 	public <T> T getParameterValue(final MavenProject project,
 	        final String parameter, final Class<T> asType,
 	        final MojoExecution mojoExecution, final IProgressMonitor monitor)
-	                throws CoreException {
+	        throws CoreException {
 		return super.getParameterValue(project, parameter, asType,
 		        mojoExecution, monitor);
 	}
@@ -167,7 +167,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final IProgressMonitor monitor,
 	        final MavenPluginWrapper mavenPluginWrapper, MavenSession session)
-	                throws CoreException;
+	        throws CoreException;
 
 	/**
 	 * Get the maven plugin {@code groupId}.
@@ -219,7 +219,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 	private boolean checkUnconfigurationRequired(final IProgressMonitor monitor,
 	        final IMavenProjectFacade curMavenProjectFacade,
 	        final IMavenProjectFacade oldMavenProjectFacade)
-	                throws CoreException {
+	        throws CoreException {
 		Preconditions.checkNotNull(curMavenProjectFacade);
 
 		if (oldMavenProjectFacade == null) {

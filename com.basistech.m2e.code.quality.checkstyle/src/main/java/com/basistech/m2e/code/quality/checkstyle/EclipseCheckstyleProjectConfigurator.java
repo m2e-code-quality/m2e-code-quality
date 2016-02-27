@@ -134,7 +134,7 @@ public class EclipseCheckstyleProjectConfigurator
 	private void buildCheckstyleConfiguration(
 	        final ProjectConfigurationWorkingCopy pcWorkingCopy,
 	        final MavenPluginConfigurationTranslator cfgTranslator)
-	                throws CheckstylePluginException, CoreException {
+	        throws CheckstylePluginException, CoreException {
 		// get the ruleset from configLocation
 		final URL ruleset = cfgTranslator.getRuleset();
 		// build or get the checkconfig
@@ -178,7 +178,7 @@ public class EclipseCheckstyleProjectConfigurator
 	private ICheckConfiguration createOrGetCheckstyleConfig(
 	        final ProjectConfigurationWorkingCopy pcWorkingCopy,
 	        final URL ruleset, final String executionId)
-	                throws CheckstylePluginException {
+	        throws CheckstylePluginException {
 		final String configName =
 		        ECLIPSE_CS_PREFS_CONFIG_NAME + " " + executionId;
 		final ICheckConfigurationWorkingSet workingSet =
