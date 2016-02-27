@@ -451,13 +451,13 @@ public class MavenPluginConfigurationTranslator
 	        throws CoreException {
 		final List<String> transformedPatterns = new LinkedList<>();
 		final String patternsString = getParameterValue(elemName, String.class);
-		if (patternsString == null || patternsString.length() == 0) {
+		if (patternsString == null || patternsString.isEmpty()) {
 			return transformedPatterns;
 		}
 		final String[] patternsArray = StringUtils.split(patternsString, ",");
 		for (String p : patternsArray) {
 			p = StringUtils.strip(p);
-			if (p == null || p.length() == 0) {
+			if (p == null || p.isEmpty()) {
 				continue;
 			}
 			String csPattern;
