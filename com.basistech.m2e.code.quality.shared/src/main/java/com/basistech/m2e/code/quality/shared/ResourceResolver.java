@@ -24,6 +24,8 @@ import java.net.URL;
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.eclipse.core.runtime.IPath;
 
+import com.google.common.base.Preconditions;
+
 /**
  * A utility class to resolve resources, which includes searching in resources
  * specified with the {@literal <dependencies>} of the Maven pluginWrapper
@@ -38,6 +40,8 @@ public final class ResourceResolver {
 
 	public ResourceResolver(final ClassRealm pluginRealm,
 	        final IPath projectLocation) {
+		Preconditions.checkNotNull(pluginRealm);
+		Preconditions.checkNotNull(projectLocation);
 		this.pluginRealm = pluginRealm;
 		this.projectLocation = projectLocation;
 	}
