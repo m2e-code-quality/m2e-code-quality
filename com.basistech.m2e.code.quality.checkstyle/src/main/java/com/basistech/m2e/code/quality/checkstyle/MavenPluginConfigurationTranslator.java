@@ -235,10 +235,9 @@ public class MavenPluginConfigurationTranslator
 	}
 
 	private String getHeaderLocation() throws CoreException {
-		final String configLocation = getConfigLocation();
-		String headerLocation = configurator.getParameterValue(mavenProject,
-		        "headerLocation", String.class, execution, monitor);
-		if ("config/maven_checks.xml".equals(configLocation)
+		String headerLocation = getParameterValue("headerLocation",
+		        String.class, "LICENSE.txt");
+		if ("config/maven_checks.xml".equals(getConfigLocation())
 		        && "LICENSE.txt".equals(headerLocation)) {
 			headerLocation = "config/maven-header.txt";
 		}
