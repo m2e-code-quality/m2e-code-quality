@@ -81,7 +81,6 @@ public class EclipseCheckstyleConfigManager {
 		final IResource checkstyleCacheFileResource =
 		        project.getFile(ECLIPSE_CS_CACHE_FILENAME);
 		checkstyleCacheFileResource.delete(IResource.FORCE, monitor);
-
 	}
 
 	public static EclipseCheckstyleConfigManager newInstance(
