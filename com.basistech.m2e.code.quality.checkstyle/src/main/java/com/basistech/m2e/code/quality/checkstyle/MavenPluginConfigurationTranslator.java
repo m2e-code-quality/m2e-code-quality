@@ -75,7 +75,6 @@ public class MavenPluginConfigurationTranslator
 	private final AbstractMavenPluginProjectConfigurator configurator;
 	private final ResourceResolver resourceResolver;
 	private final MojoExecution execution;
-	private final IProgressMonitor monitor;
 
 	private MavenPluginConfigurationTranslator(final IMaven maven,
 	        final AbstractMavenPluginProjectConfigurator configurator,
@@ -85,7 +84,6 @@ public class MavenPluginConfigurationTranslator
 		super(maven, mavenProject, mojoExecution, monitor);
 		this.mavenProject = mavenProject;
 		this.project = project;
-		this.monitor = monitor;
 		this.basedirUri = this.project.getLocationURI();
 		this.resourceResolver = resourceResolver;
 		this.execution = mojoExecution;
