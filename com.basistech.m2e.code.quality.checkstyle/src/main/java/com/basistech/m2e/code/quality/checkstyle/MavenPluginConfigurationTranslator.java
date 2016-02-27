@@ -73,7 +73,6 @@ public class MavenPluginConfigurationTranslator
 	private static final Map<String, String> PATTERNS_CACHE = new HashMap<>();
 
 	private final MavenProject mavenProject;
-	private final IProject project;
 	private final URI basedirUri;
 	private final ResourceResolver resourceResolver;
 	private final MojoExecution execution;
@@ -81,14 +80,13 @@ public class MavenPluginConfigurationTranslator
 
 	private MavenPluginConfigurationTranslator(final IMaven maven,
 	        final MavenProject mavenProject, final MojoExecution mojoExecution,
-	        final IProject project, final IProgressMonitor monitor,
+	        final URI basedirUri, final IProgressMonitor monitor,
 	        final ResourceResolver resourceResolver,
 	        final Path workingDirectory) throws CoreException {
 		super(maven, mavenProject, mojoExecution, monitor);
 		this.mavenProject = mavenProject;
-		this.project = project;
 		this.workingDirectory = workingDirectory;
-		this.basedirUri = this.project.getLocationURI();
+		this.basedirUri = basedirUri;
 		this.resourceResolver = resourceResolver;
 		this.execution = mojoExecution;
 	}
@@ -532,8 +530,8 @@ public class MavenPluginConfigurationTranslator
 			final Path path = project.getWorkingLocation(configurator.getId())
 			        .toFile().toPath();
 			m2csConverters.add(new MavenPluginConfigurationTranslator(maven,
-			        mavenProject, execution, project, monitor, resourceResolver,
-			        path));
+			        mavenProject, execution, project.getLocationURI(), monitor,
+			        resourceResolver, path));
 		}
 		return m2csConverters;
 	}
