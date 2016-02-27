@@ -236,12 +236,11 @@ public class MavenPluginConfigurationTranslator
 	}
 
 	private String getSuppressionsLocation() throws CoreException {
-		String suppressionsLocation = configurator.getParameterValue(
-		        mavenProject, "suppressionsLocation", String.class, execution,
-		        monitor);
+		String suppressionsLocation =
+		        getParameterValue("suppressionsLocation", String.class);
 		if (suppressionsLocation == null) {
-			suppressionsLocation = configurator.getParameterValue(mavenProject,
-			        "suppressionsFile", String.class, execution, monitor);
+			suppressionsLocation =
+			        getParameterValue("suppressionsFile", String.class);
 		}
 		return suppressionsLocation;
 	}
