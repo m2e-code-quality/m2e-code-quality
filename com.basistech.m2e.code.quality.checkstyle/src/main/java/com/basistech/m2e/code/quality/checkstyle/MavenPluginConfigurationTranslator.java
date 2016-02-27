@@ -373,8 +373,8 @@ public class MavenPluginConfigurationTranslator
 			        this.getResourceIncludes();
 			for (final Resource resource : this.mavenProject.getBuild()
 			        .getTestResources()) {
-				if (resource.getExcludes().size() > 0
-				        || resource.getIncludes().size() > 0) {
+				if (!resource.getExcludes().isEmpty()
+				        || !resource.getIncludes().isEmpty()) {
 					// ignore resources that have ex/includes for now
 					continue;
 				}
@@ -391,8 +391,8 @@ public class MavenPluginConfigurationTranslator
 			        this.getResourceExcludes();
 			for (final Resource resource : this.mavenProject.getBuild()
 			        .getTestResources()) {
-				if (resource.getExcludes().size() > 0
-				        || resource.getIncludes().size() > 0) {
+				if (!resource.getExcludes().isEmpty()
+				        || !resource.getIncludes().isEmpty()) {
 					// ignore resources that have ex/includes for now
 					continue;
 				}
