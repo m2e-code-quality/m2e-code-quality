@@ -91,9 +91,6 @@ public class EclipseCheckstyleProjectConfigurator
 		                mavenPluginWrapper, project, monitor, session);
 
 		try {
-			final EclipseCheckstyleConfigManager csPluginNature =
-			        EclipseCheckstyleConfigManager.newInstance(project);
-
 			// construct a new working copy
 			final ProjectConfigurationWorkingCopy pcWorkingCopy =
 			        new ProjectConfigurationWorkingCopy(
