@@ -230,12 +230,8 @@ public class MavenPluginConfigurationTranslator
 	 * @throws CoreException
 	 */
 	private String getConfigLocation() throws CoreException {
-		String configLocation = configurator.getParameterValue(mavenProject,
-		        "configLocation", String.class, execution, monitor);
-		if (configLocation == null) {
-			configLocation = CHECKSTYLE_DEFAULT_CONFIG_LOCATION;
-		}
-		return configLocation;
+		return getParameterValue("configLocation", String.class,
+		        CHECKSTYLE_DEFAULT_CONFIG_LOCATION);
 	}
 
 	private String getHeaderLocation() throws CoreException {
