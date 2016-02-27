@@ -86,7 +86,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 	@Override
 	public void configure(final ProjectConfigurationRequest request,
 	        final IProgressMonitor monitor) throws CoreException {
-		LOG.error("configure {} {}", request, monitor);
+		LOG.error("configure {}", request.getProject());
 
 		final MavenProject mavenProject = request.getMavenProject();
 		if (mavenProject == null) {
@@ -112,28 +112,28 @@ public abstract class AbstractMavenPluginProjectConfigurator
 	public void mavenProjectChanged(
 	        final MavenProjectChangedEvent mavenProjectChangedEvent,
 	        final IProgressMonitor monitor) throws CoreException {
-		if (LOG.isDebugEnabled()) {
-			switch (mavenProjectChangedEvent.getKind()) {
-				case MavenProjectChangedEvent.KIND_ADDED:
-					LOG.debug("mavenProjectChanged KIND_ADDED");
-					break;
-				case MavenProjectChangedEvent.KIND_CHANGED:
-					LOG.debug("mavenProjectChanged KIND_CHANGED");
-					break;
-				case MavenProjectChangedEvent.KIND_REMOVED:
-					LOG.debug("mavenProjectChanged KIND_REMOVED");
-					break;
-				default:
-					LOG.debug("mavenProjectChanged {}",
-					        mavenProjectChangedEvent.getKind());
-			}
-		}
-
 		final IMavenProjectFacade mavenProjectFacade =
 		        mavenProjectChangedEvent.getMavenProject();
 		final MavenPluginWrapper pluginWrapper =
 		        this.getMavenPlugin(monitor, mavenProjectFacade);
 		final IProject project = mavenProjectFacade.getProject();
+
+		if (LOG.isDebugEnabled()) {
+			switch (mavenProjectChangedEvent.getKind()) {
+				case MavenProjectChangedEvent.KIND_ADDED:
+					LOG.debug("mavenProjectChanged {}: KIND_ADDED", project);
+					break;
+				case MavenProjectChangedEvent.KIND_CHANGED:
+					LOG.debug("mavenProjectChanged {}: KIND_CHANGED", project);
+					break;
+				case MavenProjectChangedEvent.KIND_REMOVED:
+					LOG.debug("mavenProjectChanged {}: KIND_REMOVED", project);
+					break;
+				default:
+					LOG.debug("mavenProjectChanged {}: {}", project,
+					        mavenProjectChangedEvent.getKind());
+			}
+		}
 
 		if (this.checkUnconfigurationRequired(monitor, mavenProjectFacade,
 		        mavenProjectChangedEvent.getOldMavenProject())) {
