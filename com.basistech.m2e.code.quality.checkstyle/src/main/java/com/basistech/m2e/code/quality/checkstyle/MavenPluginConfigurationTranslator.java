@@ -257,21 +257,14 @@ public class MavenPluginConfigurationTranslator
 	}
 
 	private List<String> getTestSourceDirectories() throws CoreException {
-		final List<String> result = new ArrayList<>();
-		final String sourceDirectory = configurator.getParameterValue(
-		        mavenProject, "testSourceDirectory", String.class, execution,
-		        monitor);
-		if (sourceDirectory != null) {
-			result.add(sourceDirectory);
+		final List<String> testSourceDirectories = new ArrayList<>(
+		        getParameterList("testSourceDirectories", String.class));
+		final String testSourceDirectory =
+		        getParameterValue("testSourceDirectory", String.class);
+		if (testSourceDirectory != null) {
+			testSourceDirectories.add(testSourceDirectory);
 		}
-		@SuppressWarnings("unchecked")
-		final List<String> sourceDirectories = configurator.getParameterValue(
-		        mavenProject, "testSourceDirectories", List.class, execution,
-		        monitor);
-		if (sourceDirectories != null) {
-			result.addAll(sourceDirectories);
-		}
-		return result;
+		return testSourceDirectories;
 	}
 
 	private List<String> getIncludes() throws CoreException {
