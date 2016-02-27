@@ -208,7 +208,7 @@ public class MavenPluginConfigurationTranslator
 		        Boolean.FALSE);
 	}
 
-	public boolean getIncludeResourcesDirectory() throws CoreException {
+	public boolean isIncludeResources() throws CoreException {
 		return getParameterValue("includeResources", Boolean.class,
 		        Boolean.TRUE);
 	}
@@ -383,7 +383,7 @@ public class MavenPluginConfigurationTranslator
 			        false));
 		}
 
-		if (this.getIncludeResourcesDirectory()) {
+		if (this.isIncludeResources()) {
 			final List<String> resourceIncludePatterns =
 			        this.getResourceIncludes();
 			for (final Resource resource : this.mavenProject.getBuild()
