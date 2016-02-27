@@ -259,7 +259,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 		return false;
 	}
 
-	public ResourceResolver getResourceResolver(
+	public static ResourceResolver getResourceResolver(
 	        final MojoExecution mojoExecution, final MavenSession session,
 	        final IPath projectLocation) throws CoreException {
 		// call for side effect of ensuring that the realm is set in the

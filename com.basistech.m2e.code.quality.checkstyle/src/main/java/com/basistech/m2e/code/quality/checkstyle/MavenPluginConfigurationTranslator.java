@@ -583,8 +583,8 @@ public class MavenPluginConfigurationTranslator {
 		        new ArrayList<>();
 		for (final MojoExecution execution : mavenPlugin.getMojoExecutions()) {
 			final ResourceResolver resourceResolver =
-			        configurator.getResourceResolver(execution, session,
-			                project.getLocation());
+			        AbstractMavenPluginProjectConfigurator.getResourceResolver(
+			                execution, session, project.getLocation());
 			m2csConverters.add(new MavenPluginConfigurationTranslator(
 			        configurator, mavenProject, execution, project, monitor,
 			        resourceResolver));
