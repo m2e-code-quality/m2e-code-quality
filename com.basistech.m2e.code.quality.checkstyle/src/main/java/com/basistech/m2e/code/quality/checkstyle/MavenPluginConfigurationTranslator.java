@@ -128,8 +128,7 @@ public class MavenPluginConfigurationTranslator
 
 	public String getSuppressionsFile()
 	        throws CheckstylePluginException, CoreException {
-		final URL suppressionsLocation = this.resourceResolver
-		        .resolveLocation(getSuppressionsLocation());
+		final URL suppressionsLocation = getSuppressionsLocation();
 		if (suppressionsLocation == null) {
 			return null;
 		}
@@ -239,14 +238,14 @@ public class MavenPluginConfigurationTranslator
 		return resourceResolver.resolveLocation(headerLocation);
 	}
 
-	private String getSuppressionsLocation() throws CoreException {
+	private URL getSuppressionsLocation() throws CoreException {
 		String suppressionsLocation =
 		        getParameterValue("suppressionsLocation", String.class);
 		if (suppressionsLocation == null) {
 			suppressionsLocation =
 			        getParameterValue("suppressionsFile", String.class);
 		}
-		return suppressionsLocation;
+		return this.resourceResolver.resolveLocation(suppressionsLocation);
 	}
 
 	private List<String> getSourceDirectories() throws CoreException {
