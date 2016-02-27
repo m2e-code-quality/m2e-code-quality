@@ -1,5 +1,8 @@
 package com.basistech.m2e.code.quality.shared;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.maven.model.ConfigurationContainer;
 import org.apache.maven.model.PluginExecution;
 import org.apache.maven.plugin.MojoExecution;
@@ -41,6 +44,19 @@ public class AbstractMavenPluginConfigurationTranslator {
 			return defaultValue;
 		}
 		return parameterValue;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> List<T> getParameterList(final String parameter,
+	        @SuppressWarnings("unused") final Class<T> asType)
+	        throws CoreException {
+		final List<T> list = maven.getMojoParameterValue(project, parameter,
+		        List.class, mojoExecution.getPlugin(), execution,
+		        mojoExecution.getGoal(), monitor);
+		if (list == null) {
+			return Collections.emptyList();
+		}
+		return list;
 	}
 
 }
