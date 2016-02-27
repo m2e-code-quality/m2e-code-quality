@@ -23,6 +23,8 @@ import java.net.URL;
 
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.eclipse.core.runtime.IPath;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
@@ -34,6 +36,9 @@ import com.google.common.base.Preconditions;
  * @since 0.9.8
  */
 public final class ResourceResolver {
+
+	private static final Logger LOG =
+	        LoggerFactory.getLogger(ResourceResolver.class);
 
 	private final ClassRealm pluginRealm;
 	private final IPath projectLocation;
