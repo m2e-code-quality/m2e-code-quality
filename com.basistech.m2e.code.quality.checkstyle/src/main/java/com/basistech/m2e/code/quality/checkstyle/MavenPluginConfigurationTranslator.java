@@ -158,7 +158,7 @@ public class MavenPluginConfigurationTranslator
 		        new FileSet("java-sources-" + getExecutionId(), checkCfg);
 		fs.setEnabled(true);
 		// add fileset includes/excludes
-		fs.setFileMatchPatterns(this.getIncludesExcludesFileMatchPatterns());
+		fs.setFileMatchPatterns(getIncludesExcludesFileMatchPatterns());
 		// now add the config
 		pcWorkingCopy.getFileSets().add(fs);
 	}
