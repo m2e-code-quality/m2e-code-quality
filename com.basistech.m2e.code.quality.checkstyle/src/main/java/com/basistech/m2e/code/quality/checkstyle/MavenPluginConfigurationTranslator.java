@@ -182,8 +182,7 @@ public class MavenPluginConfigurationTranslator
 	 *             if an error occurs
 	 */
 	protected String getPropertiesLocation() throws CoreException {
-		return configurator.getParameterValue(mavenProject,
-		        "propertiesLocation", String.class, execution, monitor);
+		return getParameterValue("propertiesLocation", String.class);
 	}
 
 	/**
