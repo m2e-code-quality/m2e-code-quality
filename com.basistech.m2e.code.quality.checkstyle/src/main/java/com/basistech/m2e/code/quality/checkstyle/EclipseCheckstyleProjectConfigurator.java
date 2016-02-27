@@ -41,6 +41,7 @@ import net.sf.eclipsecs.core.config.ICheckConfigurationWorkingSet;
 import net.sf.eclipsecs.core.config.ResolvableProperty;
 import net.sf.eclipsecs.core.config.configtypes.ConfigurationTypes;
 import net.sf.eclipsecs.core.config.configtypes.IConfigurationType;
+import net.sf.eclipsecs.core.nature.CheckstyleNature;
 import net.sf.eclipsecs.core.projectconfig.ProjectConfigurationFactory;
 import net.sf.eclipsecs.core.projectconfig.ProjectConfigurationWorkingCopy;
 import net.sf.eclipsecs.core.util.CheckstylePluginException;
@@ -106,8 +107,7 @@ public class EclipseCheckstyleProjectConfigurator
 				if (mavenCheckstyleConfig.isActive()) {
 					this.buildCheckstyleConfiguration(pcWorkingCopy,
 					        mavenCheckstyleConfig);
-					// Add the builder and nature
-					csPluginNature.configure(monitor);
+					addNature(project, CheckstyleNature.NATURE_ID, monitor);
 				} else {
 					csPluginNature.deconfigure(monitor);
 				}
