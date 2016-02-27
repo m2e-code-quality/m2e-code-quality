@@ -86,7 +86,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 	@Override
 	public void configure(final ProjectConfigurationRequest request,
 	        final IProgressMonitor monitor) throws CoreException {
-		LOG.error("configure {}", request.getProject());
+		LOG.debug("configure {}", request.getProject());
 
 		final MavenProject mavenProject = request.getMavenProject();
 		if (mavenProject == null) {
