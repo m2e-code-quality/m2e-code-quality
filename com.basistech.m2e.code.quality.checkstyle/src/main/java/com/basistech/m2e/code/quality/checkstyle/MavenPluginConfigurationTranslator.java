@@ -171,7 +171,7 @@ public class MavenPluginConfigurationTranslator
 	 * @throws CoreException
 	 *             if an error occurs
 	 */
-	protected String getPropertiesLocation() throws CoreException {
+	private String getPropertiesLocation() throws CoreException {
 		return getParameterValue("propertiesLocation", String.class);
 	}
 
@@ -183,7 +183,7 @@ public class MavenPluginConfigurationTranslator
 	 * @throws CoreException
 	 *             if an error occurs
 	 */
-	protected String getPropertyExpansion() throws CoreException {
+	private String getPropertyExpansion() throws CoreException {
 		return getParameterValue("propertyExpansion", String.class);
 	}
 
@@ -195,17 +195,17 @@ public class MavenPluginConfigurationTranslator
 	 * @throws CoreException
 	 *             if an error occurs
 	 */
-	public boolean isIncludeTestSourceDirectory() throws CoreException {
+	private boolean isIncludeTestSourceDirectory() throws CoreException {
 		return getParameterValue("includeTestSourceDirectory", Boolean.class,
 		        Boolean.FALSE);
 	}
 
-	public boolean isIncludeResources() throws CoreException {
+	private boolean isIncludeResources() throws CoreException {
 		return getParameterValue("includeResources", Boolean.class,
 		        Boolean.TRUE);
 	}
 
-	public boolean isIncludeTestResources() throws CoreException {
+	private boolean isIncludeTestResources() throws CoreException {
 		return getParameterValue("includeTestResources", Boolean.class,
 		        Boolean.TRUE);
 	}
