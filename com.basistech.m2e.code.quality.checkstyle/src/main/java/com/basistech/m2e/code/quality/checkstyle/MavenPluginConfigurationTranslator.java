@@ -215,14 +215,8 @@ public class MavenPluginConfigurationTranslator
 	}
 
 	public boolean getIncludeResourcesDirectory() throws CoreException {
-		final Boolean includeTestSourceDirectory =
-		        configurator.getParameterValue(mavenProject, "includeResources",
-		                Boolean.class, execution, monitor);
-		if (includeTestSourceDirectory != null) {
-			return includeTestSourceDirectory.booleanValue();
-		} else {
-			return false;
-		}
+		return getParameterValue("includeResources", Boolean.class,
+		        Boolean.TRUE);
 	}
 
 	public boolean getIncludeTestResourcesDirectory() throws CoreException {
