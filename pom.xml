@@ -20,7 +20,7 @@
         <target.platform>mars</target.platform>
 
         <tycho-version>0.24.0</tycho-version>
-        <orbit.version>R20140525021250</orbit.version>
+        <orbit.version>R20160221192158</orbit.version>
         <main.basedir>${basedir}</main.basedir>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
