@@ -203,7 +203,7 @@ public class MavenPluginConfigurationTranslator
 	 * @throws CoreException
 	 *             if an error occurs
 	 */
-	public boolean getIncludeTestSourceDirectory() throws CoreException {
+	public boolean isIncludeTestSourceDirectory() throws CoreException {
 		return getParameterValue("includeTestSourceDirectory", Boolean.class,
 		        Boolean.FALSE);
 	}
@@ -343,7 +343,7 @@ public class MavenPluginConfigurationTranslator
 		final Set<String> sourceFolders = new HashSet<>();
 		sourceFolders.addAll(this.getSourceDirectories());
 
-		if (getIncludeTestSourceDirectory()) {
+		if (isIncludeTestSourceDirectory()) {
 			sourceFolders.addAll(this.getTestSourceDirectories());
 		}
 
