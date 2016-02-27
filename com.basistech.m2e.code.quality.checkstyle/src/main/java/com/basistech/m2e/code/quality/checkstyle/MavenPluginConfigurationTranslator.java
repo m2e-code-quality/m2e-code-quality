@@ -40,9 +40,11 @@ import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.m2e.core.embedder.IMaven;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.basistech.m2e.code.quality.shared.AbstractMavenPluginConfigurationTranslator;
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
 import com.basistech.m2e.code.quality.shared.ResourceResolver;
@@ -56,7 +58,8 @@ import net.sf.eclipsecs.core.util.CheckstylePluginException;
 /**
  * Utility class to get checkstyle plugin configuration.
  */
-public class MavenPluginConfigurationTranslator {
+public class MavenPluginConfigurationTranslator
+        extends AbstractMavenPluginConfigurationTranslator {
 
 	private static final Logger LOG =
 	        LoggerFactory.getLogger(MavenPluginConfigurationTranslator.class);
@@ -76,11 +79,12 @@ public class MavenPluginConfigurationTranslator {
 	private final MojoExecution execution;
 	private final IProgressMonitor monitor;
 
-	private MavenPluginConfigurationTranslator(
+	private MavenPluginConfigurationTranslator(final IMaven maven,
 	        final AbstractMavenPluginProjectConfigurator configurator,
 	        final MavenProject mavenProject, final MojoExecution mojoExecution,
 	        final IProject project, final IProgressMonitor monitor,
 	        final ResourceResolver resourceResolver) throws CoreException {
+		super(maven, mavenProject, mojoExecution, monitor);
 		this.mavenProject = mavenProject;
 		this.project = project;
 		this.monitor = monitor;
@@ -574,6 +578,7 @@ public class MavenPluginConfigurationTranslator {
 	}
 
 	public static List<MavenPluginConfigurationTranslator> newInstance(
+	        final IMaven maven,
 	        final AbstractMavenPluginProjectConfigurator configurator,
 	        final MavenProject mavenProject,
 	        final MavenPluginWrapper mavenPlugin, final IProject project,
@@ -585,7 +590,7 @@ public class MavenPluginConfigurationTranslator {
 			final ResourceResolver resourceResolver =
 			        AbstractMavenPluginProjectConfigurator.getResourceResolver(
 			                execution, session, project.getLocation());
-			m2csConverters.add(new MavenPluginConfigurationTranslator(
+			m2csConverters.add(new MavenPluginConfigurationTranslator(maven,
 			        configurator, mavenProject, execution, project, monitor,
 			        resourceResolver));
 		}
