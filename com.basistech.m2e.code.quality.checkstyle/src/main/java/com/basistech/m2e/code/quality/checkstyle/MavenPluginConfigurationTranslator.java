@@ -66,8 +66,6 @@ public class MavenPluginConfigurationTranslator
 
 	private static final String CHECKSTYLE_DEFAULT_CONFIG_LOCATION =
 	        "config/sun_checks.xml";
-	private static final String CHECKSTYLE_DEFAULT_SUPPRESSIONS_FILE_EXPRESSION =
-	        "checkstyle.suppressions.file";
 	/** checkstyle maven plugin artifactId */
 	private static final Map<String, String> PATTERNS_CACHE = new HashMap<>();
 
@@ -146,16 +144,9 @@ public class MavenPluginConfigurationTranslator
 		return suppressionsFile.getAbsolutePath();
 	}
 
-	public String getSuppressionsFileExpression()
-	        throws CheckstylePluginException, CoreException {
-		String suppressionsFileExpression = configurator.getParameterValue(
-		        mavenProject, "suppressionsFileExpression", String.class,
-		        execution, monitor);
-		if (suppressionsFileExpression == null) {
-			suppressionsFileExpression =
-			        CHECKSTYLE_DEFAULT_SUPPRESSIONS_FILE_EXPRESSION;
-		}
-		return suppressionsFileExpression;
+	public String getSuppressionsFileExpression() throws CoreException {
+		return getParameterValue("suppressionsFileExpression", String.class,
+		        "checkstyle.suppressions.file");
 	}
 
 	public void updateCheckConfigWithIncludeExcludePatterns(
