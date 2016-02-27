@@ -129,8 +129,6 @@ public abstract class AbstractMavenPluginProjectConfigurator
 			}
 		}
 
-
-
 		final IMavenProjectFacade mavenProjectFacade =
 		        mavenProjectChangedEvent.getMavenProject();
 		final MavenPluginWrapper pluginWrapper =
