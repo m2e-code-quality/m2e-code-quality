@@ -111,7 +111,8 @@ public class EclipseCheckstyleProjectConfigurator
 					        mavenCheckstyleConfig);
 					addNature(project, CheckstyleNature.NATURE_ID, monitor);
 				} else {
-					csPluginNature.deconfigure(monitor);
+					deleteEclipseFiles(project, monitor);
+					removeNature(project, CheckstyleNature.NATURE_ID, monitor);
 				}
 			}
 
