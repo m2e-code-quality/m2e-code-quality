@@ -23,6 +23,8 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.List;
 
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.eclipse.core.runtime.IPath;
@@ -84,11 +86,16 @@ public final class ResourceResolver {
 	}
 
 	public URL getResourceFromPluginRealm(final String resource) {
-		if (resource.startsWith("/")) {
-			// ClassLoaders don't want leading slashes
-			return pluginRealm.getResource(resource.substring(1));
-		} else {
-			return pluginRealm.getResource(resource);
+		String fixedResource = resource.startsWith("/") ? resource .substring(1) : resource;
+		try {
+			List<URL> urls = Collections.list(pluginRealm.getResources(fixedResource));
+			if (urls.size() > 1) {
+				LOG.warn("Resource appears more than once on classpath, this is dangerous because it makes resolving this resource dependant on classpath ordering; location='" + fixedResource + "', found in: " + urls.toString());
+			}
+			return urls.get(0);
+		} catch (IOException e) {
+			LOG.warn("getResources() failed: " + fixedResource, e);
+			return null;
 		}
 	}
 
