@@ -26,8 +26,8 @@ This project has Oomph, and you can set up an Eclipse development workspace of i
 
 1. Downloading the Eclipse Installer from https://www.eclipse.org/downloads/ and starting it.
 2. On the initial page, click on the *Switch to advanced mode* button in the top right.
-3. On the *Product* page, select *Eclipse IDE for Java Developers*.
-4. On the *Projects* page, collapse the *Eclipse Projects* to scroll down to the *Github Projects* and double-click *m2e-code-quality*.
+3. On the *Product* page, select *Eclipse for RCP and RAP Developers*.
+4. On the *Projects* page, collapse the *Eclipse Projects* to scroll down to the *Github Projects* and select *m2e-code-quality*.
 5. Choose your preferred installation settings on the *Variables* page.
 6. Finish the wizard and watch how your development environment is being assembled, courtesy of Oomph.
 
