@@ -47,13 +47,16 @@ public final class ResourceResolver {
 
 	private final ClassRealm pluginRealm;
 	private final IPath projectLocation;
+	private final List<IPath> projectLocations;
 
 	public ResourceResolver(final ClassRealm pluginRealm,
-	        final IPath projectLocation) {
+	        final IPath projectLocation, final List<IPath> projectLocations) {
 		Preconditions.checkNotNull(pluginRealm);
 		Preconditions.checkNotNull(projectLocation);
+		Preconditions.checkNotNull(projectLocations);
 		this.pluginRealm = pluginRealm;
 		this.projectLocation = projectLocation;
+		this.projectLocations = projectLocations;
 	}
 
 	/**
@@ -72,7 +75,14 @@ public final class ResourceResolver {
 		if (location == null || location.isEmpty()) {
 			return null;
 		}
-		URL url = getResourceFromPluginRealm(location);
+		URL url = null;
+		for (final IPath path : projectLocations) {
+			url = getResourceRelativeFromIPath(path, location);
+			if (url != null) {
+				return url;
+			}
+		}
+		url = getResourceFromPluginRealm(location);
 		if (url == null) {
 			url = getResourceFromRemote(location);
 		}
@@ -122,8 +132,13 @@ public final class ResourceResolver {
 	}
 
 	public URL getResourceRelativeFromProjectLocation(final String resource) {
+		return getResourceRelativeFromIPath(projectLocation, resource);
+	}
+
+	public URL getResourceRelativeFromIPath(final IPath path,
+	        final String resource) {
 		try {
-			final File file = projectLocation.append(resource).toFile();
+			final File file = path.append(resource).toFile();
 			if (file.exists()) {
 				return file.toURI().toURL();
 			}

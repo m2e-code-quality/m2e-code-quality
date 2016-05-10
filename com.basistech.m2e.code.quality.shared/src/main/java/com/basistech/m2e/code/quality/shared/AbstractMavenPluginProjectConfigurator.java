@@ -23,18 +23,23 @@ import java.util.Map;
 
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.embedder.ArtifactKey;
 import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
+import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
@@ -265,11 +270,42 @@ public abstract class AbstractMavenPluginProjectConfigurator
 		// call for side effect of ensuring that the realm is set in the
 		// descriptor.
 		final IMaven mvn = MavenPlugin.getMaven();
+		final List<IPath> projectLocations = new ArrayList<>();
+		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		final IMavenProjectRegistry mavenProjectRegistry =
+		        MavenPlugin.getMavenProjectRegistry();
+		final IMavenProjectFacade[] projects =
+		        mavenProjectRegistry.getProjects();
+		final List<Dependency> dependencies =
+		        mojoExecution.getPlugin().getDependencies();
+		for (final Dependency dependency : dependencies) {
+			for (final IMavenProjectFacade projectFacade : projects) {
+				final IProject project = projectFacade.getProject();
+				if (!project.isAccessible()) {
+					LOG.debug("Project registry contains closed project {}",
+					        project);
+					// this is actually a bug somewhere in registry refresh
+					// logic, closed projects should not be there
+					continue;
+				}
+				final ArtifactKey artifactKey = projectFacade.getArtifactKey();
+				if (artifactKey.getGroupId().equals(dependency.getGroupId())
+				        && artifactKey.getArtifactId()
+				                .equals(dependency.getArtifactId())
+				        && artifactKey.getVersion()
+				                .equals(dependency.getVersion())) {
+					final IResource outputLocation =
+					        root.findMember(projectFacade.getOutputLocation());
+					projectLocations.add(outputLocation.getLocation());
+				}
+			}
+		}
 		final Mojo configuredMojo =
 		        mvn.getConfiguredMojo(session, mojoExecution, Mojo.class);
 		mvn.releaseMojo(configuredMojo, mojoExecution);
 		return new ResourceResolver(mojoExecution.getMojoDescriptor()
-		        .getPluginDescriptor().getClassRealm(), projectLocation);
+		        .getPluginDescriptor().getClassRealm(), projectLocation,
+		        projectLocations);
 	}
 
 	private MavenPluginWrapper getMavenPlugin(final IProgressMonitor monitor,
