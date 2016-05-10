@@ -96,11 +96,17 @@ public final class ResourceResolver {
 	}
 
 	public URL getResourceFromPluginRealm(final String resource) {
-		String fixedResource = resource.startsWith("/") ? resource .substring(1) : resource;
+		String fixedResource =
+		        resource.startsWith("/") ? resource.substring(1) : resource;
 		try {
-			List<URL> urls = Collections.list(pluginRealm.getResources(fixedResource));
+			List<URL> urls =
+			        Collections.list(pluginRealm.getResources(fixedResource));
 			if (urls.size() > 1) {
-				LOG.warn("Resource appears more than once on classpath, this is dangerous because it makes resolving this resource dependant on classpath ordering; location='" + fixedResource + "', found in: " + urls.toString());
+				LOG.warn(
+				        "Resource appears more than once on classpath, this is "
+				                + "dangerous because it makes resolving this resource "
+				                + "dependant on classpath ordering; location {} found in {}",
+				        fixedResource, urls);
 			}
 			return urls.get(0);
 		} catch (IOException e) {
