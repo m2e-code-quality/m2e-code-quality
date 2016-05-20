@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+	"-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+<module name="Checker">
+    <property
+        name="severity"
+        value="${checkstyle.severity}"
+        default="error" />
+    <module name="FileTabCharacter" />
+    <module name="RegexpMultiline">
+        <property
+            name="severity"
+            value="warning" />
+        <property
+            name="format"
+            value="(System\.(out)|(err)\.print)|(\.printStackTrace)" />
+        <property
+            name="message"
+            value="Use a logger instead of System.out.println()" />
+    </module>
+    <module name="SuppressionFilter">
+        <property
+            name="file"
+            value="${checkstyle.suppressions.file}" />
+    </module>
+</module>

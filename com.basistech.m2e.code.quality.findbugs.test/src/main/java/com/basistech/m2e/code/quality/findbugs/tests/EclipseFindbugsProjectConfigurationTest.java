@@ -22,8 +22,8 @@ import de.tobject.findbugs.builder.ResourceUtils;
 import de.tobject.findbugs.builder.WorkItem;
 
 @SuppressWarnings("restriction")
-public class EclipseFindbugsProjectConfigurationTest extends
-        AbstractMavenProjectTestCase {
+public class EclipseFindbugsProjectConfigurationTest
+        extends AbstractMavenProjectTestCase {
 
 	private static final String FINDBUGS_MARKER =
 	        "edu.umd.cs.findbugs.plugin.eclipse.findbugsMarker";
@@ -36,26 +36,27 @@ public class EclipseFindbugsProjectConfigurationTest extends
 		runFindBugsAndFindMarkers("projects/findbugs-findbugs/pom.xml", 2);
 	}
 
-	private void runFindBugsAndFindMarkers(String path, int markerCount)
-	        throws Exception {
-		IProject p = importProject(path);
+	private void runFindBugsAndFindMarkers(final String path,
+	        final int markerCount) throws Exception {
+		final IProject p = importProject(path);
 
 		p.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
 		waitForJobsToComplete();
 
-		StructuredSelection selection = new StructuredSelection(p);
+		final StructuredSelection selection = new StructuredSelection(p);
 
-		Map<IProject, List<WorkItem>> projectMap =
+		final Map<IProject, List<WorkItem>> projectMap =
 		        ResourceUtils.getResourcesPerProject(selection);
 
-		for (Map.Entry<IProject, List<WorkItem>> e : projectMap.entrySet()) {
-			FindBugsWorker worker = new FindBugsWorker(p, monitor);
+		for (final Map.Entry<IProject, List<WorkItem>> e : projectMap
+		        .entrySet()) {
+			final FindBugsWorker worker = new FindBugsWorker(p, monitor);
 			worker.work(e.getValue());
 		}
 
 		waitForJobsToComplete();
 
-		IMarker[] markers =
+		final IMarker[] markers =
 		        p.findMarkers(FINDBUGS_MARKER, true, IResource.DEPTH_INFINITE);
 		assertEquals(markerCount, markers.length);
 	}

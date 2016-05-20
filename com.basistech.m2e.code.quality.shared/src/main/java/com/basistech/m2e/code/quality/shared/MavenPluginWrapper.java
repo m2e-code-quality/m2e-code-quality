@@ -23,10 +23,15 @@ import org.apache.maven.plugin.MojoExecution;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
 public class MavenPluginWrapper {
+
+	private static final Logger LOG =
+	        LoggerFactory.getLogger(MavenPluginWrapper.class);
 
 	private final String key; // for toString
 	private final List<MojoExecution> executions;
@@ -45,33 +50,35 @@ public class MavenPluginWrapper {
 		return executions;
 	}
 
-	public static boolean mojoExecutionForPlugin(MojoExecution mojoExecution,
-	        String groupId, String artifactId, String goal) {
+	public static boolean mojoExecutionForPlugin(
+	        final MojoExecution mojoExecution, final String groupId,
+	        final String artifactId, final String goal) {
 		return groupId.equals(mojoExecution.getGroupId())
 		        && artifactId.equals(mojoExecution.getArtifactId())
 		        && (goal == null || goal.equals(mojoExecution.getGoal()));
 	}
 
 	public static List<MojoExecution> findMojoExecutions(
-	        IProgressMonitor monitor, IMavenProjectFacade mavenProjectFacade,
+	        final IProgressMonitor monitor,
+	        final IMavenProjectFacade mavenProjectFacade,
 	        final String pluginGroupId, final String pluginArtifactId,
 	        final String[] pluginGoal) throws CoreException {
-		List<MojoExecution> mojoExecutions =
+		final List<MojoExecution> mojoExecutions =
 		        mavenProjectFacade.getMojoExecutions(pluginGroupId,
 		                pluginArtifactId, monitor, pluginGoal);
 		// I don't think we need to re-search for site.
 		return searchExecutions(pluginGroupId, pluginArtifactId, pluginGoal,
 		        mojoExecutions);
-	}//
+	}
 
 	private static List<MojoExecution> searchExecutions(
 	        final String pluginGroupId, final String pluginArtifactId,
-	        final String[] pluginGoal, List<MojoExecution> mojoExecutions) {
-		final List<MojoExecution> foundMojoExections =
-		        new ArrayList<>();
-		for (MojoExecution mojoExecution : mojoExecutions) {
+	        final String[] pluginGoal,
+	        final List<MojoExecution> mojoExecutions) {
+		final List<MojoExecution> foundMojoExections = new ArrayList<>();
+		for (final MojoExecution mojoExecution : mojoExecutions) {
 			if (pluginGoal != null) {
-				for (String goal : pluginGoal) {
+				for (final String goal : pluginGoal) {
 					if (mojoExecutionForPlugin(mojoExecution, pluginGroupId,
 					        pluginArtifactId, goal)) {
 						foundMojoExections.add(mojoExecution);
@@ -84,18 +91,21 @@ public class MavenPluginWrapper {
 				}
 			}
 		}
+		if (foundMojoExections.size() != mojoExecutions.size()) {
+			LOG.debug("They are different. Additional search is necessary.");
+		}
 		return foundMojoExections;
 	}
 
-	public static MavenPluginWrapper newInstance(IProgressMonitor monitor,
+	public static MavenPluginWrapper newInstance(final IProgressMonitor monitor,
 	        final String pluginGroupId, final String pluginArtifactId,
-	        final String[] pluginGoal, IMavenProjectFacade mavenProjectFacade)
-	        throws CoreException {
+	        final String[] pluginGoal,
+	        final IMavenProjectFacade mavenProjectFacade) throws CoreException {
 		Preconditions.checkNotNull(mavenProjectFacade);
 		final List<MojoExecution> executions =
 		        findMojoExecutions(monitor, mavenProjectFacade, pluginGroupId,
 		                pluginArtifactId, pluginGoal);
-		String key = pluginGroupId + ":" + pluginArtifactId;
+		final String key = pluginGroupId + ":" + pluginArtifactId;
 		return new MavenPluginWrapper(key, executions);
 	}
 
