@@ -101,6 +101,9 @@ public final class ResourceResolver {
 		try {
 			List<URL> urls =
 			        Collections.list(pluginRealm.getResources(fixedResource));
+			if (urls.isEmpty()) {
+				return null;
+			}
 			if (urls.size() > 1) {
 				LOG.warn(
 				        "Resource appears more than once on classpath, this is "
