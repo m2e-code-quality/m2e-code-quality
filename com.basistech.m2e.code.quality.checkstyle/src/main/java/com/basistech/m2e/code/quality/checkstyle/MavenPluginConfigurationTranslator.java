@@ -313,7 +313,7 @@ public class MavenPluginConfigurationTranslator
 		 */
 		final List<String> includePatterns = this.getIncludes();
 		for (final String folder : sourceFolders) {
-			final String folderRelativePath = this.basedirUri
+			final String folderRelativePath = "^" + this.basedirUri
 			        .relativize(new File(folder).toURI()).getPath();
 			if (!includePatterns.isEmpty()) {
 				patterns.addAll(
@@ -332,7 +332,7 @@ public class MavenPluginConfigurationTranslator
 		 */
 		final List<String> excludePatterns = this.getExcludes();
 		for (final String folder : sourceFolders) {
-			final String folderRelativePath = this.basedirUri
+			final String folderRelativePath = "^" + this.basedirUri
 			        .relativize(new File(folder).toURI()).getPath();
 			patterns.addAll(this.normalizePatternsToCheckstyleFileMatchPattern(
 			        excludePatterns, this.convertToEclipseCheckstyleRegExpPath(
@@ -345,7 +345,7 @@ public class MavenPluginConfigurationTranslator
 			        this.getResourceIncludes();
 			for (final Resource resource : this.mavenProject.getBuild()
 			        .getResources()) {
-				final String folderRelativePath = this.basedirUri
+				final String folderRelativePath = "^" + this.basedirUri
 				        .relativize(new File(resource.getDirectory()).toURI())
 				        .getPath();
 				patterns.addAll(
@@ -358,7 +358,7 @@ public class MavenPluginConfigurationTranslator
 			        this.getResourceExcludes();
 			for (final Resource resource : this.mavenProject.getBuild()
 			        .getResources()) {
-				final String folderRelativePath = this.basedirUri
+				final String folderRelativePath = "^" + this.basedirUri
 				        .relativize(new File(resource.getDirectory()).toURI())
 				        .getPath();
 				patterns.addAll(
@@ -378,7 +378,7 @@ public class MavenPluginConfigurationTranslator
 					// ignore resources that have ex/includes for now
 					continue;
 				}
-				final String folderRelativePath = this.basedirUri
+				final String folderRelativePath = "^" + this.basedirUri
 				        .relativize(new File(resource.getDirectory()).toURI())
 				        .getPath();
 				patterns.addAll(
@@ -396,7 +396,7 @@ public class MavenPluginConfigurationTranslator
 					// ignore resources that have ex/includes for now
 					continue;
 				}
-				final String folderRelativePath = this.basedirUri
+				final String folderRelativePath = "^" + this.basedirUri
 				        .relativize(new File(resource.getDirectory()).toURI())
 				        .getPath();
 				patterns.addAll(
