@@ -296,7 +296,9 @@ public abstract class AbstractMavenPluginProjectConfigurator
 				                .equals(dependency.getVersion())) {
 					final IResource outputLocation =
 					        root.findMember(projectFacade.getOutputLocation());
-					projectLocations.add(outputLocation.getLocation());
+					if (outputLocation != null) {
+						projectLocations.add(outputLocation.getLocation());
+					}
 				}
 			}
 		}
