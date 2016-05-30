@@ -51,7 +51,6 @@ public final class ResourceResolver {
 
 	public ResourceResolver(final ClassRealm pluginRealm,
 	        final IPath projectLocation, final List<IPath> projectLocations) {
-		Preconditions.checkNotNull(pluginRealm);
 		Preconditions.checkNotNull(projectLocation);
 		Preconditions.checkNotNull(projectLocations);
 		this.pluginRealm = pluginRealm;
@@ -96,6 +95,9 @@ public final class ResourceResolver {
 	}
 
 	public URL getResourceFromPluginRealm(final String resource) {
+		if (pluginRealm == null) {
+			return null;
+		}
 		String fixedResource =
 		        resource.startsWith("/") ? resource.substring(1) : resource;
 		try {
