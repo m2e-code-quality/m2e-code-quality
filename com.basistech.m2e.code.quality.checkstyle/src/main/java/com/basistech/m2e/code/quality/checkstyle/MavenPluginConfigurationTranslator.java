@@ -313,8 +313,7 @@ public class MavenPluginConfigurationTranslator
 		 */
 		final List<String> includePatterns = this.getIncludes();
 		for (final String folder : sourceFolders) {
-			final String folderRelativePath = "^" + this.basedirUri
-			        .relativize(new File(folder).toURI()).getPath();
+			final String folderRelativePath = relativize(folder);
 			if (!includePatterns.isEmpty()) {
 				patterns.addAll(
 				        this.normalizePatternsToCheckstyleFileMatchPattern(
@@ -332,8 +331,7 @@ public class MavenPluginConfigurationTranslator
 		 */
 		final List<String> excludePatterns = this.getExcludes();
 		for (final String folder : sourceFolders) {
-			final String folderRelativePath = "^" + this.basedirUri
-			        .relativize(new File(folder).toURI()).getPath();
+			final String folderRelativePath = relativize(folder);
 			patterns.addAll(this.normalizePatternsToCheckstyleFileMatchPattern(
 			        excludePatterns, this.convertToEclipseCheckstyleRegExpPath(
 			                folderRelativePath),
@@ -345,9 +343,8 @@ public class MavenPluginConfigurationTranslator
 			        this.getResourceIncludes();
 			for (final Resource resource : this.mavenProject.getBuild()
 			        .getResources()) {
-				final String folderRelativePath = "^" + this.basedirUri
-				        .relativize(new File(resource.getDirectory()).toURI())
-				        .getPath();
+				final String folderRelativePath =
+				        relativize(resource.getDirectory());
 				patterns.addAll(
 				        this.normalizePatternsToCheckstyleFileMatchPattern(
 				                resourceIncludePatterns, folderRelativePath,
@@ -358,9 +355,8 @@ public class MavenPluginConfigurationTranslator
 			        this.getResourceExcludes();
 			for (final Resource resource : this.mavenProject.getBuild()
 			        .getResources()) {
-				final String folderRelativePath = "^" + this.basedirUri
-				        .relativize(new File(resource.getDirectory()).toURI())
-				        .getPath();
+				final String folderRelativePath =
+				        relativize(resource.getDirectory());
 				patterns.addAll(
 				        this.normalizePatternsToCheckstyleFileMatchPattern(
 				                resourceExcludePatterns, folderRelativePath,
@@ -407,6 +403,18 @@ public class MavenPluginConfigurationTranslator
 		}
 
 		return patterns;
+	}
+
+	private String relativize(final String folder) {
+		String folderRelativePath = "^";
+		File file = new File(folder);
+		if (file.isAbsolute()) {
+			folderRelativePath +=
+			        this.basedirUri.relativize(file.toURI()).getPath();
+		} else {
+			folderRelativePath += folder;
+		}
+		return folderRelativePath;
 	}
 
 	private String convertToEclipseCheckstyleRegExpPath(final String path) {
