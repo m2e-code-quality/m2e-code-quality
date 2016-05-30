@@ -55,7 +55,7 @@ public class AbstractMavenPluginConfigurationTranslator {
 		Xpp3Dom configuration = (Xpp3Dom) executionClone.getConfiguration();
 		configuration = configuration != null
 		        ? configuration.getChild(parameter) : null;
-		if (configuration.getChildCount() > 0) {
+		if (configuration != null && configuration.getChildCount() > 0) {
 			configuration.setAttribute("default-value", "");
 		}
 		final List<T> list = maven.getMojoParameterValue(project, parameter,
