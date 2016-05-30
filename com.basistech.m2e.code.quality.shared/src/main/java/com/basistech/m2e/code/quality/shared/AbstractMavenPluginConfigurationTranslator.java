@@ -7,6 +7,7 @@ import org.apache.maven.model.ConfigurationContainer;
 import org.apache.maven.model.PluginExecution;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.m2e.core.embedder.IMaven;
@@ -50,8 +51,15 @@ public class AbstractMavenPluginConfigurationTranslator {
 	public <T> List<T> getParameterList(final String parameter,
 	        @SuppressWarnings("unused") final Class<T> asType)
 	        throws CoreException {
+		ConfigurationContainer executionClone = execution.clone();
+		Xpp3Dom configuration = (Xpp3Dom) executionClone.getConfiguration();
+		configuration = configuration != null
+		        ? configuration.getChild(parameter) : null;
+		if (configuration.getChildCount() > 0) {
+			configuration.setAttribute("default-value", "");
+		}
 		final List<T> list = maven.getMojoParameterValue(project, parameter,
-		        List.class, mojoExecution.getPlugin(), execution,
+		        List.class, mojoExecution.getPlugin(), executionClone,
 		        mojoExecution.getGoal(), monitor);
 		if (list == null) {
 			return Collections.emptyList();
