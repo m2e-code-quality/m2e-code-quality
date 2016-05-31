@@ -307,6 +307,9 @@ public abstract class AbstractMavenPluginProjectConfigurator
 			        mvn.getConfiguredMojo(session, mojoExecution, Mojo.class);
 			mvn.releaseMojo(configuredMojo, mojoExecution);
 		} catch (CoreException e) {
+			if (pluginDepencyProjectLocations.isEmpty()) {
+				throw e;
+			}
 			LOG.error("Could not get mojo", e);
 		}
 		return new ResourceResolver(mojoExecution.getMojoDescriptor()
