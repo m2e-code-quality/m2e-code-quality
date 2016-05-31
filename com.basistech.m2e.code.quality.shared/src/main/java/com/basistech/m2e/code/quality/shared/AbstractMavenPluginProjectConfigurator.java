@@ -270,7 +270,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 		// call for side effect of ensuring that the realm is set in the
 		// descriptor.
 		final IMaven mvn = MavenPlugin.getMaven();
-		final List<IPath> projectLocations = new ArrayList<>();
+		final List<IPath> pluginDepencyProjectLocations = new ArrayList<>();
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		final IMavenProjectRegistry mavenProjectRegistry =
 		        MavenPlugin.getMavenProjectRegistry();
@@ -297,7 +297,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 					final IResource outputLocation =
 					        root.findMember(projectFacade.getOutputLocation());
 					if (outputLocation != null) {
-						projectLocations.add(outputLocation.getLocation());
+						pluginDepencyProjectLocations.add(outputLocation.getLocation());
 					}
 				}
 			}
@@ -311,7 +311,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 		}
 		return new ResourceResolver(mojoExecution.getMojoDescriptor()
 		        .getPluginDescriptor().getClassRealm(), projectLocation,
-		        projectLocations);
+		        pluginDepencyProjectLocations);
 	}
 
 	private MavenPluginWrapper getMavenPlugin(final IProgressMonitor monitor,
