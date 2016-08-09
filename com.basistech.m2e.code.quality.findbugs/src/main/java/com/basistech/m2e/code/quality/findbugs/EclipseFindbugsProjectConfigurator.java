@@ -40,12 +40,11 @@ import edu.umd.cs.findbugs.config.UserPreferences;
 
 /**
  */
-public class EclipseFindbugsProjectConfigurator extends
-        AbstractMavenPluginProjectConfigurator {
+public class EclipseFindbugsProjectConfigurator
+        extends AbstractMavenPluginProjectConfigurator {
 
-	private static final Logger log =
-	        LoggerFactory
-	                .getLogger("com/basistech/m2e/code/quality/findbugs/EclipseFindbugsProjectConfigurator");
+	private static final Logger LOG =
+	        LoggerFactory.getLogger(EclipseFindbugsProjectConfigurator.class);
 
 	public EclipseFindbugsProjectConfigurator() {
 		super();
@@ -62,7 +61,7 @@ public class EclipseFindbugsProjectConfigurator extends
 	}
 
 	@Override
-	protected String[] getMavenPluginGoal() {
+	protected String[] getMavenPluginGoals() {
 		return new String[] {"findbugs", "check"};
 	}
 
@@ -70,12 +69,12 @@ public class EclipseFindbugsProjectConfigurator extends
 	protected void handleProjectConfigurationChange(
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final IProgressMonitor monitor,
-	        final MavenPluginWrapper mavenPluginWrapper, MavenSession session)
-	        throws CoreException {
-		log.debug("entering handleProjectConfigurationChange");
-		IJavaProject javaProject = JavaCore.create(project);
+	        final MavenPluginWrapper mavenPluginWrapper,
+	        final MavenSession session) throws CoreException {
+		LOG.debug("entering handleProjectConfigurationChange");
+		final IJavaProject javaProject = JavaCore.create(project);
 		if (javaProject == null || !javaProject.exists()
-				|| !javaProject.getProject().isOpen()) {
+		        || !javaProject.getProject().isOpen()) {
 			return;
 		}
 		final MavenPluginConfigurationTranslator mavenFindbugsConfig =
@@ -88,7 +87,7 @@ public class EclipseFindbugsProjectConfigurator extends
 			final List<MojoExecution> mojoExecutions =
 			        mavenPluginWrapper.getMojoExecutions();
 			if (mojoExecutions.size() != 1) {
-				log.error("Wrong number of executions. Expected 1. Found "
+				LOG.error("Wrong number of executions. Expected 1. Found "
 				        + mojoExecutions.size());
 				return;
 			}
@@ -100,14 +99,14 @@ public class EclipseFindbugsProjectConfigurator extends
 			FindbugsPlugin.saveUserPreferences(project, prefs);
 			FindbugsPlugin.setProjectSettingsEnabled(project, null, true);
 		} catch (final CoreException ex) {
-			log.error(ex.getLocalizedMessage());
+			LOG.error(ex.getLocalizedMessage(), ex);
 		}
 	}
 
 	@Override
 	protected void unconfigureEclipsePlugin(final IProject project,
 	        final IProgressMonitor monitor) throws CoreException {
-		log.debug("entering unconfigureEclipsePlugin");
+		LOG.debug("entering unconfigureEclipsePlugin");
 		final EclipseFindbugsConfigManager fbPluginNature =
 		        EclipseFindbugsConfigManager.newInstance(project);
 		fbPluginNature.deconfigure(monitor);
@@ -117,7 +116,7 @@ public class EclipseFindbugsProjectConfigurator extends
 	private UserPreferences buildFindbugsPreferences(
 	        final MavenPluginConfigurationTranslator pluginCfgTranslator)
 	        throws CoreException {
-		log.debug("entering buildFindbugsPreferences");
+		LOG.debug("entering buildFindbugsPreferences");
 		final UserPreferences prefs =
 		        UserPreferences.createDefaultUserPreferences();
 		pluginCfgTranslator.setIncludeFilterFiles(prefs);

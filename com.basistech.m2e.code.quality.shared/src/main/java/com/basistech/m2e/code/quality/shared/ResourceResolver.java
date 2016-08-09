@@ -17,11 +17,21 @@
 package com.basistech.m2e.code.quality.shared;
 
 import java.io.File;
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.List;
 
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.eclipse.core.runtime.IPath;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
 
 /**
  * A utility class to resolve resources, which includes searching in resources
@@ -32,12 +42,20 @@ import org.eclipse.core.runtime.IPath;
  */
 public final class ResourceResolver {
 
+	private static final Logger LOG =
+	        LoggerFactory.getLogger(ResourceResolver.class);
+
 	private final ClassRealm pluginRealm;
 	private final IPath projectLocation;
+	private final List<IPath> projectLocations;
 
-	public ResourceResolver(ClassRealm pluginRealm, IPath projectLocation) {
+	public ResourceResolver(final ClassRealm pluginRealm,
+	        final IPath projectLocation, final List<IPath> projectLocations) {
+		Preconditions.checkNotNull(projectLocation);
+		Preconditions.checkNotNull(projectLocations);
 		this.pluginRealm = pluginRealm;
 		this.projectLocation = projectLocation;
+		this.projectLocations = projectLocations;
 	}
 
 	/**
@@ -53,51 +71,92 @@ public final class ResourceResolver {
 	 * @return the {@code URL} of the resolved location or {@code null}.
 	 */
 	public URL resolveLocation(final String location) {
-		// 1. Try it as a resource first.
-		if (pluginRealm != null) {
-			String urlLocation = location;
-			// note that class loaders don't want leading slashes.
-			if (urlLocation.startsWith("/")) {
-				urlLocation = urlLocation.substring(1);
-			}
-			URL url = pluginRealm.getResource(urlLocation);
+		if (location == null || location.isEmpty()) {
+			return null;
+		}
+		URL url = null;
+		for (final IPath path : projectLocations) {
+			url = getResourceRelativeFromIPath(path, location);
 			if (url != null) {
 				return url;
 			}
 		}
+		url = getResourceFromPluginRealm(location);
+		if (url == null) {
+			url = getResourceFromRemote(location);
+		}
+		if (url == null) {
+			url = getResourceFromFileSystem(location);
+		}
+		if (url == null) {
+			url = getResourceRelativeFromProjectLocation(location);
+		}
+		return url;
+	}
 
-		// 2. Try it as a remote resource.
+	public URL getResourceFromPluginRealm(final String resource) {
+		if (pluginRealm == null) {
+			return null;
+		}
+		String fixedResource =
+		        resource.startsWith("/") ? resource.substring(1) : resource;
 		try {
-			URL url = new URL(location);
-			// check if valid.
-			url.openStream();
-			return url;
-		} catch (MalformedURLException ex) {
-			// ignored, try next
-		} catch (Exception ex) {
-			// ignored, try next
+			List<URL> urls =
+			        Collections.list(pluginRealm.getResources(fixedResource));
+			if (urls.isEmpty()) {
+				return null;
+			}
+			if (urls.size() > 1) {
+				LOG.warn(
+				        "Resource appears more than once on classpath, this is "
+				                + "dangerous because it makes resolving this resource "
+				                + "dependant on classpath ordering; location {} found in {}",
+				        fixedResource, urls);
+			}
+			return urls.get(0);
+		} catch (IOException e) {
+			LOG.warn("getResources() failed: " + fixedResource, e);
+			return null;
 		}
+	}
 
-		// 3. Try to see if it exists as a filesystem resource.
-		File file = new File(location);
-		if (file.exists()) {
-			try {
+	public URL getResourceFromRemote(final String resource) {
+		try {
+			return new URL(resource);
+		} catch (final IOException e) {
+			LOG.trace("Could not open resource {} from remote", resource, e);
+		}
+		return null;
+	}
+
+	public URL getResourceFromFileSystem(final String resource) {
+		try {
+			final Path path = Paths.get(resource);
+			if (Files.exists(path)) {
+				return path.toUri().toURL();
+			}
+		} catch (InvalidPathException | IOException e) {
+			LOG.trace("Could not open resource {} from file system", resource,
+			        e);
+		}
+		return null;
+	}
+
+	public URL getResourceRelativeFromProjectLocation(final String resource) {
+		return getResourceRelativeFromIPath(projectLocation, resource);
+	}
+
+	public URL getResourceRelativeFromIPath(final IPath path,
+	        final String resource) {
+		try {
+			final File file = path.append(resource).toFile();
+			if (file.exists()) {
 				return file.toURI().toURL();
-			} catch (MalformedURLException ex) {
-				// ignored, try next
 			}
+		} catch (final IOException e) {
+			LOG.trace("Could not open resource {} relative to project location",
+			        resource, e);
 		}
-
-		File projectFile = projectLocation.append(location).toFile();
-		if (projectFile.exists()) {
-			try {
-				return projectFile.toURI().toURL();
-			} catch (MalformedURLException ex) {
-				// ignored, try next
-			}
-		}
-
-		// 4. null
 		return null;
 	}
 
