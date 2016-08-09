@@ -310,7 +310,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 			if (pluginDepencyProjectLocations.isEmpty()) {
 				throw e;
 			}
-			LOG.error("Could not get mojo", e);
+			LOG.trace("Could not get mojo", e);
 		}
 		return new ResourceResolver(mojoExecution.getMojoDescriptor()
 		        .getPluginDescriptor().getClassRealm(), projectLocation,
