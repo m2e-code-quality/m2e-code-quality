@@ -94,7 +94,7 @@
         <repository
             url="http://eclipse-cs.sf.net/update"/>
         <repository
-            url="http://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site/"/>
+            url="https://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site/"/>
         <repository
             url="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
       </repositoryList>
