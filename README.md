@@ -24,12 +24,14 @@ rarely works to run a build that does not start with 'clean'.
 
 This project has Oomph, and you can set up an Eclipse development workspace of it in one click by:
 
-1. Downloading the Eclipse Installer from https://www.eclipse.org/downloads/ and starting it.
-2. On the initial page, click on the *Switch to advanced mode* button in the top right.
-3. On the *Product* page, select *Eclipse for RCP and RAP Developers*.
-4. On the *Projects* page, collapse the *Eclipse Projects* to scroll down to the *Github Projects* and select *m2e-code-quality*.
-5. Choose your preferred installation settings on the *Variables* page.
-6. Finish the wizard and watch how your development environment is being assembled, courtesy of Oomph.
+1. Make sure your JRE/JDK has the JCE installed (See http://stackoverflow.com/questions/42128981/eclipse-pmd-plug-in-handshake-failure and https://github.com/pmd/pmd-eclipse-plugin/issues/19)
+2. Downloading the Eclipse Installer from https://www.eclipse.org/downloads/ and start it.
+3. On the initial page, click on the *Switch to advanced mode* button in the top right.
+4. On the *Product* page, select *Eclipse for RCP and RAP Developers*.
+5. On the *Projects* page, collapse the *Eclipse Projects* to scroll down to the *Github Projects* and select *m2e-code-quality*.
+6. Make sure to choose the HTTPS anonymous option for the repository
+7. Choose other preferred installation settings on the *Variables* page.
+8. Finish the wizard and watch how your development environment is being assembled, courtesy of Oomph.
 
 See [doc/release.md](doc/release.md) for information about how all of this is released.
 
