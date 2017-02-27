@@ -6,6 +6,10 @@ import com.google.common.base.Preconditions;
 
 public final class CheckstyleUtil {
 
+	private static final char WINDOWS_CHAR = '\\';
+	private static final String SEPARATOR = "/";
+	private static final char SEPARATOR_CHAR = '/';
+
 	private CheckstyleUtil() {
 	}
 
@@ -23,12 +27,12 @@ public final class CheckstyleUtil {
 		Preconditions.checkArgument(!pattern.isEmpty(),
 		        "pattern cannot be empty");
 
-		String sanitizedPattern = pattern.replace(
-		        File.separatorChar == '/' ? '\\' : '/', File.separatorChar);
-		final String dupeSeperatorChar = File.separator + File.separator;
+		String sanitizedPattern = File.separatorChar == WINDOWS_CHAR ?
+		        pattern.replace(WINDOWS_CHAR, SEPARATOR_CHAR) : pattern;
+		final String dupeSeperatorChar = SEPARATOR + SEPARATOR;
 		while (sanitizedPattern.contains(dupeSeperatorChar)) {
 			sanitizedPattern =
-			        sanitizedPattern.replace(dupeSeperatorChar, File.separator);
+			        sanitizedPattern.replace(dupeSeperatorChar, SEPARATOR);
 		}
 
 		final StringBuilder sb = new StringBuilder();
@@ -44,7 +48,7 @@ public final class CheckstyleUtil {
 			}
 
 			if (curChar == '*' && nextChar == '*'
-			        && nextNextChar == File.separatorChar) {
+			        && nextNextChar == SEPARATOR_CHAR) {
 				sb.append(".*");
 				++i;
 				++i;
@@ -57,7 +61,7 @@ public final class CheckstyleUtil {
 			}
 		}
 		String result = sb.toString();
-		if (result.endsWith(File.separator)) {
+		if (result.endsWith(SEPARATOR)) {
 			result += ".*";
 		}
 
