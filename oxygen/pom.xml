@@ -13,7 +13,7 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>Oxygen</artifactId>
+	<artifactId>oxygen</artifactId>
 	<packaging>eclipse-target-definition</packaging>
 	<name>Oxygen Target Definition</name>
 
