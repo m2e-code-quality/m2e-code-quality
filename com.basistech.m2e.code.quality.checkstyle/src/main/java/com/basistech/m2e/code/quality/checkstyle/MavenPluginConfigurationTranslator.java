@@ -211,7 +211,12 @@ public class MavenPluginConfigurationTranslator
 	}
 
 	public String getExecutionId() {
-		return execution.getExecutionId();
+		String result = execution.getExecutionId();
+		int tilesSeparatorIndex = result.indexOf("::");
+		if (tilesSeparatorIndex != -1) {
+			result = result.substring(tilesSeparatorIndex + 2);
+		}
+		return result;
 	}
 
 	/**
