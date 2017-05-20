@@ -43,7 +43,6 @@
         <module>oxygen</module>
         <module>neon</module>
         <module>mars</module>
-        <module>luna</module>
     </modules>
 
     <prerequisites>
