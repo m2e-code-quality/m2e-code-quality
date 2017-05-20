@@ -86,6 +86,16 @@
           rootFolder="${git.clone.location}"
           locateNestedProjects="true"/>
       <repositoryList
+          name="Oygen">
+        <repository
+            url="http://download.eclipse.org/releases/oxygen"/>
+      </repositoryList>
+      <repositoryList
+          name="Neon">
+        <repository
+            url="http://download.eclipse.org/releases/neon"/>
+      </repositoryList>
+      <repositoryList
           name="Mars">
         <repository
             url="http://download.eclipse.org/releases/mars"/>
