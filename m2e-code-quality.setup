@@ -122,7 +122,7 @@
         <repository
             url="https://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site/"/>
         <repository
-            url="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
+            url="http://download.eclipse.org/technology/m2e/milestones/1.6"/>
       </repositoryList>
     </targlet>
   </setupTask>
