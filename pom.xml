@@ -63,17 +63,17 @@
         <repository>
             <id>cs</id>
             <layout>p2</layout>
-            <url>http://eclipse-cs.sourceforge.net/update</url>
+            <url>http://eclipse-cs.sf.net/update</url>
         </repository>
         <repository>
             <id>pmd</id>
             <layout>p2</layout>
-            <url>http://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site</url>
+            <url>https://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site/</url>
         </repository>
         <repository>
             <id>findbugs</id>
             <layout>p2</layout>
-            <url>http://m2e-code-quality.github.com/m2e-code-quality/findbugs-p2-repository</url>
+            <url>http://findbugs.cs.umd.edu/eclipse/</url>
         </repository>
         <repository>
             <id>orbit</id>
