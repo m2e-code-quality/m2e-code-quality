@@ -94,6 +94,14 @@
           name="Neon">
         <repository
             url="http://download.eclipse.org/releases/neon"/>
+        <repository
+            url="http://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="http://eclipse-cs.sf.net/update"/>
+        <repository
+            url="https://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site/"/>
+        <repository
+            url="http://download.eclipse.org/technology/m2e/milestones/1.7"/>
       </repositoryList>
       <repositoryList
           name="Mars">
