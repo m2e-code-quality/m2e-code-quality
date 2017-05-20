@@ -17,7 +17,7 @@
     </scm>
 
     <properties>
-        <target.platform>mars</target.platform>
+        <target.platform>neon</target.platform>
 
         <tycho-version>0.24.0</tycho-version>
         <orbit.version>R20160221192158</orbit.version>
@@ -56,9 +56,9 @@
             <url>http://download.eclipse.org/technology/m2e/releases</url>
         </repository>
         <repository>
-            <id>luna</id>
+            <id>neon</id>
             <layout>p2</layout>
-            <url>http://download.eclipse.org/releases/luna</url>
+            <url>http://download.eclipse.org/releases/neon</url>
         </repository>
         <repository>
             <id>cs</id>
