@@ -86,7 +86,7 @@
           rootFolder="${git.clone.location}"
           locateNestedProjects="true"/>
       <repositoryList
-          name="Oygen">
+          name="Oxygen">
         <repository
             url="http://download.eclipse.org/releases/oxygen"/>
         <repository
@@ -94,7 +94,7 @@
         <repository
             url="http://eclipse-cs.sf.net/update"/>
         <repository
-            url="https://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site/"/>
+            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
         <repository
             url="http://download.eclipse.org/technology/m2e/milestones/1.8"/>
       </repositoryList>
@@ -107,7 +107,7 @@
         <repository
             url="http://eclipse-cs.sf.net/update"/>
         <repository
-            url="https://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site/"/>
+            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
         <repository
             url="http://download.eclipse.org/technology/m2e/milestones/1.7"/>
       </repositoryList>
@@ -120,7 +120,7 @@
         <repository
             url="http://eclipse-cs.sf.net/update"/>
         <repository
-            url="https://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site/"/>
+            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
         <repository
             url="http://download.eclipse.org/technology/m2e/milestones/1.6"/>
       </repositoryList>
