@@ -68,7 +68,7 @@
         <repository>
             <id>pmd</id>
             <layout>p2</layout>
-            <url>https://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site/</url>
+            <url>https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/</url>
         </repository>
         <repository>
             <id>findbugs</id>
