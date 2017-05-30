@@ -374,7 +374,7 @@ public class MavenPluginConfigurationTranslator {
 			                        + mojoExecutions.size()));
 		}
 		final MojoExecution execution = mojoExecutions.get(0);
-		final ResourceResolver resourceResolver = configurator
+		final ResourceResolver resourceResolver = AbstractMavenPluginProjectConfigurator
 		        .getResourceResolver(execution, session, project.getLocation());
 		return new MavenPluginConfigurationTranslator(configurator, execution,
 		        project, mavenProject, monitor, resourceResolver);
