@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Eclipse 4.6.x (Neon)" sequenceNumber="62">
+<?pde version="3.8"?><target name="Eclipse 4.6.x (Neon)" sequenceNumber="63">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.jdt.feature.group" version="3.12.3.v20170301-0400"/>
@@ -19,8 +19,8 @@
 <repository location="http://findbugs.cs.umd.edu/eclipse/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="net.sf.eclipsecs.feature.group" version="7.6.0.201703111252"/>
-<repository location="http://eclipse-cs.sf.net/update"/>
+<unit id="net.sf.eclipsecs.feature.group" version="8.0.0.201707161819"/>
+<repository location="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
 </location>
 </locations>
 <targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.6"/>
