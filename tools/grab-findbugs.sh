@@ -1,6 +1,6 @@
 #!/bin/sh
 
-url=http://findbugs.cs.umd.edu/eclipse/
+url=https://spotbugs.github.io/eclipse/
 repo_path=../com.basistech.m2e.code.quality.findbugs/findbugs.p2
 repo=file://$PWD/${repo_path}
 eclipse=

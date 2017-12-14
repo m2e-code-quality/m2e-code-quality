@@ -90,7 +90,7 @@
         <repository
             url="http://download.eclipse.org/releases/oxygen"/>
         <repository
-            url="http://findbugs.cs.umd.edu/eclipse/"/>
+            url="https://spotbugs.github.io/eclipse/"/>
         <repository
             url="http://eclipse-cs.sf.net/update"/>
         <repository
@@ -103,7 +103,7 @@
         <repository
             url="http://download.eclipse.org/releases/neon"/>
         <repository
-            url="http://findbugs.cs.umd.edu/eclipse/"/>
+            url="https://spotbugs.github.io/eclipse/"/>
         <repository
             url="http://eclipse-cs.sf.net/update"/>
         <repository
@@ -116,7 +116,7 @@
         <repository
             url="http://download.eclipse.org/releases/mars"/>
         <repository
-            url="http://findbugs.cs.umd.edu/eclipse/"/>
+            url="https://spotbugs.github.io/eclipse/"/>
         <repository
             url="http://eclipse-cs.sf.net/update"/>
         <repository

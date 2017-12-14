@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.basistech.m2e.code.quality.findbugs.feature"
-      label="Findbugs configuration plugin for M2Eclipse"
+      label="SpotBugs configuration plugin for M2Eclipse"
       version="1.0.0.qualifier"
       plugin="com.basistech.m2e.code.quality.shared">
 
    <description>
-      Feature to automatically configure the Eclipse Findbugs plugin with configuration
-derived from the configuration of the check goal of the maven-findbugs-plugin.
+      Feature to automatically configure the Eclipse Spotbugs plugin with configuration
+derived from the configuration of the check goal of the spotbugs-maven-plugin.
    </description>
 
    <copyright>
       Copyright (c) 2010 Mohan KR
-Copyright (c) 2010 Basis Technology Corp.
+      Copyright (c) 2010 Basis Technology Corp.
    </copyright>
 
    <license url="http://www.apache.org/licenses/">
@@ -201,8 +201,8 @@ Copyright (c) 2010 Basis Technology Corp.
    <requires>
       <import plugin="org.eclipse.core.runtime" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.resources" version="3.6.0" match="greaterOrEqual"/>
-      <import plugin="edu.umd.cs.findbugs.plugin.eclipse" version="2.0.0" match="greaterOrEqual"/>
-      <import feature="edu.umd.cs.findbugs.plugin.eclipse" version="2.0.0.20111221" match="greaterOrEqual"/>
+      <import plugin="com.github.spotbugs.plugin.eclipse" version="3.0.0" match="greaterOrEqual"/>
+      <import feature="com.github.spotbugs.plugin.eclipse" version="3.0.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

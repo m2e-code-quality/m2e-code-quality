@@ -5,7 +5,7 @@
          point="org.eclipse.m2e.core.projectConfigurators">
        <configurator 
          id="com.basistech.m2e.code.quality.findbugsConfigurator"
-         name="M2Eclipse findbugs-maven-plugin project configurator"
+         name="M2Eclipse spotbugs-maven-plugin project configurator"
         class="com.basistech.m2e.code.quality.findbugs.EclipseFindbugsProjectConfigurator"
         />
    </extension>

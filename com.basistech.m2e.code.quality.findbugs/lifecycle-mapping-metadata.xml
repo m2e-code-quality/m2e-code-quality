@@ -3,12 +3,12 @@
 	<pluginExecutions>
 		<pluginExecution>
 			<pluginExecutionFilter>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
 				<versionRange>[2.3.3,)</versionRange>
 				<goals>
                     <goal>check</goal>
-					<goal>findbugs</goal>
+					<goal>spotbugs</goal>
 				</goals>
 			</pluginExecutionFilter>
 			<action>
@@ -17,6 +17,5 @@
 				</configurator>
 			</action>
 		</pluginExecution>
-		<!-- add in the other findbugs plugin goal? -->
 	</pluginExecutions>
 </lifecycleMappingMetadata>

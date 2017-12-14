@@ -16,9 +16,6 @@
  ******************************************************************************/
 package com.basistech.m2e.code.quality.findbugs;
 
-import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.MAVEN_PLUGIN_ARTIFACTID;
-import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.MAVEN_PLUGIN_GROUPID;
-
 import java.util.List;
 
 import org.apache.maven.execution.MavenSession;
@@ -38,8 +35,6 @@ import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
 import de.tobject.findbugs.FindbugsPlugin;
 import edu.umd.cs.findbugs.config.UserPreferences;
 
-/**
- */
 public class EclipseFindbugsProjectConfigurator
         extends AbstractMavenPluginProjectConfigurator {
 
@@ -52,17 +47,17 @@ public class EclipseFindbugsProjectConfigurator
 
 	@Override
 	protected String getMavenPluginArtifactId() {
-		return MAVEN_PLUGIN_ARTIFACTID;
+		return "spotbugs-maven-plugin";
 	}
 
 	@Override
 	protected String getMavenPluginGroupId() {
-		return MAVEN_PLUGIN_GROUPID;
+		return "com.github.spotbugs";
 	}
 
 	@Override
 	protected String[] getMavenPluginGoals() {
-		return new String[] {"findbugs", "check"};
+		return new String[] { "spotbugs", "check" };
 	}
 
 	@Override
