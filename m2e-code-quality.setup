@@ -140,7 +140,8 @@
   <setupTask
       xsi:type="maven:MavenImportTask">
     <sourceLocator
-        rootFolder="${git.clone.location}"/>
+        rootFolder="${git.clone.location}"
+        locateNestedProjects="true"/>
   </setupTask>
   <stream name="master"
       label="Master"/>
