@@ -40,6 +40,7 @@
         <module>com.basistech.m2e.code.quality.pmd</module>
         <module>com.basistech.m2e.code.quality.pmd.feature</module>
         <module>com.basistech.m2e.code.quality.site</module>
+        <module>photon</module>
         <module>oxygen</module>
         <module>neon</module>
         <module>mars</module>

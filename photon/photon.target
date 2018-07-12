@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Eclipse 4.7.x (Oxygen)" sequenceNumber="64">
+<target name="Eclipse 4.8.x (Photon)" sequenceNumber="64">
 	<locations>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
@@ -8,20 +8,19 @@
 			<unit id="org.eclipse.m2e.logback.feature.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.m2e.sdk.feature.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.sdk.feature.group" version="0.0.0"/>
-			<repository location="http://download.eclipse.org/releases/oxygen"/>
+			<repository location="http://download.eclipse.org/releases/photon"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<unit id="net.sourceforge.pmd.eclipse.feature.group" version="4.0.13.v20170429-1921"/>
+			<unit id="net.sourceforge.pmd.eclipse.feature.group" version="0.0.0"/>
 			<repository location="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<unit id="edu.umd.cs.findbugs.plugin.eclipse.feature.group" version="3.0.1.20150306-5afe4d1"/>
+			<unit id="edu.umd.cs.findbugs.plugin.eclipse.feature.group" version="0.0.0"/>
 			<repository location="http://findbugs.cs.umd.edu/eclipse/"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<unit id="net.sf.eclipsecs.feature.group" version="8.0.0.201707161819"/>
+			<unit id="net.sf.eclipsecs.feature.group" version="0.0.0"/>
 			<repository location="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
 		</location>
 	</locations>
-	<targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.6"/>
 </target>

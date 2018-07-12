@@ -5,6 +5,7 @@ matrix:
     - env: TARGETPLATFORM=mars
     - env: TARGETPLATFORM=neon
     - env: TARGETPLATFORM=oxygen
+    - env: TARGETPLATFORM=photon
   fast_finish: true
 script:
   - mvn --batch-mode -Dtarget.platform=$TARGETPLATFORM clean test

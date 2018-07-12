@@ -1,13 +1,14 @@
+//@formatter:off
 /*******************************************************************************
  * Copyright 2010 Mohan KR
  * Copyright 2010 Basis Technology Corp.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -66,6 +67,7 @@ import net.sourceforge.pmd.eclipse.runtime.properties.IProjectProperties;
 import net.sourceforge.pmd.eclipse.runtime.properties.IProjectPropertiesManager;
 import net.sourceforge.pmd.eclipse.runtime.properties.PropertiesException;
 import net.sourceforge.pmd.eclipse.runtime.writer.WriterException;
+import net.sourceforge.pmd.util.ResourceLoader;
 
 public class EclipsePmdProjectConfigurator
         extends AbstractMavenPluginProjectConfigurator {
@@ -176,7 +178,7 @@ public class EclipsePmdProjectConfigurator
 
 	/**
 	 * Configures the PMD plugin based on the POM contents
-	 * 
+	 *
 	 * @throws CoreException
 	 *             if the creation failed.
 	 */
@@ -249,18 +251,20 @@ public class EclipsePmdProjectConfigurator
 				final RuleSetReferenceId resolvedRuleSetReference =
 				        new RuleSetReferenceId(loc) {
 
-					        @Override
-					        public InputStream getInputStream(
-				                    final ClassLoader arg0)
-				                    throws RuleSetNotFoundException {
-						        try {
-							        return resolvedLocation.openStream();
-						        } catch (final IOException e) {
-							        // ignore them.
-						        }
-						        LOG.warn("No ruleset found for {}", loc);
-						        return null;
-					        }
+				            // PMD seems to have changed the method signature
+				            // public InputStream getInputStream(final ClassLoader arg0)
+                            @Override
+                            public InputStream getInputStream(
+                                    final ResourceLoader resourceLoader)
+                                    throws RuleSetNotFoundException {
+                                try {
+                                    return resolvedLocation.openStream();
+                                } catch (final IOException e) {
+                                    // ignore them.
+                                }
+                                LOG.warn("No ruleset found for {}", loc);
+                                return null;
+                            }
 				        };
 				ruleSetAtLocations =
 				        this.factory.createRuleSet(resolvedRuleSetReference);
@@ -275,7 +279,7 @@ public class EclipsePmdProjectConfigurator
 
 	/**
 	 * Serializes the ruleset for configuring eclipse PMD plugin.
-	 * 
+	 *
 	 * @param rulesetFile
 	 *            the ruleset File resource.
 	 * @param ruleSet
