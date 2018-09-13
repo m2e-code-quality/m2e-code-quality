@@ -66,6 +66,7 @@ import net.sourceforge.pmd.eclipse.runtime.properties.IProjectProperties;
 import net.sourceforge.pmd.eclipse.runtime.properties.IProjectPropertiesManager;
 import net.sourceforge.pmd.eclipse.runtime.properties.PropertiesException;
 import net.sourceforge.pmd.eclipse.runtime.writer.WriterException;
+import net.sourceforge.pmd.util.ResourceLoader;
 
 public class EclipsePmdProjectConfigurator
         extends AbstractMavenPluginProjectConfigurator {
@@ -251,7 +252,7 @@ public class EclipsePmdProjectConfigurator
 
 					        @Override
 					        public InputStream getInputStream(
-				                    final ClassLoader arg0)
+				                    final ResourceLoader arg0)
 				                    throws RuleSetNotFoundException {
 						        try {
 							        return resolvedLocation.openStream();
