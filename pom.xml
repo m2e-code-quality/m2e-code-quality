@@ -3,7 +3,6 @@
     xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.basistech.m2e-code-quality</groupId>
@@ -17,7 +16,7 @@
     </scm>
 
     <properties>
-        <target.platform>neon</target.platform>
+        <target.platform>oxygen</target.platform>
 
         <tycho-version>0.24.0</tycho-version>
         <orbit.version>R20160221192158</orbit.version>
