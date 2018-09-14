@@ -9,9 +9,19 @@ matrix:
   fast_finish: true
 
 script:
-  - mvn --batch-mode -Dtarget.platform=$TARGETPLATFORM clean test
+  - mvn --batch-mode -Dtarget.platform=$TARGETPLATFORM clean install
 
 cache:
   directories:
   - $HOME/.m2
   - .mvn
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
+  local_dir: com.basistech.m2e.code.quality.site/target/site
+  repo: m2e-code-quality/m2e-code-quality-p2-site
+  target_branch: develop
+  on:
+    branch: develop
