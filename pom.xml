@@ -44,10 +44,6 @@
         <module>mars</module>
     </modules>
 
-    <prerequisites>
-        <maven>3.0</maven>
-    </prerequisites>
-
     <repositories>
         <repository>
             <id>m2e</id>
@@ -72,7 +68,7 @@
         <repository>
             <id>findbugs</id>
             <layout>p2</layout>
-            <url>http://findbugs.cs.umd.edu/eclipse/</url>
+            <url>https://spotbugs.github.io/eclipse/</url>
         </repository>
         <repository>
             <id>orbit</id>
@@ -136,13 +132,13 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.5</version>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>findbugs</goal>
+                            <goal>spotbugs</goal>
                         </goals>
                     </execution>
                 </executions>
