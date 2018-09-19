@@ -27,6 +27,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.ConfigurationContainer;
+import org.apache.maven.model.PluginConfiguration;
+import org.apache.maven.model.PluginExecution;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
@@ -50,14 +53,20 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 	private final List<String> includeSourceRoots = new ArrayList<>();
 	private final List<String> includePatterns = new ArrayList<>();
 	private final List<String> excludePatterns = new ArrayList<>();
+	private final MojoExecution checkExecution;
+	private final ConfigurationContainer checkConfiguration;
 
 	private MavenPluginConfigurationTranslator(
 	        final IMaven maven,
 	        final MavenSession session, final MavenProject mavenProject,
-	        final MojoExecution execution, final IProject project,
+	        final MojoExecution execution, final MojoExecution forkedExecution,
+	        final IProject project,
 	        final IProgressMonitor monitor) throws CoreException {
-		super(maven, session, mavenProject, execution, project, monitor);
+		super(maven, session, mavenProject, forkedExecution, project, monitor);
 		this.basedirUri = project.getLocationURI();
+		this.checkExecution = execution;
+		checkConfiguration = new PluginExecution();
+		checkConfiguration.setConfiguration(checkExecution.getConfiguration());
 	}
 
 	public List<String> getRulesets() throws CoreException {
@@ -112,6 +121,11 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 			}
 		}
 		return transformedPatterns;
+	}
+
+	public boolean isSkip() throws CoreException {
+		return Boolean.TRUE.equals(
+				getParameterValue(checkExecution, checkConfiguration, "skip", Boolean.class));
 	}
 
 	/**
@@ -296,11 +310,13 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 	public static MavenPluginConfigurationTranslator newInstance(
 	        final IMaven maven,
 	        final MavenSession session, final MavenProject mavenProject,
+	        final MojoExecution checkGoalExecution, 
 	        final MojoExecution pmdGoalExecution, final IProject project,
 	        final IProgressMonitor monitor) throws CoreException {
 		final MavenPluginConfigurationTranslator m2csConverter =
 		        new MavenPluginConfigurationTranslator(maven, session,
-		                mavenProject, pmdGoalExecution, project, monitor);
+		                mavenProject, checkGoalExecution, pmdGoalExecution, 
+		                project, monitor);
 		m2csConverter.initialize();
 		return m2csConverter;
 	}
