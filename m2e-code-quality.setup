@@ -90,6 +90,8 @@
         <repository
             url="http://download.eclipse.org/releases/oxygen"/>
         <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+        <repository
             url="http://findbugs.cs.umd.edu/eclipse/"/>
         <repository
             url="http://eclipse-cs.sf.net/update"/>
@@ -105,6 +107,8 @@
         <repository
             url="http://findbugs.cs.umd.edu/eclipse/"/>
         <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+        <repository
             url="http://eclipse-cs.sf.net/update"/>
         <repository
             url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
@@ -117,6 +121,8 @@
             url="http://download.eclipse.org/releases/mars"/>
         <repository
             url="http://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
         <repository
             url="http://eclipse-cs.sf.net/update"/>
         <repository
