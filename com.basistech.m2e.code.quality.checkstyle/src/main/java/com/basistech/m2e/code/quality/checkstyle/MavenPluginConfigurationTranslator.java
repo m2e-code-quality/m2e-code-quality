@@ -104,7 +104,7 @@ public class MavenPluginConfigurationTranslator
 			return null;
 		}
 		final Path headerFile = workingDirectory
-		        .resolve("checkstyle-header-" + getExecutionId() + ".txt");
+		        .resolve("checkstyle-header-" + sanitizeFilename(getExecutionId()) + ".txt");
 		try (InputStream inputStream = headerLocation.openStream()) {
 			Files.copy(inputStream, headerFile,
 			        StandardCopyOption.REPLACE_EXISTING);
@@ -124,7 +124,7 @@ public class MavenPluginConfigurationTranslator
 		}
 
 		final Path suppressionsFile = workingDirectory.resolve(
-		        "checkstyle-suppressions-" + getExecutionId() + ".xml");
+		        "checkstyle-suppressions-" + sanitizeFilename(getExecutionId()) + ".xml");
 		try (InputStream inputStream = suppressionsLocation.openStream()) {
 			Files.copy(inputStream, suppressionsFile,
 			        StandardCopyOption.REPLACE_EXISTING);
@@ -147,7 +147,7 @@ public class MavenPluginConfigurationTranslator
 	        final ICheckConfiguration checkCfg)
 	        throws CheckstylePluginException, CoreException {
 		final FileSet fs =
-		        new FileSet("java-sources-" + getExecutionId(), checkCfg);
+		        new FileSet("java-sources-" + sanitizeFilename(getExecutionId()), checkCfg);
 		fs.setEnabled(true);
 		// add fileset includes/excludes
 		fs.setFileMatchPatterns(getIncludesExcludesFileMatchPatterns());
