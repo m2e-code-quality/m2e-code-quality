@@ -73,10 +73,10 @@ public class EclipseSpotbugsProjectConfigurator
 			return;
 		}
 		final MavenPluginConfigurationTranslator mavenSpotbugsConfig =
-		        MavenPluginConfigurationTranslator.newInstance(this,
-		                mavenPluginWrapper, project,
-		                mavenProjectFacade.getMavenProject(monitor), monitor,
-		                session);
+		        MavenPluginConfigurationTranslator.newInstance(maven,
+		                mavenPluginWrapper, session,
+		                mavenProjectFacade.getMavenProject(monitor),
+		                project, monitor);
 		UserPreferences prefs;
 		try {
 			final List<MojoExecution> mojoExecutions =

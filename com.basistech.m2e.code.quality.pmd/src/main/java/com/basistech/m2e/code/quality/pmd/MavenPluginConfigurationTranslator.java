@@ -26,54 +26,42 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.m2e.core.embedder.IMaven;
 
-import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
+import com.basistech.m2e.code.quality.shared.AbstractMavenPluginConfigurationTranslator;
 import com.google.common.collect.ImmutableList;
 
 /**
  * Utility class to get maven-pmd-plugin configuration.
  */
-public class MavenPluginConfigurationTranslator {
+public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfigurationTranslator {
 
 	private static final Map<String, String> PATTERNS_CACHE = new HashMap<>();
 
-	private final MavenProject mavenProject;
 	private final URI basedirUri;
 	private final List<String> excludeSourceRoots = new ArrayList<>();
 	private final List<String> includeSourceRoots = new ArrayList<>();
 	private final List<String> includePatterns = new ArrayList<>();
 	private final List<String> excludePatterns = new ArrayList<>();
 
-	private final IProject project;
-
-	private final AbstractMavenPluginProjectConfigurator configurator;
-
-	private final MojoExecution pmdGoalExecution;
-
-	private final IProgressMonitor monitor;
-
 	private MavenPluginConfigurationTranslator(
-	        final AbstractMavenPluginProjectConfigurator configurator,
-	        final MavenProject mavenProject,
-	        final MojoExecution pmdGoalExecution, final IProject project,
+	        final IMaven maven,
+	        final MavenSession session, final MavenProject mavenProject,
+	        final MojoExecution execution, final IProject project,
 	        final IProgressMonitor monitor) throws CoreException {
-		this.mavenProject = mavenProject;
-		this.project = project;
-		this.monitor = monitor;
-		this.basedirUri = this.project.getLocationURI();
-		this.pmdGoalExecution = pmdGoalExecution;
-		this.configurator = configurator;
+		super(maven, session, mavenProject, execution, project, monitor);
+		this.basedirUri = project.getLocationURI();
 	}
 
 	public List<String> getRulesets() throws CoreException {
-		final String[] rulesets = configurator.getParameterValue(mavenProject,
-		        "rulesets", String[].class, pmdGoalExecution, monitor);
+		final String[] rulesets = getParameterValue("rulesets", String[].class);
 		if (rulesets == null) {
 			// no special rulesets configured - use the same defaults as the
 			// maven-pmd-plugin does
@@ -85,8 +73,7 @@ public class MavenPluginConfigurationTranslator {
 	}
 
 	private List<String> getExcludePatterns() throws CoreException {
-		final String[] excludes = configurator.getParameterValue(mavenProject,
-		        "excludes", String[].class, pmdGoalExecution, monitor);
+		final String[] excludes = getParameterValue("excludes", String[].class);
 		final List<String> transformedPatterns = new LinkedList<>();
 		if (excludes != null && excludes.length > 0) {
 			for (String p : excludes) {
@@ -113,8 +100,7 @@ public class MavenPluginConfigurationTranslator {
 	 * @throws CoreException
 	 */
 	private List<String> getIncludePatterns() throws CoreException {
-		final String[] includes = configurator.getParameterValue(mavenProject,
-		        "includes", String[].class, pmdGoalExecution, monitor);
+		final String[] includes = getParameterValue("includes", String[].class);
 		final List<String> transformedPatterns = new LinkedList<>();
 		if (includes != null && includes.length > 0) {
 			for (String p : includes) {
@@ -137,8 +123,7 @@ public class MavenPluginConfigurationTranslator {
 	 *             if an error occurs
 	 */
 	public boolean getIncludeTests() throws CoreException {
-		final Boolean tests = configurator.getParameterValue(mavenProject,
-		        "includeTests", Boolean.class, pmdGoalExecution, monitor);
+		final Boolean tests = getParameterValue("includeTests", Boolean.class);
 		return tests != null && tests.booleanValue();
 	}
 
@@ -209,17 +194,17 @@ public class MavenPluginConfigurationTranslator {
 		final List<File> excludeRoots = new ArrayList<>();
 
 		includeRoots.addAll(this.transformResourceStringsToFiles(
-		        this.mavenProject.getCompileSourceRoots()));
+		        getMavenProject().getCompileSourceRoots()));
 
 		final List<String> targetDirectories = new ArrayList<>();
-		targetDirectories.add(this.mavenProject.getBuild().getDirectory());
+		targetDirectories.add(getMavenProject().getBuild().getDirectory());
 		excludeRoots.addAll(
 		        this.transformResourceStringsToFiles(targetDirectories));
 
 		// Get all the normalized test roots and add them to include or exclude.
 		final List<File> testCompileSourceRoots =
 		        this.transformResourceStringsToFiles(
-		                this.mavenProject.getTestCompileSourceRoots());
+		                getMavenProject().getTestCompileSourceRoots());
 		if (this.getIncludeTests()) {
 			includeRoots.addAll(testCompileSourceRoots);
 		} else {
@@ -228,9 +213,7 @@ public class MavenPluginConfigurationTranslator {
 
 		// now we need to filter out any excludeRoots from plugin configurations
 		List<File> excludeRootsFromConfig;
-		final File[] excludeRootsArray =
-		        configurator.getParameterValue(mavenProject, "excludeRoots",
-		                File[].class, pmdGoalExecution, monitor);
+		final File[] excludeRootsArray = getParameterValue("excludeRoots", File[].class);
 		if (excludeRootsArray == null) {
 			excludeRootsFromConfig = Collections.emptyList();
 		} else {
@@ -285,7 +268,7 @@ public class MavenPluginConfigurationTranslator {
 
 	private List<File> transformResourceStringsToFiles(
 	        final List<String> srcDirNames) {
-		final File basedir = this.mavenProject.getBasedir();
+		final File basedir = getMavenProject().getBasedir();
 		final List<File> sourceDirectories = new ArrayList<>();
 		if (srcDirNames != null) {
 			for (final String srcDirName : srcDirNames) {
@@ -311,12 +294,12 @@ public class MavenPluginConfigurationTranslator {
 	}
 
 	public static MavenPluginConfigurationTranslator newInstance(
-	        final AbstractMavenPluginProjectConfigurator configurator,
-	        final MavenProject mavenProject,
+	        final IMaven maven,
+	        final MavenSession session, final MavenProject mavenProject,
 	        final MojoExecution pmdGoalExecution, final IProject project,
 	        final IProgressMonitor monitor) throws CoreException {
 		final MavenPluginConfigurationTranslator m2csConverter =
-		        new MavenPluginConfigurationTranslator(configurator,
+		        new MavenPluginConfigurationTranslator(maven, session,
 		                mavenProject, pmdGoalExecution, project, monitor);
 		m2csConverter.initialize();
 		return m2csConverter;
