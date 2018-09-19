@@ -76,6 +76,12 @@ public class EclipseConfigManager {
 		// We have to explicitly add the nature.
 		final IProjectDescription desc = project.getDescription();
 		final String[] natures = desc.getNatureIds();
+		for (int i = 0; i < natures.length; i++) {
+			if (natureId.equals(natures[i])) {
+				// already configured
+				return;
+			}
+		}
 		final String[] newNatures = Arrays.copyOf(natures, natures.length + 1);
 		newNatures[natures.length] = natureId;
 		desc.setNatureIds(newNatures);
