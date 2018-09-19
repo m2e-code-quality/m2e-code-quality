@@ -92,12 +92,16 @@ public class EclipseFindbugsProjectConfigurator
 				return;
 			}
 			prefs = this.buildFindbugsPreferences(mavenFindbugsConfig);
-			final EclipseFindbugsConfigManager fbPluginNature =
-			        EclipseFindbugsConfigManager.newInstance(project);
-			// Add the builder and nature
-			fbPluginNature.configure(monitor);
-			FindbugsPlugin.saveUserPreferences(project, prefs);
-			FindbugsPlugin.setProjectSettingsEnabled(project, null, true);
+			if (!mavenFindbugsConfig.isSkip()) {
+				final EclipseFindbugsConfigManager fbPluginNature =
+						EclipseFindbugsConfigManager.newInstance(project);
+				// Add the builder and nature
+				fbPluginNature.configure(monitor);
+				FindbugsPlugin.saveUserPreferences(project, prefs);
+				FindbugsPlugin.setProjectSettingsEnabled(project, null, true);
+			} else {
+				unconfigureEclipsePlugin(project, monitor);
+			}
 		} catch (final CoreException ex) {
 			LOG.error(ex.getLocalizedMessage(), ex);
 		}
