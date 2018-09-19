@@ -227,6 +227,9 @@ public class MavenPluginConfigurationTranslator
 			suppressionsLocation =
 			        getParameterValue("suppressionsFile", String.class);
 		}
+		if (suppressionsLocation == null) {
+			return null;
+		}
 		return resolveLocation(suppressionsLocation);
 	}
 
