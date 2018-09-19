@@ -40,7 +40,6 @@ import org.apache.maven.plugin.MojoExecution;
 import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-//import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -106,8 +105,8 @@ public class EclipsePmdProjectConfigurator
 		final MojoExecution pmdGoalExecution = findForkedExecution(execution,
 		        "org.apache.maven.plugins", "maven-pmd-plugin", "pmd");
 		final MavenPluginConfigurationTranslator pluginCfgTranslator =
-		        MavenPluginConfigurationTranslator.newInstance(this,
-		                mavenProjectFacade.getMavenProject(monitor),
+		        MavenPluginConfigurationTranslator.newInstance(maven,
+		                session, mavenProjectFacade.getMavenProject(monitor),
 		                pmdGoalExecution, project, monitor);
 
 		this.createOrUpdateEclipsePmdConfiguration(mavenPluginWrapper, project,
@@ -276,7 +275,7 @@ public class EclipsePmdProjectConfigurator
 
 	/**
 	 * Serializes the ruleset for configuring eclipse PMD plugin.
-	 * 
+	 *
 	 * @param rulesetFile
 	 *            the ruleset File resource.
 	 * @param ruleSet

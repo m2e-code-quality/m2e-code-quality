@@ -1,39 +1,58 @@
 package com.basistech.m2e.code.quality.shared;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.ConfigurationContainer;
 import org.apache.maven.model.PluginExecution;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.io.URLInputStreamFacade;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.m2e.core.embedder.IMaven;
 
+import com.google.common.base.Preconditions;
+
 public class AbstractMavenPluginConfigurationTranslator {
 
 	private final IMaven maven;
-	private final MavenProject project;
+	private final MavenProject mavenProject;
 	private final MojoExecution mojoExecution;
 	private final IProgressMonitor monitor;
 	private final ConfigurationContainer execution;
+	private final IProject project;
+	private final ResourceResolver resourceResolver;
 
 	public AbstractMavenPluginConfigurationTranslator(final IMaven maven,
-	        final MavenProject project, final MojoExecution mojoExecution,
-	        final IProgressMonitor monitor) {
+			final MavenSession session, final MavenProject mavenProject,
+	        final MojoExecution mojoExecution, final IProject project,
+	        final IProgressMonitor monitor) throws CoreException {
 		this.maven = maven;
+		this.mavenProject = mavenProject;
 		this.project = project;
 		this.mojoExecution = mojoExecution;
 		this.monitor = monitor;
+		this.resourceResolver = AbstractMavenPluginProjectConfigurator
+				.getResourceResolver(mojoExecution, session, project.getLocation());
 		execution = new PluginExecution();
 		execution.setConfiguration(mojoExecution.getConfiguration());
 	}
 
+	protected MavenProject getMavenProject() {
+		return mavenProject;
+	}
+
 	public <T> T getParameterValue(final String parameter,
 	        final Class<T> asType) throws CoreException {
-		return maven.getMojoParameterValue(project, parameter, asType,
+		return maven.getMojoParameterValue(mavenProject, parameter, asType,
 		        mojoExecution.getPlugin(), execution, mojoExecution.getGoal(),
 		        monitor);
 	}
@@ -58,7 +77,7 @@ public class AbstractMavenPluginConfigurationTranslator {
 		if (configuration != null && configuration.getChildCount() > 0) {
 			configuration.setAttribute("default-value", "");
 		}
-		final List<T> list = maven.getMojoParameterValue(project, parameter,
+		final List<T> list = maven.getMojoParameterValue(mavenProject, parameter,
 		        List.class, mojoExecution.getPlugin(), executionClone,
 		        mojoExecution.getGoal(), monitor);
 		if (list == null) {
@@ -67,4 +86,61 @@ public class AbstractMavenPluginConfigurationTranslator {
 		return list;
 	}
 
+	/**
+	 * Copy a resource from the maven plugin configuration to a location within
+	 * the project.
+	 * <p>
+	 * This the only reference I could find on how the Findbugs Eclipse Plugin
+	 * configuration works.
+	 * </p>
+	 *
+	 * @param resc
+	 *            the resource location as read from the plugin configuration.
+	 * @param newLocation
+	 *            the new location relative to the project root.
+	 * @throws NullPointerException
+	 *             If any of the arguments are {@code null}.
+	 * @throws ConfigurationException
+	 *             If an error occurred during the resolution of the resource or
+	 *             copy to the new location failed.
+	 */
+	protected void copyUrlResourceToProject(final String resc,
+	        final String newLocation) {
+		Preconditions.checkNotNull(resc);
+		Preconditions.checkNotNull(newLocation);
+		final URL urlResc = resolveLocation(resc);
+		if (urlResc == null) {
+			throw new ConfigurationException(String.format(
+			        "could not locate resource [%s]", resc));
+		}
+		// copy the file to new location
+		final File newLocationFile =
+		        new File(this.project.getLocationURI().getPath(), newLocation);
+		try {
+			FileUtils.copyStreamToFile(new URLInputStreamFacade(urlResc),
+			        newLocationFile);
+		} catch (final IOException ex) {
+			throw new ConfigurationException(String.format(
+			        "could not copy resource [%s] to [%s], reason [%s]",
+			        resc, newLocationFile,
+			        ex.getLocalizedMessage()), ex);
+		}
+	}
+
+	/**
+	 * Resolve a location from within the plugin configuration
+	 * @param resc
+	 *            the resource location as read from the plugin configuration.
+	 * @return an URL to the requested resource
+	 * @throws NullPointerException
+	 *             If the argument is {@code null}.
+	 */
+	protected URL resolveLocation(String resc) {
+		Preconditions.checkNotNull(resc);
+		return this.resourceResolver.resolveLocation(resc);
+	}
+
+	public String getExecutionId() {
+		return mojoExecution.getExecutionId();
+	}
 }
