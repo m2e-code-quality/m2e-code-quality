@@ -29,6 +29,7 @@ import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.O
 import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.PRIORITY;
 import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.THRESHOLD;
 import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.VISITORS;
+import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.SKIP;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -74,6 +75,10 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 	        final MojoExecution execution, final IProject project,
 	        final IProgressMonitor monitor) throws CoreException {
 		super(maven, session, mavenProject, execution, project, monitor);
+	}
+
+	public boolean isSkip() throws CoreException {
+		return getParameterValue(SKIP, Boolean.class, Boolean.FALSE);
 	}
 
 	public void setIncludeFilterFiles(final UserPreferences prefs)

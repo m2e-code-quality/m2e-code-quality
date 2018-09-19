@@ -22,9 +22,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -104,10 +102,9 @@ public class MavenPluginConfigurationTranslator
 			return null;
 		}
 		final Path headerFile = workingDirectory
-		        .resolve("checkstyle-header-" + getExecutionId() + ".txt");
+		        .resolve("checkstyle-header-" + sanitizeFilename(getExecutionId()) + ".txt");
 		try (InputStream inputStream = headerLocation.openStream()) {
-			Files.copy(inputStream, headerFile,
-			        StandardCopyOption.REPLACE_EXISTING);
+			copyIfChanged(inputStream, headerFile);
 		} catch (final IOException e) {
 			LOG.error("Could not copy header file {}", headerLocation, e);
 			throw new CheckstylePluginException(
@@ -124,10 +121,9 @@ public class MavenPluginConfigurationTranslator
 		}
 
 		final Path suppressionsFile = workingDirectory.resolve(
-		        "checkstyle-suppressions-" + getExecutionId() + ".xml");
+		        "checkstyle-suppressions-" + sanitizeFilename(getExecutionId()) + ".xml");
 		try (InputStream inputStream = suppressionsLocation.openStream()) {
-			Files.copy(inputStream, suppressionsFile,
-			        StandardCopyOption.REPLACE_EXISTING);
+			copyIfChanged(inputStream, suppressionsFile);
 		} catch (final IOException e) {
 			LOG.error("Could not copy suppressions file {}",
 			        suppressionsLocation, e);
@@ -147,7 +143,7 @@ public class MavenPluginConfigurationTranslator
 	        final ICheckConfiguration checkCfg)
 	        throws CheckstylePluginException, CoreException {
 		final FileSet fs =
-		        new FileSet("java-sources-" + getExecutionId(), checkCfg);
+		        new FileSet("java-sources-" + sanitizeFilename(getExecutionId()), checkCfg);
 		fs.setEnabled(true);
 		// add fileset includes/excludes
 		fs.setFileMatchPatterns(getIncludesExcludesFileMatchPatterns());
