@@ -60,6 +60,7 @@ import net.sourceforge.pmd.RuleSetFactory;
 import net.sourceforge.pmd.RuleSetNotFoundException;
 import net.sourceforge.pmd.RuleSetReferenceId;
 import net.sourceforge.pmd.eclipse.plugin.PMDPlugin;
+import net.sourceforge.pmd.eclipse.runtime.builder.MarkerUtil;
 import net.sourceforge.pmd.eclipse.runtime.builder.PMDNature;
 import net.sourceforge.pmd.eclipse.runtime.properties.IProjectProperties;
 import net.sourceforge.pmd.eclipse.runtime.properties.IProjectPropertiesManager;
@@ -107,12 +108,20 @@ public class EclipsePmdProjectConfigurator
 		final MavenPluginConfigurationTranslator pluginCfgTranslator =
 		        MavenPluginConfigurationTranslator.newInstance(maven,
 		                session, mavenProjectFacade.getMavenProject(monitor),
-		                pmdGoalExecution, project, monitor);
-
+		                execution, pmdGoalExecution, project, monitor);
 		this.createOrUpdateEclipsePmdConfiguration(mavenPluginWrapper, project,
 		        pluginCfgTranslator, monitor, session);
-
+	
 		addPMDNature(project, monitor);
+
+		// in PMD we need to enable or disable the builder for skip
+		PMDNature nature = (PMDNature) project.getNature(PMDNature.PMD_NATURE);
+		if (!pluginCfgTranslator.isSkip()) {
+			nature.configure();
+		} else {
+			nature.deconfigure();
+			MarkerUtil.deleteAllMarkersIn(project);
+		}
 	}
 
 	// private static boolean addPMDNatureHere(final IProject project,

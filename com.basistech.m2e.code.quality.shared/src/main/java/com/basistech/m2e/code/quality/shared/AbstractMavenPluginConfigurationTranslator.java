@@ -56,8 +56,14 @@ public class AbstractMavenPluginConfigurationTranslator {
 
 	public <T> T getParameterValue(final String parameter,
 	        final Class<T> asType) throws CoreException {
+		return getParameterValue(mojoExecution, execution, parameter, asType);
+	}
+
+	protected <T> T getParameterValue(final MojoExecution execution,
+	        final ConfigurationContainer configurationContainer,
+	        final String parameter, final Class<T> asType) throws CoreException {
 		return maven.getMojoParameterValue(mavenProject, parameter, asType,
-		        mojoExecution.getPlugin(), execution, mojoExecution.getGoal(),
+				execution.getPlugin(), configurationContainer, execution.getGoal(),
 		        monitor);
 	}
 
