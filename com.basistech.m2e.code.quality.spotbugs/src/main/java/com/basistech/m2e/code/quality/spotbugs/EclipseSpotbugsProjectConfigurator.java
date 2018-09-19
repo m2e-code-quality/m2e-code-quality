@@ -87,12 +87,16 @@ public class EclipseSpotbugsProjectConfigurator
 				return;
 			}
 			prefs = this.buildSpotbugsPreferences(mavenSpotbugsConfig);
-			final EclipseSpotbugsConfigManager fbPluginNature =
-			        EclipseSpotbugsConfigManager.newInstance(project);
-			// Add the builder and nature
-			fbPluginNature.configure(monitor);
-			FindbugsPlugin.saveUserPreferences(project, prefs);
-			FindbugsPlugin.setProjectSettingsEnabled(project, null, true);
+			if (!mavenSpotbugsConfig.isSkip()) {
+				final EclipseSpotbugsConfigManager fbPluginNature =
+				        EclipseSpotbugsConfigManager.newInstance(project);
+				// Add the builder and nature
+				fbPluginNature.configure(monitor);
+				FindbugsPlugin.saveUserPreferences(project, prefs);
+				FindbugsPlugin.setProjectSettingsEnabled(project, null, true);
+			} else {
+				unconfigureEclipsePlugin(project, monitor);
+			}
 		} catch (final CoreException ex) {
 			LOG.error(ex.getLocalizedMessage(), ex);
 		}

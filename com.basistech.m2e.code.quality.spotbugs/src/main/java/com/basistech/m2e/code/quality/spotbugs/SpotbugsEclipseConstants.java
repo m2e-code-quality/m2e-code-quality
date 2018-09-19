@@ -37,6 +37,7 @@ public final class SpotbugsEclipseConstants {
 	public static final String EXCLUDE_FILTER_FILE = "excludeFilterFile";
 	public static final String INCLUDE_FILTER_FILE = "includeFilterFile";
 	public static final String MAX_RANK = "maxRank";
+	public static final String SKIP = "skip";
 
 	private SpotbugsEclipseConstants() {
 		// no instantiation.
