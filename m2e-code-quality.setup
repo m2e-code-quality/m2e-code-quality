@@ -86,6 +86,21 @@
           rootFolder="${git.clone.location}"
           locateNestedProjects="true"/>
       <repositoryList
+          name="Photon">
+        <repository
+            url="http://download.eclipse.org/releases/photon"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+        <repository
+            url="http://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
+        <repository
+            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
+        <repository
+            url="http://download.eclipse.org/technology/m2e/milestones/1.9"/>
+      </repositoryList>
+      <repositoryList
           name="Oxygen">
         <repository
             url="http://download.eclipse.org/releases/oxygen"/>
@@ -94,7 +109,7 @@
         <repository
             url="http://findbugs.cs.umd.edu/eclipse/"/>
         <repository
-            url="http://eclipse-cs.sf.net/update"/>
+            url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
         <repository
             url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
         <repository
@@ -109,7 +124,7 @@
         <repository
             url="https://spotbugs.github.io/eclipse/"/>
         <repository
-            url="http://eclipse-cs.sf.net/update"/>
+            url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
         <repository
             url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
         <repository
@@ -124,7 +139,7 @@
         <repository
             url="https://spotbugs.github.io/eclipse/"/>
         <repository
-            url="http://eclipse-cs.sf.net/update"/>
+            url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
         <repository
             url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
         <repository
