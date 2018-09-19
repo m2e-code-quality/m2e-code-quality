@@ -1,8 +1,13 @@
 package com.basistech.m2e.code.quality.shared;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,8 +16,7 @@ import org.apache.maven.model.ConfigurationContainer;
 import org.apache.maven.model.PluginExecution;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.io.URLInputStreamFacade;
+import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -116,9 +120,8 @@ public class AbstractMavenPluginConfigurationTranslator {
 		// copy the file to new location
 		final File newLocationFile =
 		        new File(this.project.getLocationURI().getPath(), newLocation);
-		try {
-			FileUtils.copyStreamToFile(new URLInputStreamFacade(urlResc),
-			        newLocationFile);
+		try (InputStream inputStream = urlResc.openStream()) {
+			copyIfChanged(inputStream, newLocationFile.toPath());
 		} catch (final IOException ex) {
 			throw new ConfigurationException(String.format(
 			        "could not copy resource [%s] to [%s], reason [%s]",
@@ -138,6 +141,26 @@ public class AbstractMavenPluginConfigurationTranslator {
 	protected URL resolveLocation(String resc) {
 		Preconditions.checkNotNull(resc);
 		return this.resourceResolver.resolveLocation(resc);
+	}
+
+	protected void copyIfChanged(InputStream input, Path output) throws IOException {
+		InputStream source = input;
+		if (Files.exists(output)) {
+			byte[] fileContent = IOUtil.toByteArray(input);
+			ByteArrayInputStream bufferedInput = new ByteArrayInputStream(fileContent);
+
+			// compare content first
+			try (InputStream outputContent = Files.newInputStream(output)) {
+				if (IOUtil.contentEquals(bufferedInput, outputContent)) {
+					return;
+				}
+			}
+
+			// rewind input and use it
+			bufferedInput.reset();
+			source = bufferedInput;
+		}
+		Files.copy(source, output, StandardCopyOption.REPLACE_EXISTING);
 	}
 
 	public String getExecutionId() {

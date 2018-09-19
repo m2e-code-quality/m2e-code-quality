@@ -22,9 +22,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -106,8 +104,7 @@ public class MavenPluginConfigurationTranslator
 		final Path headerFile = workingDirectory
 		        .resolve("checkstyle-header-" + getExecutionId() + ".txt");
 		try (InputStream inputStream = headerLocation.openStream()) {
-			Files.copy(inputStream, headerFile,
-			        StandardCopyOption.REPLACE_EXISTING);
+			copyIfChanged(inputStream, headerFile);
 		} catch (final IOException e) {
 			LOG.error("Could not copy header file {}", headerLocation, e);
 			throw new CheckstylePluginException(
@@ -126,8 +123,7 @@ public class MavenPluginConfigurationTranslator
 		final Path suppressionsFile = workingDirectory.resolve(
 		        "checkstyle-suppressions-" + getExecutionId() + ".xml");
 		try (InputStream inputStream = suppressionsLocation.openStream()) {
-			Files.copy(inputStream, suppressionsFile,
-			        StandardCopyOption.REPLACE_EXISTING);
+			copyIfChanged(inputStream, suppressionsFile);
 		} catch (final IOException e) {
 			LOG.error("Could not copy suppressions file {}",
 			        suppressionsLocation, e);
