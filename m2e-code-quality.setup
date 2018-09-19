@@ -28,7 +28,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Mars"
+      defaultValue="Neon"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="setup.p2:P2Task"
@@ -86,32 +86,49 @@
           rootFolder="${git.clone.location}"
           locateNestedProjects="true"/>
       <repositoryList
+          name="Oxygen">
+        <repository
+            url="http://download.eclipse.org/releases/oxygen"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+        <repository
+            url="http://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="http://eclipse-cs.sf.net/update"/>
+        <repository
+            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
+        <repository
+            url="http://download.eclipse.org/technology/m2e/milestones/1.8"/>
+      </repositoryList>
+      <repositoryList
+          name="Neon">
+        <repository
+            url="http://download.eclipse.org/releases/neon"/>
+        <repository
+            url="http://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+        <repository
+            url="http://eclipse-cs.sf.net/update"/>
+        <repository
+            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
+        <repository
+            url="http://download.eclipse.org/technology/m2e/milestones/1.7"/>
+      </repositoryList>
+      <repositoryList
           name="Mars">
         <repository
             url="http://download.eclipse.org/releases/mars"/>
         <repository
             url="http://findbugs.cs.umd.edu/eclipse/"/>
         <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+        <repository
             url="http://eclipse-cs.sf.net/update"/>
         <repository
-            url="https://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site/"/>
+            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
         <repository
-            url="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
-      </repositoryList>
-      <repositoryList
-          name="Luna">
-        <repository
-            url="http://download.eclipse.org/releases/luna"/>
-      </repositoryList>
-      <repositoryList
-          name="Kepler">
-        <repository
-            url="http://download.eclipse.org/releases/kepler"/>
-      </repositoryList>
-      <repositoryList
-          name="Juno">
-        <repository
-            url="http://download.eclipse.org/releases/juno"/>
+            url="http://download.eclipse.org/technology/m2e/milestones/1.6"/>
       </repositoryList>
     </targlet>
   </setupTask>

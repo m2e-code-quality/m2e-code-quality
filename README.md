@@ -1,4 +1,4 @@
-# m2e-code-quality #
+# m2e-code-quality [![Build Status](https://travis-ci.org/m2e-code-quality/m2e-code-quality.svg?branch=develop)](https://travis-ci.org/m2e-code-quality/m2e-code-quality)
 
 This project provides Eclipse plugins that bridge the Maven and
 Eclipse plugins for Checkstyle and PMD. In a Maven project that uses

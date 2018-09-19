@@ -3,7 +3,6 @@
     xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.basistech.m2e-code-quality</groupId>
@@ -17,9 +16,9 @@
     </scm>
 
     <properties>
-        <target.platform>mars</target.platform>
+        <target.platform>oxygen</target.platform>
 
-        <tycho-version>0.24.0</tycho-version>
+        <tycho-version>1.2.0</tycho-version>
         <orbit.version>R20160221192158</orbit.version>
         <main.basedir>${basedir}</main.basedir>
 
@@ -37,16 +36,16 @@
         <module>com.basistech.m2e.code.quality.findbugs</module>
         <module>com.basistech.m2e.code.quality.findbugs.feature</module>
         <module>com.basistech.m2e.code.quality.findbugs.test</module>
+        <module>com.basistech.m2e.code.quality.spotbugs</module>
+        <module>com.basistech.m2e.code.quality.spotbugs.feature</module>
+        <module>com.basistech.m2e.code.quality.spotbugs.test</module>
         <module>com.basistech.m2e.code.quality.pmd</module>
         <module>com.basistech.m2e.code.quality.pmd.feature</module>
         <module>com.basistech.m2e.code.quality.site</module>
+        <module>oxygen</module>
+        <module>neon</module>
         <module>mars</module>
-        <module>luna</module>
     </modules>
-
-    <prerequisites>
-        <maven>3.0</maven>
-    </prerequisites>
 
     <repositories>
         <repository>
@@ -55,24 +54,29 @@
             <url>http://download.eclipse.org/technology/m2e/releases</url>
         </repository>
         <repository>
-            <id>luna</id>
+            <id>neon</id>
             <layout>p2</layout>
-            <url>http://download.eclipse.org/releases/luna</url>
+            <url>http://download.eclipse.org/releases/neon</url>
         </repository>
         <repository>
             <id>cs</id>
             <layout>p2</layout>
-            <url>http://eclipse-cs.sourceforge.net/update</url>
+            <url>http://eclipse-cs.sf.net/update</url>
         </repository>
         <repository>
             <id>pmd</id>
             <layout>p2</layout>
-            <url>http://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site</url>
+            <url>https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/</url>
         </repository>
         <repository>
             <id>findbugs</id>
             <layout>p2</layout>
-            <url>http://m2e-code-quality.github.com/m2e-code-quality/findbugs-p2-repository</url>
+            <url>http://findbugs.cs.umd.edu/eclipse/</url>
+        </repository>
+        <repository>
+            <id>spotbugs</id>
+            <layout>p2</layout>
+            <url>https://spotbugs.github.io/eclipse/</url>
         </repository>
         <repository>
             <id>orbit</id>
@@ -136,13 +140,13 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.3</version>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>findbugs</goal>
+                            <goal>spotbugs</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -197,7 +201,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>2.7</version>
+                    <version>3.1.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -266,6 +270,21 @@
                     <id>findbugs</id>
                     <layout>p2</layout>
                     <url>file:${project.basedir}/../com.basistech.m2e.code.quality.findbugs/findbugs.p2</url>
+                </repository>
+            </repositories>
+        </profile>
+        <profile>
+            <id>local-spotbugs-p2</id>
+            <activation>
+                <file>
+                    <exists>../com.basistech.m2e.code.quality.spotbugs/spotbugs.p2/content.xml</exists>
+                </file>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>spotbugs</id>
+                    <layout>p2</layout>
+                    <url>file:${project.basedir}/../com.basistech.m2e.code.quality.spotbugs/spotbugs.p2</url>
                 </repository>
             </repositories>
         </profile>
