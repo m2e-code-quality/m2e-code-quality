@@ -195,7 +195,7 @@ derived from the configuration of the check goal of the spotbugs-maven-plugin.
    </license>
 
    <url>
-      <update label="Update Site at Github" url="http://m2e-code-quality.github.io/m2e-code-quality/site/"/>
+      <update label="Update Site at Github" url="https://m2e-code-quality.github.io/m2e-code-quality-p2-site/"/>
    </url>
 
    <requires>
