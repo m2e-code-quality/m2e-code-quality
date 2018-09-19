@@ -143,4 +143,16 @@ public class AbstractMavenPluginConfigurationTranslator {
 	public String getExecutionId() {
 		return mojoExecution.getExecutionId();
 	}
+
+	/**
+	 * Make sure a valid filename can be generated from the executionId by only allowing characters, digits, dash,
+	 * underscore and dot. All other characters are translated to an underscore.
+	 * @param filename
+	 *         filename or part thereof that needs sanitation
+	 * @return a string that can safely be used as a (part of a) filename
+	 */
+	protected String sanitizeFilename(String filename) {
+		Preconditions.checkNotNull(filename);
+		return filename.replaceAll("[^a-zA-Z0-9-_\\.]", "_");
+	}
 }
