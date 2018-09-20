@@ -111,7 +111,7 @@ public class EclipsePmdProjectConfigurator
 		                execution, pmdGoalExecution, project, monitor);
 		this.createOrUpdateEclipsePmdConfiguration(mavenPluginWrapper, project,
 		        pluginCfgTranslator, monitor, session);
-	
+
 		addPMDNature(project, monitor);
 
 		// in PMD we need to enable or disable the builder for skip
