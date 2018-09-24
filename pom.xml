@@ -45,6 +45,7 @@
         <module>oxygen</module>
         <module>neon</module>
         <module>mars</module>
+        <module>photon</module>
     </modules>
 
     <repositories>
