@@ -2,7 +2,7 @@
 <feature
       id="com.basistech.m2e.code.quality.findbugs.feature"
       label="Findbugs configuration plugin for M2Eclipse"
-      version="1.0.0.qualifier"
+      version="1.1.0.qualifier"
       plugin="com.basistech.m2e.code.quality.shared">
 
    <description>
