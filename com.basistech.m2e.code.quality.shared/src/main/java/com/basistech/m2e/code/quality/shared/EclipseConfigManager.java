@@ -101,6 +101,10 @@ public class EclipseConfigManager {
 				newNaturesList.add(natures[i]);
 			}
 		}
+		if (newNaturesList.size() == natures.length) {
+			// no changes
+			return;
+		}
 
 		final String[] newNatures =
 		        newNaturesList.toArray(new String[newNaturesList.size()]);
