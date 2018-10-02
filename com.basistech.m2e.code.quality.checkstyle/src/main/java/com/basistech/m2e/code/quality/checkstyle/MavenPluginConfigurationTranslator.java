@@ -255,9 +255,9 @@ public class MavenPluginConfigurationTranslator
 		if (testSourceDirectory != null) {
 			testSourceDirectories.add(testSourceDirectory);
 		}
-        if (testSourceDirectories.isEmpty()) {
-            testSourceDirectories.addAll(getMavenProject().getTestCompileSourceRoots());
-        }
+		if (testSourceDirectories.isEmpty()) {
+			testSourceDirectories.addAll(getMavenProject().getTestCompileSourceRoots());
+		}
 		return testSourceDirectories;
 	}
 
