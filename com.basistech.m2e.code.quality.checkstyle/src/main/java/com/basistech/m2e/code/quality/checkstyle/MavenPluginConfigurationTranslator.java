@@ -242,7 +242,7 @@ public class MavenPluginConfigurationTranslator
 			sourceDirectories.add(sourceDirectory);
 		}
 		if (sourceDirectories.isEmpty()) {
-		    sourceDirectories.addAll(getMavenProject().getCompileSourceRoots());
+			sourceDirectories.addAll(getMavenProject().getCompileSourceRoots());
 		}
 		return sourceDirectories;
 	}
