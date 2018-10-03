@@ -2,7 +2,9 @@ language: java
 sudo: false
 
 script:
-  - mvn --batch-mode clean install
+  - xvfb-run mvn --batch-mode clean install -Dmaven.test.skip=false 
+
+install: true
 
 cache:
   directories:
