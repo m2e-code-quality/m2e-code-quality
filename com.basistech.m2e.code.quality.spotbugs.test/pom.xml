@@ -16,8 +16,4 @@
     <packaging>eclipse-test-plugin</packaging>
     <name>M2Eclipse Project Configurator for Eclipse SpotBugs Tests</name>
 
-    <properties>
-        <maven.test.skip>true</maven.test.skip>
-    </properties>
-
 </project>
