@@ -2,7 +2,7 @@ language: java
 sudo: false
 
 script:
-  - xvfb-run mvn --batch-mode clean install 
+  - xvfb-run mvn --batch-mode clean verify 
 
 install: true
 
@@ -11,6 +11,8 @@ cache:
   - $HOME/.m2
   - .mvn
 
+before_deploy: ./tools/before_deploy.sh
+
 # https://docs.travis-ci.com/user/deployment/pages/
 # GITHUB_TOKEN is set in https://travis-ci.org/m2e-code-quality/m2e-code-quality/settings
 # see https://github.com/m2e-code-quality/m2e-code-quality/issues/123
@@ -18,7 +20,7 @@ deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
-  local_dir: com.basistech.m2e.code.quality.site/target/site
+  local_dir: current-site
   repo: m2e-code-quality/m2e-code-quality-p2-site
   target_branch: gh-pages
   on:
