@@ -8,3 +8,4 @@ bin
 .pmd
 .pmdruleset.xml
 findbugs.p2
+current-site/
