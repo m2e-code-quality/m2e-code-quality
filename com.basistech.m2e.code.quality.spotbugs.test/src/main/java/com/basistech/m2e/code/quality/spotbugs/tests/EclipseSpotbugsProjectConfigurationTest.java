@@ -63,11 +63,26 @@ public class EclipseSpotbugsProjectConfigurationTest extends AbstractMavenProjec
 		assertTrue(p.hasNature(NATURE_ID));
 		assertTrue(hasBuilder(p, BUILDER_ID));
 
+		// run the build -> markers
+		runBuild(p, new TriggerSpotbugsExplicitly());
+		assertMarkers(p, MARKER_ID, 1);
+
 		refreshProjectWithProfiles(p, "skip");
 
 		// must have neither nature nor builder!
 		assertFalse(p.hasNature(NATURE_ID));
 		assertFalse(hasBuilder(p, BUILDER_ID));
+
+		// no remaining markers
+		assertNoMarkers(p, MARKER_ID);
+
+		// building alone does not produces markers
+		runBuild(p);
+		assertNoMarkers(p, MARKER_ID);
+
+		// explicitly running produces the markers
+		new TriggerSpotbugsExplicitly().call(p);
+		assertMarkers(p, MARKER_ID, 1);
 	}
 
 	public void testSpotbugsReconfigureReactivate() throws Exception {
@@ -105,4 +120,5 @@ public class EclipseSpotbugsProjectConfigurationTest extends AbstractMavenProjec
 
 			waitForJobsToComplete();
 		}
-	}}
+	}
+}

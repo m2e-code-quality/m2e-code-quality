@@ -16,6 +16,8 @@
  ******************************************************************************/
 package com.basistech.m2e.code.quality.findbugs;
 
+import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.ECLIPSE_FB_NATURE_ID;
+import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.ECLIPSE_FB_PREFS_FILE;
 import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.MAVEN_PLUGIN_ARTIFACTID;
 import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.MAVEN_PLUGIN_GROUPID;
 
@@ -36,18 +38,20 @@ import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigura
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
 
 import de.tobject.findbugs.FindbugsPlugin;
+import de.tobject.findbugs.marker.FindBugsMarker;
+import de.tobject.findbugs.nature.FindBugsNature;
 import edu.umd.cs.findbugs.config.UserPreferences;
 
 /**
  */
 public class EclipseFindbugsProjectConfigurator
-        extends AbstractMavenPluginProjectConfigurator {
+        extends AbstractMavenPluginProjectConfigurator<FindBugsNature> {
 
 	private static final Logger LOG =
 	        LoggerFactory.getLogger(EclipseFindbugsProjectConfigurator.class);
 
 	public EclipseFindbugsProjectConfigurator() {
-		super();
+		super(ECLIPSE_FB_NATURE_ID, FindBugsMarker.NAME, ECLIPSE_FB_PREFS_FILE);
 	}
 
 	@Override
@@ -68,9 +72,8 @@ public class EclipseFindbugsProjectConfigurator
 	@Override
 	protected void handleProjectConfigurationChange(
 	        final IMavenProjectFacade mavenProjectFacade,
-	        final IProject project, final IProgressMonitor monitor,
-	        final MavenPluginWrapper mavenPluginWrapper,
-	        final MavenSession session) throws CoreException {
+	        final IProject project, final MavenPluginWrapper mavenPluginWrapper,
+	        final MavenSession session, final IProgressMonitor monitor) throws CoreException {
 		LOG.debug("entering handleProjectConfigurationChange");
 		final IJavaProject javaProject = JavaCore.create(project);
 		if (javaProject == null || !javaProject.exists()
@@ -92,29 +95,17 @@ public class EclipseFindbugsProjectConfigurator
 				return;
 			}
 			prefs = this.buildFindbugsPreferences(mavenFindbugsConfig);
-			if (!mavenFindbugsConfig.isSkip()) {
-				final EclipseFindbugsConfigManager fbPluginNature =
-						EclipseFindbugsConfigManager.newInstance(project);
-				// Add the builder and nature
-				fbPluginNature.configure(monitor);
+			configure(project, mavenFindbugsConfig.isSkip(), monitor);
+			UserPreferences oldPrefs = FindbugsPlugin.isProjectSettingsEnabled(project)
+					? FindbugsPlugin.getUserPreferences(project)
+					: null;
+			if (oldPrefs == null || !oldPrefs.equals(prefs)) {
 				FindbugsPlugin.saveUserPreferences(project, prefs);
 				FindbugsPlugin.setProjectSettingsEnabled(project, null, true);
-			} else {
-				unconfigureEclipsePlugin(project, monitor);
 			}
 		} catch (final CoreException ex) {
 			LOG.error(ex.getLocalizedMessage(), ex);
 		}
-	}
-
-	@Override
-	protected void unconfigureEclipsePlugin(final IProject project,
-	        final IProgressMonitor monitor) throws CoreException {
-		LOG.debug("entering unconfigureEclipsePlugin");
-		final EclipseFindbugsConfigManager fbPluginNature =
-		        EclipseFindbugsConfigManager.newInstance(project);
-		fbPluginNature.deconfigure(monitor);
-
 	}
 
 	private UserPreferences buildFindbugsPreferences(

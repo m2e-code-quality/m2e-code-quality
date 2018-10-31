@@ -7,11 +7,20 @@
  *******************************************************************************/
 package com.basistech.m2e.code.quality.checkstyle.test;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+
 import com.basistech.m2e.code.quality.shared.test.AbstractMavenProjectConfiguratorTestCase;
 
 import net.sf.eclipsecs.core.builder.CheckstyleBuilder;
 import net.sf.eclipsecs.core.builder.CheckstyleMarker;
+import net.sf.eclipsecs.core.jobs.RunCheckstyleOnFilesJob;
 import net.sf.eclipsecs.core.nature.CheckstyleNature;
 
 public class EclipseCheckstyleProjectConfigurationTest extends AbstractMavenProjectConfiguratorTestCase {
@@ -50,11 +59,26 @@ public class EclipseCheckstyleProjectConfigurationTest extends AbstractMavenProj
 		assertTrue(p.hasNature(NATURE_ID));
 		assertTrue(hasBuilder(p, BUILDER_ID));
 
+		// run the build -> markers
+		runBuild(p);
+		assertMarkers(p, MARKER_ID, 1);
+
 		refreshProjectWithProfiles(p, "skip");
 
 		// must have neither nature nor builder!
 		assertFalse(p.hasNature(NATURE_ID));
 		assertFalse(hasBuilder(p, BUILDER_ID));
+
+		// no remaining markers
+		assertNoMarkers(p, MARKER_ID);
+
+		// building alone does not produces markers
+		runBuild(p);
+		assertNoMarkers(p, MARKER_ID);
+
+		// explicitly running produces the markers
+		new TriggerCheckstyleExplicitly().call(p);
+		assertMarkers(p, MARKER_ID, 1);
 	}
 
 	public void testCheckstyleReconfigureReactivate() throws Exception {
@@ -76,5 +100,34 @@ public class EclipseCheckstyleProjectConfigurationTest extends AbstractMavenProj
 		// must have nature and builder again
 		assertTrue(p.hasNature(NATURE_ID));
 		assertTrue(hasBuilder(p, BUILDER_ID));
+	}
+
+	private final class TriggerCheckstyleExplicitly implements ProjectCallable {
+
+		@Override
+		public void call(IProject project) throws Exception {
+			List<IFile> filesToCheck = new ArrayList<IFile>();
+			collectFiles(project, filesToCheck);
+
+			RunCheckstyleOnFilesJob job = new RunCheckstyleOnFilesJob(filesToCheck);
+			job.setRule(job);
+			job.schedule();
+			job.join();
+		}
+
+		private void collectFiles(final IResource resource, final List<IFile> files) throws CoreException {
+
+			if (!resource.isAccessible()) {
+				return;
+			}
+
+			if (resource instanceof IFile) {
+				files.add((IFile) resource);
+			} else if (resource instanceof IContainer) {
+				for (IResource member : ((IContainer) resource).members()) {
+					collectFiles(member, files);
+				}
+			}
+		}
 	}
 }
