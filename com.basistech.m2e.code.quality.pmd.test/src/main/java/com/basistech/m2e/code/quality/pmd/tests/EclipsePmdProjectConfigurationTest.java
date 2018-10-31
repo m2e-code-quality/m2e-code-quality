@@ -11,11 +11,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 
 import com.basistech.m2e.code.quality.shared.test.AbstractMavenProjectConfiguratorTestCase;
 
 import net.sourceforge.pmd.eclipse.runtime.PMDRuntimeConstants;
+import net.sourceforge.pmd.eclipse.runtime.builder.MarkerUtil;
 import net.sourceforge.pmd.eclipse.runtime.builder.PMDBuilder;
 import net.sourceforge.pmd.eclipse.runtime.builder.PMDNature;
 import net.sourceforge.pmd.eclipse.runtime.cmd.MarkerInfo2;
@@ -57,11 +59,25 @@ public class EclipsePmdProjectConfigurationTest extends AbstractMavenProjectConf
 		assertTrue(p.hasNature(NATURE_ID));
 		assertTrue(hasBuilder(p, BUILDER_ID));
 
+		// run the build -> markers
+		runBuild(p);
+		assertMarkers(p, MARKER_ID, 1);
+
 		refreshProjectWithProfiles(p, "skip");
 
 		// must have neither nature nor builder!
 		assertFalse(p.hasNature(NATURE_ID));
 		assertFalse(hasBuilder(p, BUILDER_ID));
+
+		// no remaining markers
+		assertNoMarkers(p, MARKER_ID);
+
+		// building alone does not produces markers
+		runBuild(p);
+		assertNoMarkers(p, MARKER_ID);
+
+		// explicitly running produces the markers
+		assertMarkers(p, MARKER_ID, 1);
 	}
 
 	public void testPmdReconfigureReactivate() throws Exception {
@@ -98,8 +114,13 @@ public class EclipsePmdProjectConfigurationTest extends AbstractMavenProjectConf
 		cmd.performExecute();
 
 		cmd.join();
-
 		return cmd.getMarkers();
+	}
+
+	@Override
+	protected void assertNoMarkers(IProject project, String markerId) throws Exception {
+		final IMarker[] markers = MarkerUtil.findAllMarkers(project);
+		assertEquals(0, markers.length);
 	}
 
 	@Override
