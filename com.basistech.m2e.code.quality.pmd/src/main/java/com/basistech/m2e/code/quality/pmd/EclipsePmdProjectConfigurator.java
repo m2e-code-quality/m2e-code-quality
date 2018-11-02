@@ -112,38 +112,17 @@ public class EclipsePmdProjectConfigurator
 		this.createOrUpdateEclipsePmdConfiguration(mavenPluginWrapper, project,
 		        pluginCfgTranslator, monitor, session);
 
-		addPMDNature(project, monitor);
-
 		// in PMD we need to enable or disable the builder for skip
 		PMDNature nature = (PMDNature) project.getNature(PMDNature.PMD_NATURE);
 		if (!pluginCfgTranslator.isSkip()) {
+			addPMDNature(project, monitor);
 			nature.configure();
 		} else {
 			nature.deconfigure();
+			PMDNature.removePMDNature(project, monitor);
 			MarkerUtil.deleteAllMarkersIn(project);
 		}
 	}
-
-	// private static boolean addPMDNatureHere(final IProject project,
-	// final IProgressMonitor monitor) throws CoreException {
-	// boolean success = false;
-	//
-	// // unlike the one inside PMD, this carefully does NOT check for the
-	// prerequisite
-	// // Java nature, in case we end up in the wrong order.
-	// if (project.hasNature(JAVA_NATURE) && !project.hasNature(PMD_NATURE)) {
-	// final IProjectDescription description = project.getDescription();
-	// final String[] natureIds = description.getNatureIds();
-	// String[] newNatureIds = new String[natureIds.length + 1];
-	// System.arraycopy(natureIds, 0, newNatureIds, 0, natureIds.length);
-	// newNatureIds[natureIds.length] = PMD_NATURE;
-	// description.setNatureIds(newNatureIds);
-	// project.setDescription(description, monitor);
-	// success = true;
-	// }
-	//
-	// return success;
-	// }
 
 	private void addPMDNature(final IProject project,
 	        final IProgressMonitor monitor) throws CoreException {
