@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012-2013 Red Hat, Inc.
+ * Copyright (c) 2018 GEBIT Solutions GmbH
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,55 +11,98 @@ package com.basistech.m2e.code.quality.spotbugs.tests;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
 
+import com.basistech.m2e.code.quality.shared.test.AbstractMavenProjectConfiguratorTestCase;
+
+import de.tobject.findbugs.FindbugsPlugin;
 import de.tobject.findbugs.builder.FindBugsWorker;
 import de.tobject.findbugs.builder.ResourceUtils;
 import de.tobject.findbugs.builder.WorkItem;
+import de.tobject.findbugs.marker.FindBugsMarker;
 
 @SuppressWarnings("restriction")
-public class EclipseSpotbugsProjectConfigurationTest
-        extends AbstractMavenProjectTestCase {
+public class EclipseSpotbugsProjectConfigurationTest extends AbstractMavenProjectConfiguratorTestCase {
 
-	private static final String SPOTBUGS_MARKER =
-	        "com.github.spotbugs.plugin.eclipse.findbugsMarker";
+	private static final String MARKER_ID = FindBugsMarker.NAME;
+	private static final String NATURE_ID = FindbugsPlugin.NATURE_ID;
+	private static final String BUILDER_ID = FindbugsPlugin.BUILDER_ID;
 
 	public void testSpotbugsCheck() throws Exception {
-		runSpotBugsAndFindMarkers("projects/spotbugs-check/pom.xml", 2);
+		importProjectRunBuildAndFindMarkers("projects/spotbugs-check/pom.xml", MARKER_ID, 2, new TriggerSpotbugsExplicitly());
 	}
 
 	public void testSpotbugsSpotbugs() throws Exception {
-		runSpotBugsAndFindMarkers("projects/spotbugs-spotbugs/pom.xml", 2);
+		importProjectRunBuildAndFindMarkers("projects/spotbugs-spotbugs/pom.xml", MARKER_ID, 2, new TriggerSpotbugsExplicitly());
 	}
 
-	private void runSpotBugsAndFindMarkers(final String path,
-	        final int markerCount) throws Exception {
-		final IProject p = importProject(path);
+	public void testSpotbugsPresent() throws Exception {
+		final IProject p = importProject("projects/spotbugs-check/pom.xml");
+		assertTrue(p.exists());
 
-		p.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
-		waitForJobsToComplete();
+		// must have nature and builder
+		assertTrue(p.hasNature(NATURE_ID));
+		assertTrue(hasBuilder(p, BUILDER_ID));
+	}
 
-		final StructuredSelection selection = new StructuredSelection(p);
+	public void testSpotbugsSkip() throws Exception {
+		final IProject p = importProjectWithProfiles("projects/spotbugs-check/pom.xml", "skip");
+		assertTrue(p.exists());
 
-		final Map<IProject, List<WorkItem>> projectMap =
-		        ResourceUtils.getResourcesPerProject(selection);
+		// must have neither nature nor builder!
+		assertFalse(p.hasNature(NATURE_ID));
+		assertFalse(hasBuilder(p, BUILDER_ID));
+	}
 
-		for (final Map.Entry<IProject, List<WorkItem>> e : projectMap
-		        .entrySet()) {
-			final FindBugsWorker worker = new FindBugsWorker(p, monitor);
-			worker.work(e.getValue());
+	public void testSpotbugsReconfigureSkip() throws Exception {
+		final IProject p = importProject("projects/spotbugs-check/pom.xml");
+		assertTrue(p.exists());
+
+		// must have nature and builder
+		assertTrue(p.hasNature(NATURE_ID));
+		assertTrue(hasBuilder(p, BUILDER_ID));
+
+		refreshProjectWithProfiles(p, "skip");
+
+		// must have neither nature nor builder!
+		assertFalse(p.hasNature(NATURE_ID));
+		assertFalse(hasBuilder(p, BUILDER_ID));
+	}
+
+	public void testSpotbugsReconfigureReactivate() throws Exception {
+		final IProject p = importProject("projects/spotbugs-check/pom.xml");
+		assertTrue(p.exists());
+
+		// must have nature and builder
+		assertTrue(p.hasNature(NATURE_ID));
+		assertTrue(hasBuilder(p, BUILDER_ID));
+
+		refreshProjectWithProfiles(p, "skip");
+
+		// must have neither nature nor builder!
+		assertFalse(p.hasNature(NATURE_ID));
+		assertFalse(hasBuilder(p, BUILDER_ID));
+
+		refreshProjectWithProfiles(p, "");
+
+		// must have nature and builder again
+		assertTrue(p.hasNature(NATURE_ID));
+		assertTrue(hasBuilder(p, BUILDER_ID));
+	}
+
+	protected class TriggerSpotbugsExplicitly implements ProjectCallable {
+		@Override
+		public void call(IProject project) throws Exception {
+			final StructuredSelection selection = new StructuredSelection(project);
+
+			final Map<IProject, List<WorkItem>> projectMap = ResourceUtils.getResourcesPerProject(selection);
+
+			for (final Map.Entry<IProject, List<WorkItem>> e : projectMap.entrySet()) {
+				final FindBugsWorker worker = new FindBugsWorker(project, monitor);
+				worker.work(e.getValue());
+			}
+
+			waitForJobsToComplete();
 		}
-
-		waitForJobsToComplete();
-
-		final IMarker[] markers =
-		        p.findMarkers(SPOTBUGS_MARKER, true, IResource.DEPTH_INFINITE);
-		assertEquals(markerCount, markers.length);
-	}
-
-}
+	}}

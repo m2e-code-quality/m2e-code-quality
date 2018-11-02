@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012-2013 Red Hat, Inc.
+ * Copyright (c) 2018 GEBIT Solutions GmbH
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,31 +7,74 @@
  *******************************************************************************/
 package com.basistech.m2e.code.quality.checkstyle.test;
 
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
+import com.basistech.m2e.code.quality.shared.test.AbstractMavenProjectConfiguratorTestCase;
 
-@SuppressWarnings("restriction")
-public class EclipseCheckstyleProjectConfigurationTest extends AbstractMavenProjectTestCase {
+import net.sf.eclipsecs.core.builder.CheckstyleBuilder;
+import net.sf.eclipsecs.core.builder.CheckstyleMarker;
+import net.sf.eclipsecs.core.nature.CheckstyleNature;
 
-	private static final String CHECKSTYLE_MARKER = "net.sf.eclipsecs.core.CheckstyleMarker";
+public class EclipseCheckstyleProjectConfigurationTest extends AbstractMavenProjectConfiguratorTestCase {
 
-	public void testFindbugsCheck() throws Exception {
-		runCheckstyleAndFindMarkers("projects/checkstyle-check/pom.xml", 13);
+	private static final String MARKER_ID = CheckstyleMarker.MARKER_ID;
+	private static final String BUILDER_ID = CheckstyleBuilder.BUILDER_ID;
+	private static final String NATURE_ID = CheckstyleNature.NATURE_ID;
+
+	public void testCheckstyleCheck() throws Exception {
+		importProjectRunBuildAndFindMarkers("projects/checkstyle-check/pom.xml", MARKER_ID, 13);
 	}
 
-	private void runCheckstyleAndFindMarkers(final String path, final int minimumMarkerCount) throws Exception {
-		final IProject p = importProject(path);
+	public void testCheckstylePresent() throws Exception {
+		final IProject p = importProject("projects/checkstyle-check/pom.xml");
+		assertTrue(p.exists());
 
-		p.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
-		waitForJobsToComplete();
-
-		waitForJobsToComplete();
-
-		final IMarker[] markers = p.findMarkers(CHECKSTYLE_MARKER, true, IResource.DEPTH_INFINITE);
-		assertTrue(markers.length >= minimumMarkerCount);
+		// must have nature and builder
+		assertTrue(p.hasNature(NATURE_ID));
+		assertTrue(hasBuilder(p, BUILDER_ID));
 	}
 
+	public void testCheckstyleSkip() throws Exception {
+		final IProject p = importProjectWithProfiles("projects/checkstyle-check/pom.xml", "skip");
+		assertTrue(p.exists());
+
+		// must have neither nature nor builder!
+		assertFalse(p.hasNature(NATURE_ID));
+		assertFalse(hasBuilder(p, BUILDER_ID));
+	}
+
+	public void testCheckstyleReconfigureSkip() throws Exception {
+		final IProject p = importProject("projects/checkstyle-check/pom.xml");
+		assertTrue(p.exists());
+
+		// must have nature and builder
+		assertTrue(p.hasNature(NATURE_ID));
+		assertTrue(hasBuilder(p, BUILDER_ID));
+
+		refreshProjectWithProfiles(p, "skip");
+
+		// must have neither nature nor builder!
+		assertFalse(p.hasNature(NATURE_ID));
+		assertFalse(hasBuilder(p, BUILDER_ID));
+	}
+
+	public void testCheckstyleReconfigureReactivate() throws Exception {
+		final IProject p = importProject("projects/checkstyle-check/pom.xml");
+		assertTrue(p.exists());
+
+		// must have nature and builder
+		assertTrue(p.hasNature(NATURE_ID));
+		assertTrue(hasBuilder(p, BUILDER_ID));
+
+		refreshProjectWithProfiles(p, "skip");
+
+		// must have neither nature nor builder!
+		assertFalse(p.hasNature(NATURE_ID));
+		assertFalse(hasBuilder(p, BUILDER_ID));
+
+		refreshProjectWithProfiles(p, "");
+
+		// must have nature and builder again
+		assertTrue(p.hasNature(NATURE_ID));
+		assertTrue(hasBuilder(p, BUILDER_ID));
+	}
 }
