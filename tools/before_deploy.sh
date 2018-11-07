@@ -4,10 +4,9 @@ GIT_ROOT_DIR=$(cd `dirname $0` && echo `git rev-parse --show-toplevel`)
 OLD_RELEASES_FILE=${GIT_ROOT_DIR}/tools/old_releases.list
 
 CURRENT_SITE_FOLDER=current-site
-SITE_GITHUB_REPO=antoine-morvan/m2e-code-quality-p2-site
 SITE_GITHUB_BRANCH=gh-pages
 
-NEW_SITE_FOLDER=com.basistech.m2e.code.quality.site/target/site/
+NEW_SITE_FOLDER=com.basistech.m2e.code.quality.site/target/repository/
 
 SITE_NAME="M2E Code Quality - Eclipse Update Site"
 
@@ -51,13 +50,17 @@ function regenCompositeMetadata () {
 
 ## -- fetch current site
 rm -rf current-site
-git clone https://github.com/${SITE_GITHUB_REPO}.git -b ${SITE_GITHUB_BRANCH} ${CURRENT_SITE_FOLDER}
+git clone https://github.com/${TRAVIS_REPO_SLUG}-p2-site.git -b ${SITE_GITHUB_BRANCH} ${CURRENT_SITE_FOLDER}
+
 ## -- integrate (copy) new version to the site
-cp -R ${NEW_SITE_FOLDER}/* ${CURRENT_SITE_FOLDER}/
+if [ ! -z "$TRAVIS_TAG" ]; then
+  mkdir ${CURRENT_SITE_FOLDER}/${TRAVIS_TAG} && cp -R ${NEW_SITE_FOLDER}/* ${CURRENT_SITE_FOLDER}/${TRAVIS_TAG}/
+else
+  rm -rf ${CURRENT_SITE_FOLDER}/snapshot && mkdir ${CURRENT_SITE_FOLDER}/snapshot && cp -R ${NEW_SITE_FOLDER}/* ${CURRENT_SITE_FOLDER}/snapshot/
+fi
+
 ## -- regenerate composite meta data
 STABLE_RELEASES="$(cat ${OLD_RELEASES_FILE}) $(find ${CURRENT_SITE_FOLDER}/* -maxdepth 1 -type d -name "[0-9]\.[0-9].[0-9]" -printf '%f\n')"
 SNAPSHOT_RELEASES=$(find ${CURRENT_SITE_FOLDER}/snapshot* -maxdepth 1 -type d -name "[0-9]\.[0-9]\.[0-9]\.*" -printf '%f\n')
 
 regenCompositeMetadata "${STABLE_RELEASES}" "${CURRENT_SITE_FOLDER}/"
-regenCompositeMetadata "${SNAPSHOT_RELEASES}" "${CURRENT_SITE_FOLDER}/snapshot"
-

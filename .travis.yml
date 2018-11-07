@@ -1,8 +1,16 @@
 language: java
 sudo: false
 
+branches:
+  only:
+  - develop
+  - /^\d+\.\d+\.\d+$/
+
 script:
   - xvfb-run mvn --batch-mode clean verify 
+
+before_install: 
+- if [ -n "$TRAVIS_TAG" ]; then ./tools/update_version.sh $TRAVIS_TAG.$(date +%Y%m%d%H%M)-r; fi
 
 install: true
 
@@ -17,11 +25,22 @@ before_deploy: ./tools/before_deploy.sh
 # GITHUB_TOKEN is set in https://travis-ci.org/m2e-code-quality/m2e-code-quality/settings
 # see https://github.com/m2e-code-quality/m2e-code-quality/issues/123
 deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
-  local_dir: current-site
-  repo: m2e-code-quality/m2e-code-quality-p2-site
-  target_branch: gh-pages
-  on:
-    branch: develop
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    local_dir: current-site
+    repo: ${TRAVIS_REPO_SLUG}-p2-site
+    target_branch: gh-pages
+    on:
+      all_branches: true
+  - provider: releases
+    api_key:
+      secure: $GITHUB_TOKEN
+    file_glob: true
+    file: com.basistech.m2e.code.quality.site/target/com.basistech.m2e.code.quality.site-*.zip
+    skip_cleanup: true
+    on:
+      tags: true
+
+after_deploy: 
+- if [ -n "$TRAVIS_TAG" ]; then ./tools/increment_version.sh $TRAVIS_TAG; fi
