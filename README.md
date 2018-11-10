@@ -22,6 +22,11 @@ These Eclipse plugins are built with the Tycho Maven plugin. The
 marriage of OSGi, Eclipse, and Maven is imperfect. In particular, it
 rarely works to run a build that does not start with 'clean'.
 
+## Installation
+
+The latest release can be installed from the Eclipse Update Site at 
+[https://m2e-code-quality.github.io/m2e-code-quality-p2-site/](https://m2e-code-quality.github.io/m2e-code-quality-p2-site/)
+
 ## Development environment
 
 This project uses [Oomph](https://projects.eclipse.org/projects/tools.oomph), and you can set up an Eclipse development environment with the following steps:
