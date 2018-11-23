@@ -26,6 +26,10 @@
     <description>Set the heap space needed to work with the projects of ${scope.project.label}</description>
   </setupTask>
   <setupTask
+      xsi:type="setup:EclipseIniTask"
+      option="-Doomph.redirection.m2e-code-quality"
+      value="https://raw.githubusercontent.com/m2e-code-quality/m2e-code-quality/master/->${git.clone.location|uri}/"/>
+  <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
       defaultValue="Photon"
