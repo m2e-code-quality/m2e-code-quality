@@ -101,7 +101,7 @@ public class EclipseCheckstyleProjectConfigurator
 			                CheckstyleEclipseConstants.ECLIPSE_CS_GENERATE_FORMATTER_SETTINGS));
 			pcWorkingCopy.getFileSets().clear();
 
-			// use the first non-skipped or first execution otherwise
+			// use all non-skipped executions (or first skipped execution otherwise)
 			boolean applied = false;
 			for (final MavenPluginConfigurationTranslator mavenCheckstyleConfig : mavenCheckstyleConfigs) {
 				if (!mavenCheckstyleConfig.isSkip()) {
@@ -109,7 +109,6 @@ public class EclipseCheckstyleProjectConfigurator
 					configure(project, false, monitor);
 					// found a non-skipped config
 					applied = true;
-					break;
 				}
 			}
 			if (!applied && !mavenCheckstyleConfigs.isEmpty()) {
