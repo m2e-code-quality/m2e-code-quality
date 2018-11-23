@@ -26,9 +26,13 @@
     <description>Set the heap space needed to work with the projects of ${scope.project.label}</description>
   </setupTask>
   <setupTask
+      xsi:type="setup:EclipseIniTask"
+      option="-Doomph.redirection.m2e-code-quality"
+      value="https://raw.githubusercontent.com/m2e-code-quality/m2e-code-quality/master/->${git.clone.location|uri}/"/>
+  <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Mars"
+      defaultValue="Photon"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="setup.p2:P2Task"
@@ -86,32 +90,64 @@
           rootFolder="${git.clone.location}"
           locateNestedProjects="true"/>
       <repositoryList
+          name="Photon">
+        <repository
+            url="http://download.eclipse.org/releases/photon"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+        <repository
+            url="http://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
+        <repository
+            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
+        <repository
+            url="http://download.eclipse.org/technology/m2e/milestones/1.9"/>
+      </repositoryList>
+      <repositoryList
+          name="Oxygen">
+        <repository
+            url="http://download.eclipse.org/releases/oxygen"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+        <repository
+            url="http://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
+        <repository
+            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
+        <repository
+            url="http://download.eclipse.org/technology/m2e/milestones/1.8"/>
+      </repositoryList>
+      <repositoryList
+          name="Neon">
+        <repository
+            url="http://download.eclipse.org/releases/neon"/>
+        <repository
+            url="http://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+        <repository
+            url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
+        <repository
+            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
+        <repository
+            url="http://download.eclipse.org/technology/m2e/milestones/1.7"/>
+      </repositoryList>
+      <repositoryList
           name="Mars">
         <repository
             url="http://download.eclipse.org/releases/mars"/>
         <repository
             url="http://findbugs.cs.umd.edu/eclipse/"/>
         <repository
-            url="http://eclipse-cs.sf.net/update"/>
+            url="https://spotbugs.github.io/eclipse/"/>
         <repository
-            url="http://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site/"/>
+            url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
         <repository
-            url="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
-      </repositoryList>
-      <repositoryList
-          name="Luna">
+            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
         <repository
-            url="http://download.eclipse.org/releases/luna"/>
-      </repositoryList>
-      <repositoryList
-          name="Kepler">
-        <repository
-            url="http://download.eclipse.org/releases/kepler"/>
-      </repositoryList>
-      <repositoryList
-          name="Juno">
-        <repository
-            url="http://download.eclipse.org/releases/juno"/>
+            url="http://download.eclipse.org/technology/m2e/milestones/1.6"/>
       </repositoryList>
     </targlet>
   </setupTask>
