@@ -22,11 +22,15 @@ import net.sf.eclipsecs.core.builder.CheckstyleBuilder;
 import net.sf.eclipsecs.core.builder.CheckstyleMarker;
 import net.sf.eclipsecs.core.jobs.RunCheckstyleOnFilesJob;
 import net.sf.eclipsecs.core.nature.CheckstyleNature;
+import net.sf.eclipsecs.core.projectconfig.IProjectConfiguration;
+import net.sf.eclipsecs.core.projectconfig.ProjectConfigurationFactory;
 
 public class EclipseCheckstyleProjectConfigurationTest extends AbstractMavenProjectConfiguratorTestCase {
 
 	private static final String MARKER_ID = CheckstyleMarker.MARKER_ID;
+
 	private static final String BUILDER_ID = CheckstyleBuilder.BUILDER_ID;
+
 	private static final String NATURE_ID = CheckstyleNature.NATURE_ID;
 
 	public void testCheckstyleCheck() throws Exception {
@@ -100,6 +104,44 @@ public class EclipseCheckstyleProjectConfigurationTest extends AbstractMavenProj
 		// must have nature and builder again
 		assertTrue(p.hasNature(NATURE_ID));
 		assertTrue(hasBuilder(p, BUILDER_ID));
+	}
+
+	public void testCheckstyleMultipleExecutions() throws Exception {
+		final IProject p = importProject("projects/checkstyle-multi-check/pom.xml");
+		assertTrue(p.exists());
+
+		// must have nature and builder
+		assertTrue(p.hasNature(NATURE_ID));
+		assertTrue(hasBuilder(p, BUILDER_ID));
+
+		IProjectConfiguration configuration = ProjectConfigurationFactory.getConfiguration(p);
+		assertEquals(2, configuration.getLocalCheckConfigurations().size());
+	}
+
+	public void testCheckstyleMultipleExecutionsSkipOne() throws Exception {
+		final IProject p = importProjectWithProfiles("projects/checkstyle-multi-check/pom.xml", "skip-second");
+		assertTrue(p.exists());
+
+		// must have nature and builder
+		assertTrue(p.hasNature(NATURE_ID));
+		assertTrue(hasBuilder(p, BUILDER_ID));
+
+		// still both configurations present
+		IProjectConfiguration configuration = ProjectConfigurationFactory.getConfiguration(p);
+		assertEquals(2, configuration.getLocalCheckConfigurations().size());
+	}
+
+	public void testCheckstyleMultipleExecutionsSkipAll() throws Exception {
+		final IProject p = importProjectWithProfiles("projects/checkstyle-multi-check/pom.xml", "skip");
+		assertTrue(p.exists());
+
+		// must have neither nature nor builder!
+		assertFalse(p.hasNature(NATURE_ID));
+		assertFalse(hasBuilder(p, BUILDER_ID));
+
+		// still both configurations present
+		IProjectConfiguration configuration = ProjectConfigurationFactory.getConfiguration(p);
+		assertEquals(2, configuration.getLocalCheckConfigurations().size());
 	}
 
 	private final class TriggerCheckstyleExplicitly implements ProjectCallable {
