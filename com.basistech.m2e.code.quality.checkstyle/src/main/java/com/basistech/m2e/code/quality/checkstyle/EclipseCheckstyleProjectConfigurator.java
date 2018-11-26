@@ -102,20 +102,15 @@ public class EclipseCheckstyleProjectConfigurator
 			pcWorkingCopy.getFileSets().clear();
 
 			// use all non-skipped executions (or first skipped execution otherwise)
-			boolean applied = false;
+			boolean nonSkippedConfigFound = false;
 			for (final MavenPluginConfigurationTranslator mavenCheckstyleConfig : mavenCheckstyleConfigs) {
+				buildCheckstyleConfiguration(pcWorkingCopy, mavenCheckstyleConfig);
 				if (!mavenCheckstyleConfig.isSkip()) {
-					buildCheckstyleConfiguration(pcWorkingCopy, mavenCheckstyleConfig);
-					configure(project, false, monitor);
 					// found a non-skipped config
-					applied = true;
+					nonSkippedConfigFound = true;
 				}
 			}
-			if (!applied && !mavenCheckstyleConfigs.isEmpty()) {
-				// apply the first disabled config then
-				buildCheckstyleConfiguration(pcWorkingCopy, mavenCheckstyleConfigs.get(0));
-				configure(project, true, monitor);
-			}
+			configure(project, !nonSkippedConfigFound, monitor);
 
 			// persist the checkconfig
 			if (pcWorkingCopy.isDirty()) {
