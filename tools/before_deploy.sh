@@ -12,19 +12,19 @@ SITE_NAME="M2E Code Quality - Eclipse Update Site"
 
 ##
 ## adapted from
-## https://github.com/jbosstools/jbosstools-build-ci/blob/jbosstools-4.4.x/util/cleanup/jbosstools-cleanup.sh#L255 
+## https://github.com/jbosstools/jbosstools-build-ci/blob/jbosstools-4.4.x/util/cleanup/jbosstools-cleanup.sh#L255
 ##
 function regenCompositeMetadata () {
 	subdirs=$1
   targetFolder=$2
-  
+
   now=$(date +%s000)
-  
+
   countChildren=0
 	for sd in $subdirs; do
     countChildren=$((countChildren + 1))
   done
-	
+
 	echo "<?xml version='1.0' encoding='UTF-8'?><?compositeArtifactRepository version='1.0.0'?>
 <repository name='${SITE_NAME}' type='org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository' version='1.0.0'>
   <properties size='2'><property name='p2.timestamp' value='${now}'/><property name='p2.compressed' value='true'/></properties>
@@ -54,7 +54,7 @@ git clone https://github.com/${TRAVIS_REPO_SLUG}-p2-site.git -b ${SITE_GITHUB_BR
 
 ## -- integrate (copy) new version to the site
 if [ ! -z "$TRAVIS_TAG" ]; then
-  mkdir ${CURRENT_SITE_FOLDER}/${TRAVIS_TAG} && cp -R ${NEW_SITE_FOLDER}/* ${CURRENT_SITE_FOLDER}/${TRAVIS_TAG}/
+  rm -rf ${CURRENT_SITE_FOLDER}/${TRAVIS_TAG} && mkdir ${CURRENT_SITE_FOLDER}/${TRAVIS_TAG} && cp -R ${NEW_SITE_FOLDER}/* ${CURRENT_SITE_FOLDER}/${TRAVIS_TAG}/
 else
   rm -rf ${CURRENT_SITE_FOLDER}/snapshot && mkdir ${CURRENT_SITE_FOLDER}/snapshot && cp -R ${NEW_SITE_FOLDER}/* ${CURRENT_SITE_FOLDER}/snapshot/
 fi

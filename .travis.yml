@@ -1,16 +1,19 @@
 language: java
 sudo: false
 
+git:
+  depth: 9999999
+
 branches:
   only:
   - develop
   - /^\d+\.\d+\.\d+$/
 
 script:
-  - xvfb-run mvn --batch-mode clean verify 
+  - xvfb-run mvn --batch-mode clean verify
 
 before_install: 
-- if [ -n "$TRAVIS_TAG" ]; then ./tools/update_version.sh $TRAVIS_TAG.$(date +%Y%m%d%H%M)-r; fi
+- if [ -n "$TRAVIS_TAG" ]; then . ./tools/prepare_release.sh $TRAVIS_TAG.$(date +%Y%m%d%H%M)-r master; fi
 
 install: true
 
@@ -33,14 +36,8 @@ deploy:
     target_branch: gh-pages
     on:
       all_branches: true
-  - provider: releases
-    api_key:
-      secure: $GITHUB_TOKEN
-    file_glob: true
-    file: com.basistech.m2e.code.quality.site/target/com.basistech.m2e.code.quality.site-*.zip
+  - provider: script
+    script: ./tools/release.sh master 
     skip_cleanup: true
     on:
       tags: true
-
-after_deploy: 
-- if [ -n "$TRAVIS_TAG" ]; then ./tools/increment_version.sh $TRAVIS_TAG; fi
