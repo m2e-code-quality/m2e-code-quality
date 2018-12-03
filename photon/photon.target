@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?>
+<target name="Eclipse 4.8.x (Photon)">
+	<locations>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="org.eclipse.jdt.feature.group" version="0.0.0"/>
+			<repository location="http://download.eclipse.org/releases/photon"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="org.eclipse.m2e.sdk.feature.feature.group" version="0.0.0"/>
+			<unit id="org.eclipse.m2e.feature.feature.group" version="0.0.0"/>
+			<repository location="http://download.eclipse.org/technology/m2e/milestones/1.9"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="net.sourceforge.pmd.eclipse.feature.group" version="4.0.17.v20180801-1551"/>
+			<repository location="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="edu.umd.cs.findbugs.plugin.eclipse.feature.group" version="0.0.0"/>
+			<repository location="http://findbugs.cs.umd.edu/eclipse/"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="com.github.spotbugs.plugin.eclipse.feature.group" version="0.0.0"/>
+			<repository location="https://spotbugs.github.io/eclipse/"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="net.sf.eclipsecs.feature.group" version="0.0.0"/>
+			<repository location="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
+		</location>
+	</locations>
+</target>

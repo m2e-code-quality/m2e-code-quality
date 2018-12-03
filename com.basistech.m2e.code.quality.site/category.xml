@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site associateSitesURL="associate-sites.xml">
+   <description url="http://m2e-code-quality.github.org/m2e-code-quality/site">
+     Code Quality Plugin Configuration for M2Eclipse
+   </description>
+   <feature url="features/com.basistech.m2e.code.quality.checkstyle.feature_0.0.0.jar" id="com.basistech.m2e.code.quality.checkstyle.feature" version="0.0.0">
+      <category name="com.basistech.m2e.code.quality"/>
+   </feature>
+   <feature url="features/com.basistech.m2e.code.quality.pmd.feature_0.0.0.jar" id="com.basistech.m2e.code.quality.pmd.feature" version="0.0.0">
+      <category name="com.basistech.m2e.code.quality"/>
+   </feature>
+   <feature url="features/com.basistech.m2e.code.quality.findbugs.feature_0.0.0.jar" id="com.basistech.m2e.code.quality.findbugs.feature" version="0.0.0">
+      <category name="com.basistech.m2e.code.quality"/>
+   </feature>
+   <feature url="features/com.basistech.m2e.code.quality.spotbugs.feature_0.0.0.jar" id="com.basistech.m2e.code.quality.spotbugs.feature" version="0.0.0">
+      <category name="com.basistech.m2e.code.quality"/>
+   </feature>
+   <category-def name="com.basistech.m2e.code.quality" label="Code Quality Plugin Configuration for M2Eclipse"/>
+</site>

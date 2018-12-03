@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: M2Eclipse Project Configurator for Eclipse PMD Tests
+Bundle-SymbolicName: com.basistech.m2e.code.quality.pmd.test
+Bundle-Version: 1.1.0.qualifier
+Bundle-Vendor: Basis Technology Corp.
+Fragment-Host: com.basistech.m2e.code.quality.pmd;bundle-version="[1.1.0,2.0.0)"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: org.junit,
+ org.eclipse.jface,
+ com.basistech.m2e.code.quality.shared.test;bundle-version="1.1.0",
+ org.eclipse.m2e.tests.common

@@ -12,7 +12,7 @@
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="net.sourceforge.pmd.eclipse.feature.group" version="4.0.8.v20151204-2156"/>
-<repository location="http://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site/"/>
+<repository location="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="edu.umd.cs.findbugs.plugin.eclipse.feature.group" version="2.0.0.20111221"/>

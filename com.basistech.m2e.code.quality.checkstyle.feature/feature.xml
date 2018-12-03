@@ -2,7 +2,7 @@
 <feature
       id="com.basistech.m2e.code.quality.checkstyle.feature"
       label="Checkstyle configuration plugin for M2Eclipse"
-      version="1.0.0.qualifier"
+      version="1.1.1.201812031126-r"
       plugin="com.basistech.m2e.code.quality.shared">
 
    <description>
@@ -195,7 +195,7 @@ Copyright (c) 2010 Basis Technology Corp.
    </license>
 
    <url>
-      <update label="Update Site at Github" url="http://m2e-code-quality.github.io/m2e-code-quality/site/"/>
+      <update label="Update Site at Github" url="https://m2e-code-quality.github.io/m2e-code-quality-p2-site/"/>
    </url>
 
    <requires>

@@ -27,7 +27,6 @@ import java.util.Properties;
 
 import org.apache.maven.execution.MavenSession;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
@@ -37,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
 
+import net.sf.eclipsecs.core.builder.CheckstyleMarker;
 import net.sf.eclipsecs.core.config.CheckConfigurationWorkingCopy;
 import net.sf.eclipsecs.core.config.ICheckConfiguration;
 import net.sf.eclipsecs.core.config.ICheckConfigurationWorkingSet;
@@ -51,7 +51,7 @@ import net.sf.eclipsecs.core.util.CheckstylePluginException;
 /**
  */
 public class EclipseCheckstyleProjectConfigurator
-        extends AbstractMavenPluginProjectConfigurator {
+        extends AbstractMavenPluginProjectConfigurator<CheckstyleNature> {
 
 	private static final Logger LOG =
 	        LoggerFactory.getLogger(EclipseCheckstyleProjectConfigurator.class);
@@ -60,7 +60,7 @@ public class EclipseCheckstyleProjectConfigurator
 	        ConfigurationTypes.getByInternalName("remote");
 
 	public EclipseCheckstyleProjectConfigurator() {
-		super();
+		super(CheckstyleNature.NATURE_ID, CheckstyleMarker.MARKER_ID, ECLIPSE_CS_PREFS_FILE, ECLIPSE_CS_CACHE_FILENAME);
 	}
 
 	@Override
@@ -81,9 +81,8 @@ public class EclipseCheckstyleProjectConfigurator
 	@Override
 	protected void handleProjectConfigurationChange(
 	        final IMavenProjectFacade mavenProjectFacade,
-	        final IProject project, final IProgressMonitor monitor,
-	        final MavenPluginWrapper mavenPluginWrapper,
-	        final MavenSession session) throws CoreException {
+	        final IProject project, final MavenPluginWrapper mavenPluginWrapper,
+	        final MavenSession session, final IProgressMonitor monitor) throws CoreException {
 
 		final List<MavenPluginConfigurationTranslator> mavenCheckstyleConfigs =
 		        MavenPluginConfigurationTranslator.newInstance(maven, this,
@@ -102,16 +101,16 @@ public class EclipseCheckstyleProjectConfigurator
 			                CheckstyleEclipseConstants.ECLIPSE_CS_GENERATE_FORMATTER_SETTINGS));
 			pcWorkingCopy.getFileSets().clear();
 
+			// use all non-skipped executions (or first skipped execution otherwise)
+			boolean nonSkippedConfigFound = false;
 			for (final MavenPluginConfigurationTranslator mavenCheckstyleConfig : mavenCheckstyleConfigs) {
+				buildCheckstyleConfiguration(pcWorkingCopy, mavenCheckstyleConfig);
 				if (!mavenCheckstyleConfig.isSkip()) {
-					this.buildCheckstyleConfiguration(pcWorkingCopy,
-					        mavenCheckstyleConfig);
-					addNature(project, CheckstyleNature.NATURE_ID, monitor);
-				} else {
-					deleteEclipseFiles(project, monitor);
-					removeNature(project, CheckstyleNature.NATURE_ID, monitor);
+					// found a non-skipped config
+					nonSkippedConfigFound = true;
 				}
 			}
+			configure(project, !nonSkippedConfigFound, monitor);
 
 			// persist the checkconfig
 			if (pcWorkingCopy.isDirty()) {
@@ -121,22 +120,6 @@ public class EclipseCheckstyleProjectConfigurator
 		} catch (final CheckstylePluginException ex) {
 			LOG.error("CheckstylePluginException", ex);
 		}
-	}
-
-	private void deleteEclipseFiles(final IProject project,
-	        final IProgressMonitor monitor) throws CoreException {
-		final IResource checkstyleFile = project.getFile(ECLIPSE_CS_PREFS_FILE);
-		checkstyleFile.delete(IResource.FORCE, monitor);
-		final IResource checkstyleCacheFileResource =
-		        project.getFile(ECLIPSE_CS_CACHE_FILENAME);
-		checkstyleCacheFileResource.delete(IResource.FORCE, monitor);
-	}
-
-	@Override
-	protected void unconfigureEclipsePlugin(final IProject project,
-	        final IProgressMonitor monitor) throws CoreException {
-		deleteEclipseFiles(project, monitor);
-		removeNature(project, CheckstyleNature.NATURE_ID, monitor);
 	}
 
 	private void buildCheckstyleConfiguration(

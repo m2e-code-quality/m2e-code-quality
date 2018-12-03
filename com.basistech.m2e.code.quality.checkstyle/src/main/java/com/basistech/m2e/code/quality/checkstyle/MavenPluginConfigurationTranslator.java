@@ -22,9 +22,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -50,7 +48,6 @@ import org.slf4j.LoggerFactory;
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginConfigurationTranslator;
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
-import com.basistech.m2e.code.quality.shared.ResourceResolver;
 
 import net.sf.eclipsecs.core.config.ICheckConfiguration;
 import net.sf.eclipsecs.core.projectconfig.FileMatchPattern;
@@ -72,23 +69,17 @@ public class MavenPluginConfigurationTranslator
 	/** checkstyle maven plugin artifactId */
 	private static final Map<String, String> PATTERNS_CACHE = new HashMap<>();
 
-	private final MavenProject mavenProject;
 	private final URI basedirUri;
-	private final ResourceResolver resourceResolver;
-	private final MojoExecution execution;
 	private final Path workingDirectory;
 
 	private MavenPluginConfigurationTranslator(final IMaven maven,
-	        final MavenProject mavenProject, final MojoExecution mojoExecution,
-	        final URI basedirUri, final IProgressMonitor monitor,
-	        final ResourceResolver resourceResolver,
-	        final Path workingDirectory) throws CoreException {
-		super(maven, mavenProject, mojoExecution, monitor);
-		this.mavenProject = mavenProject;
+	        final MavenSession session, final MavenProject mavenProject,
+	        final MojoExecution mojoExecution, final IProject project,
+	        final URI basedirUri, final Path workingDirectory,
+	        final IProgressMonitor monitor) throws CoreException {
+		super(maven, session, mavenProject, mojoExecution, project, monitor);
 		this.workingDirectory = workingDirectory;
 		this.basedirUri = basedirUri;
-		this.resourceResolver = resourceResolver;
-		this.execution = mojoExecution;
 	}
 
 	public boolean isSkip() throws CoreException {
@@ -96,8 +87,7 @@ public class MavenPluginConfigurationTranslator
 	}
 
 	public URL getRuleset() throws CheckstylePluginException, CoreException {
-		final URL ruleset =
-		        this.resourceResolver.resolveLocation(this.getConfigLocation());
+		final URL ruleset = resolveLocation(this.getConfigLocation());
 		if (ruleset == null) {
 			throw new CheckstylePluginException(
 			        "Failed to resolve RuleSet from configLocation,SKIPPING Eclipse checkstyle configuration");
@@ -112,10 +102,9 @@ public class MavenPluginConfigurationTranslator
 			return null;
 		}
 		final Path headerFile = workingDirectory
-		        .resolve("checkstyle-header-" + getExecutionId() + ".txt");
+		        .resolve("checkstyle-header-" + sanitizeFilename(getExecutionId()) + ".txt");
 		try (InputStream inputStream = headerLocation.openStream()) {
-			Files.copy(inputStream, headerFile,
-			        StandardCopyOption.REPLACE_EXISTING);
+			copyIfChanged(inputStream, headerFile);
 		} catch (final IOException e) {
 			LOG.error("Could not copy header file {}", headerLocation, e);
 			throw new CheckstylePluginException(
@@ -132,10 +121,9 @@ public class MavenPluginConfigurationTranslator
 		}
 
 		final Path suppressionsFile = workingDirectory.resolve(
-		        "checkstyle-suppressions-" + getExecutionId() + ".xml");
+		        "checkstyle-suppressions-" + sanitizeFilename(getExecutionId()) + ".xml");
 		try (InputStream inputStream = suppressionsLocation.openStream()) {
-			Files.copy(inputStream, suppressionsFile,
-			        StandardCopyOption.REPLACE_EXISTING);
+			copyIfChanged(inputStream, suppressionsFile);
 		} catch (final IOException e) {
 			LOG.error("Could not copy suppressions file {}",
 			        suppressionsLocation, e);
@@ -155,7 +143,7 @@ public class MavenPluginConfigurationTranslator
 	        final ICheckConfiguration checkCfg)
 	        throws CheckstylePluginException, CoreException {
 		final FileSet fs =
-		        new FileSet("java-sources-" + getExecutionId(), checkCfg);
+		        new FileSet("java-sources-" + sanitizeFilename(getExecutionId()), checkCfg);
 		fs.setEnabled(true);
 		// add fileset includes/excludes
 		fs.setFileMatchPatterns(getIncludesExcludesFileMatchPatterns());
@@ -210,10 +198,6 @@ public class MavenPluginConfigurationTranslator
 		        Boolean.TRUE);
 	}
 
-	public String getExecutionId() {
-		return execution.getExecutionId();
-	}
-
 	/**
 	 * Get the {@literal configLocation} element if present in the
 	 * configuration.
@@ -233,7 +217,7 @@ public class MavenPluginConfigurationTranslator
 		        && "LICENSE.txt".equals(headerLocation)) {
 			headerLocation = "config/maven-header.txt";
 		}
-		return resourceResolver.resolveLocation(headerLocation);
+		return resolveLocation(headerLocation);
 	}
 
 	private URL getSuppressionsLocation() throws CoreException {
@@ -243,7 +227,10 @@ public class MavenPluginConfigurationTranslator
 			suppressionsLocation =
 			        getParameterValue("suppressionsFile", String.class);
 		}
-		return this.resourceResolver.resolveLocation(suppressionsLocation);
+		if (suppressionsLocation == null) {
+			return null;
+		}
+		return resolveLocation(suppressionsLocation);
 	}
 
 	private List<String> getSourceDirectories() throws CoreException {
@@ -253,6 +240,9 @@ public class MavenPluginConfigurationTranslator
 		        getParameterValue("sourceDirectory", String.class);
 		if (sourceDirectory != null) {
 			sourceDirectories.add(sourceDirectory);
+		}
+		if (sourceDirectories.isEmpty()) {
+			sourceDirectories.addAll(getMavenProject().getCompileSourceRoots());
 		}
 		return sourceDirectories;
 	}
@@ -264,6 +254,9 @@ public class MavenPluginConfigurationTranslator
 		        getParameterValue("testSourceDirectory", String.class);
 		if (testSourceDirectory != null) {
 			testSourceDirectories.add(testSourceDirectory);
+		}
+		if (testSourceDirectories.isEmpty()) {
+			testSourceDirectories.addAll(getMavenProject().getTestCompileSourceRoots());
 		}
 		return testSourceDirectories;
 	}
@@ -341,7 +334,7 @@ public class MavenPluginConfigurationTranslator
 		if (this.isIncludeResources()) {
 			final List<String> resourceIncludePatterns =
 			        this.getResourceIncludes();
-			for (final Resource resource : this.mavenProject.getBuild()
+			for (final Resource resource : getMavenProject().getBuild()
 			        .getResources()) {
 				final String folderRelativePath =
 				        relativize(resource.getDirectory());
@@ -353,7 +346,7 @@ public class MavenPluginConfigurationTranslator
 
 			final List<String> resourceExcludePatterns =
 			        this.getResourceExcludes();
-			for (final Resource resource : this.mavenProject.getBuild()
+			for (final Resource resource : getMavenProject().getBuild()
 			        .getResources()) {
 				final String folderRelativePath =
 				        relativize(resource.getDirectory());
@@ -367,7 +360,7 @@ public class MavenPluginConfigurationTranslator
 		if (this.isIncludeTestResources()) {
 			final List<String> resourceIncludePatterns =
 			        this.getResourceIncludes();
-			for (final Resource resource : this.mavenProject.getBuild()
+			for (final Resource resource : getMavenProject().getBuild()
 			        .getTestResources()) {
 				if (!resource.getExcludes().isEmpty()
 				        || !resource.getIncludes().isEmpty()) {
@@ -385,7 +378,7 @@ public class MavenPluginConfigurationTranslator
 
 			final List<String> resourceExcludePatterns =
 			        this.getResourceExcludes();
-			for (final Resource resource : this.mavenProject.getBuild()
+			for (final Resource resource : getMavenProject().getBuild()
 			        .getTestResources()) {
 				if (!resource.getExcludes().isEmpty()
 				        || !resource.getIncludes().isEmpty()) {
@@ -483,8 +476,7 @@ public class MavenPluginConfigurationTranslator
 		final String propertiesLocation = getPropertiesLocation();
 		final Properties properties = new Properties();
 		if (propertiesLocation != null) {
-			final URL url =
-			        this.resourceResolver.resolveLocation(propertiesLocation);
+			final URL url = resolveLocation(propertiesLocation);
 			if (url == null) {
 				throw new CheckstylePluginException(String.format(
 				        "Failed to resolve propertiesLocation [%s]",
@@ -529,14 +521,11 @@ public class MavenPluginConfigurationTranslator
 		final List<MavenPluginConfigurationTranslator> m2csConverters =
 		        new ArrayList<>();
 		for (final MojoExecution execution : mavenPlugin.getMojoExecutions()) {
-			final ResourceResolver resourceResolver =
-			        AbstractMavenPluginProjectConfigurator.getResourceResolver(
-			                execution, session, project.getLocation());
 			final Path path = project.getWorkingLocation(configurator.getId())
 			        .toFile().toPath();
 			m2csConverters.add(new MavenPluginConfigurationTranslator(maven,
-			        mavenProject, execution, project.getLocationURI(), monitor,
-			        resourceResolver, path));
+			        session, mavenProject, execution, project,
+			        project.getLocationURI(), path, monitor));
 		}
 		return m2csConverters;
 	}

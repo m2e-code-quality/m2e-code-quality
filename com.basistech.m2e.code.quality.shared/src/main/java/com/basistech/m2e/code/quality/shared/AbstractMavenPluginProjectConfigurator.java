@@ -24,25 +24,33 @@ import java.util.Map;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Dependency;
-import org.apache.maven.plugin.Mojo;
+import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.MojoExecution;
+import org.apache.maven.plugin.PluginManagerException;
+import org.apache.maven.plugin.PluginResolutionException;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.ArtifactKey;
 import org.eclipse.m2e.core.embedder.IMaven;
+import org.eclipse.m2e.core.internal.embedder.MavenImpl;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
+import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,31 +63,25 @@ import com.google.common.base.Preconditions;
  * plugin configuration.
  * 
  */
-public abstract class AbstractMavenPluginProjectConfigurator
+@SuppressWarnings("restriction")
+public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectNature>
         extends AbstractProjectConfigurator {
 
 	private static final Logger LOG = LoggerFactory
 	        .getLogger(AbstractMavenPluginProjectConfigurator.class);
 
-	public static void removeNature(final IProject project,
-	        final String natureId, final IProgressMonitor monitor)
-	        throws CoreException {
-		removeNature(project, natureId, IResource.KEEP_HISTORY, monitor);
-	}
+	private final String natureId;
+	
+	private final String markerId;
 
-	public static void removeNature(final IProject project,
-	        final String natureId, final int updateFlags,
-	        final IProgressMonitor monitor) throws CoreException {
-		if (project.hasNature(natureId)) {
-			final IProjectDescription description = project.getDescription();
-			final String[] prevNatures = description.getNatureIds();
-			final List<String> natures =
-			        new ArrayList<>(Arrays.asList(prevNatures));
-			natures.remove(natureId);
-			final String[] newNatures = natures.toArray(new String[0]);
-			description.setNatureIds(newNatures);
-			project.setDescription(description, updateFlags, monitor);
-		}
+	private final String[] associatedFileNames;
+
+	@SuppressWarnings("hiding")
+	protected AbstractMavenPluginProjectConfigurator(final String natureId, final String markerId,
+			final String... associatedFileNames) {
+		this.natureId = natureId;
+		this.markerId = markerId;
+		this.associatedFileNames = associatedFileNames;
 	}
 
 	@Override
@@ -135,7 +137,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 		final MavenSession mavenSession = request.getMavenSession();
 
 		this.handleProjectConfigurationChange(request.getMavenProjectFacade(),
-		        project, monitor, pluginWrapper, mavenSession);
+		        project, pluginWrapper, mavenSession, monitor);
 	}
 
 	@Override
@@ -179,7 +181,7 @@ public abstract class AbstractMavenPluginProjectConfigurator
 			        maven.createSession(request, mavenProjectChangedEvent
 			                .getMavenProject().getMavenProject(monitor));
 			this.handleProjectConfigurationChange(mavenProjectFacade, project,
-			        monitor, pluginWrapper, session);
+			        pluginWrapper, session, monitor);
 		} else {
 			// TODO: redirect to eclipse logger.
 			// this.console.logMessage(String.format(
@@ -191,10 +193,13 @@ public abstract class AbstractMavenPluginProjectConfigurator
 		}
 	}
 
+	/**
+	 * Should call {@link #configure(IProject, boolean, IProgressMonitor)} to (de-)activate nature and builder
+	 */
 	protected abstract void handleProjectConfigurationChange(
 	        final IMavenProjectFacade mavenProjectFacade,
-	        final IProject project, final IProgressMonitor monitor,
-	        final MavenPluginWrapper mavenPluginWrapper, MavenSession session)
+	        final IProject project, final MavenPluginWrapper mavenPluginWrapper,
+	        final MavenSession session, final IProgressMonitor monitor)
 	        throws CoreException;
 
 	/**
@@ -223,14 +228,20 @@ public abstract class AbstractMavenPluginProjectConfigurator
 	 * Unconfigure the associated Eclipse plugin.
 	 * 
 	 * @param project
-	 *            the {@link IProject} instance.
+	 *            the {@link IProject} to unconfigure.
 	 * @param monitor
 	 *            the {@link IProgressMonitor} instance.
 	 * @throws CoreException
 	 *             if unconfiguring the eclipse plugin fails.
 	 */
-	protected abstract void unconfigureEclipsePlugin(final IProject project,
-	        final IProgressMonitor monitor) throws CoreException;
+	protected void unconfigureEclipsePlugin(final IProject project,
+	        final IProgressMonitor monitor) throws CoreException {
+		LOG.debug("entering deconfigure");
+		// this removes the builder and nature
+		removeNature(project, monitor);
+		// remove all eclipse files.
+		deleteEclipseFiles(project, monitor);
+	}
 
 	/**
 	 * Helper to check if a Eclipse plugin unconfiguration is needed. This
@@ -303,18 +314,22 @@ public abstract class AbstractMavenPluginProjectConfigurator
 			}
 		}
 		try {
-			final Mojo configuredMojo =
-			        mvn.getConfiguredMojo(session, mojoExecution, Mojo.class);
-			mvn.releaseMojo(configuredMojo, mojoExecution);
-		} catch (CoreException e) {
-			if (pluginDepencyProjectLocations.isEmpty()) {
-				throw e;
-			}
-			LOG.trace("Could not get mojo", e);
+			// we want just the classpath of the Mojo to load resources from it
+			BuildPluginManager buildPluginManager = ((MavenImpl)mvn)
+					.lookupComponent(BuildPluginManager.class);
+			ClassRealm pluginRealm = buildPluginManager.getPluginRealm(session,
+					mojoExecution.getMojoDescriptor().getPluginDescriptor());
+			return new ResourceResolver(pluginRealm, projectLocation,
+					pluginDepencyProjectLocations);
+		} catch (PluginResolutionException | PluginManagerException e) {
+			throw new CoreException(new Status(IStatus.ERROR,
+					FrameworkUtil
+						.getBundle(AbstractMavenPluginProjectConfigurator.class)
+						.getSymbolicName(),
+					"Failed to access classpath of mojo " 
+						+ mojoExecution.getMojoDescriptor().getId(), 
+					e));
 		}
-		return new ResourceResolver(mojoExecution.getMojoDescriptor()
-		        .getPluginDescriptor().getClassRealm(), projectLocation,
-		        pluginDepencyProjectLocations);
 	}
 
 	private MavenPluginWrapper getMavenPlugin(final IProgressMonitor monitor,
@@ -324,4 +339,79 @@ public abstract class AbstractMavenPluginProjectConfigurator
 		        projectFacade);
 	}
 
+	protected void configure(final IProject project, final boolean skip, final IProgressMonitor monitor) throws CoreException {
+		LOG.debug("entering configure");
+		if (!skip) {
+			addNature(project, monitor);
+		} else {
+			removeNature(project, monitor);
+		}
+	}
+
+	/**
+	 * Get the currently configured nature in the project
+	 * @return <code>null</code> if the nature is not active.
+	 */
+	protected N getNature(final IProject project) throws CoreException {
+		return (N) project.getNature(natureId);
+	}
+
+	protected N addNature(final IProject project, final IProgressMonitor monitor)
+	        throws CoreException {
+		LOG.debug("entering configureNature");
+		// We have to explicitly add the nature.
+		final IProjectDescription desc = project.getDescription();
+		final String[] natures = desc.getNatureIds();
+		for (int i = 0; i < natures.length; i++) {
+			if (natureId.equals(natures[i])) {
+				// already configured
+				return (N) project.getNature(natureId);
+			}
+		}
+		final String[] newNatures = Arrays.copyOf(natures, natures.length + 1);
+		newNatures[natures.length] = natureId;
+		desc.setNatureIds(newNatures);
+		project.setDescription(desc, monitor);
+
+		// should be available now
+		return (N) project.getNature(natureId);
+	}
+
+	protected void removeNature(final IProject project, final IProgressMonitor monitor)
+	        throws CoreException {
+		LOG.debug("entering deconfigureNature");
+
+		// clean all markers
+		project.deleteMarkers(markerId, true, IResource.DEPTH_INFINITE);
+
+		// remove the nature itself, by resetting the nature list.
+		final IProjectDescription desc = project.getDescription();
+		final String[] natures = desc.getNatureIds();
+		final List<String> newNaturesList = new ArrayList<>();
+		for (int i = 0; i < natures.length; i++) {
+			if (!natureId.equals(natures[i])) {
+				newNaturesList.add(natures[i]);
+			}
+		}
+		if (newNaturesList.size() == natures.length) {
+			// no changes
+			return;
+		}
+
+		final String[] newNatures =
+		        newNaturesList.toArray(new String[newNaturesList.size()]);
+		desc.setNatureIds(newNatures);
+		project.setDescription(desc, monitor);
+	}
+
+	protected void deleteEclipseFiles(final IProject project, final IProgressMonitor monitor)
+	        throws CoreException {
+		LOG.debug("entering deleteEclipseFiles");
+		for (String associatedFileName : associatedFileNames) {
+			final IResource associatedFile = project.getFile(associatedFileName);
+			if (associatedFile.exists()) {
+				associatedFile.delete(IResource.FORCE, monitor);
+			}
+		}
+	}
 }

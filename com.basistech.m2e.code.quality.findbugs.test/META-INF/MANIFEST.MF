@@ -2,9 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: M2Eclipse Project Configurator for Eclipse Findbugs Tests
 Bundle-SymbolicName: com.basistech.m2e.code.quality.findbugs.test
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.1.1.201812031126-r
 Bundle-Vendor: Basis Technology Corp.
-Fragment-Host: com.basistech.m2e.code.quality.findbugs;bundle-version="[1.0.0,2.0.0)"
+Fragment-Host: com.basistech.m2e.code.quality.findbugs;bundle-version="[1.1.1.201812031126-r,2.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.junit,
+ com.basistech.m2e.code.quality.shared.test;bundle-version="1.1.1.201812031126-r",
  org.eclipse.m2e.tests.common

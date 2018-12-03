@@ -1,19 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.basistech.m2e-code-quality</groupId>
-        <artifactId>m2e-code-quality-plugins</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<groupId>com.basistech.m2e-code-quality</groupId>
+		<artifactId>m2e-code-quality-plugins</artifactId>
+		<version>1.1.1.201812031126-r</version>
+	</parent>
 
-    <artifactId>com.basistech.m2e.code.quality.site</artifactId>
-    <packaging>eclipse-update-site</packaging>
-    <name>M2Eclipse Code Quality Plugins Update Site</name>
+	<artifactId>com.basistech.m2e.code.quality.site</artifactId>
+	<packaging>eclipse-repository</packaging>
+	<name>M2Eclipse Code Quality Plugins Update Site</name>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.jboss.tools.tycho-plugins</groupId>
+				<artifactId>repository-utils</artifactId>
+				<version>1.1.0</version>
+				<executions>
+					<!-- creates index.html and other artifacts -->
+					<!-- see https://github.com/jbosstools/jbosstools-maven-plugins/wiki -->
+					<execution>
+						<id>generate-facade</id>
+						<phase>package</phase>
+						<goals>
+							<goal>generate-repository-facade</goal>
+						</goals>
+						<configuration>
+							<siteTemplateFolder>siteTemplateFolder</siteTemplateFolder>
+							<!-- configuration options for the generated HTML page -->
+							<symbols>
+								<update.site.name>M2E Code Quality</update.site.name>
+								<update.site.description>Eclipse</update.site.description>
+								<update.site.version>${qualifiedVersion}</update.site.version>
+							</symbols>
+							<!-- this adds repository references to the update site's content.xml -->
+							<associateSites>
+								<site>${updatesite.m2e}</site>
+								<site>${updatesite.eclipse}</site>
+								<site>${updatesite.cs}</site>
+								<site>${updatesite.pmd}</site>
+								<site>${updatesite.findbugs}</site>
+								<site>${updatesite.spotbugs}</site>
+								<site>${updatesite.orbit}</site>
+							</associateSites>
+							<!-- to remove the default category created for any uncategorized 
+								features or bundles, set this to true -->
+							<removeDefaultCategory>true</removeDefaultCategory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

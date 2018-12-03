@@ -1,2 +1,43 @@
 language: java
 sudo: false
+
+git:
+  depth: 9999999
+
+branches:
+  only:
+  - develop
+  - /^\d+\.\d+\.\d+$/
+
+script:
+  - xvfb-run mvn --batch-mode clean verify
+
+before_install: 
+- if [ -n "$TRAVIS_TAG" ]; then . ./tools/prepare_release.sh $TRAVIS_TAG.$(date +%Y%m%d%H%M)-r master; fi
+
+install: true
+
+cache:
+  directories:
+  - $HOME/.m2
+  - .mvn
+
+before_deploy: ./tools/before_deploy.sh
+
+# https://docs.travis-ci.com/user/deployment/pages/
+# GITHUB_TOKEN is set in https://travis-ci.org/m2e-code-quality/m2e-code-quality/settings
+# see https://github.com/m2e-code-quality/m2e-code-quality/issues/123
+deploy:
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    local_dir: current-site
+    repo: ${TRAVIS_REPO_SLUG}-p2-site
+    target_branch: gh-pages
+    on:
+      all_branches: true
+  - provider: script
+    script: ./tools/release.sh master 
+    skip_cleanup: true
+    on:
+      tags: true
