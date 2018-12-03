@@ -28,7 +28,7 @@ git fetch origin > /dev/null 2>&1
 git checkout -B $2 origin/$2
 
 # merge develop into release
-git merge --no-ff -X ours origin/$GITHUB_BRANCH
+git merge --no-ff -X theirs origin/$GITHUB_BRANCH
 
 # set version and add all changed POMs and add them to the merge commit
 echo "changing version to $1"
