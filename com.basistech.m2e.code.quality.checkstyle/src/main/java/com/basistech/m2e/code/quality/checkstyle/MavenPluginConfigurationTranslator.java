@@ -17,9 +17,13 @@
 package com.basistech.m2e.code.quality.checkstyle;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.io.Writer;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
@@ -37,11 +41,17 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.configuration.PlexusConfiguration;
+import org.codehaus.plexus.configuration.xml.XmlPlexusConfiguration;
 import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.m2e.core.embedder.IMaven;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,13 +74,19 @@ public class MavenPluginConfigurationTranslator
 	private static final Logger LOG =
 	        LoggerFactory.getLogger(MavenPluginConfigurationTranslator.class);
 
+	private static final String CHECKSTYLE_DEFAULT_CONFIG_FILE_NAME = "sun_checks.xml";
 	private static final String CHECKSTYLE_DEFAULT_CONFIG_LOCATION =
-	        "config/sun_checks.xml";
+	        "config/" + CHECKSTYLE_DEFAULT_CONFIG_FILE_NAME;
 	/** checkstyle maven plugin artifactId */
 	private static final Map<String, String> PATTERNS_CACHE = new HashMap<>();
+	private static final String CHECKSTYLE_CONFIG_FILE_HEADER =
+			"<?xml version=\"1.0\"?>\n" +
+	        "<!DOCTYPE module PUBLIC \"-//Checkstyle//DTD Checkstyle Configuration 1.3//EN\" " +
+			"\"https://checkstyle.org/dtds/configuration_1_3.dtd\">";
 
 	private final URI basedirUri;
 	private final Path workingDirectory;
+	private final String projectName;
 
 	private MavenPluginConfigurationTranslator(final IMaven maven,
 	        final MavenSession session, final MavenProject mavenProject,
@@ -78,6 +94,7 @@ public class MavenPluginConfigurationTranslator
 	        final URI basedirUri, final Path workingDirectory,
 	        final IProgressMonitor monitor) throws CoreException {
 		super(maven, session, mavenProject, mojoExecution, project, monitor);
+		this.projectName = project.getName();
 		this.workingDirectory = workingDirectory;
 		this.basedirUri = basedirUri;
 	}
@@ -87,12 +104,38 @@ public class MavenPluginConfigurationTranslator
 	}
 
 	public URL getRuleset() throws CheckstylePluginException, CoreException {
-		final URL ruleset = resolveLocation(this.getConfigLocation());
+		String configLocation = this.getConfigLocation();
+		final URL ruleset;
+		if (CHECKSTYLE_DEFAULT_CONFIG_FILE_NAME.equals(configLocation)) {
+			ruleset = getInlineRules();
+		} else {
+			ruleset = resolveLocation(this.getConfigLocation());
+		}
 		if (ruleset == null) {
 			throw new CheckstylePluginException(
 			        "Failed to resolve RuleSet from configLocation,SKIPPING Eclipse checkstyle configuration");
 		}
 		return ruleset;
+	}
+
+	private URL getInlineRules() throws CoreException, CheckstylePluginException {
+		PlexusConfiguration config = getParameterValue("checkstyleRules", XmlPlexusConfiguration.class);
+		if (config == null || ((config = config.getChild(0)) == null)) {
+			return null;
+		}
+		
+		Bundle bundle = FrameworkUtil.getBundle(getClass());
+		IPath stateLocation = Platform.getStateLocation(bundle);
+		File dir = stateLocation.toFile();
+		File checkstyleFile = new File(dir, projectName + "_inline_checkstyle.xml");
+		try (Writer writer = new FileWriter(checkstyleFile)){
+			writer.write(CHECKSTYLE_CONFIG_FILE_HEADER);
+			writer.write(config.toString());
+			return checkstyleFile.toURI().toURL();
+		} catch (IOException e) {
+			CheckstylePluginException.rethrow(e, "Error while extracting inline rules.");
+			return null;
+		}
 	}
 
 	public String getHeaderFile()
