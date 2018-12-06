@@ -105,10 +105,11 @@ public class MavenPluginConfigurationTranslator
 
 	public URL getRuleset() throws CheckstylePluginException, CoreException {
 		String configLocation = this.getConfigLocation();
-		final URL ruleset;
+		URL ruleset = null;
 		if (CHECKSTYLE_DEFAULT_CONFIG_FILE_NAME.equals(configLocation)) {
 			ruleset = getInlineRules();
-		} else {
+		}
+		if (ruleset == null) {
 			ruleset = resolveLocation(this.getConfigLocation());
 		}
 		if (ruleset == null) {
