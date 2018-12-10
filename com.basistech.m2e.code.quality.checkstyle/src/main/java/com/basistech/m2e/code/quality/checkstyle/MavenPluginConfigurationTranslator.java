@@ -125,8 +125,7 @@ public class MavenPluginConfigurationTranslator
 			return null;
 		}
 		
-		Bundle bundle = FrameworkUtil.getBundle(getClass());
-		IPath stateLocation = Platform.getStateLocation(bundle);
+		IPath stateLocation = Activator.getDefault().getStateLocation();
 		File dir = stateLocation.toFile();
 		File checkstyleFile = new File(dir, projectName + "_inline_checkstyle.xml");
 		try (Writer writer = new FileWriter(checkstyleFile)){
