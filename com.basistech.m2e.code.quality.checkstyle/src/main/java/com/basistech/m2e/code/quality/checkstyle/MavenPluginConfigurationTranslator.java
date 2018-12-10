@@ -20,10 +20,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.Writer;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
@@ -48,10 +46,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.m2e.core.embedder.IMaven;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,17 +99,13 @@ public class MavenPluginConfigurationTranslator
 	}
 
 	public URL getRuleset() throws CheckstylePluginException, CoreException {
-		String configLocation = this.getConfigLocation();
-		URL ruleset = null;
-		if (CHECKSTYLE_DEFAULT_CONFIG_FILE_NAME.equals(configLocation)) {
-			ruleset = getInlineRules();
-		}
+		URL ruleset = getInlineRules();
 		if (ruleset == null) {
 			ruleset = resolveLocation(this.getConfigLocation());
 		}
 		if (ruleset == null) {
 			throw new CheckstylePluginException(
-			        "Failed to resolve RuleSet from configLocation,SKIPPING Eclipse checkstyle configuration");
+			        "Failed to resolve RuleSet from inlineConfig or configLocation,SKIPPING Eclipse checkstyle configuration");
 		}
 		return ruleset;
 	}
