@@ -99,7 +99,13 @@ public class MavenPluginConfigurationTranslator
 	}
 
 	public URL getRuleset() throws CheckstylePluginException, CoreException {
+		final String configLocation = this.getConfigLocation();
 		URL ruleset = getInlineRules();
+
+		if (ruleset != null && !CHECKSTYLE_DEFAULT_CONFIG_FILE_NAME.equals(configLocation)) {
+			throw new CheckstylePluginException("If you use inline configuration for rules, don't specify a configLocation");
+		}
+
 		if (ruleset == null) {
 			ruleset = resolveLocation(this.getConfigLocation());
 		}
@@ -112,7 +118,13 @@ public class MavenPluginConfigurationTranslator
 
 	private URL getInlineRules() throws CoreException, CheckstylePluginException {
 		PlexusConfiguration config = getParameterValue("checkstyleRules", XmlPlexusConfiguration.class);
-		if (config == null || ((config = config.getChild(0)) == null)) {
+		if (config == null) {
+			return null;
+		}
+		if (config.getChildCount() > 1) {
+			throw new CheckstylePluginException("Currently only one root module is supported");
+		}
+		if ((config = config.getChild(0)) == null) {
 			return null;
 		}
 		
