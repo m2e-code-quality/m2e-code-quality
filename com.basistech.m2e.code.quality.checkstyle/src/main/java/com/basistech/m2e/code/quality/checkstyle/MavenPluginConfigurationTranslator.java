@@ -74,7 +74,7 @@ public class MavenPluginConfigurationTranslator
 	        "config/" + CHECKSTYLE_DEFAULT_CONFIG_FILE_NAME;
 	/** checkstyle maven plugin artifactId */
 	private static final Map<String, String> PATTERNS_CACHE = new HashMap<>();
-	private static final String CHECKSTYLE_CONFIG_FILE_HEADER =
+	private static final String CHECKSTYLE_DEFAULT_CONFIG_FILE_HEADER =
 			"<?xml version=\"1.0\"?>\n" +
 	        "<!DOCTYPE module PUBLIC \"-//Checkstyle//DTD Checkstyle Configuration 1.3//EN\" " +
 			"\"https://checkstyle.org/dtds/configuration_1_3.dtd\">";
@@ -127,12 +127,16 @@ public class MavenPluginConfigurationTranslator
 		if ((config = config.getChild(0)) == null) {
 			return null;
 		}
+		String configFileHeader = getParameterValue("checkstyleRulesHeader", String.class);
+		if (configFileHeader == null) {
+			configFileHeader = CHECKSTYLE_DEFAULT_CONFIG_FILE_HEADER;
+		}
 		
 		IPath stateLocation = Activator.getDefault().getStateLocation();
 		File dir = stateLocation.toFile();
 		File checkstyleFile = new File(dir, projectName + "_inline_checkstyle.xml");
 		try (Writer writer = new FileWriter(checkstyleFile)){
-			writer.write(CHECKSTYLE_CONFIG_FILE_HEADER);
+			writer.write(configFileHeader);
 			writer.write(config.toString());
 			return checkstyleFile.toURI().toURL();
 		} catch (IOException e) {
