@@ -1,5 +1,29 @@
 # Change Log
 
+## [Unreleased](https://github.com/m2e-code-quality/m2e-code-quality/tree/HEAD)
+
+[Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.1.2...HEAD)
+
+**Closed issues:**
+
+- Plan a new Release [\#191](https://github.com/m2e-code-quality/m2e-code-quality/issues/191)
+
+## [1.1.2](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.1.2) (2018-12-19)
+[Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.1.1...1.1.2)
+
+**Closed issues:**
+
+- For inline configuration use header from maven [\#192](https://github.com/m2e-code-quality/m2e-code-quality/issues/192)
+- Icon, for GitHub org and perhaps even Eclipse's About [\#189](https://github.com/m2e-code-quality/m2e-code-quality/issues/189)
+- When merging to master on release handle conflicts correctly [\#187](https://github.com/m2e-code-quality/m2e-code-quality/issues/187)
+- Support inline checkstyle configuration [\#178](https://github.com/m2e-code-quality/m2e-code-quality/issues/178)
+
+**Merged pull requests:**
+
+- Fix \#192 [\#193](https://github.com/m2e-code-quality/m2e-code-quality/pull/193) ([Serranya](https://github.com/Serranya))
+- Bump tycho-version from 1.2.0 to 1.3.0 [\#190](https://github.com/m2e-code-quality/m2e-code-quality/pull/190) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Support checkstyle inline configuration \#178 [\#188](https://github.com/m2e-code-quality/m2e-code-quality/pull/188) ([Serranya](https://github.com/Serranya))
+
 ## [1.1.1](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.1.1) (2018-12-03)
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.1.0...1.1.1)
 
@@ -8,6 +32,7 @@
 - Checkstyle only adds 1st of several Local Check Configurations?! [\#180](https://github.com/m2e-code-quality/m2e-code-quality/issues/180)
 - Automatic release recreates JARs for tagged version [\#179](https://github.com/m2e-code-quality/m2e-code-quality/issues/179)
 - Automatic release does not work [\#176](https://github.com/m2e-code-quality/m2e-code-quality/issues/176)
+- Setup instructions from README does not work [\#157](https://github.com/m2e-code-quality/m2e-code-quality/issues/157)
 - Redirect old to new CD update site? [\#143](https://github.com/m2e-code-quality/m2e-code-quality/issues/143)
 - Build is too brittle because .target files contain timestamps of external dependencies which change [\#135](https://github.com/m2e-code-quality/m2e-code-quality/issues/135)
 

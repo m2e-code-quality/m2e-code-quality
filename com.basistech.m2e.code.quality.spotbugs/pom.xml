@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.basistech.m2e-code-quality</groupId>
         <artifactId>m2e-code-quality-plugins</artifactId>
-        <version>1.1.1.201812031126-r</version>
+        <version>1.1.2.201812191233-r</version>
     </parent>
 
     <artifactId>com.basistech.m2e.code.quality.spotbugs</artifactId>
