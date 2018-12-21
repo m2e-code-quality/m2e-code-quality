@@ -51,7 +51,7 @@ previous_release_tag=$(curl -s \
         jq -r .tag_name)
 
 # Create release notes
-github_changelog_generator -t ${GITHUB_TOKEN} --output /tmp/CHANGELOG-$1.md --since-tag ${previous_release_tag}
+github_changelog_generator -t ${GITHUB_TOKEN} --no-unreleased --output /tmp/CHANGELOG-$1.md --since-tag ${previous_release_tag}
 export RELEASE_CHANGELOG=$(< /tmp/CHANGELOG-$1.md)
 
 # move tag to release branch
