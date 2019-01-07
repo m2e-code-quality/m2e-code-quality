@@ -233,6 +233,8 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		} else {
 			excludeRootsFromConfig = Arrays.asList(excludeRootsArray);
 		}
+		excludeRoots.addAll(excludeRootsFromConfig);
+
 		// do the filtering
 		final List<File> filteredIncludeRoots = new LinkedList<>();
 		for (final File f : includeRoots) {
