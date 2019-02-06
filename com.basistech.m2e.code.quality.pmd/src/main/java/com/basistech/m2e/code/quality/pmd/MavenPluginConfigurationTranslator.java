@@ -28,7 +28,6 @@ import java.util.Map;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.ConfigurationContainer;
-import org.apache.maven.model.PluginConfiguration;
 import org.apache.maven.model.PluginExecution;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;

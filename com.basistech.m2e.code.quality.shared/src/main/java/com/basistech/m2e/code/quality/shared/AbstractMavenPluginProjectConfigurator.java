@@ -352,10 +352,12 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 	 * Get the currently configured nature in the project
 	 * @return <code>null</code> if the nature is not active.
 	 */
+	@SuppressWarnings("unchecked")
 	protected N getNature(final IProject project) throws CoreException {
 		return (N) project.getNature(natureId);
 	}
 
+	@SuppressWarnings("unchecked")
 	protected N addNature(final IProject project, final IProgressMonitor monitor)
 	        throws CoreException {
 		LOG.debug("entering configureNature");
