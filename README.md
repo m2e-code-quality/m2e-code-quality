@@ -35,8 +35,8 @@ This project uses [Oomph](https://projects.eclipse.org/projects/tools.oomph), an
 2. Downloading the Eclipse Installer from https://www.eclipse.org/downloads/ and start it.
 3. On the initial page, click on the *Switch to advanced mode* button in the top right.
 4. On the *Product* page, select *Eclipse for RCP and RAP Developers*.
-5. On the *Projects* page, collapse the *Eclipse Projects* to scroll down to the *Github Projects* and select *m2e-code-quality*.
-6. Make sure to choose the HTTPS anonymous option for the repository
+5. On the *Projects* page, collapse the *Eclipse Projects* to scroll down to the *GitHub Projects* and select *m2e-code-quality*.
+6. Make sure to choose the HTTPS anonymous option for the repository.
 7. Choose other preferred installation settings on the *Variables* page.
 8. Finish the wizard and watch your development environment being assembled.
 9. Create an Eclipse run configuration. The target platform will automatically be setup correctly.
