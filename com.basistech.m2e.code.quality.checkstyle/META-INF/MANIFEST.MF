@@ -27,3 +27,4 @@ Import-Package: org.apache.commons.lang,
 Bundle-Activator: com.basistech.m2e.code.quality.checkstyle.Activator
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
+Automatic-Module-Name: com.basistech.m2e.code.quality.checkstyle
