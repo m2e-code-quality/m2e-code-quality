@@ -14,6 +14,6 @@
 
     <artifactId>com.basistech.m2e.code.quality.spotbugs</artifactId>
     <packaging>eclipse-plugin</packaging>
-    <name>M2Eclipse Project Configurator for Eclipse Spotbugs</name>
+    <name>M2Eclipse Project Configurator for Eclipse SpotBugs</name>
 
 </project>
