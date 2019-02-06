@@ -100,7 +100,7 @@ public class AbstractMavenPluginConfigurationTranslator {
 	 * Copy a resource from the maven plugin configuration to a location within
 	 * the project.
 	 * <p>
-	 * This the only reference I could find on how the Findbugs Eclipse Plugin
+	 * This the only reference I could find on how the FindBugs Eclipse Plugin
 	 * configuration works.
 	 * </p>
 	 *

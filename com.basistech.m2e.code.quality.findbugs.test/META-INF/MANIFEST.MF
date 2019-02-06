@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: M2Eclipse Project Configurator for Eclipse Findbugs Tests
+Bundle-Name: M2Eclipse Project Configurator for Eclipse FindBugs Tests
 Bundle-SymbolicName: com.basistech.m2e.code.quality.findbugs.test
 Bundle-Version: 1.1.3.qualifier
 Bundle-Vendor: Basis Technology Corp.
