@@ -563,7 +563,7 @@ public class MavenPluginConfigurationTranslator
 
 	public static List<MavenPluginConfigurationTranslator> newInstance(
 	        final IMaven maven,
-	        final AbstractMavenPluginProjectConfigurator configurator,
+	        final AbstractMavenPluginProjectConfigurator<?> configurator,
 	        final MavenProject mavenProject,
 	        final MavenPluginWrapper mavenPlugin, final IProject project,
 	        final IProgressMonitor monitor, final MavenSession session)
