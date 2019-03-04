@@ -90,14 +90,16 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 			LOG.debug("includeFilterFile is null");
 			return;
 		}
-		this.copyUrlResourceToProject(includeFilterFile,
+		List<String> filterFiles = this.copyUrlResourcesToProject(includeFilterFile,
 		        FB_INCLUDE_FILTER_FILE);
 		final Map<String, Boolean> curIncludeFilteredFiles =
 		        prefs.getIncludeFilterFiles();
 		final Map<String, Boolean> newIncludeFilteredFiles = new HashMap<>();
 		// Make sure we add it only once.
-		if (!curIncludeFilteredFiles.containsKey(FB_INCLUDE_FILTER_FILE)) {
-			newIncludeFilteredFiles.put(FB_INCLUDE_FILTER_FILE, Boolean.TRUE);
+		for (String filterFile : filterFiles) {
+			if (!curIncludeFilteredFiles.containsKey(filterFile)) {
+				newIncludeFilteredFiles.put(filterFile, Boolean.TRUE);
+			}
 		}
 		newIncludeFilteredFiles.putAll(curIncludeFilteredFiles);
 		prefs.setIncludeFilterFiles(newIncludeFilteredFiles);
@@ -113,14 +115,17 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 			LOG.debug("excludeFilterFile is null");
 			return;
 		}
-		this.copyUrlResourceToProject(excludeFilterFile,
+
+		List<String> filterFiles = this.copyUrlResourcesToProject(excludeFilterFile,
 		        FB_EXCLUDE_FILTER_FILE);
 		final Map<String, Boolean> curExcludeFilteredFiles =
-		        prefs.getExcludeFilterFiles();
+				prefs.getExcludeFilterFiles();
 		final Map<String, Boolean> newExcludeFilteredFiles = new HashMap<>();
 		// Make sure we add it only once.
-		if (!curExcludeFilteredFiles.containsKey(FB_EXCLUDE_FILTER_FILE)) {
-			newExcludeFilteredFiles.put(FB_EXCLUDE_FILTER_FILE, Boolean.TRUE);
+		for (String filterFile : filterFiles) {
+			if (!curExcludeFilteredFiles.containsKey(filterFile)) {
+				newExcludeFilteredFiles.put(filterFile, Boolean.TRUE);
+			}
 		}
 		newExcludeFilteredFiles.putAll(curExcludeFilteredFiles);
 		prefs.setExcludeFilterFiles(newExcludeFilteredFiles);
