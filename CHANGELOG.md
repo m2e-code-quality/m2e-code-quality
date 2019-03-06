@@ -1,12 +1,27 @@
 # Change Log
 
-## [Unreleased](https://github.com/m2e-code-quality/m2e-code-quality/tree/HEAD)
-
-[Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.1.2...HEAD)
+## [1.1.3](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.1.3) (2019-03-06)
+[Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.1.2...1.1.3)
 
 **Closed issues:**
 
-- Plan a new Release [\#191](https://github.com/m2e-code-quality/m2e-code-quality/issues/191)
+- target platform does not contain commons.lang [\#203](https://github.com/m2e-code-quality/m2e-code-quality/issues/203)
+- oomph setup not working [\#201](https://github.com/m2e-code-quality/m2e-code-quality/issues/201)
+- pmd excludeRoots is not working [\#196](https://github.com/m2e-code-quality/m2e-code-quality/issues/196)
+- Keeping the lights on this project [\#124](https://github.com/m2e-code-quality/m2e-code-quality/issues/124)
+
+**Merged pull requests:**
+
+- Handle multiple values for include/excludeFilterFile for spot/findBugs [\#209](https://github.com/m2e-code-quality/m2e-code-quality/pull/209) ([erwint](https://github.com/erwint))
+- fix/suppress some compiler warnings [\#207](https://github.com/m2e-code-quality/m2e-code-quality/pull/207) ([Bananeweizen](https://github.com/Bananeweizen))
+- Fix typos [\#206](https://github.com/m2e-code-quality/m2e-code-quality/pull/206) ([Bananeweizen](https://github.com/Bananeweizen))
+- Fix \#203: Have org.apache.commons.lang in targets [\#205](https://github.com/m2e-code-quality/m2e-code-quality/pull/205) ([Bananeweizen](https://github.com/Bananeweizen))
+- Use uppercase B in SpotBugs/FindBugs [\#204](https://github.com/m2e-code-quality/m2e-code-quality/pull/204) ([Bananeweizen](https://github.com/Bananeweizen))
+- Add Automatic-Module-Name header [\#202](https://github.com/m2e-code-quality/m2e-code-quality/pull/202) ([Bananeweizen](https://github.com/Bananeweizen))
+- Bump spotbugs-maven-plugin from 3.1.10 to 3.1.11 [\#200](https://github.com/m2e-code-quality/m2e-code-quality/pull/200) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Fixes \#196 [\#198](https://github.com/m2e-code-quality/m2e-code-quality/pull/198) ([Flugtiger](https://github.com/Flugtiger))
+- Bump repository-utils from 1.1.0 to 1.3.0 [\#195](https://github.com/m2e-code-quality/m2e-code-quality/pull/195) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump spotbugs-maven-plugin from 3.1.9 to 3.1.10 [\#194](https://github.com/m2e-code-quality/m2e-code-quality/pull/194) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [1.1.2](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.1.2) (2018-12-19)
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.1.1...1.1.2)
@@ -14,6 +29,7 @@
 **Closed issues:**
 
 - For inline configuration use header from maven [\#192](https://github.com/m2e-code-quality/m2e-code-quality/issues/192)
+- Plan a new Release [\#191](https://github.com/m2e-code-quality/m2e-code-quality/issues/191)
 - Icon, for GitHub org and perhaps even Eclipse's About [\#189](https://github.com/m2e-code-quality/m2e-code-quality/issues/189)
 - When merging to master on release handle conflicts correctly [\#187](https://github.com/m2e-code-quality/m2e-code-quality/issues/187)
 - Support inline checkstyle configuration [\#178](https://github.com/m2e-code-quality/m2e-code-quality/issues/178)

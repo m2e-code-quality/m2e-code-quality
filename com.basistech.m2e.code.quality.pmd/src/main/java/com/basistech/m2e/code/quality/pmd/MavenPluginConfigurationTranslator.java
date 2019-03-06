@@ -28,7 +28,6 @@ import java.util.Map;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.ConfigurationContainer;
-import org.apache.maven.model.PluginConfiguration;
 import org.apache.maven.model.PluginExecution;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
@@ -233,6 +232,8 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		} else {
 			excludeRootsFromConfig = Arrays.asList(excludeRootsArray);
 		}
+		excludeRoots.addAll(excludeRootsFromConfig);
+
 		// do the filtering
 		final List<File> filteredIncludeRoots = new LinkedList<>();
 		for (final File f : includeRoots) {

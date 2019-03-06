@@ -8,6 +8,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -100,7 +101,7 @@ public class AbstractMavenPluginConfigurationTranslator {
 	 * Copy a resource from the maven plugin configuration to a location within
 	 * the project.
 	 * <p>
-	 * This the only reference I could find on how the Findbugs Eclipse Plugin
+	 * This the only reference I could find on how the FindBugs Eclipse Plugin
 	 * configuration works.
 	 * </p>
 	 *
@@ -167,6 +168,38 @@ public class AbstractMavenPluginConfigurationTranslator {
 			source = bufferedInput;
 		}
 		Files.copy(source, output, StandardCopyOption.REPLACE_EXISTING);
+	}
+
+	/**
+	 * Copy a comma separated list of resource names, separated by comma. Will append an index to the basename if there
+	 * is more than a single element. Also, for backwards compatibility the first element will not have an index
+	 * appended.
+	 * @param resc
+	 *            the resource location as read from the plugin configuration. Can be a single resource or a comma 
+	 *            separated list of resources
+	 * @param newLocationBase
+	 *            the new location relative to the project root.
+	 * @return a list of new locations relative to the project root
+	 * @throws NullPointerException
+	 *             If any of the arguments are {@code null}.
+	 * @throws ConfigurationException
+	 *             If an error occurred during the resolution of the resource or
+	 *             copy to the new location failed.
+	 * @see #copyUrlResourceToProject(String, String)
+	 */
+	protected List<String> copyUrlResourcesToProject(String resc, String newLocationBase) {
+		Preconditions.checkNotNull(resc);
+		Preconditions.checkNotNull(newLocationBase);
+
+		List<String> result = new ArrayList<String>();
+		String[] resourceList = resc.split(",");
+		for (int i=0; i<resourceList.length; ++i) {
+			String suffix = i == 0 ? "" : "." + i;
+			String target = newLocationBase + suffix; 
+			copyUrlResourceToProject(resourceList[i], target);
+			result.add(target);
+		}
+		return result;
 	}
 
 	public String getExecutionId() {
