@@ -23,10 +23,14 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.m2e.core.embedder.IMaven;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
 public class AbstractMavenPluginConfigurationTranslator {
+	private static final Logger LOG = LoggerFactory
+	        .getLogger(AbstractMavenPluginConfigurationTranslator.class);
 
 	private final IMaven maven;
 	private final MavenProject mavenProject;
@@ -109,26 +113,28 @@ public class AbstractMavenPluginConfigurationTranslator {
 	 *            the resource location as read from the plugin configuration.
 	 * @param newLocation
 	 *            the new location relative to the project root.
+	 * @return <code>true</code> if resource has been found and copied.
 	 * @throws NullPointerException
 	 *             If any of the arguments are {@code null}.
 	 * @throws ConfigurationException
-	 *             If an error occurred during the resolution of the resource or
-	 *             copy to the new location failed.
+	 *             If an error occurred during copy to the new location failed.
+	 *             If the resolutions fails only an error will be logged
 	 */
-	protected void copyUrlResourceToProject(final String resc,
+	protected boolean copyUrlResourceToProject(final String resc,
 	        final String newLocation) {
 		Preconditions.checkNotNull(resc);
 		Preconditions.checkNotNull(newLocation);
 		final URL urlResc = resolveLocation(resc);
 		if (urlResc == null) {
-			throw new ConfigurationException(String.format(
-			        "could not locate resource [%s]", resc));
+			LOG.error(String.format("%s: could not locate resource [%s] in classpath of [%s]", project.getName(), resc, mojoExecution));
+			return false;
 		}
 		// copy the file to new location
 		final File newLocationFile =
 		        new File(this.project.getLocationURI().getPath(), newLocation);
 		try (InputStream inputStream = urlResc.openStream()) {
 			copyIfChanged(inputStream, newLocationFile.toPath());
+			return true;
 		} catch (final IOException ex) {
 			throw new ConfigurationException(String.format(
 			        "could not copy resource [%s] to [%s], reason [%s]",
@@ -192,12 +198,14 @@ public class AbstractMavenPluginConfigurationTranslator {
 		Preconditions.checkNotNull(newLocationBase);
 
 		List<String> result = new ArrayList<String>();
-		String[] resourceList = resc.split(",");
-		for (int i=0; i<resourceList.length; ++i) {
-			String suffix = i == 0 ? "" : "." + i;
+		int index=0;
+		for (String resource : resc.split(",")) {
+			String suffix = index == 0 ? "" : "." + index;
 			String target = newLocationBase + suffix; 
-			copyUrlResourceToProject(resourceList[i], target);
-			result.add(target);
+			if (copyUrlResourceToProject(resource, target)) {
+				result.add(target);
+				++index;
+			}
 		}
 		return result;
 	}
