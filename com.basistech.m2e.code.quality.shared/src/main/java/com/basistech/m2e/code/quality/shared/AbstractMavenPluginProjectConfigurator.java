@@ -167,8 +167,7 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 			}
 		}
 
-		if (this.checkUnconfigurationRequired(monitor, mavenProjectFacade,
-		        mavenProjectChangedEvent.getOldMavenProject())) {
+		if (this.checkUnconfigurationRequired(monitor, mavenProjectFacade)) {
 			this.unconfigureEclipsePlugin(project, monitor);
 			return;
 		}
@@ -249,27 +248,18 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 	 * 
 	 * @param curMavenProjectFacade
 	 *            the current {@code IMavenProjectFacade}.
-	 * @param oldMavenProjectFacade
-	 *            the previous {@code IMavenProjectFacade}.
 	 * @return {@code true} if the Eclipse plugin configuration needs to be
 	 *         deleted.
 	 * @throws CoreException
 	 */
 	private boolean checkUnconfigurationRequired(final IProgressMonitor monitor,
-	        final IMavenProjectFacade curMavenProjectFacade,
-	        final IMavenProjectFacade oldMavenProjectFacade)
+	        final IMavenProjectFacade curMavenProjectFacade)
 	        throws CoreException {
 		Preconditions.checkNotNull(curMavenProjectFacade);
 
-		if (oldMavenProjectFacade == null) {
-			return false;
-		}
 		final MavenPluginWrapper newMavenPlugin =
 		        this.getMavenPlugin(monitor, curMavenProjectFacade);
-		final MavenPluginWrapper oldMavenPlugin =
-		        this.getMavenPlugin(monitor, oldMavenProjectFacade);
-		if (!newMavenPlugin.isPluginConfigured()
-		        && oldMavenPlugin.isPluginConfigured()) {
+		if (!newMavenPlugin.isPluginConfigured()) {
 			return true;
 		}
 		return false;
