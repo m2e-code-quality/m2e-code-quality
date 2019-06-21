@@ -1,5 +1,23 @@
 # Change Log
 
+## [1.1.4](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.1.4) (2019-06-21)
+[Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.1.3...1.1.4)
+
+**Closed issues:**
+
+- snapshot page is not working [\#215](https://github.com/m2e-code-quality/m2e-code-quality/issues/215)
+- An internal error occurred during: "Updating Maven Project" [\#213](https://github.com/m2e-code-quality/m2e-code-quality/issues/213)
+- Invite additional committers [\#208](https://github.com/m2e-code-quality/m2e-code-quality/issues/208)
+- ConfigurationException: could not locate resource \[...\] would be more helpful if it inclued more details [\#199](https://github.com/m2e-code-quality/m2e-code-quality/issues/199)
+
+**Merged pull requests:**
+
+- checkUnconfigurationRequired does not need old IMavenProjectFacade [\#218](https://github.com/m2e-code-quality/m2e-code-quality/pull/218) ([erwint](https://github.com/erwint))
+- Bump spotbugs-maven-plugin from 3.1.11 to 3.1.12 [\#217](https://github.com/m2e-code-quality/m2e-code-quality/pull/217) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump repository-utils from 1.3.0 to 1.4.0 [\#214](https://github.com/m2e-code-quality/m2e-code-quality/pull/214) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Log only an error if a resource file cannot be found \(fixes \#199\) [\#212](https://github.com/m2e-code-quality/m2e-code-quality/pull/212) ([erwint](https://github.com/erwint))
+- Bump tycho-version from 1.3.0 to 1.4.0 [\#211](https://github.com/m2e-code-quality/m2e-code-quality/pull/211) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
 ## [1.1.3](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.1.3) (2019-03-06)
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.1.2...1.1.3)
 
@@ -18,10 +36,10 @@
 - Fix \#203: Have org.apache.commons.lang in targets [\#205](https://github.com/m2e-code-quality/m2e-code-quality/pull/205) ([Bananeweizen](https://github.com/Bananeweizen))
 - Use uppercase B in SpotBugs/FindBugs [\#204](https://github.com/m2e-code-quality/m2e-code-quality/pull/204) ([Bananeweizen](https://github.com/Bananeweizen))
 - Add Automatic-Module-Name header [\#202](https://github.com/m2e-code-quality/m2e-code-quality/pull/202) ([Bananeweizen](https://github.com/Bananeweizen))
-- Bump spotbugs-maven-plugin from 3.1.10 to 3.1.11 [\#200](https://github.com/m2e-code-quality/m2e-code-quality/pull/200) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump spotbugs-maven-plugin from 3.1.10 to 3.1.11 [\#200](https://github.com/m2e-code-quality/m2e-code-quality/pull/200) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Fixes \#196 [\#198](https://github.com/m2e-code-quality/m2e-code-quality/pull/198) ([Flugtiger](https://github.com/Flugtiger))
-- Bump repository-utils from 1.1.0 to 1.3.0 [\#195](https://github.com/m2e-code-quality/m2e-code-quality/pull/195) ([dependabot[bot]](https://github.com/apps/dependabot))
-- Bump spotbugs-maven-plugin from 3.1.9 to 3.1.10 [\#194](https://github.com/m2e-code-quality/m2e-code-quality/pull/194) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump repository-utils from 1.1.0 to 1.3.0 [\#195](https://github.com/m2e-code-quality/m2e-code-quality/pull/195) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump spotbugs-maven-plugin from 3.1.9 to 3.1.10 [\#194](https://github.com/m2e-code-quality/m2e-code-quality/pull/194) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 
 ## [1.1.2](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.1.2) (2018-12-19)
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.1.1...1.1.2)
@@ -37,7 +55,7 @@
 **Merged pull requests:**
 
 - Fix \#192 [\#193](https://github.com/m2e-code-quality/m2e-code-quality/pull/193) ([Serranya](https://github.com/Serranya))
-- Bump tycho-version from 1.2.0 to 1.3.0 [\#190](https://github.com/m2e-code-quality/m2e-code-quality/pull/190) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump tycho-version from 1.2.0 to 1.3.0 [\#190](https://github.com/m2e-code-quality/m2e-code-quality/pull/190) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Support checkstyle inline configuration \#178 [\#188](https://github.com/m2e-code-quality/m2e-code-quality/pull/188) ([Serranya](https://github.com/Serranya))
 
 ## [1.1.1](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.1.1) (2018-12-03)
@@ -54,7 +72,7 @@
 
 **Merged pull requests:**
 
-- Bump spotbugs-maven-plugin from 3.1.8 to 3.1.9 [\#186](https://github.com/m2e-code-quality/m2e-code-quality/pull/186) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump spotbugs-maven-plugin from 3.1.8 to 3.1.9 [\#186](https://github.com/m2e-code-quality/m2e-code-quality/pull/186) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Automatic changelog [\#185](https://github.com/m2e-code-quality/m2e-code-quality/pull/185) ([erwint](https://github.com/erwint))
 - Refactored multiple checkstyle executions and added tests [\#184](https://github.com/m2e-code-quality/m2e-code-quality/pull/184) ([erwint](https://github.com/erwint))
 - Add newer eclipse versions to oomph [\#183](https://github.com/m2e-code-quality/m2e-code-quality/pull/183) ([Serranya](https://github.com/Serranya))
@@ -97,12 +115,12 @@
 **Merged pull requests:**
 
 - Release and snapshot repo [\#175](https://github.com/m2e-code-quality/m2e-code-quality/pull/175) ([erwint](https://github.com/erwint))
-- Bump maven-jarsigner-plugin from 1.4 to 3.0.0 [\#174](https://github.com/m2e-code-quality/m2e-code-quality/pull/174) ([dependabot[bot]](https://github.com/apps/dependabot))
-- Bump spotbugs-maven-plugin from 3.1.7 to 3.1.8 [\#173](https://github.com/m2e-code-quality/m2e-code-quality/pull/173) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump maven-jarsigner-plugin from 1.4 to 3.0.0 [\#174](https://github.com/m2e-code-quality/m2e-code-quality/pull/174) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump spotbugs-maven-plugin from 3.1.7 to 3.1.8 [\#173](https://github.com/m2e-code-quality/m2e-code-quality/pull/173) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Refactor config manager [\#172](https://github.com/m2e-code-quality/m2e-code-quality/pull/172) ([erwint](https://github.com/erwint))
 -  Refactored and extended tests  [\#171](https://github.com/m2e-code-quality/m2e-code-quality/pull/171) ([erwint](https://github.com/erwint))
 - Use 0.0.0 version where there's a single version only [\#169](https://github.com/m2e-code-quality/m2e-code-quality/pull/169) ([erwint](https://github.com/erwint))
-- Bump spotbugs-maven-plugin from 3.1.6 to 3.1.7 [\#167](https://github.com/m2e-code-quality/m2e-code-quality/pull/167) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump spotbugs-maven-plugin from 3.1.6 to 3.1.7 [\#167](https://github.com/m2e-code-quality/m2e-code-quality/pull/167) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Use EditorConfig to standardize formatting [\#165](https://github.com/m2e-code-quality/m2e-code-quality/pull/165) ([pgalbraith](https://github.com/pgalbraith))
 - Run tests in travis [\#163](https://github.com/m2e-code-quality/m2e-code-quality/pull/163) ([erwint](https://github.com/erwint))
 - Tests in x86\_64 on windows [\#162](https://github.com/m2e-code-quality/m2e-code-quality/pull/162) ([erwint](https://github.com/erwint))
@@ -111,7 +129,7 @@
 - Prevent project update when no nature is to be removed [\#159](https://github.com/m2e-code-quality/m2e-code-quality/pull/159) ([erwint](https://github.com/erwint))
 - Updated version to 1.1.0-SNAPSHOT [\#158](https://github.com/m2e-code-quality/m2e-code-quality/pull/158) ([erwint](https://github.com/erwint))
 - Redirect latest folder of the P2 repo to the new update site [\#155](https://github.com/m2e-code-quality/m2e-code-quality/pull/155) ([antoine-morvan](https://github.com/antoine-morvan))
-- Bump spotbugs-maven-plugin from 3.1.0 to 3.1.6 [\#154](https://github.com/m2e-code-quality/m2e-code-quality/pull/154) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump spotbugs-maven-plugin from 3.1.0 to 3.1.6 [\#154](https://github.com/m2e-code-quality/m2e-code-quality/pull/154) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Support \<skip\> configuration for PMD, too [\#153](https://github.com/m2e-code-quality/m2e-code-quality/pull/153) ([erwint](https://github.com/erwint))
 - remove un-used \(and long gone with the wind\) maven-osgi-lifecycle-plugin [\#152](https://github.com/m2e-code-quality/m2e-code-quality/pull/152) ([vorburger](https://github.com/vorburger))
 - Do not fail if no suppressions are configured in Checkstyle [\#151](https://github.com/m2e-code-quality/m2e-code-quality/pull/151) ([victornoel](https://github.com/victornoel))
@@ -127,8 +145,8 @@
 - bump Tycho from 0.24.0 to 1.2.0 [\#138](https://github.com/m2e-code-quality/m2e-code-quality/pull/138) ([vorburger](https://github.com/vorburger))
 - Spotbugs refactoring [\#136](https://github.com/m2e-code-quality/m2e-code-quality/pull/136) ([erwint](https://github.com/erwint))
 - ditch multiple Taret Platform build \(and deploy..\) from Travis CI [\#134](https://github.com/m2e-code-quality/m2e-code-quality/pull/134) ([vorburger](https://github.com/vorburger))
-- Bump maven-resources-plugin from 2.7 to 3.1.0 [\#133](https://github.com/m2e-code-quality/m2e-code-quality/pull/133) ([dependabot[bot]](https://github.com/apps/dependabot))
-- Bump findbugs-maven-plugin from 3.0.4 to 3.0.5 [\#132](https://github.com/m2e-code-quality/m2e-code-quality/pull/132) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump maven-resources-plugin from 2.7 to 3.1.0 [\#133](https://github.com/m2e-code-quality/m2e-code-quality/pull/133) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump findbugs-maven-plugin from 3.0.4 to 3.0.5 [\#132](https://github.com/m2e-code-quality/m2e-code-quality/pull/132) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - fix org.eclipse.jdt.feature.group timestamp in Oxygen TP [\#130](https://github.com/m2e-code-quality/m2e-code-quality/pull/130) ([vorburger](https://github.com/vorburger))
 - Fix build for PMD \>= 6.0.0 [\#126](https://github.com/m2e-code-quality/m2e-code-quality/pull/126) ([adangel](https://github.com/adangel))
 - \#114: remove M2E \<= 1.8.x contraint from MANIFEST.MF [\#115](https://github.com/m2e-code-quality/m2e-code-quality/pull/115) ([vorburger](https://github.com/vorburger))

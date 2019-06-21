@@ -1,6 +1,9 @@
 language: java
 sudo: false
 
+jdk:
+  openjdk8
+
 git:
   depth: 9999999
 
