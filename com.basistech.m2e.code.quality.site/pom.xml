@@ -20,7 +20,7 @@
 			<plugin>
 				<groupId>org.jboss.tools.tycho-plugins</groupId>
 				<artifactId>repository-utils</artifactId>
-				<version>1.4.0</version>
+				<version>1.5.1</version>
 				<executions>
 					<!-- creates index.html and other artifacts -->
 					<!-- see https://github.com/jbosstools/jbosstools-maven-plugins/wiki -->
