@@ -10,8 +10,8 @@
 			<repository location="http://download.eclipse.org/technology/m2e/milestones/1.9"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<unit id="net.sourceforge.pmd.eclipse.feature.group" version="4.0.17.v20180801-1551"/>
-			<repository location="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
+			<unit id="net.sourceforge.pmd.eclipse.feature.group" version="0.0.0"/>
+			<repository location="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<unit id="edu.umd.cs.findbugs.plugin.eclipse.feature.group" version="0.0.0"/>

@@ -100,7 +100,7 @@
         <repository
             url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
         <repository
-            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
             url="http://download.eclipse.org/technology/m2e/releases/1.9"/>
       </repositoryList>
@@ -115,7 +115,7 @@
         <repository
             url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
         <repository
-            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
             url="http://download.eclipse.org/technology/m2e/releases/1.9"/>
       </repositoryList>
@@ -130,7 +130,7 @@
         <repository
             url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
         <repository
-            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
             url="http://download.eclipse.org/technology/m2e/milestones/1.9"/>
       </repositoryList>
@@ -145,7 +145,7 @@
         <repository
             url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
         <repository
-            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
             url="http://download.eclipse.org/technology/m2e/milestones/1.8"/>
       </repositoryList>
@@ -160,7 +160,7 @@
         <repository
             url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
         <repository
-            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
             url="http://download.eclipse.org/technology/m2e/milestones/1.7"/>
       </repositoryList>
@@ -175,7 +175,7 @@
         <repository
             url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
         <repository
-            url="https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/"/>
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
             url="http://download.eclipse.org/technology/m2e/milestones/1.6"/>
       </repositoryList>

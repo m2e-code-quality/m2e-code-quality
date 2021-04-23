@@ -30,7 +30,7 @@
         <updatesite.m2e>http://download.eclipse.org/technology/m2e/releases</updatesite.m2e>
         <updatesite.eclipse>http://download.eclipse.org/releases/photon</updatesite.eclipse>
         <updatesite.cs>http://eclipse-cs.sf.net/update</updatesite.cs>
-        <updatesite.pmd>https://dl.bintray.com/pmd/pmd-eclipse-plugin/updates/</updatesite.pmd>
+        <updatesite.pmd>https://pmd.github.io/pmd-eclipse-plugin-p2-site/</updatesite.pmd>
         <updatesite.findbugs>http://findbugs.cs.umd.edu/eclipse/</updatesite.findbugs>
         <updatesite.spotbugs>https://spotbugs.github.io/eclipse/</updatesite.spotbugs>
         <updatesite.orbit>http://download.eclipse.org/tools/orbit/downloads/drops/${orbit.version}/repository/</updatesite.orbit>
