@@ -15,8 +15,8 @@
 <repository location="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="edu.umd.cs.findbugs.plugin.eclipse.feature.group" version="2.0.0.20111221"/>
-<repository location="http://m2e-code-quality.github.com/m2e-code-quality/findbugs-p2-repository"/>
+<unit id="edu.umd.cs.findbugs.plugin.eclipse.feature.group" version="0.0.0"/>
+<repository location="https://findbugs.cs.umd.edu/eclipse/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="net.sf.eclipsecs.feature.group" version="6.16.0.201603042321"/>
