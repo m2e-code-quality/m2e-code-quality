@@ -1,0 +1,29 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: org.eclipse.tycho:tycho-versions-plugin
+    versions:
+    - 2.2.0
+  - dependency-name: org.eclipse.tycho:tycho-p2-plugin
+    versions:
+    - 2.2.0
+  - dependency-name: org.eclipse.tycho:tycho-compiler-plugin
+    versions:
+    - 2.2.0
+  - dependency-name: org.eclipse.tycho:tycho-surefire-plugin
+    versions:
+    - 2.2.0
+  - dependency-name: org.eclipse.tycho:tycho-packaging-plugin
+    versions:
+    - 2.2.0
+  - dependency-name: org.eclipse.tycho:target-platform-configuration
+    versions:
+    - 2.2.0
+  - dependency-name: org.eclipse.tycho:tycho-maven-plugin
+    versions:
+    - 2.2.0
