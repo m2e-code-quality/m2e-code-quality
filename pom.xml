@@ -18,7 +18,7 @@
     <properties>
         <target.platform>oxygen</target.platform>
 
-        <tycho-version>1.7.0</tycho-version>
+        <tycho-version>2.4.0</tycho-version>
         <orbit.version>R20160221192158</orbit.version>
         <main.basedir>${basedir}</main.basedir>
 
