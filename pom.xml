@@ -97,7 +97,8 @@
 
     <pluginRepositories>
         <pluginRepository>
-            <id>sonatype-public</id>
+            <!-- needed for org.jboss.tools.tycho-plugins:repository-utils in com.basistech.m2e.code.quality.site -->
+            <id>jboss</id>
             <url>https://repository.jboss.org/nexus/content/groups/public</url>
             <snapshots>
                 <enabled>true</enabled>

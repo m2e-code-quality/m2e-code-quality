@@ -1,0 +1,39 @@
+name: GitHub CI
+
+on:
+  push:
+    branches:
+      - develop
+      - '**'
+  pull_request:
+    branches:
+      - develop
+      - '**'
+
+jobs:
+  build:
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macOS-latest ]
+        #java: [ 8, 11, 17-ea ]
+        java: [ 8 ]
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+          cache: 'maven'
+
+      - name: Build with Maven
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: mvn clean verify -e -B -V -ntp
