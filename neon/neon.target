@@ -24,7 +24,7 @@
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="net.sf.eclipsecs.feature.group" version="0.0.0"/>
-<repository location="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
+<repository location="https://checkstyle.org/eclipse-cs-update-site/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 	<unit id="org.apache.commons.lang" version="2.6.0.v201404270220"/>

@@ -29,7 +29,7 @@
 
         <updatesite.m2e>http://download.eclipse.org/technology/m2e/releases</updatesite.m2e>
         <updatesite.eclipse>http://download.eclipse.org/releases/photon</updatesite.eclipse>
-        <updatesite.cs>http://eclipse-cs.sf.net/update</updatesite.cs>
+        <updatesite.cs>https://checkstyle.org/eclipse-cs-update-site/</updatesite.cs>
         <updatesite.pmd>https://pmd.github.io/pmd-eclipse-plugin-p2-site/</updatesite.pmd>
         <updatesite.findbugs>http://findbugs.cs.umd.edu/eclipse/</updatesite.findbugs>
         <updatesite.spotbugs>https://spotbugs.github.io/eclipse/</updatesite.spotbugs>
