@@ -9,7 +9,7 @@
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
     xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
     xmlns:setup.targlets="http://www.eclipse.org/oomph/setup/targlets/1.0"
-    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/jdt/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore http://www.eclipse.org/oomph/setup/maven/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore"
+    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/jdt/1.0 https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore http://www.eclipse.org/oomph/setup/maven/1.0 https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore"
     name="m2e-code-quality"
     label="m2e-code-quality">
   <setupTask
@@ -40,7 +40,7 @@
     <requirement
         name="org.sonatype.tycho.m2e.feature.feature.group"/>
     <repository
-        url="http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.8.0/N/0.8.0.201409231215/"/>
+        url="https://repo.maven.apache.org/maven2/.m2e/connectors/m2eclipse-tycho/0.8.0/N/0.8.0.201409231215/"/>
     <description>Install the tools needed in the IDE to work with the source code for ${scope.project.label}</description>
   </setupTask>
   <setupTask
@@ -92,92 +92,92 @@
       <repositoryList
           name="2018-12">
         <repository
-            url="http://findbugs.cs.umd.edu/eclipse/"/>
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="https://download.eclipse.org/releases/2018-12"/>
         <repository
             url="https://spotbugs.github.io/eclipse/"/>
         <repository
-            url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
         <repository
             url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
-            url="http://download.eclipse.org/technology/m2e/releases/1.9"/>
+            url="https://download.eclipse.org/technology/m2e/releases/1.9"/>
       </repositoryList>
       <repositoryList
           name="2018-09">
         <repository
-            url="http://download.eclipse.org/releases/2018-09"/>
+            url="https://download.eclipse.org/releases/2018-09"/>
         <repository
-            url="http://findbugs.cs.umd.edu/eclipse/"/>
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
         <repository
             url="https://spotbugs.github.io/eclipse/"/>
         <repository
-            url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
         <repository
             url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
-            url="http://download.eclipse.org/technology/m2e/releases/1.9"/>
+            url="https://download.eclipse.org/technology/m2e/releases/1.9"/>
       </repositoryList>
       <repositoryList
           name="Photon">
         <repository
-            url="http://download.eclipse.org/releases/photon"/>
+            url="https://download.eclipse.org/releases/photon"/>
         <repository
             url="https://spotbugs.github.io/eclipse/"/>
         <repository
-            url="http://findbugs.cs.umd.edu/eclipse/"/>
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
         <repository
-            url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
         <repository
             url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
-            url="http://download.eclipse.org/technology/m2e/milestones/1.9"/>
+            url="https://download.eclipse.org/technology/m2e/milestones/1.9"/>
       </repositoryList>
       <repositoryList
           name="Oxygen">
         <repository
-            url="http://download.eclipse.org/releases/oxygen"/>
+            url="https://download.eclipse.org/releases/oxygen"/>
         <repository
             url="https://spotbugs.github.io/eclipse/"/>
         <repository
-            url="http://findbugs.cs.umd.edu/eclipse/"/>
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
         <repository
-            url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
         <repository
             url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
-            url="http://download.eclipse.org/technology/m2e/milestones/1.8"/>
+            url="https://download.eclipse.org/technology/m2e/milestones/1.8"/>
       </repositoryList>
       <repositoryList
           name="Neon">
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="https://download.eclipse.org/releases/neon"/>
         <repository
-            url="http://findbugs.cs.umd.edu/eclipse/"/>
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
         <repository
             url="https://spotbugs.github.io/eclipse/"/>
         <repository
-            url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
         <repository
             url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
-            url="http://download.eclipse.org/technology/m2e/milestones/1.7"/>
+            url="https://download.eclipse.org/technology/m2e/milestones/1.7"/>
       </repositoryList>
       <repositoryList
           name="Mars">
         <repository
-            url="http://download.eclipse.org/releases/mars"/>
+            url="https://download.eclipse.org/releases/mars"/>
         <repository
-            url="http://findbugs.cs.umd.edu/eclipse/"/>
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
         <repository
             url="https://spotbugs.github.io/eclipse/"/>
         <repository
-            url="https://dl.bintray.com/eclipse-cs/eclipse-cs/8.0.0/"/>
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
         <repository
             url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
-            url="http://download.eclipse.org/technology/m2e/milestones/1.6"/>
+            url="https://download.eclipse.org/technology/m2e/milestones/1.6"/>
       </repositoryList>
     </targlet>
   </setupTask>

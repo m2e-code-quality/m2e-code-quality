@@ -2,7 +2,7 @@
 <project
     xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.basistech.m2e-code-quality</groupId>
@@ -27,13 +27,13 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
 
-        <updatesite.m2e>http://download.eclipse.org/technology/m2e/releases</updatesite.m2e>
-        <updatesite.eclipse>http://download.eclipse.org/releases/photon</updatesite.eclipse>
+        <updatesite.m2e>https://download.eclipse.org/technology/m2e/releases</updatesite.m2e>
+        <updatesite.eclipse>https://download.eclipse.org/releases/photon</updatesite.eclipse>
         <updatesite.cs>https://checkstyle.org/eclipse-cs-update-site/</updatesite.cs>
         <updatesite.pmd>https://pmd.github.io/pmd-eclipse-plugin-p2-site/</updatesite.pmd>
-        <updatesite.findbugs>http://findbugs.cs.umd.edu/eclipse/</updatesite.findbugs>
+        <updatesite.findbugs>https://findbugs.cs.umd.edu/eclipse/</updatesite.findbugs>
         <updatesite.spotbugs>https://spotbugs.github.io/eclipse/</updatesite.spotbugs>
-        <updatesite.orbit>http://download.eclipse.org/tools/orbit/downloads/drops/${orbit.version}/repository/</updatesite.orbit>
+        <updatesite.orbit>https://download.eclipse.org/tools/orbit/downloads/drops/${orbit.version}/repository/</updatesite.orbit>
     </properties>
 
     <modules>
@@ -98,7 +98,7 @@
     <pluginRepositories>
         <pluginRepository>
             <id>sonatype-public</id>
-            <url>https://repository.sonatype.org/content/groups/sonatype-public-grid</url>
+            <url>https://repository.jboss.org/nexus/content/groups/public</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
