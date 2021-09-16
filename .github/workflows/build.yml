@@ -46,7 +46,7 @@ jobs:
           run: ./mvnw clean verify -e -B -V -ntp
 
       - name: Publish update site
-        if: ${{ runner.os == 'Linux' && github.event_name == 'push' && github.repository.full_name == 'm2e-code-quality/m2e-code-quality' && github.ref == 'refs/heads/develop' }}
+        if: ${{ runner.os == 'Linux' && github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' && github.ref == 'refs/heads/develop' }}
         shell: bash
         run: tools/publish-update-site.sh
         env:
