@@ -41,7 +41,7 @@ jobs:
       - name: Build with Maven
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: mvn clean verify -e -B -V -ntp
+          run: ./mvnw clean verify -e -B -V -ntp
 
       - name: Publish update site
         if: ${{ runner.os == 'Linux' && github.event.name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' && github.ref == 'refs/heads/develop' }}

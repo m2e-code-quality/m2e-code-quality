@@ -90,7 +90,7 @@ regenCompositeMetadata "${STABLE_RELEASES}" "${CURRENT_SITE_FOLDER}/"
 
 ## -- generate changelog
 # get current version
-current_version=$(mvn --batch-mode --no-transfer-progress \
+current_version=$(./mvnw --batch-mode --no-transfer-progress \
         org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
         -Dexpression=project.version -q -DforceStdout \
         -Dtycho.mode=maven)
