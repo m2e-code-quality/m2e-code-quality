@@ -55,7 +55,7 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
 
       - name: Publish update site
-        if: ${{ runner.os == 'Linux' && github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' && github.ref == 'refs/heads/develop' }}
+        if: ${{ runner.os == 'Linux' && github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' }}
         shell: bash
         run: tools/publish-update-site.sh
         env:
