@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.basistech.m2e.code.quality.shared.test;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.core.resources.ICommand;
@@ -16,7 +17,11 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.IVMInstallType;
+import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
@@ -26,6 +31,55 @@ import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
 
 @SuppressWarnings("restriction")
 public abstract class AbstractMavenProjectConfiguratorTestCase extends AbstractMavenProjectTestCase {
+
+	@Override
+	protected void setUp() throws Exception {
+		addDefaultJavaVMIfNeeded();
+		super.setUp();
+	}
+
+	/**
+	 * Setup a default JVM if none exists yet. This is especially required for mac
+	 * osx on github actions, as there is no default JVM detected automatically.
+	 * This is not done via the following extension, in order to check for the
+	 * existence of openjdk8Path:
+	 *
+	 * <pre>
+	 *    &lt;extension
+	 *         point="org.eclipse.jdt.launching.vmInstalls">
+	 *      &lt;vmInstall
+	 *            home="${env_var:JAVA_HOME}"
+	 *            id="com.basistech.m2e.code.quality.shared.defaultJvm"
+	 *            name="defaultJvm"
+	 *            vmInstallType="org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType">
+	 *      &lt;/vmInstall>
+	 *   &lt;/extension>
+	 * </pre>
+	 */
+	private void addDefaultJavaVMIfNeeded() {
+		if (JavaRuntime.getDefaultVMInstall() != null
+				&& JavaRuntime.getDefaultVMInstall().getInstallLocation().exists()) {
+			return;
+		}
+
+		File javaHome = new File(System.getenv("JAVA_HOME"));
+		if (javaHome.exists()) {
+			try {
+				javaHome = javaHome.getCanonicalFile();
+				IVMInstallType vmInstallType = JavaRuntime
+						.getVMInstallType("org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType");
+				IVMInstall vm = vmInstallType.createVMInstall("com.basistech.m2e.code.quality.shared.defaultJvm");
+				vm.setInstallLocation(javaHome);
+				vm.setName("defaultJvm");
+				NullProgressMonitor monitor = new NullProgressMonitor();
+				JavaRuntime.setDefaultVMInstall(vm, monitor);
+			} catch (IOException | CoreException e) {
+				System.out.println("ERROR: Error setting up default JVM " + javaHome + ": " + e);
+			}
+		} else {
+			System.out.println("ERROR: Path " + javaHome + " does not exist");
+		}
+	}
 
 	protected boolean hasBuilder(final IProject project, final String id) throws Exception {
 		for (ICommand cmd : project.getDescription().getBuildSpec()) {

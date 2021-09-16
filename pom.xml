@@ -97,7 +97,8 @@
 
     <pluginRepositories>
         <pluginRepository>
-            <id>sonatype-public</id>
+            <!-- needed for org.jboss.tools.tycho-plugins:repository-utils in com.basistech.m2e.code.quality.site -->
+            <id>jboss</id>
             <url>https://repository.jboss.org/nexus/content/groups/public</url>
             <snapshots>
                 <enabled>true</enabled>
@@ -184,6 +185,8 @@
                     <version>${tycho-version}</version>
                     <configuration>
                         <useUIHarness>true</useUIHarness>
+                        <showEclipseLog>true</showEclipseLog>
+                        <trimStackTrace>false</trimStackTrace>
                         <includes>
                             <include>**/*Test.java</include>
                         </includes>
@@ -227,28 +230,12 @@
 
     <profiles>
         <profile>
-            <id>sun-jvm</id>
-            <activation>
-                <property>
-                    <name>java.vendor.url</name>
-                    <value>http://java.sun.com/</value>
-                </property>
-            </activation>
-            <properties>
-                <tycho.test.jvmArgs><![CDATA[-Xmx800m -XX:MaxPermSize=256m]]></tycho.test.jvmArgs>
-            </properties>
-        </profile>
-        <profile>
             <id>osx</id>
             <activation>
-                <property>
-                    <name>java.vendor.url</name>
-                    <value>http://www.apple.com/</value>
-                </property>
+                <os><family>mac</family></os>
             </activation>
             <properties>
-                <tycho.test.jvmArgs><![CDATA[-Xmx800m -XX:MaxPermSize=256m -Dosgi.ws=cocoa -XstartOnFirstThread]]></tycho.test.jvmArgs>
-                <osgi.ws>cocoa</osgi.ws>
+                <tycho.test.jvmArgs>-XstartOnFirstThread</tycho.test.jvmArgs>
             </properties>
         </profile>
         <profile>
