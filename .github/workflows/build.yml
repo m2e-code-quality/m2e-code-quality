@@ -60,3 +60,10 @@ jobs:
         run: tools/publish-update-site.sh
         env:
           GITHUB_TOKEN: ${{ secrets.PUBLISH_SITE_TOKEN }}
+
+      - name: Publish release
+        if: ${{ runner.os == 'Linux' && github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' && startsWith(github.ref, 'refs/tags/') }}
+        shell: bash
+        run: tools/release.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

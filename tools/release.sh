@@ -1,17 +1,33 @@
 #!/bin/bash -eu
 
-[ "$#" -ne "1" ] && echo "usage: $0 <release branch name>" && exit 1
+if [[ "${GITHUB_REF}" != refs/tags/* ]]; then
+    echo "${GITHUB_REF} is not a tag!"
+    exit 1
+fi
 
-# move tag and push release branches
-git push https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git :refs/tags/$TRAVIS_TAG
-git push --quiet --atomic --tags https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git $1
+# stop on first error
+set -eu
+
+RELEASE_TAG=${GITHUB_REF##refs/tags/}
+RELEASE_BRANCH=master
+REPOSITORY=m2e-code-quality/m2e-code-quality
+GITHUB_BRANCH=develop
+
+# remove remote tag and push moved tag + release branch
+git push origin ":refs/tags/$RELEASE_TAG"
+git push --atomic --tags origin $RELEASE_BRANCH
 
 # Overwrite CHANGELOG.md with JSON data for GitHub API
-jq -n \
+# extract the release notes
+END_LINE=$(grep -n "^## " CHANGELOG.md|head -2|tail -1|cut -d ":" -f 1)
+END_LINE=$((END_LINE - 1))
+RELEASE_CHANGELOG="$(head -$END_LINE CHANGELOG.md)"
+
+request="$(jq -n \
   --arg body "$RELEASE_CHANGELOG" \
-  --arg name "Release $TRAVIS_TAG" \
-  --arg tag_name "$TRAVIS_TAG" \
-  --arg target_commitish "$1" \
+  --arg name "Release $RELEASE_TAG" \
+  --arg tag_name "$RELEASE_TAG" \
+  --arg target_commitish "$RELEASE_BRANCH" \
   '{
     body: $body,
     name: $name,
@@ -19,33 +35,33 @@ jq -n \
     target_commitish: $target_commitish,
     draft: false,
     prerelease: false
-  }' > /tmp/release.json
+  }')"
 
 # Create release in github
-echo "Create release $TRAVIS_TAG for repo: $TRAVIS_REPO_SLUG, branch: $GITHUB_BRANCH"
-upload_url=$(curl -s -H "Authorization: token $GITHUB_TOKEN" --data @/tmp/release.json "https://api.github.com/repos/${TRAVIS_REPO_SLUG}/releases" \
+echo "Create release $RELEASE_TAG for repo: $REPOSITORY, branch: $GITHUB_BRANCH"
+upload_url=$(curl -s -H "Authorization: token $GITHUB_TOKEN" --data "${request}" "https://api.github.com/repos/${REPOSITORY}/releases" \
   | jq -r '.upload_url')
 
 # upload p2 site to release
 upload_url="${upload_url%\{*}"
 
-FILES=./com.basistech.m2e.code.quality.site/target/com.basistech.m2e.code.quality.site-*.zip
-for f in $FILES
+FILES=(./com.basistech.m2e.code.quality.site/target/com.basistech.m2e.code.quality.site-*.zip)
+for f in "${FILES[@]}"
 do
   echo "uploading $f to $upload_url"
   curl -s -H "Authorization: token $GITHUB_TOKEN"  \
         -H "Content-Type: application/zip" \
         --data-binary @"$f"  \
-        "$upload_url?name=$(basename $f)&label=P2%20Repository"
+        "$upload_url?name=$(basename "$f")&label=P2%20Repository"
 done
 
 # increment version
-NEW_VERSION=$(echo $TRAVIS_TAG | awk 'BEGIN { FS="." } { $3++; } { printf "%d.%d.%d\n", $1, $2, $3 }')-SNAPSHOT
+NEW_VERSION=$(echo "$RELEASE_TAG" | awk 'BEGIN { FS="." } { $3++; } { printf "%d.%d.%d\n", $1, $2, $3 }')-SNAPSHOT
 echo "changing version to $NEW_VERSION"
-mvn org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=$NEW_VERSION -Dtycho.mode=maven
+mvn org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion="$NEW_VERSION" -Dtycho.mode=maven
 
 # commit the updated version
-git commit -a --message "Next version: $NEW_VERSION" > /dev/null 2>&1
+git commit -a --message "Next version: $NEW_VERSION"
 
-# push updated and development branche
-git push --quiet https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git $GITHUB_BRANCH
+# push updated development branch
+git push "$GITHUB_BRANCH"
