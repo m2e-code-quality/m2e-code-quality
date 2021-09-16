@@ -106,6 +106,7 @@ bundle exec github_changelog_generator \
 # create a new single commit
 pushd "${CURRENT_SITE_FOLDER}"
 git checkout --orphan=gh-pages-2
+git add -A
 git commit -a -m "Update ${SITE_GITHUB_REPO}"
 git push --force origin "gh-pages-2:${SITE_GITHUB_BRANCH}"
 popd
