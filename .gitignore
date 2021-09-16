@@ -9,3 +9,4 @@ bin
 .pmdruleset.xml
 findbugs.p2
 current-site/
+vendor/

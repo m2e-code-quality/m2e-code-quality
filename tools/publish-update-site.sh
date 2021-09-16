@@ -88,6 +88,21 @@ STABLE_RELEASES="$(cat "${OLD_RELEASES_FILE}") $(find ${CURRENT_SITE_FOLDER}/* -
 
 regenCompositeMetadata "${STABLE_RELEASES}" "${CURRENT_SITE_FOLDER}/"
 
+## -- generate changelog
+# get current version
+current_version=$(mvn --batch-mode --no-transfer-progress \
+        org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
+        -Dexpression=project.version -q -DforceStdout \
+        -Dtycho.mode=maven)
+
+# Create release notes (snapshot)
+bundle exec github_changelog_generator \
+    -t "${GITHUB_TOKEN}" \
+    --output "${CURRENT_SITE_FOLDER}/snapshot/CHANGELOG.md" \
+    --unreleased-only \
+    --unreleased-label "${current_version} ($(date +%Y-%m-%d))"
+
+
 # create a new single commit
 pushd "${CURRENT_SITE_FOLDER}"
 git checkout --orphan=gh-pages-2
