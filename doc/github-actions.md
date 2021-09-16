@@ -20,6 +20,9 @@ in order to commit the updated site.
 
 For the commit, the identity of [m2e-code-quality-bot](https://github.com/m2e-code-quality-bot) is used.
 
+The password for the keystore to sign the plugin is configured as a repository secret
+named `KEYSTORE_PASSWORD`.
+
 ## What is being done
 
 See the [build workflow](.github/workflows/build.yml).
@@ -38,4 +41,15 @@ An updated changelog is generated via [github-changelog-generator](https://githu
 and also placed into the site repo.
 
 As last the, the site repo is pushed to github and github will publish it via github pages.
+
+## Signing
+
+The plugin is signed with a certificate for CN=m2e-code-quality.github.io. This certificate has
+been issued by Let's Encrypt.
+
+The keystore is `tools/code-signing.p12`.
+
+The password is in the env var `KEYSTORE_PASSWORD` which is configured as a secret.
+
+Whether signing should be done or not is decided in the small build script `tools/build.sh`.
 
