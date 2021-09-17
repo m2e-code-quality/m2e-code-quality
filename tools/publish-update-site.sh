@@ -2,7 +2,8 @@
 
 if [[ "${GITHUB_REF}" != refs/tags/* && "${GITHUB_REF}" != refs/heads/develop ]]; then
     echo "${GITHUB_REF} is neither develop branch nor a tag!"
-    exit 1
+    # exit with success to just skip this part of the build and not fail the build
+    exit 0
 fi
 
 # stop on first error
