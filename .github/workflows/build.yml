@@ -49,6 +49,7 @@ jobs:
           cache: 'maven'
 
       - name: Setup maven toolchains.xml
+        shell: bash
         run: |
           echo "JAVA8_HOME=${{ steps.java8.outputs.path }}" >> $GITHUB_ENV
           echo "JAVA11_HOME=${{ steps.java11.outputs.path }}" >> $GITHUB_ENV
