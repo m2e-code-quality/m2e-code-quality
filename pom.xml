@@ -47,6 +47,7 @@
         <module>com.basistech.m2e.code.quality.spotbugs.test</module>
         <module>com.basistech.m2e.code.quality.pmd</module>
         <module>com.basistech.m2e.code.quality.pmd.feature</module>
+        <module>com.basistech.m2e.code.quality.pmd.test</module>
         <module>com.basistech.m2e.code.quality.site</module>
         <module>com.basistech.m2e.code.quality.target-platform</module>
     </modules>
