@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - develop
+      - '**'
       # don't execute push builds for dependabot - these are done with pull requests
       - '!dependabot/**'
-      - '**'
   pull_request:
     branches:
       - develop
