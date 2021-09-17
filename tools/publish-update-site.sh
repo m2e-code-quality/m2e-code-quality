@@ -1,6 +1,6 @@
 #!/bin/bash -eu
 
-if [[ "${GITHUB_REF}" != refs/tags/* || "${GITHUB_REF}" != refs/heads/develop ]]; then
+if [[ "${GITHUB_REF}" != refs/tags/* && "${GITHUB_REF}" != refs/heads/develop ]]; then
     echo "${GITHUB_REF} is neither develop branch nor a tag!"
     exit 1
 fi
