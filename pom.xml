@@ -18,7 +18,7 @@
     <properties>
         <target.platform>oxygen</target.platform>
 
-        <tycho-version>1.7.0</tycho-version>
+        <tycho-version>2.4.0</tycho-version>
         <orbit.version>R20160221192158</orbit.version>
         <main.basedir>${basedir}</main.basedir>
 
@@ -163,6 +163,25 @@
                     <execution>
                         <goals>
                             <goal>spotbugs</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-toolchains-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <toolchains>
+                        <jdk>
+                            <id>JavaSE-1.8</id>
+                        </jdk>
+                    </toolchains>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>toolchain</goal>
                         </goals>
                     </execution>
                 </executions>

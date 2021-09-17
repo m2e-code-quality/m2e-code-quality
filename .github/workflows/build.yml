@@ -18,8 +18,6 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macOS-latest ]
-        #java: [ 8, 11, 17-ea ]
-        java: [ 8 ]
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
@@ -35,12 +33,26 @@ jobs:
           ruby-version: 2.7
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
-      - name: Set up JDK
+      - name: Set up JDK 8
+        id: java8
         uses: actions/setup-java@v2
         with:
           distribution: temurin
-          java-version: ${{ matrix.java }}
+          java-version: '8'
+
+      - name: Set up JDK 11
+        id: java11
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: '11'
           cache: 'maven'
+
+      - name: Setup maven toolchains.xml
+        run: |
+          echo "JAVA8_HOME=${{ steps.java8.outputs.path }}" >> $GITHUB_ENV
+          echo "JAVA11_HOME=${{ steps.java11.outputs.path }}" >> $GITHUB_ENV
+          cp tools/toolchains.xml $HOME/.m2/
 
       - name: Prepare release
         if: ${{ runner.os == 'Linux' && github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' && startsWith(github.ref, 'refs/tags/') }}
