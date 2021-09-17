@@ -9,12 +9,13 @@ fi
 set -eu
 
 #
-# This script requires the env var "GITHUB_TOKEN". It uses this token to commit
-# to https://github.com/m2e-code-quality/m2e-code-quality-p2-site and
-# fetch information to generate a changelog.
+# This script requires two tokens as env vars:
+# * PUBLISH_SITE_TOKEN: This token is used to commit
+#   to https://github.com/m2e-code-quality/m2e-code-quality-p2-site
+#   Since this script is called from a workflow from repo m2e-code-quality, the default
+#   GITHUB_TOKEN won't work to commit to a different repo (m2e-code-quality-p2-site).
 #
-# Since this script is called from a workflow from repo m2e-code-quality, the default
-# GITHUB_TOKEN won't work to commit to a different repo (m2e-code-quality-p2-site).
+# * GITHUB_TOKEN: Is used to fetch information to generate a changelog.
 #
 
 
@@ -79,7 +80,7 @@ pushd "${CURRENT_SITE_FOLDER}"
 git init -q --initial-branch="${SITE_GITHUB_BRANCH}"
 git config --local user.name "m2e-code-quality-bot"
 git config --local user.email "m2e-code-quality-bot@users.noreply.github.com"
-git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $(echo -n "x-access-token:${GITHUB_TOKEN}"|base64)"
+git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $(echo -n "x-access-token:${PUBLISH_SITE_TOKEN}"|base64)"
 git remote add origin "${SITE_GITHUB_REPO_URL}"
 git pull --rebase origin "${SITE_GITHUB_BRANCH}"
 popd
@@ -128,5 +129,6 @@ git checkout --orphan=gh-pages-2
 git add -A
 git commit -a -m "Update ${SITE_GITHUB_REPO}"
 git push --force origin "gh-pages-2:${SITE_GITHUB_BRANCH}"
+git config --local --unset-all http.https://github.com/.extraheader
 popd
 
