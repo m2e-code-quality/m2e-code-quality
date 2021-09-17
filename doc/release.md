@@ -1,11 +1,10 @@
-m2e-code-quality build and release
-==================================
+# m2e-code-quality build and release
 
 m2e-code-quality is built with Tycho.
 
 To make a release:
 
-1. Run a build. Use Apache Maven version 3.0.3 or newer. Always run `mvn clean install`;
+1. Run a build. Always run `./mvnw clean install`;
 Tycho has some stupid bug that goes off if you don't start from clean.
 
 2. Test as you feel the urge using the plugins and features.

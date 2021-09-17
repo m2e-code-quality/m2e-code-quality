@@ -1,23 +1,35 @@
 #!/bin/bash -eu
 
+if [[ "${GITHUB_REF}" != refs/tags/* || "${GITHUB_REF}" != refs/heads/develop ]]; then
+    echo "${GITHUB_REF} is neither develop branch nor a tag!"
+    exit 1
+fi
+
+# stop on first error
+set -eu
+
 #
-# This script requires the env var "GITHUB_TOKEN". It uses this token to commit
-# to https://github.com/m2e-code-quality/m2e-code-quality-p2-site and
-# fetch information to generate a changelog.
+# This script requires two tokens as env vars:
+# * PUBLISH_SITE_TOKEN: This token is used to commit
+#   to https://github.com/m2e-code-quality/m2e-code-quality-p2-site
+#   Since this script is called from a workflow from repo m2e-code-quality, the default
+#   GITHUB_TOKEN won't work to commit to a different repo (m2e-code-quality-p2-site).
 #
-# Since this script is called from a workflow from repo m2e-code-quality, the default
-# GITHUB_TOKEN won't work to commit to a different repo (m2e-code-quality-p2-site).
+# * GITHUB_TOKEN: Is used to fetch information to generate a changelog.
 #
 
 
 GIT_ROOT_DIR="$(cd "$(dirname "$0")" && git rev-parse --show-toplevel)"
 OLD_RELEASES_FILE=${GIT_ROOT_DIR}/tools/old_releases.list
 
-TRAVIS_TAG=""
+RELEASE_TAG=""
+if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+    RELEASE_TAG=${GITHUB_REF##refs/tags/}
+fi
 CURRENT_SITE_FOLDER=current-site
 SITE_GITHUB_BRANCH=gh-pages
 SITE_GITHUB_REPO=m2e-code-quality/m2e-code-quality-p2-site
-SITE_GITHUB_REPO_URL="https://${GITHUB_TOKEN}@github.com/${SITE_GITHUB_REPO}"
+SITE_GITHUB_REPO_URL="https://github.com/${SITE_GITHUB_REPO}"
 
 NEW_SITE_FOLDER=com.basistech.m2e.code.quality.site/target/repository/
 
@@ -66,17 +78,18 @@ rm -rf "${CURRENT_SITE_FOLDER}"
 mkdir "${CURRENT_SITE_FOLDER}"
 pushd "${CURRENT_SITE_FOLDER}"
 git init -q --initial-branch="${SITE_GITHUB_BRANCH}"
-git config user.name "m2e-code-quality-bot"
-git config user.email "m2e-code-quality-bot@users.noreply.github.com"
+git config --local user.name "m2e-code-quality-bot"
+git config --local user.email "m2e-code-quality-bot@users.noreply.github.com"
+git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $(echo -n "x-access-token:${PUBLISH_SITE_TOKEN}"|base64)"
 git remote add origin "${SITE_GITHUB_REPO_URL}"
 git pull --rebase origin "${SITE_GITHUB_BRANCH}"
 popd
 
 ## -- integrate (copy) new version to the site
-if [ -n "$TRAVIS_TAG" ]; then
-  rm -rf "${CURRENT_SITE_FOLDER:?}/${TRAVIS_TAG}" \
-    && mkdir "${CURRENT_SITE_FOLDER}/${TRAVIS_TAG}" \
-    && cp -R "${NEW_SITE_FOLDER}"/* "${CURRENT_SITE_FOLDER}/${TRAVIS_TAG}/"
+if [ -n "$RELEASE_TAG" ]; then
+  rm -rf "${CURRENT_SITE_FOLDER:?}/${RELEASE_TAG}" \
+    && mkdir "${CURRENT_SITE_FOLDER}/${RELEASE_TAG}" \
+    && cp -R "${NEW_SITE_FOLDER}"/* "${CURRENT_SITE_FOLDER}/${RELEASE_TAG}/"
 else
   rm -rf "${CURRENT_SITE_FOLDER:?}/snapshot" \
     && mkdir "${CURRENT_SITE_FOLDER}/snapshot" \
@@ -89,19 +102,20 @@ STABLE_RELEASES="$(cat "${OLD_RELEASES_FILE}") $(find ${CURRENT_SITE_FOLDER}/* -
 regenCompositeMetadata "${STABLE_RELEASES}" "${CURRENT_SITE_FOLDER}/"
 
 ## -- generate changelog
-# get current version
-current_version=$(./mvnw --batch-mode --no-transfer-progress \
-        org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
-        -Dexpression=project.version -q -DforceStdout \
-        -Dtycho.mode=maven)
-
-# Create release notes (snapshot)
-bundle exec github_changelog_generator \
-    -t "${GITHUB_TOKEN}" \
-    --output "${CURRENT_SITE_FOLDER}/snapshot/CHANGELOG.md" \
-    --unreleased-only \
-    --unreleased-label "${current_version} ($(date +%Y-%m-%d))"
-
+if [ -n "$RELEASE_TAG" ]; then
+    # extract the release notes
+    END_LINE=$(grep -n "^## " CHANGELOG.md|head -2|tail -1|cut -d ":" -f 1)
+    END_LINE=$((END_LINE - 1))
+    head -$END_LINE CHANGELOG.md > "${CURRENT_SITE_FOLDER}/${RELEASE_TAG}/CHANGELOG.md"
+else
+    # Create release notes (snapshot)
+    bundle exec github_changelog_generator \
+        -t "${GITHUB_TOKEN}" \
+        --output "${CURRENT_SITE_FOLDER}/snapshot/CHANGELOG.md" \
+        --unreleased-only \
+        --future-release "develop" \
+        --no-verbose
+fi
 
 # create a new single commit
 pushd "${CURRENT_SITE_FOLDER}"
@@ -109,5 +123,6 @@ git checkout --orphan=gh-pages-2
 git add -A
 git commit -a -m "Update ${SITE_GITHUB_REPO}"
 git push --force origin "gh-pages-2:${SITE_GITHUB_BRANCH}"
+git config --local --unset-all http.https://github.com/.extraheader
 popd
 

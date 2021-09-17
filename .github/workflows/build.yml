@@ -40,6 +40,13 @@ jobs:
           java-version: ${{ matrix.java }}
           cache: 'maven'
 
+      - name: Prepare release
+        if: ${{ runner.os == 'Linux' && github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' && startsWith(github.ref, 'refs/tags/') }}
+        shell: bash
+        run: tools/prepare_release.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build with Maven
         uses: GabrielBB/xvfb-action@v1
         with:
@@ -48,8 +55,16 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
 
       - name: Publish update site
-        if: ${{ runner.os == 'Linux' && github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' && github.ref == 'refs/heads/develop' }}
+        if: ${{ runner.os == 'Linux' && github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' }}
         shell: bash
         run: tools/publish-update-site.sh
         env:
-          GITHUB_TOKEN: ${{ secrets.PUBLISH_SITE_TOKEN }}
+          PUBLISH_SITE_TOKEN: ${{ secrets.PUBLISH_SITE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish release
+        if: ${{ runner.os == 'Linux' && github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' && startsWith(github.ref, 'refs/tags/') }}
+        shell: bash
+        run: tools/release.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
