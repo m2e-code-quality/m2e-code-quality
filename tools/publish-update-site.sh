@@ -108,18 +108,12 @@ if [ -n "$RELEASE_TAG" ]; then
     END_LINE=$((END_LINE - 1))
     head -$END_LINE CHANGELOG.md > "${CURRENT_SITE_FOLDER}/${RELEASE_TAG}/CHANGELOG.md"
 else
-    # get current version
-    current_version=$(./mvnw --batch-mode --no-transfer-progress \
-            org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate \
-            -Dexpression=project.version -q -DforceStdout \
-            -Dtycho.mode=maven)
-
     # Create release notes (snapshot)
     bundle exec github_changelog_generator \
         -t "${GITHUB_TOKEN}" \
         --output "${CURRENT_SITE_FOLDER}/snapshot/CHANGELOG.md" \
         --unreleased-only \
-        --unreleased-label "${current_version} ($(date +%Y-%m-%d))" \
+        --future-release "develop" \
         --no-verbose
 fi
 
