@@ -7,6 +7,9 @@
  *******************************************************************************/
 package com.basistech.m2e.code.quality.shared.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -33,7 +36,7 @@ import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
 public abstract class AbstractMavenProjectConfiguratorTestCase extends AbstractMavenProjectTestCase {
 
 	@Override
-	protected void setUp() throws Exception {
+	public void setUp() throws Exception {
 		addDefaultJavaVMIfNeeded();
 		super.setUp();
 	}
