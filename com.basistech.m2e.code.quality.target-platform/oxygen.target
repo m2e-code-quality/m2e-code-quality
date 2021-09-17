@@ -3,6 +3,7 @@
 <target name="Eclipse 4.7.x (Oxygen)" sequenceNumber="65">
     <locations>
         <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+            <unit id="org.eclipse.ui.ide.application" version="1.2.0.v20170512-1452"/>
             <unit id="org.eclipse.jdt.feature.group" version="3.13.4.v20180330-0919"/>
             <unit id="org.eclipse.m2e.sdk.feature.feature.group" version="1.8.3.20180227-2137"/>
             <unit id="org.eclipse.m2e.feature.feature.group" version="1.8.3.20180227-2137"/>
