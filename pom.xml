@@ -252,7 +252,10 @@
         <profile>
             <id>linux</id>
             <activation>
-                <os><family>unixuhoh</family></os>
+                <os>
+                    <family>unix</family>
+                    <name>Linux</name>
+                </os>
             </activation>
             <build>
                 <plugins>
