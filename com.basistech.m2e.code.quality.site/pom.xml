@@ -40,13 +40,10 @@
 							</symbols>
 							<!-- this adds repository references to the update site's content.xml -->
 							<associateSites>
-								<site>${updatesite.m2e}</site>
-								<site>${updatesite.eclipse}</site>
 								<site>${updatesite.cs}</site>
 								<site>${updatesite.pmd}</site>
 								<site>${updatesite.findbugs}</site>
 								<site>${updatesite.spotbugs}</site>
-								<site>${updatesite.orbit}</site>
 							</associateSites>
 							<!-- to remove the default category created for any uncategorized 
 								features or bundles, set this to true -->
