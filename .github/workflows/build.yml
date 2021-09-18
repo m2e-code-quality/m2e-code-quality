@@ -7,10 +7,15 @@ on:
       - '**'
       # don't execute push builds for dependabot - these are done with pull requests
       - '!dependabot/**'
+      # gh-pages is something entirely different
+      - '!gh-pages'
+      # builds from branch master should not be done. Releases are done with builds from tags
+      - '!master'
   pull_request:
     branches:
       - develop
       - '**'
+      - '!gh-pages'
 
 jobs:
   build:
