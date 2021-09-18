@@ -14,6 +14,8 @@ REPOSITORY=m2e-code-quality/m2e-code-quality
 GITHUB_BRANCH=develop
 
 # remove remote tag and push moved tag + release branch
+# Note: according to https://docs.github.com/en/actions/reference/authentication-in-a-workflow
+# these pushes should *not* trigger a new workflow run...
 git push origin ":refs/tags/$RELEASE_TAG"
 git push --atomic --tags origin $RELEASE_BRANCH
 

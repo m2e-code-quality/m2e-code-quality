@@ -9,7 +9,7 @@ signing_options=()
 if [[ "${RUNNER_OS}" == "Linux"
         && "${GITHUB_EVENT_NAME}" == "push"
         && "${GITHUB_REPOSITORY}" == "m2e-code-quality/m2e-code-quality"
-        && "${GITHUB_REF}" == "refs/heads/develop"
+        && ( "${GITHUB_REF}" == "refs/heads/develop" || "${GITHUB_REF}" == refs/tags/* )
         && -n "${KEYSTORE_PASSWORD}" ]]; then
 
     signing_options=(
