@@ -1,3 +1,18 @@
+GIT
+  remote: https://github.com/adangel/github-changelog-generator.git
+  revision: 02a99497aa9589a53cedd76469badcd4bfbf9abf
+  branch: fix-issue-977-frozen-string
+  specs:
+    github_changelog_generator (1.16.4)
+      activesupport
+      async (>= 1.25.0)
+      async-http-faraday
+      faraday-http-cache
+      multi_json
+      octokit (~> 4.6)
+      rainbow (>= 2.2.1)
+      rake (>= 10.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -30,7 +45,7 @@ GEM
     concurrent-ruby (1.1.9)
     console (1.13.1)
       fiber-local
-    faraday (1.7.2)
+    faraday (1.8.0)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -52,15 +67,6 @@ GEM
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
     fiber-local (1.0.0)
-    github_changelog_generator (1.16.4)
-      activesupport
-      async (>= 1.25.0)
-      async-http-faraday
-      faraday-http-cache
-      multi_json
-      octokit (~> 4.6)
-      rainbow (>= 2.2.1)
-      rake (>= 10.0)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
     minitest (5.14.4)
@@ -93,7 +99,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  github_changelog_generator
+  github_changelog_generator!
 
 BUNDLED WITH
    2.1.4
