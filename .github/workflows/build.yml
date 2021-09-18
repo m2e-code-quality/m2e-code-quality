@@ -12,6 +12,7 @@ on:
       # builds from branch master should not be done. Releases are done with builds from tags
       - '!master'
     tags:
+      - '**'
   pull_request:
     branches:
       - develop
