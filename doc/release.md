@@ -17,6 +17,9 @@ maintain it.
 create a new GitHub Issue, set the label `release-summary` and add it to a GitHub milestone named after the intended
 release version (see next section). The description of the issue will then be used as the release summary.
 
+You can look at the preview of the [snapshot changelog](https://m2e-code-quality.github.io/m2e-code-quality-p2-site/snapshot/CHANGELOG.html)
+in the p2 update site.
+
 5. When you're satisfied and all changes are pushed to the develop branch, tag the head
 commit with a 3-digit version number (e.g. 1.1.0). This will automatically build a site,
 publish it to
