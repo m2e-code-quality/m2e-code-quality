@@ -1,11 +1,10 @@
-m2e-code-quality build and release
-==================================
+# m2e-code-quality build and release
 
 m2e-code-quality is built with Tycho.
 
 To make a release:
 
-1. Run a build. Use Apache Maven version 3.0.3 or newer. Always run `mvn clean install`;
+1. Run a build. Always run `./mvnw clean install`;
 Tycho has some stupid bug that goes off if you don't start from clean.
 
 2. Test as you feel the urge using the plugins and features.
@@ -17,6 +16,9 @@ maintain it.
 [release summary](https://github.com/github-changelog-generator/github-changelog-generator#using-the-summary-section-feature),
 create a new GitHub Issue, set the label `release-summary` and add it to a GitHub milestone named after the intended
 release version (see next section). The description of the issue will then be used as the release summary.
+
+You can look at the preview of the [snapshot changelog](https://m2e-code-quality.github.io/m2e-code-quality-p2-site/snapshot/CHANGELOG.html)
+in the p2 update site.
 
 5. When you're satisfied and all changes are pushed to the develop branch, tag the head
 commit with a 3-digit version number (e.g. 1.1.0). This will automatically build a site,

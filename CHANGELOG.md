@@ -1,6 +1,48 @@
-# Change Log
+# Changelog
+
+## [1.1.5](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.1.5) (2021-09-18)
+
+[Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.1.4...1.1.5)
+
+**Implemented enhancements:**
+
+- Sign the plugins [\#257](https://github.com/m2e-code-quality/m2e-code-quality/issues/257)
+
+**Closed issues:**
+
+- Wrong Checkstyle URL breaks Oomph setup [\#251](https://github.com/m2e-code-quality/m2e-code-quality/issues/251)
+- Eclipse 4.19: net.sf.eclipsecs.core 5.2.0 but it could not be found [\#250](https://github.com/m2e-code-quality/m2e-code-quality/issues/250)
+- EclipseCheckstyleProjectConfigurationTest failure [\#229](https://github.com/m2e-code-quality/m2e-code-quality/issues/229)
+- Broken Build due to com.github.spotbugs.plugin.eclipse-\*.jar!/META-INF/MANIFEST.MF: Invalid manifest header Bundle-ClassPath: "spotbugs-plugin.jar," [\#227](https://github.com/m2e-code-quality/m2e-code-quality/issues/227)
+
+**Merged pull requests:**
+
+- Upgrade tycho, use toolchains [\#260](https://github.com/m2e-code-quality/m2e-code-quality/pull/260) ([adangel](https://github.com/adangel))
+- Release automation with github actions [\#259](https://github.com/m2e-code-quality/m2e-code-quality/pull/259) ([adangel](https://github.com/adangel))
+- Add keystore to sign plugin [\#258](https://github.com/m2e-code-quality/m2e-code-quality/pull/258) ([adangel](https://github.com/adangel))
+- Add Github Actions workflow [\#256](https://github.com/m2e-code-quality/m2e-code-quality/pull/256) ([adangel](https://github.com/adangel))
+- Fix checkstyle update site [\#255](https://github.com/m2e-code-quality/m2e-code-quality/pull/255) ([adangel](https://github.com/adangel))
+- Bump spotbugs-maven-plugin from 4.2.3 to 4.3.0 [\#252](https://github.com/m2e-code-quality/m2e-code-quality/pull/252) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Upgrade to GitHub-native Dependabot [\#249](https://github.com/m2e-code-quality/m2e-code-quality/pull/249) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- New PMD Eclipse Plugin update site [\#248](https://github.com/m2e-code-quality/m2e-code-quality/pull/248) ([adangel](https://github.com/adangel))
+- Bump spotbugs-maven-plugin from 4.2.2 to 4.2.3 [\#247](https://github.com/m2e-code-quality/m2e-code-quality/pull/247) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump spotbugs-maven-plugin from 4.2.0 to 4.2.2 [\#245](https://github.com/m2e-code-quality/m2e-code-quality/pull/245) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump spotbugs-maven-plugin from 4.1.4 to 4.2.0 [\#242](https://github.com/m2e-code-quality/m2e-code-quality/pull/242) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump spotbugs-maven-plugin from 4.0.4 to 4.1.4 [\#240](https://github.com/m2e-code-quality/m2e-code-quality/pull/240) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump maven-resources-plugin from 3.1.0 to 3.2.0 [\#237](https://github.com/m2e-code-quality/m2e-code-quality/pull/237) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump spotbugs-maven-plugin from 4.0.0 to 4.0.4 [\#236](https://github.com/m2e-code-quality/m2e-code-quality/pull/236) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump repository-utils from 1.6.0 to 1.7.0 [\#235](https://github.com/m2e-code-quality/m2e-code-quality/pull/235) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump tycho-version from 1.6.0 to 1.7.0 [\#233](https://github.com/m2e-code-quality/m2e-code-quality/pull/233) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump spotbugs-maven-plugin from 3.1.12.2 to 4.0.0 [\#232](https://github.com/m2e-code-quality/m2e-code-quality/pull/232) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- \[SECURITY\] Use HTTPS to resolve dependencies in Maven Build [\#231](https://github.com/m2e-code-quality/m2e-code-quality/pull/231) ([JLLeitschuh](https://github.com/JLLeitschuh))
+- Add explicit checkstyle version in test projects [\#230](https://github.com/m2e-code-quality/m2e-code-quality/pull/230) ([adangel](https://github.com/adangel))
+- Bump repository-utils from 1.4.0 to 1.6.0 [\#228](https://github.com/m2e-code-quality/m2e-code-quality/pull/228) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump tycho-version from 1.5.1 to 1.6.0 [\#226](https://github.com/m2e-code-quality/m2e-code-quality/pull/226) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump tycho-version from 1.4.0 to 1.5.1 [\#224](https://github.com/m2e-code-quality/m2e-code-quality/pull/224) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Bump spotbugs-maven-plugin from 3.1.12 to 3.1.12.2 [\#220](https://github.com/m2e-code-quality/m2e-code-quality/pull/220) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 
 ## [1.1.4](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.1.4) (2019-06-21)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.1.3...1.1.4)
 
 **Closed issues:**
@@ -19,6 +61,7 @@
 - Bump tycho-version from 1.3.0 to 1.4.0 [\#211](https://github.com/m2e-code-quality/m2e-code-quality/pull/211) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 
 ## [1.1.3](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.1.3) (2019-03-06)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.1.2...1.1.3)
 
 **Closed issues:**
@@ -42,6 +85,7 @@
 - Bump spotbugs-maven-plugin from 3.1.9 to 3.1.10 [\#194](https://github.com/m2e-code-quality/m2e-code-quality/pull/194) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 
 ## [1.1.2](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.1.2) (2018-12-19)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.1.1...1.1.2)
 
 **Closed issues:**
@@ -59,6 +103,7 @@
 - Support checkstyle inline configuration \#178 [\#188](https://github.com/m2e-code-quality/m2e-code-quality/pull/188) ([Serranya](https://github.com/Serranya))
 
 ## [1.1.1](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.1.1) (2018-12-03)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.1.0...1.1.1)
 
 **Closed issues:**
@@ -80,6 +125,7 @@
 - Instructions for releasing [\#177](https://github.com/m2e-code-quality/m2e-code-quality/pull/177) ([erwint](https://github.com/erwint))
 
 ## [1.1.0](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.1.0) (2018-11-11)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201608091842...1.1.0)
 
 **Closed issues:**
@@ -128,7 +174,6 @@
 - To address issue \#117 [\#160](https://github.com/m2e-code-quality/m2e-code-quality/pull/160) ([pgalbraith](https://github.com/pgalbraith))
 - Prevent project update when no nature is to be removed [\#159](https://github.com/m2e-code-quality/m2e-code-quality/pull/159) ([erwint](https://github.com/erwint))
 - Updated version to 1.1.0-SNAPSHOT [\#158](https://github.com/m2e-code-quality/m2e-code-quality/pull/158) ([erwint](https://github.com/erwint))
-- Redirect latest folder of the P2 repo to the new update site [\#155](https://github.com/m2e-code-quality/m2e-code-quality/pull/155) ([antoine-morvan](https://github.com/antoine-morvan))
 - Bump spotbugs-maven-plugin from 3.1.0 to 3.1.6 [\#154](https://github.com/m2e-code-quality/m2e-code-quality/pull/154) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 - Support \<skip\> configuration for PMD, too [\#153](https://github.com/m2e-code-quality/m2e-code-quality/pull/153) ([erwint](https://github.com/erwint))
 - remove un-used \(and long gone with the wind\) maven-osgi-lifecycle-plugin [\#152](https://github.com/m2e-code-quality/m2e-code-quality/pull/152) ([vorburger](https://github.com/vorburger))
@@ -136,8 +181,6 @@
 - Add Photon target [\#149](https://github.com/m2e-code-quality/m2e-code-quality/pull/149) ([victornoel](https://github.com/victornoel))
 - add missing /LICENSE \(ASL\) file [\#148](https://github.com/m2e-code-quality/m2e-code-quality/pull/148) ([vorburger](https://github.com/vorburger))
 - change Update Site URL in feature.xml from old to new CD site \(fixes \#137\) [\#147](https://github.com/m2e-code-quality/m2e-code-quality/pull/147) ([vorburger](https://github.com/vorburger))
-- remove findbugs-p2-repository \(fixes \#145\) [\#146](https://github.com/m2e-code-quality/m2e-code-quality/pull/146) ([vorburger](https://github.com/vorburger))
-- Change home page to point to new p2 repo, and drop individual names to make it more of an open community [\#144](https://github.com/m2e-code-quality/m2e-code-quality/pull/144) ([vorburger](https://github.com/vorburger))
 - Sanitize filenames derived from executionIds [\#142](https://github.com/m2e-code-quality/m2e-code-quality/pull/142) ([erwint](https://github.com/erwint))
 - Support \<skip\> configuration for findbugs/spotbugs like for checkstyle [\#141](https://github.com/m2e-code-quality/m2e-code-quality/pull/141) ([erwint](https://github.com/erwint))
 - Just get a classloader for the Mojo, no need for an actual instance [\#140](https://github.com/m2e-code-quality/m2e-code-quality/pull/140) ([erwint](https://github.com/erwint))
@@ -156,6 +199,7 @@
 - Try to fix includes/excludes on Windows [\#101](https://github.com/m2e-code-quality/m2e-code-quality/pull/101) ([jodastephen](https://github.com/jodastephen))
 
 ## [1.0.0.201608091842](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201608091842) (2016-08-09)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201602071612...1.0.0.201608091842)
 
 **Closed issues:**
@@ -196,6 +240,7 @@
 - initial checkin of m2e cs example [\#79](https://github.com/m2e-code-quality/m2e-code-quality/pull/79) ([mrtnsp](https://github.com/mrtnsp))
 
 ## [1.0.0.201602071612](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201602071612) (2016-02-07)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201501120825...1.0.0.201602071612)
 
 **Closed issues:**
@@ -217,6 +262,7 @@
 - FindBugs nature only for Java project [\#73](https://github.com/m2e-code-quality/m2e-code-quality/pull/73) ([dojcsak](https://github.com/dojcsak))
 
 ## [1.0.0.201501120825](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201501120825) (2015-01-12)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201501061739...1.0.0.201501120825)
 
 **Closed issues:**
@@ -232,6 +278,7 @@
 - Update support for using a local findbugs p2 repository [\#65](https://github.com/m2e-code-quality/m2e-code-quality/pull/65) ([spark404](https://github.com/spark404))
 
 ## [1.0.0.201501061739](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201501061739) (2015-01-07)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201408150901...1.0.0.201501061739)
 
 **Closed issues:**
@@ -245,9 +292,11 @@
 - m2e-code-quality/m2e-code-quality\#58: Support for Checkstyle 6.x [\#60](https://github.com/m2e-code-quality/m2e-code-quality/pull/60) ([berndv](https://github.com/berndv))
 
 ## [1.0.0.201408150901](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201408150901) (2014-08-15)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201407291130...1.0.0.201408150901)
 
 ## [1.0.0.201407291130](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201407291130) (2014-07-29)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201406051702...1.0.0.201407291130)
 
 **Closed issues:**
@@ -257,6 +306,7 @@
 - Support for findbugs:check goal? [\#35](https://github.com/m2e-code-quality/m2e-code-quality/issues/35)
 
 ## [1.0.0.201406051702](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201406051702) (2014-06-05)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201307140636...1.0.0.201406051702)
 
 **Closed issues:**
@@ -278,17 +328,19 @@
 - \#27 source folders consistency with maven-checkstyle-plugin [\#28](https://github.com/m2e-code-quality/m2e-code-quality/pull/28) ([jpraet](https://github.com/jpraet))
 - add support for suppressionsLocation [\#26](https://github.com/m2e-code-quality/m2e-code-quality/pull/26) ([jpraet](https://github.com/jpraet))
 - Fix for pull request 21 [\#24](https://github.com/m2e-code-quality/m2e-code-quality/pull/24) ([adangel](https://github.com/adangel))
+- Add support for pmd eclipse plugin 4.0.0 [\#21](https://github.com/m2e-code-quality/m2e-code-quality/pull/21) ([adangel](https://github.com/adangel))
 
 ## [1.0.0.201307140636](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201307140636) (2013-07-14)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201211052156...1.0.0.201307140636)
 
 **Merged pull requests:**
 
-- Add support for pmd eclipse plugin 4.0.0 [\#21](https://github.com/m2e-code-quality/m2e-code-quality/pull/21) ([adangel](https://github.com/adangel))
 - NPE Fix  [\#19](https://github.com/m2e-code-quality/m2e-code-quality/pull/19) ([zeilush](https://github.com/zeilush))
 - Please apply patch to enable loading of properties containing e.g. a windows path [\#17](https://github.com/m2e-code-quality/m2e-code-quality/pull/17) ([tobias-hammerschmidt](https://github.com/tobias-hammerschmidt))
 
 ## [1.0.0.201211052156](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201211052156) (2012-11-05)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201209141747...1.0.0.201211052156)
 
 **Merged pull requests:**
@@ -297,6 +349,7 @@
 - Support for checkstyle \<headerLocation\> pom value. [\#15](https://github.com/m2e-code-quality/m2e-code-quality/pull/15) ([tnaroska](https://github.com/tnaroska))
 
 ## [1.0.0.201209141747](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201209141747) (2012-09-14)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201207211939...1.0.0.201209141747)
 
 **Merged pull requests:**
@@ -305,22 +358,23 @@
 - Mark 'check' goal of checkstyle-plugin supported [\#12](https://github.com/m2e-code-quality/m2e-code-quality/pull/12) ([a14n](https://github.com/a14n))
 
 ## [1.0.0.201207211939](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201207211939) (2012-07-21)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201207211912...1.0.0.201207211939)
 
-**Merged pull requests:**
-
-- Add m2e catalog entry [\#10](https://github.com/m2e-code-quality/m2e-code-quality/pull/10) ([jvanzyl](https://github.com/jvanzyl))
-
 ## [1.0.0.201207211912](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201207211912) (2012-05-22)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201201191655...1.0.0.201207211912)
 
 ## [1.0.0.201201191655](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201201191655) (2012-01-19)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201201191721...1.0.0.201201191655)
 
 ## [1.0.0.201201191721](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201201191721) (2012-01-19)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201201101050...1.0.0.201201191721)
 
 ## [1.0.0.201201101050](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201201101050) (2012-01-09)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201106081737...1.0.0.201201101050)
 
 **Closed issues:**
@@ -332,36 +386,45 @@
 - m2e findbugs connector [\#8](https://github.com/m2e-code-quality/m2e-code-quality/pull/8) ([belaeroess](https://github.com/belaeroess))
 
 ## [1.0.0.201106081737](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201106081737) (2011-06-08)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201106061641...1.0.0.201106081737)
 
 ## [1.0.0.201106061641](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201106061641) (2011-06-06)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201106051811...1.0.0.201106061641)
 
 ## [1.0.0.201106051811](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201106051811) (2011-06-05)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.0.0.201106051722...1.0.0.201106051811)
 
 ## [1.0.0.201106051722](https://github.com/m2e-code-quality/m2e-code-quality/tree/1.0.0.201106051722) (2011-06-05)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/0.13.0.201105271405...1.0.0.201106051722)
-
-## [0.13.0.201105271405](https://github.com/m2e-code-quality/m2e-code-quality/tree/0.13.0.201105271405) (2011-05-27)
-[Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/0.13.0.201105271713...0.13.0.201105271405)
-
-## [0.13.0.201105271713](https://github.com/m2e-code-quality/m2e-code-quality/tree/0.13.0.201105271713) (2011-05-27)
-[Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/m2e-bugzilla-snapshot...0.13.0.201105271713)
 
 **Merged pull requests:**
 
 - patch for pmd exclusions on Windows machines [\#3](https://github.com/m2e-code-quality/m2e-code-quality/pull/3) ([idcmp](https://github.com/idcmp))
 
+## [0.13.0.201105271405](https://github.com/m2e-code-quality/m2e-code-quality/tree/0.13.0.201105271405) (2011-05-27)
+
+[Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/0.13.0.201105271713...0.13.0.201105271405)
+
+## [0.13.0.201105271713](https://github.com/m2e-code-quality/m2e-code-quality/tree/0.13.0.201105271713) (2011-05-27)
+
+[Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/m2e-bugzilla-snapshot...0.13.0.201105271713)
+
 ## [m2e-bugzilla-snapshot](https://github.com/m2e-code-quality/m2e-code-quality/tree/m2e-bugzilla-snapshot) (2011-05-15)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/0.12.0.201104101508...m2e-bugzilla-snapshot)
 
 ## [0.12.0.201104101508](https://github.com/m2e-code-quality/m2e-code-quality/tree/0.12.0.201104101508) (2011-04-10)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/0.12.0.201101251749...0.12.0.201104101508)
 
 ## [0.12.0.201101251749](https://github.com/m2e-code-quality/m2e-code-quality/tree/0.12.0.201101251749) (2011-01-25)
+
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/0.12.0.201101081422...0.12.0.201101251749)
 
 
 
-\* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*

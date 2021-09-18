@@ -7,6 +7,10 @@
  *******************************************************************************/
 package com.basistech.m2e.code.quality.checkstyle.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +19,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.junit.Test;
 
 import com.basistech.m2e.code.quality.shared.test.AbstractMavenProjectConfiguratorTestCase;
 
@@ -33,10 +38,12 @@ public class EclipseCheckstyleProjectConfigurationTest extends AbstractMavenProj
 
 	private static final String NATURE_ID = CheckstyleNature.NATURE_ID;
 
+	@Test
 	public void testCheckstyleCheck() throws Exception {
 		importProjectRunBuildAndFindMarkers("projects/checkstyle-check/pom.xml", MARKER_ID, 13);
 	}
 
+	@Test
 	public void testCheckstylePresent() throws Exception {
 		final IProject p = importProject("projects/checkstyle-check/pom.xml");
 		assertTrue(p.exists());
@@ -46,6 +53,7 @@ public class EclipseCheckstyleProjectConfigurationTest extends AbstractMavenProj
 		assertTrue(hasBuilder(p, BUILDER_ID));
 	}
 
+	@Test
 	public void testCheckstyleSkip() throws Exception {
 		final IProject p = importProjectWithProfiles("projects/checkstyle-check/pom.xml", "skip");
 		assertTrue(p.exists());
@@ -55,6 +63,7 @@ public class EclipseCheckstyleProjectConfigurationTest extends AbstractMavenProj
 		assertFalse(hasBuilder(p, BUILDER_ID));
 	}
 
+	@Test
 	public void testCheckstyleReconfigureSkip() throws Exception {
 		final IProject p = importProject("projects/checkstyle-check/pom.xml");
 		assertTrue(p.exists());
@@ -85,6 +94,7 @@ public class EclipseCheckstyleProjectConfigurationTest extends AbstractMavenProj
 		assertMarkers(p, MARKER_ID, 1);
 	}
 
+	@Test
 	public void testCheckstyleReconfigureReactivate() throws Exception {
 		final IProject p = importProject("projects/checkstyle-check/pom.xml");
 		assertTrue(p.exists());
@@ -106,6 +116,7 @@ public class EclipseCheckstyleProjectConfigurationTest extends AbstractMavenProj
 		assertTrue(hasBuilder(p, BUILDER_ID));
 	}
 
+	@Test
 	public void testCheckstyleMultipleExecutions() throws Exception {
 		final IProject p = importProject("projects/checkstyle-multi-check/pom.xml");
 		assertTrue(p.exists());
@@ -118,6 +129,7 @@ public class EclipseCheckstyleProjectConfigurationTest extends AbstractMavenProj
 		assertEquals(2, configuration.getLocalCheckConfigurations().size());
 	}
 
+	@Test
 	public void testCheckstyleMultipleExecutionsSkipOne() throws Exception {
 		final IProject p = importProjectWithProfiles("projects/checkstyle-multi-check/pom.xml", "skip-second");
 		assertTrue(p.exists());
@@ -131,6 +143,7 @@ public class EclipseCheckstyleProjectConfigurationTest extends AbstractMavenProj
 		assertEquals(2, configuration.getLocalCheckConfigurations().size());
 	}
 
+	@Test
 	public void testCheckstyleMultipleExecutionsSkipAll() throws Exception {
 		final IProject p = importProjectWithProfiles("projects/checkstyle-multi-check/pom.xml", "skip");
 		assertTrue(p.exists());
