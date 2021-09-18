@@ -8,11 +8,15 @@
  *******************************************************************************/
 package com.basistech.m2e.code.quality.spotbugs.tests;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.junit.Test;
 
 import com.basistech.m2e.code.quality.shared.test.AbstractMavenProjectConfiguratorTestCase;
 
@@ -29,14 +33,17 @@ public class EclipseSpotbugsProjectConfigurationTest extends AbstractMavenProjec
 	private static final String NATURE_ID = FindbugsPlugin.NATURE_ID;
 	private static final String BUILDER_ID = FindbugsPlugin.BUILDER_ID;
 
+	@Test
 	public void testSpotbugsCheck() throws Exception {
 		importProjectRunBuildAndFindMarkers("projects/spotbugs-check/pom.xml", MARKER_ID, 2, new TriggerSpotbugsExplicitly());
 	}
 
+	@Test
 	public void testSpotbugsSpotbugs() throws Exception {
 		importProjectRunBuildAndFindMarkers("projects/spotbugs-spotbugs/pom.xml", MARKER_ID, 2, new TriggerSpotbugsExplicitly());
 	}
 
+	@Test
 	public void testSpotbugsPresent() throws Exception {
 		final IProject p = importProject("projects/spotbugs-check/pom.xml");
 		assertTrue(p.exists());
@@ -46,6 +53,7 @@ public class EclipseSpotbugsProjectConfigurationTest extends AbstractMavenProjec
 		assertTrue(hasBuilder(p, BUILDER_ID));
 	}
 
+	@Test
 	public void testSpotbugsSkip() throws Exception {
 		final IProject p = importProjectWithProfiles("projects/spotbugs-check/pom.xml", "skip");
 		assertTrue(p.exists());
@@ -55,6 +63,7 @@ public class EclipseSpotbugsProjectConfigurationTest extends AbstractMavenProjec
 		assertFalse(hasBuilder(p, BUILDER_ID));
 	}
 
+	@Test
 	public void testSpotbugsReconfigureSkip() throws Exception {
 		final IProject p = importProject("projects/spotbugs-check/pom.xml");
 		assertTrue(p.exists());
@@ -85,6 +94,7 @@ public class EclipseSpotbugsProjectConfigurationTest extends AbstractMavenProjec
 		assertMarkers(p, MARKER_ID, 1);
 	}
 
+	@Test
 	public void testSpotbugsReconfigureReactivate() throws Exception {
 		final IProject p = importProject("projects/spotbugs-check/pom.xml");
 		assertTrue(p.exists());

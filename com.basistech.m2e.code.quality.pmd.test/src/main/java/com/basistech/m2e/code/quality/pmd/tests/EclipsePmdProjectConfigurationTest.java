@@ -7,12 +7,17 @@
  *******************************************************************************/
 package com.basistech.m2e.code.quality.pmd.tests;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.junit.Test;
 
 import com.basistech.m2e.code.quality.shared.test.AbstractMavenProjectConfiguratorTestCase;
 
@@ -29,10 +34,12 @@ public class EclipsePmdProjectConfigurationTest extends AbstractMavenProjectConf
 	private static final String NATURE_ID = PMDNature.PMD_NATURE;
 	private static final String BUILDER_ID = PMDBuilder.PMD_BUILDER;
 
+	@Test
 	public void testPmdCheck() throws Exception {
 		importProjectRunBuildAndFindMarkers("projects/pmd-check/pom.xml", MARKER_ID, 3);
 	}
 
+	@Test
 	public void testPmdPresent() throws Exception {
 		final IProject p = importProject("projects/pmd-check/pom.xml");
 		assertTrue(p.exists());
@@ -42,6 +49,7 @@ public class EclipsePmdProjectConfigurationTest extends AbstractMavenProjectConf
 		assertTrue(hasBuilder(p, BUILDER_ID));
 	}
 
+	@Test
 	public void testPmdSkip() throws Exception {
 		final IProject p = importProjectWithProfiles("projects/pmd-check/pom.xml", "skip");
 		assertTrue(p.exists());
@@ -51,6 +59,7 @@ public class EclipsePmdProjectConfigurationTest extends AbstractMavenProjectConf
 		assertFalse(hasBuilder(p, BUILDER_ID));
 	}
 
+	@Test
 	public void testPmdReconfigureSkip() throws Exception {
 		final IProject p = importProject("projects/pmd-check/pom.xml");
 		assertTrue(p.exists());
@@ -80,6 +89,7 @@ public class EclipsePmdProjectConfigurationTest extends AbstractMavenProjectConf
 		assertMarkers(p, MARKER_ID, 1);
 	}
 
+	@Test
 	public void testPmdReconfigureReactivate() throws Exception {
 		final IProject p = importProject("projects/pmd-check/pom.xml");
 		assertTrue(p.exists());

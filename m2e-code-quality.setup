@@ -14,9 +14,15 @@
     label="m2e-code-quality">
   <setupTask
       xsi:type="jdt:JRETask"
-      version="JavaSE-1.7"
-      location="${jre.location-1.7}">
-    <description>Define the JRE needed to compile and run the Java projects of ${scope.project.label}</description>
+      version="JavaSE-1.8"
+      location="${jre.location-1.8}">
+    <description>Define the JDK needed to compile and run the Java projects of ${scope.project.label}</description>
+  </setupTask>
+  <setupTask
+      xsi:type="jdt:JRETask"
+      version="JavaSE-11"
+      location="${jre.location-11}">
+    <description>Define the JDK needed to compile and run the Java projects of ${scope.project.label}</description>
   </setupTask>
   <setupTask
       xsi:type="setup:EclipseIniTask"
@@ -32,16 +38,21 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Photon"
+      defaultValue="2021-09"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="setup.p2:P2Task"
-      label="tycho">
+      label="m2e-tycho">
     <requirement
         name="org.sonatype.tycho.m2e.feature.feature.group"/>
     <repository
         url="https://repo.maven.apache.org/maven2/.m2e/connectors/m2eclipse-tycho/0.8.0/N/0.8.0.201409231215/"/>
     <description>Install the tools needed in the IDE to work with the source code for ${scope.project.label}</description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup.p2:P2Task">
+    <requirement
+        name="org.eclipse.mylyn.wikitext.editors_feature.feature.group"/>
   </setupTask>
   <setupTask
       xsi:type="git:GitCloneTask"
@@ -73,125 +84,273 @@
       <requirement
           name="org.eclipse.sdk.feature.group"/>
       <requirement
-          name="edu.umd.cs.findbugs.plugin.eclipse.feature.group"/>
+          name="org.eclipse.jdt.feature.group"/>
       <requirement
           name="org.eclipse.m2e.feature.feature.group"/>
       <requirement
-          name="net.sf.eclipsecs.feature.group"/>
-      <requirement
-          name="net.sourceforge.pmd.eclipse.feature.group"/>
+          name="org.eclipse.m2e.logback.feature.feature.group"/>
       <requirement
           name="org.eclipse.m2e.sdk.feature.feature.group"/>
       <requirement
           name="org.apache.commons.lang"/>
       <requirement
-          name="org.eclipse.m2e.logback.feature.feature.group"/>
+          name="net.sf.eclipsecs.feature.group"/>
+      <requirement
+          name="net.sourceforge.pmd.eclipse.feature.group"/>
+      <requirement
+          name="edu.umd.cs.findbugs.plugin.eclipse.feature.group"
+          optional="true"/>
+      <requirement
+          name="com.github.spotbugs.plugin.eclipse.feature.group"/>
       <sourceLocator
           rootFolder="${git.clone.location}"
           locateNestedProjects="true"/>
       <repositoryList
-          name="2018-12">
+          name="2021-12">
         <repository
-            url="https://findbugs.cs.umd.edu/eclipse/"/>
-        <repository
-            url="https://download.eclipse.org/releases/2018-12"/>
-        <repository
-            url="https://spotbugs.github.io/eclipse/"/>
+            url="https://download.eclipse.org/releases/2021-12/"/>
         <repository
             url="https://checkstyle.org/eclipse-cs-update-site/"/>
         <repository
             url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
-            url="https://download.eclipse.org/technology/m2e/releases/1.9"/>
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+      </repositoryList>
+      <repositoryList
+          name="2021-09">
+        <repository
+            url="https://download.eclipse.org/releases/2021-09/"/>
+        <repository
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
+        <repository
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
+        <repository
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+      </repositoryList>
+      <repositoryList
+          name="2021-06">
+        <repository
+            url="https://download.eclipse.org/releases/2021-06/"/>
+        <repository
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
+        <repository
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
+        <repository
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+      </repositoryList>
+      <repositoryList
+          name="2021-03">
+        <repository
+            url="https://download.eclipse.org/releases/2021-03/"/>
+        <repository
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
+        <repository
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
+        <repository
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+      </repositoryList>
+      <repositoryList
+          name="2020-12">
+        <repository
+            url="https://download.eclipse.org/releases/2020-12/"/>
+        <repository
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
+        <repository
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
+        <repository
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+      </repositoryList>
+      <repositoryList
+          name="2020-09">
+        <repository
+            url="https://download.eclipse.org/releases/2020-09/"/>
+        <repository
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
+        <repository
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
+        <repository
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+      </repositoryList>
+      <repositoryList
+          name="2020-06">
+        <repository
+            url="https://download.eclipse.org/releases/2020-06/"/>
+        <repository
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
+        <repository
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
+        <repository
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+      </repositoryList>
+      <repositoryList
+          name="2020-03">
+        <repository
+            url="https://download.eclipse.org/releases/2020-03/"/>
+        <repository
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
+        <repository
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
+        <repository
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+      </repositoryList>
+      <repositoryList
+          name="2019-12">
+        <repository
+            url="https://download.eclipse.org/releases/2019-12/"/>
+        <repository
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
+        <repository
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
+        <repository
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+      </repositoryList>
+      <repositoryList
+          name="2019-09">
+        <repository
+            url="https://download.eclipse.org/releases/2019-09/"/>
+        <repository
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
+        <repository
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
+        <repository
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+      </repositoryList>
+      <repositoryList
+          name="2019-06">
+        <repository
+            url="https://download.eclipse.org/releases/2019-06/"/>
+        <repository
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
+        <repository
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
+        <repository
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+      </repositoryList>
+      <repositoryList
+          name="2019-03">
+        <repository
+            url="https://download.eclipse.org/releases/2019-03/"/>
+        <repository
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
+        <repository
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
+        <repository
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+      </repositoryList>
+      <repositoryList
+          name="2018-12">
+        <repository
+            url="https://download.eclipse.org/releases/2018-12/"/>
+        <repository
+            url="https://checkstyle.org/eclipse-cs-update-site/"/>
+        <repository
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
+        <repository
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
       </repositoryList>
       <repositoryList
           name="2018-09">
         <repository
-            url="https://download.eclipse.org/releases/2018-09"/>
-        <repository
-            url="https://findbugs.cs.umd.edu/eclipse/"/>
-        <repository
-            url="https://spotbugs.github.io/eclipse/"/>
+            url="https://download.eclipse.org/releases/2018-09/"/>
         <repository
             url="https://checkstyle.org/eclipse-cs-update-site/"/>
         <repository
             url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
-            url="https://download.eclipse.org/technology/m2e/releases/1.9"/>
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
       </repositoryList>
       <repositoryList
           name="Photon">
         <repository
-            url="https://download.eclipse.org/releases/photon"/>
-        <repository
-            url="https://spotbugs.github.io/eclipse/"/>
-        <repository
-            url="https://findbugs.cs.umd.edu/eclipse/"/>
+            url="https://download.eclipse.org/releases/photon/"/>
         <repository
             url="https://checkstyle.org/eclipse-cs-update-site/"/>
         <repository
             url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
-            url="https://download.eclipse.org/technology/m2e/milestones/1.9"/>
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
       </repositoryList>
       <repositoryList
           name="Oxygen">
         <repository
-            url="https://download.eclipse.org/releases/oxygen"/>
-        <repository
-            url="https://spotbugs.github.io/eclipse/"/>
-        <repository
-            url="https://findbugs.cs.umd.edu/eclipse/"/>
+            url="https://download.eclipse.org/releases/oxygen/"/>
         <repository
             url="https://checkstyle.org/eclipse-cs-update-site/"/>
         <repository
             url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
-            url="https://download.eclipse.org/technology/m2e/milestones/1.8"/>
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
       </repositoryList>
       <repositoryList
           name="Neon">
         <repository
-            url="https://download.eclipse.org/releases/neon"/>
-        <repository
-            url="https://findbugs.cs.umd.edu/eclipse/"/>
-        <repository
-            url="https://spotbugs.github.io/eclipse/"/>
+            url="https://download.eclipse.org/releases/neon/"/>
         <repository
             url="https://checkstyle.org/eclipse-cs-update-site/"/>
         <repository
             url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
-            url="https://download.eclipse.org/technology/m2e/milestones/1.7"/>
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
       </repositoryList>
       <repositoryList
           name="Mars">
         <repository
-            url="https://download.eclipse.org/releases/mars"/>
-        <repository
-            url="https://findbugs.cs.umd.edu/eclipse/"/>
-        <repository
-            url="https://spotbugs.github.io/eclipse/"/>
+            url="https://download.eclipse.org/releases/mars/"/>
         <repository
             url="https://checkstyle.org/eclipse-cs-update-site/"/>
         <repository
             url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
         <repository
-            url="https://download.eclipse.org/technology/m2e/milestones/1.6"/>
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
       </repositoryList>
     </targlet>
   </setupTask>
   <setupTask
       xsi:type="maven:MavenImportTask">
     <sourceLocator
-        rootFolder="${git.clone.location}"/>
+        rootFolder="${git.clone.location}"
+        locateNestedProjects="true"/>
   </setupTask>
-  <stream name="master"
-      label="Master"/>
   <stream name="develop"
       label="Develop"/>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
       href="index:/org.eclipse.setup#//@projectCatalogs[name='com.github']"/>
-  <description>A collection of Eclipse plugins for M2Eclipse that carry configuration from the Checkstyle, FindBugs and PMD Maven plugins to their corresponding Eclipse plugins.</description>
+  <description>A collection of Eclipse plugins for M2Eclipse that carry configuration from the Checkstyle, FindBugs, Spotbugs and PMD Maven plugins to their corresponding Eclipse plugins.</description>
 </setup:Project>

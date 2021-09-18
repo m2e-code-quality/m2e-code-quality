@@ -29,17 +29,26 @@ The latest release can be installed from the Eclipse Update Site at
 
 ## Development environment
 
+**Building**
+
+The project uses maven and tycho. You need a Java8 JDK and a Java11 JDK and setup
+[Maven Toolchains](https://maven.apache.org/guides/mini/guide-using-toolchains.html) correctly.
+You can use the project's [toolchains.xml](tools/toolchains.xml) as a template.
+
+Once setup, you can build the project with `./mvnw clean verify`.
+
+**IDE**
+
 This project uses [Oomph](https://projects.eclipse.org/projects/tools.oomph), and you can set up an Eclipse development environment with the following steps:
 
-1. Make sure your JRE/JDK has the JCE installed (See http://stackoverflow.com/questions/42128981/eclipse-pmd-plug-in-handshake-failure and https://github.com/pmd/pmd-eclipse-plugin/issues/19)
-2. Downloading the Eclipse Installer from https://www.eclipse.org/downloads/ and start it.
-3. On the initial page, click on the *Switch to advanced mode* button in the top right.
-4. On the *Product* page, select *Eclipse for RCP and RAP Developers*.
-5. On the *Projects* page, collapse the *Eclipse Projects* to scroll down to the *GitHub Projects* and select *m2e-code-quality*.
-6. Make sure to choose the HTTPS anonymous option for the repository.
-7. Choose other preferred installation settings on the *Variables* page.
-8. Finish the wizard and watch your development environment being assembled.
-9. Create an Eclipse run configuration. The target platform will automatically be setup correctly.
+1. Downloading the Eclipse Installer from https://www.eclipse.org/downloads/ and start it.
+2. On the initial page, click on the *Switch to advanced mode* button in the top right.
+3. On the *Product* page, select *Eclipse IDE for RCP and RAP Developers*.
+4. On the *Projects* page, collapse the *Eclipse Projects* to scroll down to the *GitHub Projects* and select *m2e-code-quality*.
+5. Make sure to choose the HTTPS anonymous option for the Github repository.
+6. Choose other preferred installation settings on the *Variables* page.
+7. Finish the wizard and watch your development environment being assembled.
+8. Create an Eclipse run configuration. The target platform will automatically be setup correctly.
 
 ## Release
 

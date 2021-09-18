@@ -7,6 +7,9 @@
  *******************************************************************************/
 package com.basistech.m2e.code.quality.shared.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -33,7 +36,7 @@ import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
 public abstract class AbstractMavenProjectConfiguratorTestCase extends AbstractMavenProjectTestCase {
 
 	@Override
-	protected void setUp() throws Exception {
+	public void setUp() throws Exception {
 		addDefaultJavaVMIfNeeded();
 		super.setUp();
 	}
@@ -42,7 +45,7 @@ public abstract class AbstractMavenProjectConfiguratorTestCase extends AbstractM
 	 * Setup a default JVM if none exists yet. This is especially required for mac
 	 * osx on github actions, as there is no default JVM detected automatically.
 	 * This is not done via the following extension, in order to check for the
-	 * existence of openjdk8Path:
+	 * existence of JAVA_HOME:
 	 *
 	 * <pre>
 	 *    &lt;extension
@@ -62,7 +65,15 @@ public abstract class AbstractMavenProjectConfiguratorTestCase extends AbstractM
 			return;
 		}
 
-		File javaHome = new File(System.getenv("JAVA_HOME"));
+		String javaHomeEnv = System.getenv("JAVA8_HOME");
+		if (javaHomeEnv == null) {
+			javaHomeEnv = System.getenv("JAVA_HOME");
+		}
+		if (javaHomeEnv == null) {
+			System.out.println("WARN: Neither JAVA8_HOME nor JAVA_HOME found!");
+			return;
+		}
+		File javaHome = new File(javaHomeEnv);
 		if (javaHome.exists()) {
 			try {
 				javaHome = javaHome.getCanonicalFile();

@@ -20,7 +20,7 @@
 			<plugin>
 				<groupId>org.jboss.tools.tycho-plugins</groupId>
 				<artifactId>repository-utils</artifactId>
-				<version>1.7.0</version>
+				<version>2.2.0</version>
 				<executions>
 					<!-- creates index.html and other artifacts -->
 					<!-- see https://github.com/jbosstools/jbosstools-maven-plugins/wiki -->
@@ -40,13 +40,10 @@
 							</symbols>
 							<!-- this adds repository references to the update site's content.xml -->
 							<associateSites>
-								<site>${updatesite.m2e}</site>
-								<site>${updatesite.eclipse}</site>
 								<site>${updatesite.cs}</site>
 								<site>${updatesite.pmd}</site>
 								<site>${updatesite.findbugs}</site>
 								<site>${updatesite.spotbugs}</site>
-								<site>${updatesite.orbit}</site>
 							</associateSites>
 							<!-- to remove the default category created for any uncategorized 
 								features or bundles, set this to true -->
