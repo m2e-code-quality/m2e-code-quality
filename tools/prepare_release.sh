@@ -21,7 +21,7 @@ git config --local user.email "m2e-code-quality-bot@users.noreply.github.com"
 
 # verify same commit as branch
 HEAD=$(git rev-parse --verify HEAD)
-GITHUB_BRANCH=$(git ls-remote -q --refs | grep "$HEAD" | awk '{print $2}' | sed -e 's/^refs\/heads\///')
+GITHUB_BRANCH=$(git ls-remote -q --refs | grep "$HEAD" | awk '{print $2}' | grep '^refs/heads' | sed -e 's/^refs\/heads\///')
 
 C=$(echo "$GITHUB_BRANCH" | wc -w)
 if [ "$C" -ne "1" ]; then echo "Tag cannot be resolved to branch name" && exit 1; fi
