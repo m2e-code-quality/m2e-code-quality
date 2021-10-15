@@ -82,7 +82,7 @@ jobs:
         shell: bash
         run: tools/publish-update-site.sh
         env:
-          PUBLISH_SITE_TOKEN: ${{ secrets.PUBLISH_SITE_TOKEN }}
+          SITE_DEPLOY_PRIVATE_KEY: ${{ secrets.SITE_DEPLOY_PRIVATE_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish release
