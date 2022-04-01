@@ -20,8 +20,8 @@ Please modify src/main/resources/category.xml instead.
       <category name="com.basistech.m2e.code.quality"/>
    </feature>
    <category-def name="com.basistech.m2e.code.quality" label="Code Quality Plugin Configuration for M2Eclipse"/>
-   <repository-reference location="https://checkstyle.org/eclipse-cs-update-site/" enabled="true" />
-   <repository-reference location="https://pmd.github.io/pmd-eclipse-plugin-p2-site/" enabled="true" />
-   <repository-reference location="https://findbugs.cs.umd.edu/eclipse/" enabled="true" />
-   <repository-reference location="https://spotbugs.github.io/eclipse/" enabled="true" />
+   <repository-reference location="${updatesite.cs}" enabled="true" />
+   <repository-reference location="${updatesite.pmd}" enabled="true" />
+   <repository-reference location="${updatesite.findbugs}" enabled="true" />
+   <repository-reference location="${updatesite.spotbugs}" enabled="true" />
 </site>
