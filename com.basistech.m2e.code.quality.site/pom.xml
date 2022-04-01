@@ -15,6 +15,13 @@
 	<packaging>eclipse-repository</packaging>
 	<name>M2Eclipse Code Quality Plugins Update Site</name>
 
+	<properties>
+		<update.site.name>M2E Code Quality</update.site.name>
+		<update.site.description>Eclipse</update.site.description>
+		<update.site.version>${qualifiedVersion}</update.site.version>
+		<update.site.category>com.basistech.m2e.code.quality</update.site.category>
+	</properties>
+
 	<build>
 		<resources>
 			<resource>
@@ -23,6 +30,13 @@
 				<targetPath>${basedir}</targetPath>
 				<includes>
 					<include>category.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>index.html</include>
 				</includes>
 			</resource>
 		</resources>
