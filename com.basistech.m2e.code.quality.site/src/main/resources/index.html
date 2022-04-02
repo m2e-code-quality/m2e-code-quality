@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+<title>${update.site.name} - ${update.site.description} Update Site: ${update.site.version}</title>
+<meta charset="utf-8">
+<style type="text/css">
+body {
+	max-width: 960px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+blockquote {
+	border: 1px dashed #1778be;
+	padding: 2px;
+}
+
+th {
+	background-color: #DDDDDD;
+}
+
+tr {
+	background-color: #EEEEEE;
+}
+</style>
+</head>
+<body>
+    <h2>${update.site.name} - ${update.site.description} Update Site</h2>
+
+    <p>
+        This is the <strong>${update.site.description}</strong> Update Site for ${update.site.name}.
+    </p>
+    <p>
+        Build: ${update.site.version} | <a href="CHANGELOG.html">Changelog</a>
+    </p>
+
+    <blockquote>
+        <ol>
+            <li>To install from this site, start up Eclipse, then do:
+                <p>
+                    <code>
+                        <strong>Help &gt; Install New Software... </strong>
+                    </code>
+                </p>
+            </li>
+            <li>Copy this site's URL into Eclipse, and hit Enter.</li>
+            <li>When the site loads, select the features to install, or click the <code>
+                    <strong>Select All</strong>
+                </code> button.
+            </li>
+            <li>To properly resolve all dependencies, check
+                <p>
+                    <code>
+                        <strong>[x] Contact all update sites during install to find required software</strong>
+                    </code>
+                </p>
+            <li>Click <code>
+                    <strong>Next</strong>
+                </code>, agree to the license terms, and install.
+            </li>
+
+        </ol>
+    </blockquote>
+
+    <table>
+        <tr>
+            <th>Feature</th>
+            <th>Version</th>
+            <th>Feature Categor(ies)</th>
+        </tr>
+        <tr>
+            <td><a href="features/com.basistech.m2e.code.quality.checkstyle.feature_${update.site.version}.jar">com.basistech.m2e.code.quality.checkstyle.feature</a></td>
+            <td>${update.site.version}</td>
+            <td>| ${update.site.category}</td>
+        </tr>
+        <tr>
+            <td><a href="features/com.basistech.m2e.code.quality.findbugs.feature_${update.site.version}.jar">com.basistech.m2e.code.quality.findbugs.feature</a></td>
+            <td>${update.site.version}</td>
+            <td>| ${update.site.category}</td>
+        </tr>
+        <tr>
+            <td><a href="features/com.basistech.m2e.code.quality.pmd.feature_${update.site.version}.jar">com.basistech.m2e.code.quality.pmd.feature</a></td>
+            <td>${update.site.version}</td>
+            <td>| ${update.site.category}</td>
+        </tr>
+        <tr>
+            <td><a href="features/com.basistech.m2e.code.quality.spotbugs.feature_${update.site.version}.jar">com.basistech.m2e.code.quality.spotbugs.feature</a></td>
+            <td>${update.site.version}</td>
+            <td>| ${update.site.category}</td>
+        </tr>
+        <tr>
+            <th>Feature</th>
+            <th>Version</th>
+            <th>Feature Categor(ies)</th>
+        </tr>
+        <tr>
+            <td><a href="artifacts.jar">artifacts.jar</a> :: <a href="content.jar">content.jar</a></td>
+            <td>:: <a href="plugins/">plugins</a> :: <a href="features/">features</a></td>
+            <td></td>
+        </tr>
+    </table>
+</body>
+</html>
