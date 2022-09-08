@@ -12,7 +12,7 @@
         </location>
         <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
             <unit id="net.sf.eclipsecs.feature.group" version="0.0.0"/>
-            <repository location="https://checkstyle.org/eclipse-cs-update-site/"/>
+            <repository location="https://checkstyle.org/eclipse-cs-update-site/updates/9.x"/>
         </location>
         <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
             <unit id="net.sourceforge.pmd.eclipse.feature.group" version="0.0.0"/>
