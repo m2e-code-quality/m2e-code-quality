@@ -22,6 +22,7 @@ on:
 jobs:
   # verify build on one node before multiple builds on different os are started
   fail-fast-build:
+    name: fail-fast verify (ubuntu-latest, oxygen)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -56,6 +57,7 @@ jobs:
 
   verify:
     needs: fail-fast-build
+    name: verify (${{ matrix.os }}, ${{ matrix.target }})
 
     strategy:
       matrix:
