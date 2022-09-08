@@ -21,9 +21,11 @@ if [[ "${RUNNER_OS}" == "Linux"
                      )
 fi
 
+additional_options=("$@")
+
 # make org.jboss.tools.tycho-plugins:repository-utils happy:
 # for pull requests it sees a ref "refs/remotes/pull/<PR-Number>/merge"
 # but no remote named "pull" exists...
 git remote add pull https://github.com/m2e-code-quality/m2e-code-quality
 
-./mvnw clean verify -e -B -V -ntp "${signing_options[@]}"
+./mvnw clean verify -e -B -V -ntp "${signing_options[@]}" "${additional_options[@]}"
