@@ -20,26 +20,13 @@ on:
       - '!gh-pages'
 
 jobs:
-  build:
-
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest, macOS-latest ]
-      fail-fast: false
-
-    runs-on: ${{ matrix.os }}
-
-    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
-
+  # verify build on one node before multiple builds on different os are started
+  fail-fast-build:
+    name: fail-fast verify (ubuntu-latest, oxygen)
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - uses: ruby/setup-ruby@v1
-        if: ${{ runner.os == 'Linux' }}
-        with:
-          ruby-version: 2.7
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
       - name: Set up JDK 8
         id: java8
@@ -63,8 +50,145 @@ jobs:
           echo "JAVA11_HOME=${{ steps.java11.outputs.path }}" >> $GITHUB_ENV
           cp tools/toolchains.xml $HOME/.m2/
 
+      - name: Build with Maven
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: bash tools/build.sh -Dtarget.platform=oxygen
+
+  verify:
+    needs: fail-fast-build
+    name: verify (${{ matrix.os }}, ${{ matrix.target }})
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macOS-latest ]
+        target: [ oxygen, 2022-06 ]
+        exclude:
+          # exclude the fail-fast-build, which already run
+          - os: ubuntu-latest
+            target: oxygen
+      fail-fast: true
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 8
+        id: java8
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      - name: Set up JDK 11
+        id: java11
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: '11'
+          cache: 'maven'
+
+      - name: Setup maven toolchains.xml
+        shell: bash
+        run: |
+          echo "JAVA8_HOME=${{ steps.java8.outputs.path }}" >> $GITHUB_ENV
+          echo "JAVA11_HOME=${{ steps.java11.outputs.path }}" >> $GITHUB_ENV
+          cp tools/toolchains.xml $HOME/.m2/
+
+      - name: Build with Maven
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: bash tools/build.sh -Dtarget.platform=${{ matrix.target }}
+
+  publish-snapshot-update-site:
+    needs: verify
+    if: ${{ github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' && github.ref == 'refs/heads/develop' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 8
+        id: java8
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      - name: Set up JDK 11
+        id: java11
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: '11'
+          cache: 'maven'
+
+      - name: Setup maven toolchains.xml
+        shell: bash
+        run: |
+          echo "JAVA8_HOME=${{ steps.java8.outputs.path }}" >> $GITHUB_ENV
+          echo "JAVA11_HOME=${{ steps.java11.outputs.path }}" >> $GITHUB_ENV
+          cp tools/toolchains.xml $HOME/.m2/
+
+      - name: Build with Maven
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: bash tools/build.sh -Dtarget.platform=oxygen -Dmaven.test.skip=true
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - name: Publish update site
+        shell: bash
+        run: tools/publish-update-site.sh
+        env:
+          SITE_DEPLOY_PRIVATE_KEY: ${{ secrets.SITE_DEPLOY_PRIVATE_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    needs: verify
+    if: ${{ github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' && startsWith(github.ref, 'refs/tags/') }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 8
+        id: java8
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      - name: Set up JDK 11
+        id: java11
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: '11'
+          cache: 'maven'
+
+      - name: Setup maven toolchains.xml
+        shell: bash
+        run: |
+          echo "JAVA8_HOME=${{ steps.java8.outputs.path }}" >> $GITHUB_ENV
+          echo "JAVA11_HOME=${{ steps.java11.outputs.path }}" >> $GITHUB_ENV
+          cp tools/toolchains.xml $HOME/.m2/
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
       - name: Prepare release
-        if: ${{ runner.os == 'Linux' && github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' && startsWith(github.ref, 'refs/tags/') }}
         shell: bash
         run: tools/prepare_release.sh
         env:
@@ -73,12 +197,11 @@ jobs:
       - name: Build with Maven
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: bash tools/build.sh
+          run: bash tools/build.sh -Dtarget.platform=oxygen -Dmaven.test.skip=true
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
 
       - name: Publish update site
-        if: ${{ runner.os == 'Linux' && github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' }}
         shell: bash
         run: tools/publish-update-site.sh
         env:
@@ -86,7 +209,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish release
-        if: ${{ runner.os == 'Linux' && github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' && startsWith(github.ref, 'refs/tags/') }}
         shell: bash
         run: tools/release.sh
         env:

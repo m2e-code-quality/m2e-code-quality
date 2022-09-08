@@ -17,6 +17,7 @@
 
     <properties>
         <target.platform>oxygen</target.platform>
+        <target.ee>JavaSE-1.8</target.ee>
 
         <tycho-version>2.7.1</tycho-version>
         <main.basedir>${basedir}</main.basedir>
@@ -93,7 +94,7 @@
                 <configuration>
                     <toolchains>
                         <jdk>
-                            <id>JavaSE-1.8</id>
+                            <id>${target.ee}</id>
                         </jdk>
                     </toolchains>
                 </configuration>
@@ -287,6 +288,7 @@
             </build>
         </profile>
         <profile>
+            <id>2021-09</id>
             <activation>
                 <property>
                     <name>target.platform</name>
@@ -294,30 +296,22 @@
                 </property>
             </activation>
             <properties>
-                <java.version>11</java.version>
+                <maven.compiler.release>11</maven.compiler.release>
+                <target.ee>JavaSE-11</target.ee>
             </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.eclipse.tycho</groupId>
-                        <artifactId>tycho-compiler-plugin</artifactId>
-                        <configuration>
-                            <release>11</release>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-toolchains-plugin</artifactId>
-                        <configuration>
-                            <toolchains>
-                                <jdk>
-                                    <id>JavaSE-11</id>
-                                </jdk>
-                            </toolchains>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
+        </profile>
+        <profile>
+            <id>2022-06</id>
+            <activation>
+                <property>
+                    <name>target.platform</name>
+                    <value>2022-06</value>
+                </property>
+            </activation>
+            <properties>
+                <maven.compiler.release>11</maven.compiler.release>
+                <target.ee>JavaSE-11</target.ee>
+            </properties>
         </profile>
         <profile>
             <id>local-findbugs-p2</id>
