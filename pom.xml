@@ -19,7 +19,7 @@
         <target.platform>oxygen</target.platform>
         <target.ee>JavaSE-1.8</target.ee>
 
-        <tycho-version>2.7.1</tycho-version>
+        <tycho-version>2.7.5</tycho-version>
         <main.basedir>${basedir}</main.basedir>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
