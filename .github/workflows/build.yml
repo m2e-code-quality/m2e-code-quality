@@ -62,7 +62,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macOS-latest ]
-        target: [ oxygen, 2022-06 ]
+        target: [ oxygen, 2022-06, 2022-09 ]
         exclude:
           # exclude the fail-fast-build, which already run
           - os: ubuntu-latest
