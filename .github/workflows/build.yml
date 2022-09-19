@@ -22,7 +22,7 @@ on:
 jobs:
   # verify build on one node before multiple builds on different os are started
   fail-fast-build:
-    name: fail-fast verify (ubuntu-latest, oxygen)
+    name: fail-fast verify (ubuntu-latest, 2022-09)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -53,7 +53,7 @@ jobs:
       - name: Build with Maven
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: bash tools/build.sh -Dtarget.platform=oxygen
+          run: bash tools/build.sh -Dtarget.platform=2022-09
 
   verify:
     needs: fail-fast-build
@@ -62,11 +62,11 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macOS-latest ]
-        target: [ oxygen, 2022-06, 2022-09 ]
+        target: [ 2022-09 ]
         exclude:
           # exclude the fail-fast-build, which already run
           - os: ubuntu-latest
-            target: oxygen
+            target: 2022-09
       fail-fast: true
 
     runs-on: ${{ matrix.os }}
@@ -136,7 +136,7 @@ jobs:
       - name: Build with Maven
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: bash tools/build.sh -Dtarget.platform=oxygen -Dmaven.test.skip=true
+          run: bash tools/build.sh -Dtarget.platform=2022-09 -Dmaven.test.skip=true
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
 
@@ -197,7 +197,7 @@ jobs:
       - name: Build with Maven
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: bash tools/build.sh -Dtarget.platform=oxygen -Dmaven.test.skip=true
+          run: bash tools/build.sh -Dtarget.platform=2022-09 -Dmaven.test.skip=true
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
 
