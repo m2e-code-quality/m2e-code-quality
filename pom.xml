@@ -16,8 +16,8 @@
     </scm>
 
     <properties>
-        <target.platform>oxygen</target.platform>
-        <target.ee>JavaSE-1.8</target.ee>
+        <target.platform>2022-09</target.platform>
+        <target.ee>JavaSE-11</target.ee>
 
         <tycho-version>2.7.5</tycho-version>
         <main.basedir>${basedir}</main.basedir>
