@@ -46,13 +46,12 @@ import com.google.common.base.Preconditions;
  * 
  */
 public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectNature>
-        extends AbstractProjectConfigurator {
+		extends AbstractProjectConfigurator {
 
-	private static final Logger LOG = LoggerFactory
-	        .getLogger(AbstractMavenPluginProjectConfigurator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractMavenPluginProjectConfigurator.class);
 
 	private final String natureId;
-	
+
 	private final String markerId;
 
 	private final String[] associatedFileNames;
@@ -66,25 +65,20 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 	}
 
 	@Override
-	public <T> T getParameterValue(final MavenProject project,
-	        final String parameter, final Class<T> asType,
-	        final MojoExecution mojoExecution, final IProgressMonitor monitor)
-	        throws CoreException {
-		return super.getParameterValue(project, parameter, asType,
-		        mojoExecution, monitor);
+	public <T> T getParameterValue(final MavenProject project, final String parameter, final Class<T> asType,
+			final MojoExecution mojoExecution, final IProgressMonitor monitor) throws CoreException {
+		return super.getParameterValue(project, parameter, asType, mojoExecution, monitor);
 	}
 
-	protected MojoExecution findForkedExecution(final MojoExecution primary,
-	        final String groupId, final String artifactId, final String goal) {
-		final Map<String, List<MojoExecution>> forkedExecutions =
-		        primary.getForkedExecutions();
+	protected MojoExecution findForkedExecution(final MojoExecution primary, final String groupId,
+			final String artifactId, final String goal) {
+		final Map<String, List<MojoExecution>> forkedExecutions = primary.getForkedExecutions();
 		MojoExecution goalExecution = null;
-		for (final List<MojoExecution> possibleExecutionList : forkedExecutions
-		        .values()) {
+		for (final List<MojoExecution> possibleExecutionList : forkedExecutions.values()) {
 			for (final MojoExecution possibleExecution : possibleExecutionList) {
 				if (groupId.equals(possibleExecution.getGroupId())
-				        && artifactId.equals(possibleExecution.getArtifactId())
-				        && goal.equals(possibleExecution.getGoal())) {
+						&& artifactId.equals(possibleExecution.getArtifactId())
+						&& goal.equals(possibleExecution.getGoal())) {
 					goalExecution = possibleExecution;
 					break;
 				}
@@ -97,8 +91,8 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 	}
 
 	@Override
-	public void configure(final ProjectConfigurationRequest request,
-	        final IProgressMonitor monitor) throws CoreException {
+	public void configure(final ProjectConfigurationRequest request, final IProgressMonitor monitor)
+			throws CoreException {
 		LOG.debug("configure {}", request.mavenProject().getArtifact().getArtifactId());
 
 		final MavenProject mavenProject = request.mavenProject();
@@ -106,42 +100,36 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 			return;
 		}
 
-		final MavenPluginWrapper pluginWrapper =
-		        this.getMavenPlugin(monitor, request.mavenProjectFacade());
+		final MavenPluginWrapper pluginWrapper = this.getMavenPlugin(monitor, request.mavenProjectFacade());
 		final IProject project = request.mavenProjectFacade().getProject();
 
 		if (!pluginWrapper.isPluginConfigured()) {
 			return;
 		}
 
-		this.handleProjectConfigurationChange(request.mavenProjectFacade(),
-		        project, pluginWrapper, monitor);
+		this.handleProjectConfigurationChange(request.mavenProjectFacade(), project, pluginWrapper, monitor);
 	}
 
 	@Override
-	public void mavenProjectChanged(
-	        final MavenProjectChangedEvent mavenProjectChangedEvent,
-	        final IProgressMonitor monitor) throws CoreException {
-		final IMavenProjectFacade mavenProjectFacade =
-		        mavenProjectChangedEvent.getMavenProject();
-		final MavenPluginWrapper pluginWrapper =
-		        this.getMavenPlugin(monitor, mavenProjectFacade);
+	public void mavenProjectChanged(final MavenProjectChangedEvent mavenProjectChangedEvent,
+			final IProgressMonitor monitor) throws CoreException {
+		final IMavenProjectFacade mavenProjectFacade = mavenProjectChangedEvent.getMavenProject();
+		final MavenPluginWrapper pluginWrapper = this.getMavenPlugin(monitor, mavenProjectFacade);
 		final IProject project = mavenProjectFacade.getProject();
 
 		if (LOG.isDebugEnabled()) {
 			switch (mavenProjectChangedEvent.getKind()) {
-				case MavenProjectChangedEvent.KIND_ADDED:
-					LOG.debug("mavenProjectChanged {}: KIND_ADDED", project);
-					break;
-				case MavenProjectChangedEvent.KIND_CHANGED:
-					LOG.debug("mavenProjectChanged {}: KIND_CHANGED", project);
-					break;
-				case MavenProjectChangedEvent.KIND_REMOVED:
-					LOG.debug("mavenProjectChanged {}: KIND_REMOVED", project);
-					break;
-				default:
-					LOG.debug("mavenProjectChanged {}: {}", project,
-					        mavenProjectChangedEvent.getKind());
+			case MavenProjectChangedEvent.KIND_ADDED:
+				LOG.debug("mavenProjectChanged {}: KIND_ADDED", project);
+				break;
+			case MavenProjectChangedEvent.KIND_CHANGED:
+				LOG.debug("mavenProjectChanged {}: KIND_CHANGED", project);
+				break;
+			case MavenProjectChangedEvent.KIND_REMOVED:
+				LOG.debug("mavenProjectChanged {}: KIND_REMOVED", project);
+				break;
+			default:
+				LOG.debug("mavenProjectChanged {}: {}", project, mavenProjectChangedEvent.getKind());
 			}
 		}
 
@@ -150,8 +138,7 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 			return;
 		}
 		if (pluginWrapper.isPluginConfigured()) {
-			this.handleProjectConfigurationChange(mavenProjectFacade, project,
-			        pluginWrapper, monitor);
+			this.handleProjectConfigurationChange(mavenProjectFacade, project, pluginWrapper, monitor);
 		} else {
 			// TODO: redirect to eclipse logger.
 			// this.console.logMessage(String.format(
@@ -164,13 +151,12 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 	}
 
 	/**
-	 * Should call {@link #configure(IProject, boolean, IProgressMonitor)} to (de-)activate nature and builder
+	 * Should call {@link #configure(IProject, boolean, IProgressMonitor)} to
+	 * (de-)activate nature and builder
 	 */
-	protected abstract void handleProjectConfigurationChange(
-	        final IMavenProjectFacade mavenProjectFacade,
-	        final IProject project, final MavenPluginWrapper mavenPluginWrapper,
-	        final IProgressMonitor monitor)
-	        throws CoreException;
+	protected abstract void handleProjectConfigurationChange(final IMavenProjectFacade mavenProjectFacade,
+			final IProject project, final MavenPluginWrapper mavenPluginWrapper, final IProgressMonitor monitor)
+			throws CoreException;
 
 	/**
 	 * Get the maven plugin {@code groupId}.
@@ -187,25 +173,22 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 	protected abstract String getMavenPluginArtifactId();
 
 	/**
-	 * @return the specific goals that this class works on, or null if it all
-	 *         goals apply. Null may lead to chaotic overlaying of multiple
-	 *         configurations. If more than one, this will process in order
-	 *         looking for an execution.
+	 * @return the specific goals that this class works on, or null if it all goals
+	 *         apply. Null may lead to chaotic overlaying of multiple
+	 *         configurations. If more than one, this will process in order looking
+	 *         for an execution.
 	 */
 	protected abstract String[] getMavenPluginGoals();
 
 	/**
 	 * Unconfigure the associated Eclipse plugin.
 	 * 
-	 * @param project
-	 *            the {@link IProject} to unconfigure.
-	 * @param monitor
-	 *            the {@link IProgressMonitor} instance.
-	 * @throws CoreException
-	 *             if unconfiguring the eclipse plugin fails.
+	 * @param project the {@link IProject} to unconfigure.
+	 * @param monitor the {@link IProgressMonitor} instance.
+	 * @throws CoreException if unconfiguring the eclipse plugin fails.
 	 */
-	protected void unconfigureEclipsePlugin(final IProject project,
-	        final IProgressMonitor monitor) throws CoreException {
+	protected void unconfigureEclipsePlugin(final IProject project, final IProgressMonitor monitor)
+			throws CoreException {
 		LOG.debug("entering deconfigure");
 		// this removes the builder and nature
 		removeNature(project, monitor);
@@ -214,36 +197,32 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 	}
 
 	/**
-	 * Helper to check if a Eclipse plugin unconfiguration is needed. This
-	 * usually happens if the maven plugin has been unconfigured.
+	 * Helper to check if a Eclipse plugin unconfiguration is needed. This usually
+	 * happens if the maven plugin has been unconfigured.
 	 * 
-	 * @param curMavenProjectFacade
-	 *            the current {@code IMavenProjectFacade}.
-	 * @return {@code true} if the Eclipse plugin configuration needs to be
-	 *         deleted.
+	 * @param curMavenProjectFacade the current {@code IMavenProjectFacade}.
+	 * @return {@code true} if the Eclipse plugin configuration needs to be deleted.
 	 * @throws CoreException
 	 */
 	private boolean checkUnconfigurationRequired(final IProgressMonitor monitor,
-	        final IMavenProjectFacade curMavenProjectFacade)
-	        throws CoreException {
+			final IMavenProjectFacade curMavenProjectFacade) throws CoreException {
 		Preconditions.checkNotNull(curMavenProjectFacade);
 
-		final MavenPluginWrapper newMavenPlugin =
-		        this.getMavenPlugin(monitor, curMavenProjectFacade);
+		final MavenPluginWrapper newMavenPlugin = this.getMavenPlugin(monitor, curMavenProjectFacade);
 		if (!newMavenPlugin.isPluginConfigured()) {
 			return true;
 		}
 		return false;
 	}
 
-	private MavenPluginWrapper getMavenPlugin(final IProgressMonitor monitor,
-	        final IMavenProjectFacade projectFacade) throws CoreException {
-		return MavenPluginWrapper.newInstance(monitor, getMavenPluginGroupId(),
-		        getMavenPluginArtifactId(), getMavenPluginGoals(),
-		        projectFacade);
+	private MavenPluginWrapper getMavenPlugin(final IProgressMonitor monitor, final IMavenProjectFacade projectFacade)
+			throws CoreException {
+		return MavenPluginWrapper.newInstance(monitor, getMavenPluginGroupId(), getMavenPluginArtifactId(),
+				getMavenPluginGoals(), projectFacade);
 	}
 
-	protected void configure(final IProject project, final boolean skip, final IProgressMonitor monitor) throws CoreException {
+	protected void configure(final IProject project, final boolean skip, final IProgressMonitor monitor)
+			throws CoreException {
 		LOG.debug("entering configure");
 		if (!skip) {
 			addNature(project, monitor);
@@ -254,6 +233,7 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 
 	/**
 	 * Get the currently configured nature in the project
+	 * 
 	 * @return <code>null</code> if the nature is not active.
 	 */
 	@SuppressWarnings("unchecked")
@@ -262,8 +242,7 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 	}
 
 	@SuppressWarnings("unchecked")
-	protected N addNature(final IProject project, final IProgressMonitor monitor)
-	        throws CoreException {
+	protected N addNature(final IProject project, final IProgressMonitor monitor) throws CoreException {
 		LOG.debug("entering configureNature");
 		// We have to explicitly add the nature.
 		final IProjectDescription desc = project.getDescription();
@@ -283,8 +262,7 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 		return (N) project.getNature(natureId);
 	}
 
-	protected void removeNature(final IProject project, final IProgressMonitor monitor)
-	        throws CoreException {
+	protected void removeNature(final IProject project, final IProgressMonitor monitor) throws CoreException {
 		LOG.debug("entering deconfigureNature");
 
 		// clean all markers
@@ -304,14 +282,12 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 			return;
 		}
 
-		final String[] newNatures =
-		        newNaturesList.toArray(new String[newNaturesList.size()]);
+		final String[] newNatures = newNaturesList.toArray(new String[newNaturesList.size()]);
 		desc.setNatureIds(newNatures);
 		project.setDescription(desc, monitor);
 	}
 
-	protected void deleteEclipseFiles(final IProject project, final IProgressMonitor monitor)
-	        throws CoreException {
+	protected void deleteEclipseFiles(final IProject project, final IProgressMonitor monitor) throws CoreException {
 		LOG.debug("entering deleteEclipseFiles");
 		for (String associatedFileName : associatedFileNames) {
 			final IResource associatedFile = project.getFile(associatedFileName);

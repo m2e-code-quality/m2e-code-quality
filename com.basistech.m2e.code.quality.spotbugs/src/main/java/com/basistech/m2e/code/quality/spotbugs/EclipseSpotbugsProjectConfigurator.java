@@ -38,11 +38,9 @@ import de.tobject.findbugs.marker.FindBugsMarker;
 import de.tobject.findbugs.nature.FindBugsNature;
 import edu.umd.cs.findbugs.config.UserPreferences;
 
-public class EclipseSpotbugsProjectConfigurator
-        extends AbstractMavenPluginProjectConfigurator<FindBugsNature> {
+public class EclipseSpotbugsProjectConfigurator extends AbstractMavenPluginProjectConfigurator<FindBugsNature> {
 
-	private static final Logger LOG =
-	        LoggerFactory.getLogger(EclipseSpotbugsProjectConfigurator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(EclipseSpotbugsProjectConfigurator.class);
 
 	public EclipseSpotbugsProjectConfigurator() {
 		super(ECLIPSE_FB_NATURE_ID, FindBugsMarker.NAME, ECLIPSE_FB_PREFS_FILE);
@@ -64,28 +62,21 @@ public class EclipseSpotbugsProjectConfigurator
 	}
 
 	@Override
-	protected void handleProjectConfigurationChange(
-	        final IMavenProjectFacade mavenProjectFacade,
-	        final IProject project, final MavenPluginWrapper mavenPluginWrapper,
-	        final IProgressMonitor monitor) throws CoreException {
+	protected void handleProjectConfigurationChange(final IMavenProjectFacade mavenProjectFacade,
+			final IProject project, final MavenPluginWrapper mavenPluginWrapper, final IProgressMonitor monitor)
+			throws CoreException {
 		LOG.debug("entering handleProjectConfigurationChange");
 		final IJavaProject javaProject = JavaCore.create(project);
-		if (javaProject == null || !javaProject.exists()
-		        || !javaProject.getProject().isOpen()) {
+		if (javaProject == null || !javaProject.exists() || !javaProject.getProject().isOpen()) {
 			return;
 		}
-		final MavenPluginConfigurationTranslator mavenSpotbugsConfig =
-		        MavenPluginConfigurationTranslator.newInstance(maven,
-		                mavenPluginWrapper,
-		                mavenProjectFacade.getMavenProject(monitor),
-		                project, monitor);
+		final MavenPluginConfigurationTranslator mavenSpotbugsConfig = MavenPluginConfigurationTranslator
+				.newInstance(maven, mavenPluginWrapper, mavenProjectFacade.getMavenProject(monitor), project, monitor);
 		UserPreferences prefs;
 		try {
-			final List<MojoExecution> mojoExecutions =
-			        mavenPluginWrapper.getMojoExecutions();
+			final List<MojoExecution> mojoExecutions = mavenPluginWrapper.getMojoExecutions();
 			if (mojoExecutions.size() != 1) {
-				LOG.error("Wrong number of executions. Expected 1. Found "
-				        + mojoExecutions.size());
+				LOG.error("Wrong number of executions. Expected 1. Found " + mojoExecutions.size());
 				return;
 			}
 			prefs = this.buildSpotbugsPreferences(mavenSpotbugsConfig);
@@ -102,12 +93,10 @@ public class EclipseSpotbugsProjectConfigurator
 		}
 	}
 
-	private UserPreferences buildSpotbugsPreferences(
-	        final MavenPluginConfigurationTranslator pluginCfgTranslator)
-	        throws CoreException {
+	private UserPreferences buildSpotbugsPreferences(final MavenPluginConfigurationTranslator pluginCfgTranslator)
+			throws CoreException {
 		LOG.debug("entering buildSpotbugsPreferences");
-		final UserPreferences prefs =
-		        UserPreferences.createDefaultUserPreferences();
+		final UserPreferences prefs = UserPreferences.createDefaultUserPreferences();
 		pluginCfgTranslator.setIncludeFilterFiles(prefs);
 		pluginCfgTranslator.setExcludeFilterFiles(prefs);
 		// pluginCfgTranslator.setBugCatagories(prefs);

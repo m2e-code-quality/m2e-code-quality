@@ -54,12 +54,9 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 	private final MojoExecution checkExecution;
 	private final ConfigurationContainer checkConfiguration;
 
-	private MavenPluginConfigurationTranslator(
-	        final IMaven maven,
-	        final MavenProject mavenProject,
-	        final MojoExecution execution, final MojoExecution forkedExecution,
-	        final IProject project,
-	        final IProgressMonitor monitor) throws CoreException {
+	private MavenPluginConfigurationTranslator(final IMaven maven, final MavenProject mavenProject,
+			final MojoExecution execution, final MojoExecution forkedExecution, final IProject project,
+			final IProgressMonitor monitor) throws CoreException {
 		super(maven, mavenProject, forkedExecution, project, monitor);
 		this.basedirUri = project.getLocationURI();
 		this.checkExecution = execution;
@@ -72,9 +69,8 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		if (rulesets == null) {
 			// no special rulesets configured - use the same defaults as the
 			// maven-pmd-plugin does
-			return Arrays.asList("/rulesets/java/basic.xml",
-			        "/rulesets/java/unusedcode.xml",
-			        "/rulesets/java/imports.xml");
+			return Arrays.asList("/rulesets/java/basic.xml", "/rulesets/java/unusedcode.xml",
+					"/rulesets/java/imports.xml");
 		}
 		return Arrays.asList(rulesets);
 	}
@@ -97,10 +93,10 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 	/**
 	 * Return the included patterns if any.
 	 * <p>
-	 * IMPORTANT: To line up with the behavior of maven-pmd-plugin includes, if
-	 * an include pattern is specified then, all the includeSourceRoots are
-	 * added to the excludeSourceRoots. What this means is, there is no point in
-	 * specifying excludes at this point.
+	 * IMPORTANT: To line up with the behavior of maven-pmd-plugin includes, if an
+	 * include pattern is specified then, all the includeSourceRoots are added to
+	 * the excludeSourceRoots. What this means is, there is no point in specifying
+	 * excludes at this point.
 	 * </p>
 	 * 
 	 * @return a {@code List} of inclusive patterns.
@@ -122,8 +118,7 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 	}
 
 	public boolean isSkip() throws CoreException {
-		return Boolean.TRUE.equals(
-				getParameterValue(checkExecution, checkConfiguration, "skip", Boolean.class));
+		return Boolean.TRUE.equals(getParameterValue(checkExecution, checkConfiguration, "skip", Boolean.class));
 	}
 
 	/**
@@ -131,8 +126,7 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 	 * configuration.
 	 * 
 	 * @return the value of the {@code includeTests} element.
-	 * @throws CoreException
-	 *             if an error occurs
+	 * @throws CoreException if an error occurs
 	 */
 	public boolean getIncludeTests() throws CoreException {
 		final Boolean tests = getParameterValue("includeTests", Boolean.class);
@@ -160,8 +154,7 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		if (PATTERNS_CACHE.containsKey(antStylePattern)) {
 			newPattern = PATTERNS_CACHE.get(antStylePattern);
 		} else {
-			newPattern =
-			        this.convertAntStylePatternToPmdPattern(antStylePattern);
+			newPattern = this.convertAntStylePatternToPmdPattern(antStylePattern);
 			PATTERNS_CACHE.put(antStylePattern, newPattern);
 		}
 		return newPattern;
@@ -171,8 +164,7 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 	 * Helper to convert the maven-pmd-plugin includes/excludes pattern to PMD
 	 * pattern (not eclipse PMD).
 	 * 
-	 * @param pattern
-	 *            the maven-pmd-plugin pattern.
+	 * @param pattern the maven-pmd-plugin pattern.
 	 * @return the converted PMD pattern.
 	 */
 	private String convertAntStylePatternToPmdPattern(final String pattern) {
@@ -205,18 +197,15 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		final List<File> includeRoots = new ArrayList<>();
 		final List<File> excludeRoots = new ArrayList<>();
 
-		includeRoots.addAll(this.transformResourceStringsToFiles(
-		        getMavenProject().getCompileSourceRoots()));
+		includeRoots.addAll(this.transformResourceStringsToFiles(getMavenProject().getCompileSourceRoots()));
 
 		final List<String> targetDirectories = new ArrayList<>();
 		targetDirectories.add(getMavenProject().getBuild().getDirectory());
-		excludeRoots.addAll(
-		        this.transformResourceStringsToFiles(targetDirectories));
+		excludeRoots.addAll(this.transformResourceStringsToFiles(targetDirectories));
 
 		// Get all the normalized test roots and add them to include or exclude.
-		final List<File> testCompileSourceRoots =
-		        this.transformResourceStringsToFiles(
-		                getMavenProject().getTestCompileSourceRoots());
+		final List<File> testCompileSourceRoots = this
+				.transformResourceStringsToFiles(getMavenProject().getTestCompileSourceRoots());
 		if (this.getIncludeTests()) {
 			includeRoots.addAll(testCompileSourceRoots);
 		} else {
@@ -238,8 +227,8 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		for (final File f : includeRoots) {
 			final int idx = excludeRootsFromConfig.indexOf(f);
 			/**
-			 * Be optimistic when adding inclusions; if the specified File does
-			 * not exist yet, then assume it will at some point and include it.
+			 * Be optimistic when adding inclusions; if the specified File does not exist
+			 * yet, then assume it will at some point and include it.
 			 */
 			if (idx == -1 && (f.isDirectory() || !f.exists())) {
 				filteredIncludeRoots.add(f);
@@ -248,14 +237,11 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 				excludeRoots.add(f);
 			}
 		}
-		this.includeSourceRoots.addAll(this
-		        .convertFileFoldersToRelativePathStrings(filteredIncludeRoots));
-		this.excludeSourceRoots.addAll(
-		        this.convertFileFoldersToRelativePathStrings(excludeRoots));
+		this.includeSourceRoots.addAll(this.convertFileFoldersToRelativePathStrings(filteredIncludeRoots));
+		this.excludeSourceRoots.addAll(this.convertFileFoldersToRelativePathStrings(excludeRoots));
 	}
 
-	private List<String> convertFileFoldersToRelativePathStrings(
-	        final Iterable<? extends File> sources) {
+	private List<String> convertFileFoldersToRelativePathStrings(final Iterable<? extends File> sources) {
 		final List<String> folders = new ArrayList<>();
 		// No null check as internally we *know*
 		for (final File f : sources) {
@@ -270,8 +256,7 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 				relativePath = relativePath.replace("\\", "/");
 			}
 			if (relativePath.endsWith("/")) {
-				relativePath =
-				        relativePath.substring(0, relativePath.length() - 1);
+				relativePath = relativePath.substring(0, relativePath.length() - 1);
 			}
 			// we append the .* pattern regardless
 			relativePath = relativePath + ".*";
@@ -280,8 +265,7 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		return folders;
 	}
 
-	private List<File> transformResourceStringsToFiles(
-	        final List<String> srcDirNames) {
+	private List<File> transformResourceStringsToFiles(final List<String> srcDirNames) {
 		final File basedir = getMavenProject().getBasedir();
 		final List<File> sourceDirectories = new ArrayList<>();
 		if (srcDirNames != null) {
@@ -307,16 +291,11 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		this.excludePatterns.addAll(this.getExcludePatterns());
 	}
 
-	public static MavenPluginConfigurationTranslator newInstance(
-	        final IMaven maven,
-	        final MavenProject mavenProject,
-	        final MojoExecution checkGoalExecution, 
-	        final MojoExecution pmdGoalExecution, final IProject project,
-	        final IProgressMonitor monitor) throws CoreException {
-		final MavenPluginConfigurationTranslator m2csConverter =
-		        new MavenPluginConfigurationTranslator(maven,
-		                mavenProject, checkGoalExecution, pmdGoalExecution, 
-		                project, monitor);
+	public static MavenPluginConfigurationTranslator newInstance(final IMaven maven, final MavenProject mavenProject,
+			final MojoExecution checkGoalExecution, final MojoExecution pmdGoalExecution, final IProject project,
+			final IProgressMonitor monitor) throws CoreException {
+		final MavenPluginConfigurationTranslator m2csConverter = new MavenPluginConfigurationTranslator(maven,
+				mavenProject, checkGoalExecution, pmdGoalExecution, project, monitor);
 		m2csConverter.initialize();
 		return m2csConverter;
 	}

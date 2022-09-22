@@ -35,12 +35,14 @@ public class EclipseSpotbugsProjectConfigurationTest extends AbstractMavenProjec
 
 	@Test
 	public void testSpotbugsCheck() throws Exception {
-		importProjectRunBuildAndFindMarkers("projects/spotbugs-check/pom.xml", MARKER_ID, 2, new TriggerSpotbugsExplicitly());
+		importProjectRunBuildAndFindMarkers("projects/spotbugs-check/pom.xml", MARKER_ID, 2,
+				new TriggerSpotbugsExplicitly());
 	}
 
 	@Test
 	public void testSpotbugsSpotbugs() throws Exception {
-		importProjectRunBuildAndFindMarkers("projects/spotbugs-spotbugs/pom.xml", MARKER_ID, 2, new TriggerSpotbugsExplicitly());
+		importProjectRunBuildAndFindMarkers("projects/spotbugs-spotbugs/pom.xml", MARKER_ID, 2,
+				new TriggerSpotbugsExplicitly());
 	}
 
 	@Test

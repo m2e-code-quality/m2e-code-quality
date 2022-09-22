@@ -48,14 +48,11 @@ import net.sf.eclipsecs.core.util.CheckstylePluginException;
 
 /**
  */
-public class EclipseCheckstyleProjectConfigurator
-        extends AbstractMavenPluginProjectConfigurator<CheckstyleNature> {
+public class EclipseCheckstyleProjectConfigurator extends AbstractMavenPluginProjectConfigurator<CheckstyleNature> {
 
-	private static final Logger LOG =
-	        LoggerFactory.getLogger(EclipseCheckstyleProjectConfigurator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(EclipseCheckstyleProjectConfigurator.class);
 
-	private static final IConfigurationType REMOTE_CONFIGURATION_TYPE =
-	        ConfigurationTypes.getByInternalName("remote");
+	private static final IConfigurationType REMOTE_CONFIGURATION_TYPE = ConfigurationTypes.getByInternalName("remote");
 
 	public EclipseCheckstyleProjectConfigurator() {
 		super(CheckstyleNature.NATURE_ID, CheckstyleMarker.MARKER_ID, ECLIPSE_CS_PREFS_FILE, ECLIPSE_CS_CACHE_FILENAME);
@@ -73,30 +70,25 @@ public class EclipseCheckstyleProjectConfigurator
 
 	@Override
 	protected String[] getMavenPluginGoals() {
-		return new String[] {"checkstyle", "check"};
+		return new String[] { "checkstyle", "check" };
 	}
 
 	@Override
-	protected void handleProjectConfigurationChange(
-	        final IMavenProjectFacade mavenProjectFacade,
-	        final IProject project, final MavenPluginWrapper mavenPluginWrapper,
-	        final IProgressMonitor monitor) throws CoreException {
+	protected void handleProjectConfigurationChange(final IMavenProjectFacade mavenProjectFacade,
+			final IProject project, final MavenPluginWrapper mavenPluginWrapper, final IProgressMonitor monitor)
+			throws CoreException {
 
-		final List<MavenPluginConfigurationTranslator> mavenCheckstyleConfigs =
-		        MavenPluginConfigurationTranslator.newInstance(maven, this,
-		                mavenProjectFacade.getMavenProject(monitor),
-		                mavenPluginWrapper, project, monitor);
+		final List<MavenPluginConfigurationTranslator> mavenCheckstyleConfigs = MavenPluginConfigurationTranslator
+				.newInstance(maven, this, mavenProjectFacade.getMavenProject(monitor), mavenPluginWrapper, project,
+						monitor);
 
 		try {
 			// construct a new working copy
-			final ProjectConfigurationWorkingCopy pcWorkingCopy =
-			        new ProjectConfigurationWorkingCopy(
-			                ProjectConfigurationFactory
-			                        .getConfiguration(project));
+			final ProjectConfigurationWorkingCopy pcWorkingCopy = new ProjectConfigurationWorkingCopy(
+					ProjectConfigurationFactory.getConfiguration(project));
 			pcWorkingCopy.setUseSimpleConfig(false);
-			pcWorkingCopy.setSyncFormatter(
-			        Activator.getDefault().getPreferenceStore().getBoolean(
-			                CheckstyleEclipseConstants.ECLIPSE_CS_GENERATE_FORMATTER_SETTINGS));
+			pcWorkingCopy.setSyncFormatter(Activator.getDefault().getPreferenceStore()
+					.getBoolean(CheckstyleEclipseConstants.ECLIPSE_CS_GENERATE_FORMATTER_SETTINGS));
 			pcWorkingCopy.getFileSets().clear();
 
 			// use all non-skipped executions (or first skipped execution otherwise)
@@ -120,18 +112,15 @@ public class EclipseCheckstyleProjectConfigurator
 		}
 	}
 
-	private void buildCheckstyleConfiguration(
-	        final ProjectConfigurationWorkingCopy pcWorkingCopy,
-	        final MavenPluginConfigurationTranslator cfgTranslator)
-	        throws CheckstylePluginException, CoreException {
+	private void buildCheckstyleConfiguration(final ProjectConfigurationWorkingCopy pcWorkingCopy,
+			final MavenPluginConfigurationTranslator cfgTranslator) throws CheckstylePluginException, CoreException {
 		// get the ruleset from configLocation
 		final URL ruleset = cfgTranslator.getRuleset();
 		// build or get the checkconfig
-		final ICheckConfiguration checkCfg = this.createOrGetCheckstyleConfig(
-		        pcWorkingCopy, ruleset, cfgTranslator.getExecutionId());
+		final ICheckConfiguration checkCfg = this.createOrGetCheckstyleConfig(pcWorkingCopy, ruleset,
+				cfgTranslator.getExecutionId());
 		// update filesets (include and exclude patterns)
-		cfgTranslator.updateCheckConfigWithIncludeExcludePatterns(pcWorkingCopy,
-		        checkCfg);
+		cfgTranslator.updateCheckConfigWithIncludeExcludePatterns(pcWorkingCopy, checkCfg);
 		// 2. Load all properties
 		// get Properties from propertiesLocation
 		final Properties props = cfgTranslator.getConfiguredProperties();
@@ -144,18 +133,15 @@ public class EclipseCheckstyleProjectConfigurator
 		// add the suppressions file location to the props.
 		final String suppressionsFile = cfgTranslator.getSuppressionsFile();
 		if (suppressionsFile != null) {
-			props.setProperty(cfgTranslator.getSuppressionsFileExpression(),
-			        suppressionsFile);
+			props.setProperty(cfgTranslator.getSuppressionsFileExpression(), suppressionsFile);
 		}
 		// add the cache file location to the props.
 		props.setProperty("checkstyle.cache.file", ECLIPSE_CS_CACHE_FILENAME);
 		// Load all properties in the checkConfig
-		final List<ResolvableProperty> csProps =
-		        checkCfg.getResolvableProperties();
+		final List<ResolvableProperty> csProps = checkCfg.getResolvableProperties();
 		csProps.clear();
 		for (final Map.Entry<Object, Object> entry : props.entrySet()) {
-			csProps.add(new ResolvableProperty((String) entry.getKey(),
-			        (String) entry.getValue()));
+			csProps.add(new ResolvableProperty((String) entry.getKey(), (String) entry.getValue()));
 		}
 
 	}
@@ -164,20 +150,15 @@ public class EclipseCheckstyleProjectConfigurator
 	 * Retrieve a pre-existing LocalCheckConfiguration for maven to eclipse-cs
 	 * integration, or create a new one
 	 */
-	private ICheckConfiguration createOrGetCheckstyleConfig(
-	        final ProjectConfigurationWorkingCopy pcWorkingCopy,
-	        final URL ruleset, final String executionId)
-	        throws CheckstylePluginException {
-		final String configName =
-		        ECLIPSE_CS_PREFS_CONFIG_NAME + " " + executionId;
-		final ICheckConfigurationWorkingSet workingSet =
-		        pcWorkingCopy.getLocalCheckConfigWorkingSet();
+	private ICheckConfiguration createOrGetCheckstyleConfig(final ProjectConfigurationWorkingCopy pcWorkingCopy,
+			final URL ruleset, final String executionId) throws CheckstylePluginException {
+		final String configName = ECLIPSE_CS_PREFS_CONFIG_NAME + " " + executionId;
+		final ICheckConfigurationWorkingSet workingSet = pcWorkingCopy.getLocalCheckConfigWorkingSet();
 
 		CheckConfigurationWorkingCopy workingCopy = null;
 
 		// Try to retrieve an existing checkstyle configuration to be updated
-		CheckConfigurationWorkingCopy[] workingCopies =
-		        workingSet.getWorkingCopies();
+		CheckConfigurationWorkingCopy[] workingCopies = workingSet.getWorkingCopies();
 		if (workingCopies == null) {
 			LOG.error("The working copies are null");
 			workingCopies = new CheckConfigurationWorkingCopy[0];
@@ -188,10 +169,9 @@ public class EclipseCheckstyleProjectConfigurator
 					workingCopy = copy;
 					break;
 				}
-				throw new CheckstylePluginException(String.format(
-				        "A local Checkstyle configuration already exists with name "
-				                + " [%s] with incompatible type [%s]",
-				        configName, copy.getType()));
+				throw new CheckstylePluginException(
+						String.format("A local Checkstyle configuration already exists with name "
+								+ " [%s] with incompatible type [%s]", configName, copy.getType()));
 			}
 		}
 		// Nothing exist create a brand new one.
@@ -202,8 +182,7 @@ public class EclipseCheckstyleProjectConfigurator
 			workingSet.addCheckConfiguration(workingCopy);
 		}
 
-		workingCopy.setDescription(
-		        "maven-checkstyle-plugin configuration " + executionId);
+		workingCopy.setDescription("maven-checkstyle-plugin configuration " + executionId);
 		workingCopy.setLocation(ruleset.toExternalForm());
 		return workingCopy;
 	}

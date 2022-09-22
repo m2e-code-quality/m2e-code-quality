@@ -30,14 +30,12 @@ import com.google.common.base.Preconditions;
 
 public class MavenPluginWrapper {
 
-	private static final Logger LOG =
-	        LoggerFactory.getLogger(MavenPluginWrapper.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MavenPluginWrapper.class);
 
 	private final String key; // for toString
 	private final List<MojoExecution> executions;
 
-	private MavenPluginWrapper(final String key,
-	        final List<MojoExecution> executions) {
+	private MavenPluginWrapper(final String key, final List<MojoExecution> executions) {
 		this.key = key;
 		this.executions = executions;
 	}
@@ -50,43 +48,33 @@ public class MavenPluginWrapper {
 		return executions;
 	}
 
-	public static boolean mojoExecutionForPlugin(
-	        final MojoExecution mojoExecution, final String groupId,
-	        final String artifactId, final String goal) {
-		return groupId.equals(mojoExecution.getGroupId())
-		        && artifactId.equals(mojoExecution.getArtifactId())
-		        && (goal == null || goal.equals(mojoExecution.getGoal()));
+	public static boolean mojoExecutionForPlugin(final MojoExecution mojoExecution, final String groupId,
+			final String artifactId, final String goal) {
+		return groupId.equals(mojoExecution.getGroupId()) && artifactId.equals(mojoExecution.getArtifactId())
+				&& (goal == null || goal.equals(mojoExecution.getGoal()));
 	}
 
-	public static List<MojoExecution> findMojoExecutions(
-	        final IProgressMonitor monitor,
-	        final IMavenProjectFacade mavenProjectFacade,
-	        final String pluginGroupId, final String pluginArtifactId,
-	        final String[] pluginGoal) throws CoreException {
-		final List<MojoExecution> mojoExecutions =
-		        mavenProjectFacade.getMojoExecutions(pluginGroupId,
-		                pluginArtifactId, monitor, pluginGoal);
+	public static List<MojoExecution> findMojoExecutions(final IProgressMonitor monitor,
+			final IMavenProjectFacade mavenProjectFacade, final String pluginGroupId, final String pluginArtifactId,
+			final String[] pluginGoal) throws CoreException {
+		final List<MojoExecution> mojoExecutions = mavenProjectFacade.getMojoExecutions(pluginGroupId, pluginArtifactId,
+				monitor, pluginGoal);
 		// I don't think we need to re-search for site.
-		return searchExecutions(pluginGroupId, pluginArtifactId, pluginGoal,
-		        mojoExecutions);
+		return searchExecutions(pluginGroupId, pluginArtifactId, pluginGoal, mojoExecutions);
 	}
 
-	private static List<MojoExecution> searchExecutions(
-	        final String pluginGroupId, final String pluginArtifactId,
-	        final String[] pluginGoal,
-	        final List<MojoExecution> mojoExecutions) {
+	private static List<MojoExecution> searchExecutions(final String pluginGroupId, final String pluginArtifactId,
+			final String[] pluginGoal, final List<MojoExecution> mojoExecutions) {
 		final List<MojoExecution> foundMojoExections = new ArrayList<>();
 		for (final MojoExecution mojoExecution : mojoExecutions) {
 			if (pluginGoal != null) {
 				for (final String goal : pluginGoal) {
-					if (mojoExecutionForPlugin(mojoExecution, pluginGroupId,
-					        pluginArtifactId, goal)) {
+					if (mojoExecutionForPlugin(mojoExecution, pluginGroupId, pluginArtifactId, goal)) {
 						foundMojoExections.add(mojoExecution);
 					}
 				}
 			} else {
-				if (mojoExecutionForPlugin(mojoExecution, pluginGroupId,
-				        pluginArtifactId, null)) {
+				if (mojoExecutionForPlugin(mojoExecution, pluginGroupId, pluginArtifactId, null)) {
 					foundMojoExections.add(mojoExecution);
 				}
 			}
@@ -97,14 +85,12 @@ public class MavenPluginWrapper {
 		return foundMojoExections;
 	}
 
-	public static MavenPluginWrapper newInstance(final IProgressMonitor monitor,
-	        final String pluginGroupId, final String pluginArtifactId,
-	        final String[] pluginGoal,
-	        final IMavenProjectFacade mavenProjectFacade) throws CoreException {
+	public static MavenPluginWrapper newInstance(final IProgressMonitor monitor, final String pluginGroupId,
+			final String pluginArtifactId, final String[] pluginGoal, final IMavenProjectFacade mavenProjectFacade)
+			throws CoreException {
 		Preconditions.checkNotNull(mavenProjectFacade);
-		final List<MojoExecution> executions =
-		        findMojoExecutions(monitor, mavenProjectFacade, pluginGroupId,
-		                pluginArtifactId, pluginGoal);
+		final List<MojoExecution> executions = findMojoExecutions(monitor, mavenProjectFacade, pluginGroupId,
+				pluginArtifactId, pluginGoal);
 		final String key = pluginGroupId + ":" + pluginArtifactId;
 		return new MavenPluginWrapper(key, executions);
 	}

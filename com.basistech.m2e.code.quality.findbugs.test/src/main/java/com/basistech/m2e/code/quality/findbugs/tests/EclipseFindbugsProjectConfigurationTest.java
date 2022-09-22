@@ -35,12 +35,14 @@ public class EclipseFindbugsProjectConfigurationTest extends AbstractMavenProjec
 
 	@Test
 	public void testFindbugsCheck() throws Exception {
-		importProjectRunBuildAndFindMarkers("projects/findbugs-check/pom.xml", MARKER_ID, 2, new TriggerFindbugsExplicitly());
+		importProjectRunBuildAndFindMarkers("projects/findbugs-check/pom.xml", MARKER_ID, 2,
+				new TriggerFindbugsExplicitly());
 	}
 
 	@Test
 	public void testFindbugsFindbugs() throws Exception {
-		importProjectRunBuildAndFindMarkers("projects/findbugs-findbugs/pom.xml", MARKER_ID, 2, new TriggerFindbugsExplicitly());
+		importProjectRunBuildAndFindMarkers("projects/findbugs-findbugs/pom.xml", MARKER_ID, 2,
+				new TriggerFindbugsExplicitly());
 	}
 
 	@Test
