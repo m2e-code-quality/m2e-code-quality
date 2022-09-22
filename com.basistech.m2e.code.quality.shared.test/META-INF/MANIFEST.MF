@@ -4,7 +4,7 @@ Bundle-Name: M2Eclipse Project Configurator for Eclipse Shared Tests
 Bundle-SymbolicName: com.basistech.m2e.code.quality.shared.test
 Bundle-Version: 2.0.0.qualifier
 Bundle-Vendor: Basis Technology Corp.
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.eclipse.m2e.jdt;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.m2e.core;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.m2e.maven.runtime;bundle-version="[1.0.0,2.0.0)",
