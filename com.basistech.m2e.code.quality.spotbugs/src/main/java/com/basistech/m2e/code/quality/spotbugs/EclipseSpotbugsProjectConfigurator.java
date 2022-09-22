@@ -21,7 +21,6 @@ import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.E
 
 import java.util.List;
 
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -34,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
-
 import de.tobject.findbugs.FindbugsPlugin;
 import de.tobject.findbugs.marker.FindBugsMarker;
 import de.tobject.findbugs.nature.FindBugsNature;
@@ -69,7 +67,7 @@ public class EclipseSpotbugsProjectConfigurator
 	protected void handleProjectConfigurationChange(
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final MavenPluginWrapper mavenPluginWrapper,
-	        final MavenSession session, final IProgressMonitor monitor) throws CoreException {
+	        final IProgressMonitor monitor) throws CoreException {
 		LOG.debug("entering handleProjectConfigurationChange");
 		final IJavaProject javaProject = JavaCore.create(project);
 		if (javaProject == null || !javaProject.exists()
@@ -78,7 +76,7 @@ public class EclipseSpotbugsProjectConfigurator
 		}
 		final MavenPluginConfigurationTranslator mavenSpotbugsConfig =
 		        MavenPluginConfigurationTranslator.newInstance(maven,
-		                mavenPluginWrapper, session,
+		                mavenPluginWrapper,
 		                mavenProjectFacade.getMavenProject(monitor),
 		                project, monitor);
 		UserPreferences prefs;

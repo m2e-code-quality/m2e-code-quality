@@ -12,22 +12,39 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.ConfigurationContainer;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.model.PluginExecution;
+import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.MojoExecution;
+import org.apache.maven.plugin.PluginManagerException;
+import org.apache.maven.plugin.PluginResolutionException;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.embedder.ArtifactKey;
 import org.eclipse.m2e.core.embedder.IMaven;
+import org.eclipse.m2e.core.internal.embedder.MavenImpl;
+import org.eclipse.m2e.core.project.IMavenProjectFacade;
+import org.eclipse.m2e.core.project.IMavenProjectRegistry;
+import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
+@SuppressWarnings("restriction")
 public class AbstractMavenPluginConfigurationTranslator {
 	private static final Logger LOG = LoggerFactory
 	        .getLogger(AbstractMavenPluginConfigurationTranslator.class);
@@ -41,7 +58,7 @@ public class AbstractMavenPluginConfigurationTranslator {
 	private final ResourceResolver resourceResolver;
 
 	public AbstractMavenPluginConfigurationTranslator(final IMaven maven,
-			final MavenSession session, final MavenProject mavenProject,
+			final MavenProject mavenProject,
 	        final MojoExecution mojoExecution, final IProject project,
 	        final IProgressMonitor monitor) throws CoreException {
 		this.maven = maven;
@@ -49,8 +66,7 @@ public class AbstractMavenPluginConfigurationTranslator {
 		this.project = project;
 		this.mojoExecution = mojoExecution;
 		this.monitor = monitor;
-		this.resourceResolver = AbstractMavenPluginProjectConfigurator
-				.getResourceResolver(mojoExecution, mavenProject, project.getLocation());
+		this.resourceResolver = getResourceResolver(mojoExecution, mavenProject, project.getLocation());
 		execution = new PluginExecution();
 		execution.setConfiguration(mojoExecution.getConfiguration());
 	}
@@ -156,6 +172,69 @@ public class AbstractMavenPluginConfigurationTranslator {
 		return this.resourceResolver.resolveLocation(resc);
 	}
 
+	public ResourceResolver getResourceResolver() {
+	    return this.resourceResolver;
+	}
+
+    private ResourceResolver getResourceResolver(
+            final MojoExecution mojoExecution, final MavenProject mavenProject,
+            final IPath projectLocation) throws CoreException {
+        // call for side effect of ensuring that the realm is set in the
+        // descriptor.
+        final List<IPath> pluginDepencyProjectLocations = new ArrayList<>();
+        final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+        final IMavenProjectRegistry mavenProjectRegistry =
+                MavenPlugin.getMavenProjectRegistry();
+        final List<IMavenProjectFacade> projects =
+                mavenProjectRegistry.getProjects();
+        final List<Dependency> dependencies =
+                mojoExecution.getPlugin().getDependencies();
+        for (final Dependency dependency : dependencies) {
+            for (final IMavenProjectFacade projectFacade : projects) {
+                final IProject project = projectFacade.getProject();
+                if (!project.isAccessible()) {
+                    LOG.debug("Project registry contains closed project {}",
+                            project);
+                    // this is actually a bug somewhere in registry refresh
+                    // logic, closed projects should not be there
+                    continue;
+                }
+                final ArtifactKey artifactKey = projectFacade.getArtifactKey();
+                if (artifactKey.groupId().equals(dependency.getGroupId())
+                        && artifactKey.artifactId()
+                                .equals(dependency.getArtifactId())
+                        && artifactKey.version()
+                                .equals(dependency.getVersion())) {
+                    final IResource outputLocation =
+                            root.findMember(projectFacade.getOutputLocation());
+                    if (outputLocation != null) {
+                        pluginDepencyProjectLocations.add(outputLocation.getLocation());
+                    }
+                }
+            }
+        }
+            var executionContext = maven.createExecutionContext();
+            return executionContext.execute(mavenProject, (context, pm) -> {
+                try {
+                    // we want just the classpath of the Mojo to load resources from it
+                    BuildPluginManager buildPluginManager = ((MavenImpl)maven)
+                            .lookup(BuildPluginManager.class);
+                    ClassRealm pluginRealm = buildPluginManager.getPluginRealm(context.getSession(),
+                            mojoExecution.getMojoDescriptor().getPluginDescriptor());
+                    return new ResourceResolver(pluginRealm, projectLocation,
+                            pluginDepencyProjectLocations);
+                } catch (PluginResolutionException | PluginManagerException e) {
+                    throw new CoreException(new Status(IStatus.ERROR,
+                            FrameworkUtil
+                            .getBundle(AbstractMavenPluginProjectConfigurator.class)
+                            .getSymbolicName(),
+                            "Failed to access classpath of mojo " 
+                                    + mojoExecution.getMojoDescriptor().getId(), 
+                                    e));
+                }
+            }, null);
+    }
+	
 	protected void copyIfChanged(InputStream input, Path output) throws IOException {
 		InputStream source = input;
 		if (Files.exists(output)) {

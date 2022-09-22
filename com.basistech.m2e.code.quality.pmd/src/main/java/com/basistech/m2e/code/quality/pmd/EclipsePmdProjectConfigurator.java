@@ -34,7 +34,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
@@ -101,7 +100,7 @@ public class EclipsePmdProjectConfigurator
 	protected void handleProjectConfigurationChange(
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final MavenPluginWrapper mavenPluginWrapper,
-	        final MavenSession session, final IProgressMonitor monitor) throws CoreException {
+	        final IProgressMonitor monitor) throws CoreException {
 
 		final MavenProject mavenProject = mavenProjectFacade.getMavenProject();
 		final MojoExecution execution = findMojoExecution(mavenPluginWrapper);
@@ -109,7 +108,7 @@ public class EclipsePmdProjectConfigurator
 		        "org.apache.maven.plugins", "maven-pmd-plugin", "pmd");
 		final MavenPluginConfigurationTranslator pluginCfgTranslator =
 		        MavenPluginConfigurationTranslator.newInstance(maven,
-		                session, mavenProjectFacade.getMavenProject(monitor),
+		                mavenProjectFacade.getMavenProject(monitor),
 		                execution, pmdGoalExecution, project, monitor);
 		this.createOrUpdateEclipsePmdConfiguration(mavenPluginWrapper, project,
 		        pluginCfgTranslator, monitor, mavenProject);
@@ -151,9 +150,7 @@ public class EclipsePmdProjectConfigurator
 	        final IProgressMonitor monitor, final MavenProject mavenProject)
 	        throws CoreException {
 
-		final MojoExecution execution = findMojoExecution(pluginWrapper);
-		final ResourceResolver resourceResolver = AbstractMavenPluginProjectConfigurator
-		        .getResourceResolver(execution, mavenProject, project.getLocation());
+		final ResourceResolver resourceResolver = pluginCfgTranslator.getResourceResolver();
 		try {
 			List<Rule> allRules = this.locatePmdRules(pluginCfgTranslator, resourceResolver);
 			Collection<String> excludePatterns = new ArrayList<>();

@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.maven.execution.MavenSession;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -35,7 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
-
 import net.sf.eclipsecs.core.builder.CheckstyleMarker;
 import net.sf.eclipsecs.core.config.CheckConfigurationWorkingCopy;
 import net.sf.eclipsecs.core.config.ICheckConfiguration;
@@ -82,12 +80,12 @@ public class EclipseCheckstyleProjectConfigurator
 	protected void handleProjectConfigurationChange(
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final MavenPluginWrapper mavenPluginWrapper,
-	        final MavenSession session, final IProgressMonitor monitor) throws CoreException {
+	        final IProgressMonitor monitor) throws CoreException {
 
 		final List<MavenPluginConfigurationTranslator> mavenCheckstyleConfigs =
 		        MavenPluginConfigurationTranslator.newInstance(maven, this,
 		                mavenProjectFacade.getMavenProject(monitor),
-		                mavenPluginWrapper, project, monitor, session);
+		                mavenPluginWrapper, project, monitor);
 
 		try {
 			// construct a new working copy
