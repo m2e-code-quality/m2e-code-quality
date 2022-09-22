@@ -1,0 +1,28 @@
+#
+# Reusable action to build and verify m2e-code-quality plugins
+#
+
+name: 'Verify'
+description: 'Executes the maven build'
+inputs:
+  targetPlatform:
+    description: 'The eclipse target platform to build the plugins against'
+    required: true
+  skipTests:
+    description: 'Whether to skip building and executing the unit tests'
+    required: false
+    default: 'false'
+  keystorePassword:
+    description: 'Password for the keystore in order to sign the plugins'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Build with Maven
+      uses: GabrielBB/xvfb-action@v1
+      with:
+        run: bash tools/build.sh -Dtarget.platform=${{ inputs.targetPlatform }} -Dmaven.test.skip=${{ inputs.skipTests }}
+      env:
+        KEYSTORE_PASSWORD: ${{ inputs.keystorePassword }}
