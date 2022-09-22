@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: M2Eclipse Project Configurator for Eclipse Checkstyle
 Bundle-SymbolicName: com.basistech.m2e.code.quality.checkstyle
  ;singleton:=true
-Bundle-Version: 1.1.6.qualifier
+Bundle-Version: 2.0.0.qualifier
 Require-Bundle: org.eclipse.m2e.jdt;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.m2e.core;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.m2e.maven.runtime;bundle-version="[1.0.0,2.0.0)",
@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.m2e.jdt;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.core.runtime;bundle-version="3.6.0",
  net.sf.eclipsecs.core;bundle-version="5.2.0",
  net.sf.eclipsecs.checkstyle;bundle-version="5.2.0",
- com.basistech.m2e.code.quality.shared;bundle-version="1.1.6",
+ com.basistech.m2e.code.quality.shared;bundle-version="2.0.0",
  org.apache.commons.lang;bundle-version="2.6.0",
  org.slf4j.api;bundle-version="1.6.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
