@@ -31,7 +31,7 @@ The latest release can be installed from the Eclipse Update Site at
 
 **Building**
 
-The project uses maven and tycho. You need a Java8 JDK and a Java11 JDK and setup
+The project uses maven and tycho. You need at least a Java17 JDK and setup
 [Maven Toolchains](https://maven.apache.org/guides/mini/guide-using-toolchains.html) correctly.
 You can use the project's [toolchains.xml](tools/toolchains.xml) as a template.
 
