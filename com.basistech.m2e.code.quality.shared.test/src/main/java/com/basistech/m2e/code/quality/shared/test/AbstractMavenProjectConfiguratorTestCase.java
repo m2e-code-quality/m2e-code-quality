@@ -155,7 +155,7 @@ public abstract class AbstractMavenProjectConfiguratorTestCase extends AbstractM
 
 		assertMarkers(project, markerId, minimumMarkerCount);
 	}
-	
+
 	protected void runBuild(final IProject project) throws Exception {
 		runBuild(project, null);
 	}
@@ -169,8 +169,7 @@ public abstract class AbstractMavenProjectConfiguratorTestCase extends AbstractM
 		}
 	}
 
-	protected IMarker[] findMarkers(final IProject project, final String markerId)
-			throws Exception {
+	protected IMarker[] findMarkers(final IProject project, final String markerId) throws Exception {
 		return project.findMarkers(markerId, true, IResource.DEPTH_INFINITE);
 	}
 
@@ -180,8 +179,7 @@ public abstract class AbstractMavenProjectConfiguratorTestCase extends AbstractM
 		assertTrue(markers.length >= minimumMarkerCount);
 	}
 
-	protected void assertNoMarkers(final IProject project, final String markerId)
-			throws Exception {
+	protected void assertNoMarkers(final IProject project, final String markerId) throws Exception {
 		final IMarker[] markers = findMarkers(project, markerId);
 		assertEquals(0, markers.length);
 	}

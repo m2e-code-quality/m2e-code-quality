@@ -1,3 +1,4 @@
+
 package com.basistech.m2e.code.quality.checkstyle.test;
 
 import static org.junit.Assert.assertEquals;
@@ -13,19 +14,12 @@ public class CheckstyleUtilTest {
 	@Test
 	public void testAntToCheckstyleConversion() throws Exception {
 		if (File.separatorChar == '\\') {
-			assertEquals(
-					".*\\.java",
-					CheckstyleUtil.convertAntStylePatternToCheckstylePattern("**\\*.java"));
+			assertEquals(".*\\.java", CheckstyleUtil.convertAntStylePatternToCheckstylePattern("**\\*.java"));
 		}
-		assertEquals(
-				"com/foo/.*",
-				CheckstyleUtil.convertAntStylePatternToCheckstylePattern("com/foo/"));
-		assertEquals(
-				"com/foo/.*\\.java",
+		assertEquals("com/foo/.*", CheckstyleUtil.convertAntStylePatternToCheckstylePattern("com/foo/"));
+		assertEquals("com/foo/.*\\.java",
 				CheckstyleUtil.convertAntStylePatternToCheckstylePattern("com/foo/**/*.java"));
-		assertEquals(
-				".*\\.properties",
-				CheckstyleUtil.convertAntStylePatternToCheckstylePattern("**/*.properties"));
+		assertEquals(".*\\.properties", CheckstyleUtil.convertAntStylePatternToCheckstylePattern("**/*.properties"));
 	}
 
 }

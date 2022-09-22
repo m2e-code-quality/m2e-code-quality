@@ -19,12 +19,12 @@ public final class SpotbugsEclipseConstants {
 
 	public static final String LOG_PREFIX = "M2E-FB";
 	public static final String MAVEN_PLUGIN_GROUPID = "com.github.spotbugs";
-	public static final String MAVEN_PLUGIN_ARTIFACTID =
-	        "spotbugs-maven-plugin";
+	public static final String MAVEN_PLUGIN_ARTIFACTID = "spotbugs-maven-plugin";
 	public static final String ECLIPSE_FB_PREFS_FILE = ".fbprefs";
 	public static final String ECLIPSE_FB_NATURE_ID =
-			// NB: SpotBugs still uses the old FindBugs Eclipse Project Nature ID, see https://github.com/spotbugs/spotbugs/blob/master/eclipsePlugin/plugin.xml
-	        "edu.umd.cs.findbugs.plugin.eclipse.findbugsNature";
+			// NB: SpotBugs still uses the old FindBugs Eclipse Project Nature ID, see
+			// https://github.com/spotbugs/spotbugs/blob/master/eclipsePlugin/plugin.xml
+			"edu.umd.cs.findbugs.plugin.eclipse.findbugsNature";
 	public static final String FB_EXCLUDE_FILTER_FILE = ".fbExcludeFilterFile";
 	public static final String FB_INCLUDE_FILTER_FILE = ".fbIncludeFilterFile";
 	public static final String VISITORS = "visitors";
