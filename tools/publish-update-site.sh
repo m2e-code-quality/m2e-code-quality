@@ -11,10 +11,12 @@ set -eu
 
 #
 # This script requires two tokens as env vars:
-# * PUBLISH_SITE_TOKEN: This token is used to commit
-#   to https://github.com/m2e-code-quality/m2e-code-quality-p2-site
+# * SITE_DEPLOY_PRIVATE_KEY: This is the private ssh key used to push to
+#   to git@github.com:m2e-code-quality/m2e-code-quality-p2-site.git
 #   Since this script is called from a workflow from repo m2e-code-quality, the default
 #   GITHUB_TOKEN won't work to commit to a different repo (m2e-code-quality-p2-site).
+#   The corresponding public key is configured on the repo m2e-code-quality-p2-site
+#   as a deploy key.
 #
 # * GITHUB_TOKEN: Is used to fetch information to generate a changelog.
 #
@@ -29,8 +31,9 @@ if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
 fi
 CURRENT_SITE_FOLDER=current-site
 SITE_GITHUB_BRANCH=gh-pages
-SITE_GITHUB_REPO=m2e-code-quality/m2e-code-quality-p2-site
-SITE_GITHUB_REPO_URL="https://github.com/${SITE_GITHUB_REPO}"
+SITE_GITHUB_REPO=m2e-code-quality/m2e-code-quality-p2-site.git
+SITE_GITHUB_REPO_URL="git@github.com-repo-p2-site:${SITE_GITHUB_REPO}"
+SITE_DEPLOY_PRIVATE_KEY_PATH="${HOME}/.ssh/m2e-code-quality-p2-site_deploy_key"
 
 NEW_SITE_FOLDER=com.basistech.m2e.code.quality.site/target/repository/
 
@@ -74,6 +77,17 @@ function regenCompositeMetadata () {
 " >> "${targetFolder}/compositeArtifacts.xml"
 }
 
+## -- setup ssh
+mkdir -p ~/.ssh
+echo "${SITE_DEPLOY_PRIVATE_KEY}" > "${SITE_DEPLOY_PRIVATE_KEY_PATH}"
+chmod 400 "${SITE_DEPLOY_PRIVATE_KEY_PATH}"
+echo "
+Host github.com-repo-p2-site
+        Hostname github.com
+        IdentityFile=${SITE_DEPLOY_PRIVATE_KEY_PATH}
+" > "${HOME}/.ssh/config"
+
+
 ## -- fetch current site
 rm -rf "${CURRENT_SITE_FOLDER}"
 mkdir "${CURRENT_SITE_FOLDER}"
@@ -81,7 +95,6 @@ pushd "${CURRENT_SITE_FOLDER}"
 git init -q --initial-branch="${SITE_GITHUB_BRANCH}"
 git config --local user.name "m2e-code-quality-bot"
 git config --local user.email "m2e-code-quality-bot@users.noreply.github.com"
-git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $(echo -n "x-access-token:${PUBLISH_SITE_TOKEN}"|base64)"
 git remote add origin "${SITE_GITHUB_REPO_URL}"
 git pull --rebase origin "${SITE_GITHUB_BRANCH}"
 popd
@@ -118,12 +131,13 @@ else
         --no-verbose
 fi
 
-# create a new single commit
+## -- create a new single commit
 pushd "${CURRENT_SITE_FOLDER}"
 git checkout --orphan=gh-pages-2
 git add -A
 git commit -a -m "Update ${SITE_GITHUB_REPO}"
 git push --force origin "gh-pages-2:${SITE_GITHUB_BRANCH}"
-git config --local --unset-all http.https://github.com/.extraheader
 popd
 
+## -- cleanup: remove ssh key
+rm "${SITE_DEPLOY_PRIVATE_KEY_PATH}"

@@ -7,7 +7,7 @@
 
     <groupId>com.basistech.m2e-code-quality</groupId>
     <artifactId>m2e-code-quality-plugins</artifactId>
-    <version>1.1.5.202109180907-r</version>
+    <version>2.0.0.202209221556-r</version>
     <packaging>pom</packaging>
 
     <scm>
@@ -16,14 +16,15 @@
     </scm>
 
     <properties>
-        <target.platform>oxygen</target.platform>
+        <target.platform>2022-09</target.platform>
+        <target.ee>JavaSE-17</target.ee>
 
-        <tycho-version>2.4.0</tycho-version>
+        <tycho-version>2.7.5</tycho-version>
         <main.basedir>${basedir}</main.basedir>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <java.version>1.7</java.version>
+        <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
@@ -52,20 +53,6 @@
         <module>com.basistech.m2e.code.quality.target-platform</module>
     </modules>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <!-- needed for org.jboss.tools.tycho-plugins:repository-utils in com.basistech.m2e.code.quality.site -->
-            <id>jboss</id>
-            <url>https://repository.jboss.org/nexus/content/groups/public</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </pluginRepository>
-    </pluginRepositories>
-
     <build>
         <plugins>
             <plugin>
@@ -91,7 +78,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.3.0</version>
+                <version>4.7.2.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -103,11 +90,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-toolchains-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
                 <configuration>
                     <toolchains>
                         <jdk>
-                            <id>JavaSE-1.8</id>
+                            <id>${target.ee}</id>
                         </jdk>
                     </toolchains>
                 </configuration>
@@ -145,24 +132,6 @@
                         </includes>
                         <argLine>${tycho.test.jvmArgs}</argLine>
                         <forkedProcessTimeoutInSeconds>7200</forkedProcessTimeoutInSeconds>
-                        <!-- http://wiki.eclipse.org/Eclipse4/RCP/FAQ#Why_won.27t_my_application_start.3F -->
-                        <bundleStartLevel>
-                            <bundle>
-                                <id>org.eclipse.core.runtime</id>
-                                <level>2</level>
-                                <autoStart>true</autoStart>
-                            </bundle>
-                            <bundle>
-                                <id>org.eclipse.equinox.ds</id>
-                                <level>3</level>
-                                <autoStart>true</autoStart>
-                            </bundle>
-                            <bundle>
-                                <id>org.eclipse.equinox.event</id>
-                                <level>3</level>
-                                <autoStart>true</autoStart>
-                            </bundle>
-                        </bundleStartLevel>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -193,7 +162,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -301,6 +270,7 @@
             </build>
         </profile>
         <profile>
+            <id>2021-09</id>
             <activation>
                 <property>
                     <name>target.platform</name>
@@ -308,30 +278,35 @@
                 </property>
             </activation>
             <properties>
-                <java.version>11</java.version>
+                <maven.compiler.release>11</maven.compiler.release>
+                <target.ee>JavaSE-11</target.ee>
             </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.eclipse.tycho</groupId>
-                        <artifactId>tycho-compiler-plugin</artifactId>
-                        <configuration>
-                            <release>11</release>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-toolchains-plugin</artifactId>
-                        <configuration>
-                            <toolchains>
-                                <jdk>
-                                    <id>JavaSE-11</id>
-                                </jdk>
-                            </toolchains>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
+        </profile>
+        <profile>
+            <id>2022-06</id>
+            <activation>
+                <property>
+                    <name>target.platform</name>
+                    <value>2022-06</value>
+                </property>
+            </activation>
+            <properties>
+                <maven.compiler.release>11</maven.compiler.release>
+                <target.ee>JavaSE-11</target.ee>
+            </properties>
+        </profile>
+        <profile>
+            <id>2022-09</id>
+            <activation>
+                <property>
+                    <name>target.platform</name>
+                    <value>2022-09</value>
+                </property>
+            </activation>
+            <properties>
+                <maven.compiler.release>17</maven.compiler.release>
+                <target.ee>JavaSE-17</target.ee>
+            </properties>
         </profile>
         <profile>
             <id>local-findbugs-p2</id>

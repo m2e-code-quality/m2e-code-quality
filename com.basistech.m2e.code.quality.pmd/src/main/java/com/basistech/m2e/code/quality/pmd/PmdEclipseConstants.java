@@ -23,16 +23,14 @@ import org.osgi.framework.FrameworkUtil;
 public final class PmdEclipseConstants {
 
 	public static final String LOG_PREFIX = "M2E-PMD";
-	public static final String MAVEN_PLUGIN_GROUPID =
-	        "org.apache.maven.plugins";
+	public static final String MAVEN_PLUGIN_GROUPID = "org.apache.maven.plugins";
 	public static final String MAVEN_PLUGIN_ARTIFACTID = "maven-pmd-plugin";
 
 	public static final String PMD_RULESET_FILE = ".pmdruleset.xml";
 
 	public static final String PMD_SETTINGS_FILE = ".pmd";
 
-	public static final String PLUGIN_ID = FrameworkUtil
-	        .getBundle(PmdEclipseConstants.class).getSymbolicName();
+	public static final String PLUGIN_ID = FrameworkUtil.getBundle(PmdEclipseConstants.class).getSymbolicName();
 
 	private PmdEclipseConstants() {
 		// no instantiation.

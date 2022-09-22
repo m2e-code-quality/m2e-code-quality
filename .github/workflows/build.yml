@@ -20,72 +20,108 @@ on:
       - '!gh-pages'
 
 jobs:
-  build:
+  # verify build on one node before multiple builds on different os are started
+  fail-fast-build:
+    name: fail-fast verify (ubuntu-latest, 2022-09)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setup
+
+      - uses: ./.github/actions/verify
+        with:
+          targetPlatform: 2022-09
+
+  verify:
+    needs: fail-fast-build
+    name: verify (${{ matrix.os }}, ${{ matrix.targetPlatform }})
+    timeout-minutes: 60
 
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macOS-latest ]
-      fail-fast: false
+        targetPlatform: [ 2022-09 ]
+        exclude:
+          # exclude the fail-fast-build, which already ran
+          - os: ubuntu-latest
+            targetPlatform: 2022-09
+      fail-fast: true
 
     runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+      - uses: ./.github/actions/setup
+
+      - uses: ./.github/actions/verify
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+
+  publish-snapshot-update-site:
+    needs: verify
+    if: ${{ github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' && github.ref == 'refs/heads/develop' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - uses: ruby/setup-ruby@v1
+      - uses: ./.github/actions/setup
         with:
-          ruby-version: 2.7
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          withRuby: 'true'
 
-      - name: Set up JDK 8
-        id: java8
-        uses: actions/setup-java@v2
+      - uses: ./.github/actions/verify
         with:
-          distribution: temurin
-          java-version: '8'
+          targetPlatform: 2022-09
+          keystorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          skipTests: 'true'
 
-      - name: Set up JDK 11
-        id: java11
-        uses: actions/setup-java@v2
-        with:
-          distribution: temurin
-          java-version: '11'
-          cache: 'maven'
-
-      - name: Setup maven toolchains.xml
+      - name: Publish update site
         shell: bash
-        run: |
-          echo "JAVA8_HOME=${{ steps.java8.outputs.path }}" >> $GITHUB_ENV
-          echo "JAVA11_HOME=${{ steps.java11.outputs.path }}" >> $GITHUB_ENV
-          cp tools/toolchains.xml $HOME/.m2/
+        run: tools/publish-update-site.sh
+        env:
+          SITE_DEPLOY_PRIVATE_KEY: ${{ secrets.SITE_DEPLOY_PRIVATE_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    needs: verify
+    if: ${{ github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' && startsWith(github.ref, 'refs/tags/') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setup
+        with:
+          withRuby: 'true'
 
       - name: Prepare release
-        if: ${{ runner.os == 'Linux' && github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' && startsWith(github.ref, 'refs/tags/') }}
         shell: bash
         run: tools/prepare_release.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build with Maven
-        uses: GabrielBB/xvfb-action@v1
+      - uses: ./.github/actions/verify
         with:
-          run: bash tools/build.sh
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          targetPlatform: 2022-09
+          keystorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          skipTests: 'true'
 
       - name: Publish update site
-        if: ${{ runner.os == 'Linux' && github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' }}
         shell: bash
         run: tools/publish-update-site.sh
         env:
-          PUBLISH_SITE_TOKEN: ${{ secrets.PUBLISH_SITE_TOKEN }}
+          SITE_DEPLOY_PRIVATE_KEY: ${{ secrets.SITE_DEPLOY_PRIVATE_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish release
-        if: ${{ runner.os == 'Linux' && github.event_name == 'push' && github.repository == 'm2e-code-quality/m2e-code-quality' && startsWith(github.ref, 'refs/tags/') }}
         shell: bash
         run: tools/release.sh
         env:

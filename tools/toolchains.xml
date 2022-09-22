@@ -6,23 +6,12 @@
     <toolchain>
         <type>jdk</type>
         <provides>
-            <version>1.8</version>
+            <version>17</version>
             <vendor>openjdk</vendor>
-            <id>JavaSE-1.8</id>
+            <id>JavaSE-17</id>
         </provides>
         <configuration>
-            <jdkHome>${env.JAVA8_HOME}</jdkHome>
-        </configuration>
-    </toolchain>
-    <toolchain>
-        <type>jdk</type>
-        <provides>
-            <version>11</version>
-            <vendor>openjdk</vendor>
-            <id>JavaSE-11</id>
-        </provides>
-        <configuration>
-            <jdkHome>${env.JAVA11_HOME}</jdkHome>
+            <jdkHome>${env.JAVA17_HOME}</jdkHome>
         </configuration>
     </toolchain>
 </toolchains>

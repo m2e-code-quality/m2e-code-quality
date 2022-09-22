@@ -27,9 +27,9 @@ import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.L
 import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.MAX_RANK;
 import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.OMIT_VISITORS;
 import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.PRIORITY;
+import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.SKIP;
 import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.THRESHOLD;
 import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.VISITORS;
-import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.SKIP;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,7 +39,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
@@ -55,7 +54,6 @@ import org.slf4j.LoggerFactory;
 
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginConfigurationTranslator;
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
-
 import edu.umd.cs.findbugs.DetectorFactory;
 import edu.umd.cs.findbugs.DetectorFactoryCollection;
 import edu.umd.cs.findbugs.config.ProjectFilterSettings;
@@ -66,34 +64,27 @@ import edu.umd.cs.findbugs.config.UserPreferences;
  */
 public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfigurationTranslator {
 
-	private static final Logger LOG =
-	        LoggerFactory.getLogger(MavenPluginConfigurationTranslator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MavenPluginConfigurationTranslator.class);
 
-	private MavenPluginConfigurationTranslator(
-	        final IMaven maven,
-	        final MavenSession session, final MavenProject mavenProject,
-	        final MojoExecution execution, final IProject project,
-	        final IProgressMonitor monitor) throws CoreException {
-		super(maven, session, mavenProject, execution, project, monitor);
+	private MavenPluginConfigurationTranslator(final IMaven maven, final MavenProject mavenProject,
+			final MojoExecution execution, final IProject project, final IProgressMonitor monitor)
+			throws CoreException {
+		super(maven, mavenProject, execution, project, monitor);
 	}
 
 	public boolean isSkip() throws CoreException {
 		return getParameterValue(SKIP, Boolean.class, Boolean.FALSE);
 	}
 
-	public void setIncludeFilterFiles(final UserPreferences prefs)
-	        throws CoreException {
-		final String includeFilterFile =
-		        getParameterValue(INCLUDE_FILTER_FILE, String.class);
+	public void setIncludeFilterFiles(final UserPreferences prefs) throws CoreException {
+		final String includeFilterFile = getParameterValue(INCLUDE_FILTER_FILE, String.class);
 		// don't do anything if null
 		if (includeFilterFile == null) {
 			LOG.debug("includeFilterFile is null");
 			return;
 		}
-		List<String> filterFiles = this.copyUrlResourcesToProject(includeFilterFile,
-		        FB_INCLUDE_FILTER_FILE);
-		final Map<String, Boolean> curIncludeFilteredFiles =
-		        prefs.getIncludeFilterFiles();
+		List<String> filterFiles = this.copyUrlResourcesToProject(includeFilterFile, FB_INCLUDE_FILTER_FILE);
+		final Map<String, Boolean> curIncludeFilteredFiles = prefs.getIncludeFilterFiles();
 		final Map<String, Boolean> newIncludeFilteredFiles = new HashMap<>();
 		// Make sure we add it only once.
 		for (String filterFile : filterFiles) {
@@ -105,20 +96,16 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		prefs.setIncludeFilterFiles(newIncludeFilteredFiles);
 	}
 
-	public void setExcludeFilterFiles(final UserPreferences prefs)
-	        throws CoreException {
+	public void setExcludeFilterFiles(final UserPreferences prefs) throws CoreException {
 		LOG.debug("entering setExcludeFilterFiles");
-		final String excludeFilterFile =
-		        getParameterValue(EXCLUDE_FILTER_FILE, String.class);
+		final String excludeFilterFile = getParameterValue(EXCLUDE_FILTER_FILE, String.class);
 		// don't do anything if null
 		if (excludeFilterFile == null) {
 			LOG.debug("excludeFilterFile is null");
 			return;
 		}
-		List<String> filterFiles = this.copyUrlResourcesToProject(excludeFilterFile,
-		        FB_EXCLUDE_FILTER_FILE);
-		final Map<String, Boolean> curExcludeFilteredFiles =
-		        prefs.getExcludeFilterFiles();
+		List<String> filterFiles = this.copyUrlResourcesToProject(excludeFilterFile, FB_EXCLUDE_FILTER_FILE);
+		final Map<String, Boolean> curExcludeFilteredFiles = prefs.getExcludeFilterFiles();
 		final Map<String, Boolean> newExcludeFilteredFiles = new HashMap<>();
 		for (String filterFile : filterFiles) {
 			if (!curExcludeFilteredFiles.containsKey(filterFile)) {
@@ -146,23 +133,19 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 	 * </ul>
 	 * </p>
 	 *
-	 * @param prefs
-	 *            the {@link UserPreferences} instance.
-	 * @throws CoreException
-	 *             if an error occurs
+	 * @param prefs the {@link UserPreferences} instance.
+	 * @throws CoreException if an error occurs
 	 */
-	public void setBugCatagories(final UserPreferences prefs)
-	        throws CoreException {
+	public void setBugCatagories(final UserPreferences prefs) throws CoreException {
 		final ProjectFilterSettings pfs = prefs.getFilterSettings();
 		final String bugCatagories = getParameterValue(BUG_CATEGORIES, String.class);
 		if (bugCatagories == null) {
 			LOG.debug("bugCatagories is null");
 			return;
 		}
-		final List<String> addBugCatagoriesList =
-		        Arrays.asList(StringUtils.split(bugCatagories, ","));
+		final List<String> addBugCatagoriesList = Arrays.asList(StringUtils.split(bugCatagories, ","));
 		final List<String> availableBugCategories = new LinkedList<>(
-		        DetectorFactoryCollection.instance().getBugCategories());
+				DetectorFactoryCollection.instance().getBugCategories());
 		if (!addBugCatagoriesList.isEmpty()) {
 			for (final String removeBugCategory : availableBugCategories) {
 				pfs.removeCategory(removeBugCategory);
@@ -174,8 +157,7 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 			if (availableBugCategories.contains(bcUpper)) {
 				pfs.addCategory(bcUpper);
 			} else {
-				LOG.debug(String.format("[%s]: Unknown Bug Catagory [%s]",
-				        LOG_PREFIX, bc));
+				LOG.debug(String.format("[%s]: Unknown Bug Catagory [%s]", LOG_PREFIX, bc));
 			}
 			if (pfs.getActiveCategorySet().contains(bcUpper)) {
 				removeBugCategoriesSet.add(bcUpper);
@@ -198,9 +180,8 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		try {
 			prefs.setEffort(effort);
 		} catch (final IllegalArgumentException ex) {
-			LOG.error(
-			        "{}: could not set <effort>, reason {}, setting it to default {}",
-			        LOG_PREFIX, effort, UserPreferences.EFFORT_DEFAULT, ex);
+			LOG.error("{}: could not set <effort>, reason {}, setting it to default {}", LOG_PREFIX, effort,
+					UserPreferences.EFFORT_DEFAULT, ex);
 		}
 	}
 
@@ -213,9 +194,7 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		try {
 			prefs.getFilterSettings().setMinRank(minRank);
 		} catch (final IllegalArgumentException ex) {
-			LOG.error(
-			        "{}: could not set <rank>, reason {}, setting it to default {}",
-			        LOG_PREFIX, minRank, 15, ex);
+			LOG.error("{}: could not set <rank>, reason {}, setting it to default {}", LOG_PREFIX, minRank, 15, ex);
 		}
 	}
 
@@ -228,28 +207,22 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		try {
 			prefs.getFilterSettings().setMinPriority(priority);
 		} catch (final Exception ex) {
-			LOG.error(
-			        "{}: could not set <threshold>, reason {}, leaving it alone",
-			        LOG_PREFIX, priority, ex);
+			LOG.error("{}: could not set <threshold>, reason {}, leaving it alone", LOG_PREFIX, priority, ex);
 		}
 	}
 
-	public void setOmitVisitors(final UserPreferences prefs)
-	        throws CoreException {
+	public void setOmitVisitors(final UserPreferences prefs) throws CoreException {
 		final String omitVisitors = getParameterValue(OMIT_VISITORS, String.class);
 		if (omitVisitors == null) {
 			LOG.debug("omitVisitors is null");
 			return;
 		}
-		final List<String> detectorsList =
-		        Arrays.asList(StringUtils.split(omitVisitors, ","));
-		final DetectorFactoryCollection dfc =
-		        DetectorFactoryCollection.instance();
+		final List<String> detectorsList = Arrays.asList(StringUtils.split(omitVisitors, ","));
+		final DetectorFactoryCollection dfc = DetectorFactoryCollection.instance();
 		for (final String d : detectorsList) {
 			final DetectorFactory df = dfc.getFactory(d);
 			if (df == null) {
-				LOG.error(String.format("[%s]: IGNORING unknown detector [%s]",
-				        LOG_PREFIX, d));
+				LOG.error(String.format("[%s]: IGNORING unknown detector [%s]", LOG_PREFIX, d));
 			} else {
 				prefs.enableDetector(df, false);
 			}
@@ -265,9 +238,7 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		try {
 			prefs.getFilterSettings().setMinPriority(threshold);
 		} catch (final Exception ex) {
-			LOG.error(
-			        "{}: could not set <threshold>, reason {}, leaving it alone",
-			        LOG_PREFIX, threshold, ex);
+			LOG.error("{}: could not set <threshold>, reason {}, leaving it alone", LOG_PREFIX, threshold, ex);
 		}
 	}
 
@@ -276,42 +247,30 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		if (visitors == null) {
 			return;
 		}
-		final List<String> detectorsList =
-		        Arrays.asList(StringUtils.split(visitors, ","));
+		final List<String> detectorsList = Arrays.asList(StringUtils.split(visitors, ","));
 		prefs.enableAllDetectors(false);
-		final DetectorFactoryCollection dfc =
-		        DetectorFactoryCollection.instance();
+		final DetectorFactoryCollection dfc = DetectorFactoryCollection.instance();
 		for (final String d : detectorsList) {
 			final DetectorFactory df = dfc.getFactory(d);
 			if (df == null) {
-				LOG.error(String.format("[%s]: IGNORING unknown detector [%s]",
-				        LOG_PREFIX, d));
+				LOG.error(String.format("[%s]: IGNORING unknown detector [%s]", LOG_PREFIX, d));
 			} else {
 				prefs.enableDetector(df, true);
 			}
 		}
 	}
 
-	public static MavenPluginConfigurationTranslator newInstance(
-	        final IMaven maven,
-	        final MavenPluginWrapper mavenPlugin, final MavenSession session,
-	        final MavenProject mavenProject, final IProject project,
-	        final IProgressMonitor monitor) throws CoreException {
+	public static MavenPluginConfigurationTranslator newInstance(final IMaven maven,
+			final MavenPluginWrapper mavenPlugin, final MavenProject mavenProject, final IProject project,
+			final IProgressMonitor monitor) throws CoreException {
 
-		final List<MojoExecution> mojoExecutions =
-		        mavenPlugin.getMojoExecutions();
+		final List<MojoExecution> mojoExecutions = mavenPlugin.getMojoExecutions();
 		if (mojoExecutions.size() != 1) {
-			throw new CoreException(
-			        new Status(IStatus.ERROR,
-			                FrameworkUtil
-			                        .getBundle(
-			                                MavenPluginConfigurationTranslator.class)
-			                        .getSymbolicName(),
-			                "Wrong number of executions. Expected 1. Found "
-			                        + mojoExecutions.size()));
+			throw new CoreException(new Status(IStatus.ERROR,
+					FrameworkUtil.getBundle(MavenPluginConfigurationTranslator.class).getSymbolicName(),
+					"Wrong number of executions. Expected 1. Found " + mojoExecutions.size()));
 		}
 		final MojoExecution execution = mojoExecutions.get(0);
-		return new MavenPluginConfigurationTranslator(maven, session, mavenProject,
-				execution, project, monitor);
+		return new MavenPluginConfigurationTranslator(maven, mavenProject, execution, project, monitor);
 	}
 }

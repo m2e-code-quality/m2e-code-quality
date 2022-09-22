@@ -60,10 +60,10 @@ done
 # increment version
 NEW_VERSION=$(echo "$RELEASE_TAG" | awk 'BEGIN { FS="." } { $3++; } { printf "%d.%d.%d\n", $1, $2, $3 }')-SNAPSHOT
 echo "changing version to $NEW_VERSION"
-mvn org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion="$NEW_VERSION" -Dtycho.mode=maven
+./mvnw org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion="$NEW_VERSION" -Dtycho.mode=maven
 
 # commit the updated version
 git commit -a --message "Next version: $NEW_VERSION"
 
 # push updated development branch
-git push "$GITHUB_BRANCH"
+git push origin "$GITHUB_BRANCH"

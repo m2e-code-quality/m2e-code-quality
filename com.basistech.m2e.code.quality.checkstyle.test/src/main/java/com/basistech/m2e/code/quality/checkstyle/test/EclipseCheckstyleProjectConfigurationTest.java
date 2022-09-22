@@ -5,6 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
+
 package com.basistech.m2e.code.quality.checkstyle.test;
 
 import static org.junit.Assert.assertEquals;

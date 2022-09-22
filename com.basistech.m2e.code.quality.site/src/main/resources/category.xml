@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This category.xml file is filtered and copied to {project.basedir}/category.xml during the build.
+Please modify src/main/resources/category.xml instead.
+-->
+<site>
+   <description url="http://m2e-code-quality.github.org/m2e-code-quality/site">
+     Code Quality Plugin Configuration for M2Eclipse
+   </description>
+   <feature url="features/com.basistech.m2e.code.quality.checkstyle.feature_0.0.0.jar" id="com.basistech.m2e.code.quality.checkstyle.feature" version="0.0.0">
+      <category name="${update.site.category}"/>
+   </feature>
+   <feature url="features/com.basistech.m2e.code.quality.pmd.feature_0.0.0.jar" id="com.basistech.m2e.code.quality.pmd.feature" version="0.0.0">
+      <category name="${update.site.category}"/>
+   </feature>
+   <feature url="features/com.basistech.m2e.code.quality.findbugs.feature_0.0.0.jar" id="com.basistech.m2e.code.quality.findbugs.feature" version="0.0.0">
+      <category name="${update.site.category}"/>
+   </feature>
+   <feature url="features/com.basistech.m2e.code.quality.spotbugs.feature_0.0.0.jar" id="com.basistech.m2e.code.quality.spotbugs.feature" version="0.0.0">
+      <category name="${update.site.category}"/>
+   </feature>
+   <category-def name="${update.site.category}" label="Code Quality Plugin Configuration for M2Eclipse"/>
+   <repository-reference location="${updatesite.cs}" enabled="true" />
+   <repository-reference location="${updatesite.pmd}" enabled="true" />
+   <repository-reference location="${updatesite.findbugs}" enabled="true" />
+   <repository-reference location="${updatesite.spotbugs}" enabled="true" />
+</site>

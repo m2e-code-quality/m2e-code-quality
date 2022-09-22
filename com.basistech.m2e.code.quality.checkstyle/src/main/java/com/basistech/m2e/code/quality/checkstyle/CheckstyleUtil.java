@@ -14,25 +14,21 @@ public final class CheckstyleUtil {
 	}
 
 	/**
-	 * Helper to convert the maven-checkstyle-plugin includes/excludes pattern
-	 * to eclipse checkstyle plugin pattern.
+	 * Helper to convert the maven-checkstyle-plugin includes/excludes pattern to
+	 * eclipse checkstyle plugin pattern.
 	 * 
-	 * @param pattern
-	 *            the maven-checkstyle-plugin pattern.
+	 * @param pattern the maven-checkstyle-plugin pattern.
 	 * @return the converted checkstyle eclipse pattern.
 	 */
-	public static String convertAntStylePatternToCheckstylePattern(
-	        final String pattern) {
+	public static String convertAntStylePatternToCheckstylePattern(final String pattern) {
 		Preconditions.checkNotNull(pattern, "pattern cannot be null");
-		Preconditions.checkArgument(!pattern.isEmpty(),
-		        "pattern cannot be empty");
+		Preconditions.checkArgument(!pattern.isEmpty(), "pattern cannot be empty");
 
-		String sanitizedPattern = File.separatorChar == WINDOWS_CHAR ?
-		        pattern.replace(WINDOWS_CHAR, SEPARATOR_CHAR) : pattern;
+		String sanitizedPattern = File.separatorChar == WINDOWS_CHAR ? pattern.replace(WINDOWS_CHAR, SEPARATOR_CHAR)
+				: pattern;
 		final String dupeSeperatorChar = SEPARATOR + SEPARATOR;
 		while (sanitizedPattern.contains(dupeSeperatorChar)) {
-			sanitizedPattern =
-			        sanitizedPattern.replace(dupeSeperatorChar, SEPARATOR);
+			sanitizedPattern = sanitizedPattern.replace(dupeSeperatorChar, SEPARATOR);
 		}
 
 		final StringBuilder sb = new StringBuilder();
@@ -47,8 +43,7 @@ public final class CheckstyleUtil {
 				nextNextChar = sanitizedPattern.charAt(i + 2);
 			}
 
-			if (curChar == '*' && nextChar == '*'
-			        && nextNextChar == SEPARATOR_CHAR) {
+			if (curChar == '*' && nextChar == '*' && nextNextChar == SEPARATOR_CHAR) {
 				sb.append(".*");
 				++i;
 				++i;

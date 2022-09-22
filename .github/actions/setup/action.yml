@@ -1,0 +1,31 @@
+name: 'Setup'
+description: 'Setup java, maven and toolchains and optionally ruby'
+inputs:
+  withRuby:
+    description: 'Setup ruby as well'
+    required: false
+    default: 'false'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Ruby
+      if: ${{ inputs.withRuby == 'true' }}
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+    - name: Set up JDK 17
+      id: java17
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: '17'
+        cache: 'maven'
+
+    - name: Setup maven toolchains.xml
+      shell: bash
+      run: |
+        echo "JAVA17_HOME=${{ steps.java17.outputs.path }}" >> $GITHUB_ENV
+        cp tools/toolchains.xml $HOME/.m2/

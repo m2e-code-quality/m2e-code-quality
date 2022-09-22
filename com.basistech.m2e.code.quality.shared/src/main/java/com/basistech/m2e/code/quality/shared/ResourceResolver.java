@@ -42,15 +42,14 @@ import com.google.common.base.Preconditions;
  */
 public final class ResourceResolver {
 
-	private static final Logger LOG =
-	        LoggerFactory.getLogger(ResourceResolver.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ResourceResolver.class);
 
 	private final ClassRealm pluginRealm;
 	private final IPath projectLocation;
 	private final List<IPath> projectLocations;
 
-	public ResourceResolver(final ClassRealm pluginRealm,
-	        final IPath projectLocation, final List<IPath> projectLocations) {
+	public ResourceResolver(final ClassRealm pluginRealm, final IPath projectLocation,
+			final List<IPath> projectLocations) {
 		Preconditions.checkNotNull(projectLocation);
 		Preconditions.checkNotNull(projectLocations);
 		this.pluginRealm = pluginRealm;
@@ -66,8 +65,7 @@ public final class ResourceResolver {
 	 * <li>As a filesystem resource.</li>
 	 * </ol>
 	 * 
-	 * @param location
-	 *            the resource location as a string.
+	 * @param location the resource location as a string.
 	 * @return the {@code URL} of the resolved location or {@code null}.
 	 */
 	public URL resolveLocation(final String location) {
@@ -98,20 +96,16 @@ public final class ResourceResolver {
 		if (pluginRealm == null) {
 			return null;
 		}
-		String fixedResource =
-		        resource.startsWith("/") ? resource.substring(1) : resource;
+		String fixedResource = resource.startsWith("/") ? resource.substring(1) : resource;
 		try {
-			List<URL> urls =
-			        Collections.list(pluginRealm.getResources(fixedResource));
+			List<URL> urls = Collections.list(pluginRealm.getResources(fixedResource));
 			if (urls.isEmpty()) {
 				return null;
 			}
 			if (urls.size() > 1) {
-				LOG.warn(
-				        "Resource appears more than once on classpath, this is "
-				                + "dangerous because it makes resolving this resource "
-				                + "dependant on classpath ordering; location {} found in {}",
-				        fixedResource, urls);
+				LOG.warn("Resource appears more than once on classpath, this is "
+						+ "dangerous because it makes resolving this resource "
+						+ "dependant on classpath ordering; location {} found in {}", fixedResource, urls);
 			}
 			return urls.get(0);
 		} catch (IOException e) {
@@ -136,8 +130,7 @@ public final class ResourceResolver {
 				return path.toUri().toURL();
 			}
 		} catch (InvalidPathException | IOException e) {
-			LOG.trace("Could not open resource {} from file system", resource,
-			        e);
+			LOG.trace("Could not open resource {} from file system", resource, e);
 		}
 		return null;
 	}
@@ -146,16 +139,14 @@ public final class ResourceResolver {
 		return getResourceRelativeFromIPath(projectLocation, resource);
 	}
 
-	public URL getResourceRelativeFromIPath(final IPath path,
-	        final String resource) {
+	public URL getResourceRelativeFromIPath(final IPath path, final String resource) {
 		try {
 			final File file = path.append(resource).toFile();
 			if (file.exists()) {
 				return file.toURI().toURL();
 			}
 		} catch (final IOException e) {
-			LOG.trace("Could not open resource {} relative to project location",
-			        resource, e);
+			LOG.trace("Could not open resource {} relative to project location", resource, e);
 		}
 		return null;
 	}

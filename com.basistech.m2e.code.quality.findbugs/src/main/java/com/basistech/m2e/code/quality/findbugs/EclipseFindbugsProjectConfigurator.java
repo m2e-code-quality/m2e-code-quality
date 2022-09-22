@@ -23,7 +23,6 @@ import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.M
 
 import java.util.List;
 
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -36,7 +35,6 @@ import org.slf4j.LoggerFactory;
 
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
-
 import de.tobject.findbugs.FindbugsPlugin;
 import de.tobject.findbugs.marker.FindBugsMarker;
 import de.tobject.findbugs.nature.FindBugsNature;
@@ -44,11 +42,9 @@ import edu.umd.cs.findbugs.config.UserPreferences;
 
 /**
  */
-public class EclipseFindbugsProjectConfigurator
-        extends AbstractMavenPluginProjectConfigurator<FindBugsNature> {
+public class EclipseFindbugsProjectConfigurator extends AbstractMavenPluginProjectConfigurator<FindBugsNature> {
 
-	private static final Logger LOG =
-	        LoggerFactory.getLogger(EclipseFindbugsProjectConfigurator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(EclipseFindbugsProjectConfigurator.class);
 
 	public EclipseFindbugsProjectConfigurator() {
 		super(ECLIPSE_FB_NATURE_ID, FindBugsMarker.NAME, ECLIPSE_FB_PREFS_FILE);
@@ -66,32 +62,25 @@ public class EclipseFindbugsProjectConfigurator
 
 	@Override
 	protected String[] getMavenPluginGoals() {
-		return new String[] {"findbugs", "check"};
+		return new String[] { "findbugs", "check" };
 	}
 
 	@Override
-	protected void handleProjectConfigurationChange(
-	        final IMavenProjectFacade mavenProjectFacade,
-	        final IProject project, final MavenPluginWrapper mavenPluginWrapper,
-	        final MavenSession session, final IProgressMonitor monitor) throws CoreException {
+	protected void handleProjectConfigurationChange(final IMavenProjectFacade mavenProjectFacade,
+			final IProject project, final MavenPluginWrapper mavenPluginWrapper, final IProgressMonitor monitor)
+			throws CoreException {
 		LOG.debug("entering handleProjectConfigurationChange");
 		final IJavaProject javaProject = JavaCore.create(project);
-		if (javaProject == null || !javaProject.exists()
-		        || !javaProject.getProject().isOpen()) {
+		if (javaProject == null || !javaProject.exists() || !javaProject.getProject().isOpen()) {
 			return;
 		}
-		final MavenPluginConfigurationTranslator mavenFindbugsConfig =
-		        MavenPluginConfigurationTranslator.newInstance(maven,
-		                mavenPluginWrapper, session,
-		                mavenProjectFacade.getMavenProject(monitor),
-		                project, monitor);
+		final MavenPluginConfigurationTranslator mavenFindbugsConfig = MavenPluginConfigurationTranslator
+				.newInstance(maven, mavenPluginWrapper, mavenProjectFacade.getMavenProject(monitor), project, monitor);
 		UserPreferences prefs;
 		try {
-			final List<MojoExecution> mojoExecutions =
-			        mavenPluginWrapper.getMojoExecutions();
+			final List<MojoExecution> mojoExecutions = mavenPluginWrapper.getMojoExecutions();
 			if (mojoExecutions.size() != 1) {
-				LOG.error("Wrong number of executions. Expected 1. Found "
-				        + mojoExecutions.size());
+				LOG.error("Wrong number of executions. Expected 1. Found " + mojoExecutions.size());
 				return;
 			}
 			prefs = this.buildFindbugsPreferences(mavenFindbugsConfig);
@@ -108,12 +97,10 @@ public class EclipseFindbugsProjectConfigurator
 		}
 	}
 
-	private UserPreferences buildFindbugsPreferences(
-	        final MavenPluginConfigurationTranslator pluginCfgTranslator)
-	        throws CoreException {
+	private UserPreferences buildFindbugsPreferences(final MavenPluginConfigurationTranslator pluginCfgTranslator)
+			throws CoreException {
 		LOG.debug("entering buildFindbugsPreferences");
-		final UserPreferences prefs =
-		        UserPreferences.createDefaultUserPreferences();
+		final UserPreferences prefs = UserPreferences.createDefaultUserPreferences();
 		pluginCfgTranslator.setIncludeFilterFiles(prefs);
 		pluginCfgTranslator.setExcludeFilterFiles(prefs);
 		// pluginCfgTranslator.setBugCatagories(prefs);

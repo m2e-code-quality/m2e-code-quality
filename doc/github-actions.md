@@ -6,22 +6,34 @@ For every push, the snapshot update site is updated.
 
 ## Secrets
 
-For publishing the update site and generating a changelog, a github token is required.
+These secrets are configured for
+[m2e-code-quality](https://github.com/m2e-code-quality/m2e-code-quality/settings/secrets/actions):
 
-The token is configured as a repository secret named `PUBLISH_SITE_TOKEN`.
+### GITHUB_TOKEN
 
-The github action is called from the main code repository `m2e-code-quality`. The default
-GITHUB_TOKEN provided by github actions is not working, because the update site
-is in a separate repository `m2e-code-quality-p2-site`.
+That's the default token that is issued by github actions. It allows to push to the
+same repo as the action has been started. This token is used to generate a changelog
+and create a release.
 
-The token needs the scope "public_repo". A new token can be created at <https://github.com/settings/tokens>.
-The user, to which the token belongs, needs to have write permissions for `m2e-code-quality-p2-site`
-in order to commit the updated site.
+During the release, also some commits are done. These use the
+identity of [m2e-code-quality-bot](https://github.com/m2e-code-quality-bot).
 
-For the commit, the identity of [m2e-code-quality-bot](https://github.com/m2e-code-quality-bot) is used.
+### KEYSTORE_PASSWORD
 
 The password for the keystore to sign the plugin is configured as a repository secret
 named `KEYSTORE_PASSWORD`.
+
+### SITE_DEPLOY_PRIVATE_KEY
+
+That's the private ssh key used to push to the repository `m2e-code-quality-p2-site`.
+The public key is add in the settings of
+[m2e-code-quality-p2-site](https://github.com/m2e-code-quality/m2e-code-quality-p2-site/settings/keys)
+with write access.
+
+This secret is written to `~/.ssh/m2e-code-quality-p2-site_deploy_key` in the script
+`tools/publish-update-site.sh`.
+
+For the commit, the identity of [m2e-code-quality-bot](https://github.com/m2e-code-quality-bot) is used.
 
 ## What is being done
 
@@ -37,10 +49,11 @@ is executed.
 This will temporarily clone the site repo `m2e-code-quality-p2-site` and integrate the new
 generated snapshot update site into it.
 
-An updated changelog is generated via [github-changelog-generator](https://github.com/github-changelog-generator/github-changelog-generator)
+An updated changelog is generated via
+[github-changelog-generator](https://github.com/github-changelog-generator/github-changelog-generator)
 and also placed into the site repo.
 
-As last the, the site repo is pushed to github and github will publish it via github pages.
+As last step, the site repo is pushed to github using the deploy key and github will publish it via github pages.
 
 ## Signing
 
