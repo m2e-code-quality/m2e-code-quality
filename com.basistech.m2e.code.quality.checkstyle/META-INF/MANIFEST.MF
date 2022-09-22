@@ -4,26 +4,21 @@ Bundle-Name: M2Eclipse Project Configurator for Eclipse Checkstyle
 Bundle-SymbolicName: com.basistech.m2e.code.quality.checkstyle
  ;singleton:=true
 Bundle-Version: 2.0.0.qualifier
-Require-Bundle: org.eclipse.m2e.jdt;bundle-version="[2.0.0,3.0.0)",
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.ui,
  org.eclipse.m2e.core;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.m2e.maven.runtime;bundle-version="[3.0.0,4.0.0)",
- org.eclipse.equinox.common;bundle-version="3.6.0",
- org.eclipse.core.resources;bundle-version="3.6.0",
- org.eclipse.ui.console,
- org.eclipse.jdt.core;bundle-version="3.6.0",
- org.eclipse.core.runtime;bundle-version="3.6.0",
- net.sf.eclipsecs.core;bundle-version="5.2.0",
- net.sf.eclipsecs.checkstyle;bundle-version="5.2.0",
- com.basistech.m2e.code.quality.shared;bundle-version="2.0.0",
- org.apache.commons.lang;bundle-version="2.6.0",
- org.slf4j.api;bundle-version="1.6.1"
+ net.sf.eclipsecs.core,
+ com.basistech.m2e.code.quality.shared;bundle-version="2.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: Basis Technology Corp.
 Import-Package: org.apache.commons.lang,
  org.eclipse.jface.preference,
  org.eclipse.swt.widgets,
  org.eclipse.ui,
- org.eclipse.ui.plugin
+ org.eclipse.ui.plugin,
+ org.slf4j
 Bundle-Activator: com.basistech.m2e.code.quality.checkstyle.Activator
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
