@@ -50,7 +50,7 @@ public class AbstractMavenPluginConfigurationTranslator {
 		this.mojoExecution = mojoExecution;
 		this.monitor = monitor;
 		this.resourceResolver = AbstractMavenPluginProjectConfigurator
-				.getResourceResolver(mojoExecution, session, project.getLocation());
+				.getResourceResolver(mojoExecution, mavenProject, project.getLocation());
 		execution = new PluginExecution();
 		execution.setConfiguration(mojoExecution.getConfiguration());
 	}

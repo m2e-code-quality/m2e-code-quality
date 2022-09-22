@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.BuildPluginManager;
@@ -44,6 +43,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.ArtifactKey;
 import org.eclipse.m2e.core.embedder.IMaven;
+import org.eclipse.m2e.core.embedder.IMavenExecutionContext;
 import org.eclipse.m2e.core.internal.embedder.MavenImpl;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
@@ -118,26 +118,23 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 	@Override
 	public void configure(final ProjectConfigurationRequest request,
 	        final IProgressMonitor monitor) throws CoreException {
-		LOG.debug("configure {}", request.getProject());
+		LOG.debug("configure {}", request.mavenProject().getArtifact().getArtifactId());
 
-		final MavenProject mavenProject = request.getMavenProject();
+		final MavenProject mavenProject = request.mavenProject();
 		if (mavenProject == null) {
 			return;
 		}
 
 		final MavenPluginWrapper pluginWrapper =
-		        this.getMavenPlugin(monitor, request.getMavenProjectFacade());
-		final IProject project = request.getProject();
+		        this.getMavenPlugin(monitor, request.mavenProjectFacade());
+		final IProject project = request.mavenProjectFacade().getProject();
 
 		if (!pluginWrapper.isPluginConfigured()) {
 			return;
 		}
 
-		@SuppressWarnings("deprecation")
-		final MavenSession mavenSession = request.getMavenSession();
-
-		this.handleProjectConfigurationChange(request.getMavenProjectFacade(),
-		        project, pluginWrapper, mavenSession, monitor);
+		this.handleProjectConfigurationChange(request.mavenProjectFacade(),
+		        project, pluginWrapper, null, monitor);
 	}
 
 	@Override
@@ -172,15 +169,8 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 			return;
 		}
 		if (pluginWrapper.isPluginConfigured()) {
-			@SuppressWarnings("deprecation")
-			final MavenExecutionRequest request =
-			        maven.createExecutionRequest(monitor);
-			@SuppressWarnings("deprecation")
-			final MavenSession session =
-			        maven.createSession(request, mavenProjectChangedEvent
-			                .getMavenProject().getMavenProject(monitor));
 			this.handleProjectConfigurationChange(mavenProjectFacade, project,
-			        pluginWrapper, session, monitor);
+			        pluginWrapper, null, monitor);
 		} else {
 			// TODO: redirect to eclipse logger.
 			// this.console.logMessage(String.format(
@@ -266,7 +256,7 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 	}
 
 	public static ResourceResolver getResourceResolver(
-	        final MojoExecution mojoExecution, final MavenSession session,
+	        final MojoExecution mojoExecution, final MavenProject mavenProject,
 	        final IPath projectLocation) throws CoreException {
 		// call for side effect of ensuring that the realm is set in the
 		// descriptor.
@@ -275,7 +265,7 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		final IMavenProjectRegistry mavenProjectRegistry =
 		        MavenPlugin.getMavenProjectRegistry();
-		final IMavenProjectFacade[] projects =
+		final List<IMavenProjectFacade> projects =
 		        mavenProjectRegistry.getProjects();
 		final List<Dependency> dependencies =
 		        mojoExecution.getPlugin().getDependencies();
@@ -290,10 +280,10 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 					continue;
 				}
 				final ArtifactKey artifactKey = projectFacade.getArtifactKey();
-				if (artifactKey.getGroupId().equals(dependency.getGroupId())
-				        && artifactKey.getArtifactId()
+				if (artifactKey.groupId().equals(dependency.getGroupId())
+				        && artifactKey.artifactId()
 				                .equals(dependency.getArtifactId())
-				        && artifactKey.getVersion()
+				        && artifactKey.version()
 				                .equals(dependency.getVersion())) {
 					final IResource outputLocation =
 					        root.findMember(projectFacade.getOutputLocation());
@@ -303,23 +293,26 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 				}
 			}
 		}
-		try {
-			// we want just the classpath of the Mojo to load resources from it
-			BuildPluginManager buildPluginManager = ((MavenImpl)mvn)
-					.lookupComponent(BuildPluginManager.class);
-			ClassRealm pluginRealm = buildPluginManager.getPluginRealm(session,
-					mojoExecution.getMojoDescriptor().getPluginDescriptor());
-			return new ResourceResolver(pluginRealm, projectLocation,
-					pluginDepencyProjectLocations);
-		} catch (PluginResolutionException | PluginManagerException e) {
-			throw new CoreException(new Status(IStatus.ERROR,
-					FrameworkUtil
-						.getBundle(AbstractMavenPluginProjectConfigurator.class)
-						.getSymbolicName(),
-					"Failed to access classpath of mojo " 
-						+ mojoExecution.getMojoDescriptor().getId(), 
-					e));
-		}
+		    var executionContext = mvn.createExecutionContext();
+		    return executionContext.execute(mavenProject, (context, pm) -> {
+		        try {
+    	            // we want just the classpath of the Mojo to load resources from it
+    	            BuildPluginManager buildPluginManager = ((MavenImpl)mvn)
+    	                    .lookup(BuildPluginManager.class);
+    	            ClassRealm pluginRealm = buildPluginManager.getPluginRealm(context.getSession(),
+    	                    mojoExecution.getMojoDescriptor().getPluginDescriptor());
+    	            return new ResourceResolver(pluginRealm, projectLocation,
+    	                    pluginDepencyProjectLocations);
+		        } catch (PluginResolutionException | PluginManagerException e) {
+		            throw new CoreException(new Status(IStatus.ERROR,
+		                    FrameworkUtil
+		                    .getBundle(AbstractMavenPluginProjectConfigurator.class)
+		                    .getSymbolicName(),
+		                    "Failed to access classpath of mojo " 
+		                            + mojoExecution.getMojoDescriptor().getId(), 
+		                            e));
+		        }
+		    }, null);
 	}
 
 	private MavenPluginWrapper getMavenPlugin(final IProgressMonitor monitor,

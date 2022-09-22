@@ -36,6 +36,7 @@ import java.util.Set;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
+import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -47,10 +48,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
-import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
-import com.basistech.m2e.code.quality.shared.ResourceResolver;
 
 import net.sourceforge.pmd.PMDException;
 import net.sourceforge.pmd.Rule;
@@ -67,6 +64,10 @@ import net.sourceforge.pmd.eclipse.runtime.properties.IProjectPropertiesManager;
 import net.sourceforge.pmd.eclipse.runtime.properties.PropertiesException;
 import net.sourceforge.pmd.eclipse.runtime.writer.WriterException;
 import net.sourceforge.pmd.util.ResourceLoader;
+
+import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
+import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
+import com.basistech.m2e.code.quality.shared.ResourceResolver;
 
 public class EclipsePmdProjectConfigurator
         extends AbstractMavenPluginProjectConfigurator<PMDNature> {
@@ -102,6 +103,7 @@ public class EclipsePmdProjectConfigurator
 	        final IProject project, final MavenPluginWrapper mavenPluginWrapper,
 	        final MavenSession session, final IProgressMonitor monitor) throws CoreException {
 
+		final MavenProject mavenProject = mavenProjectFacade.getMavenProject();
 		final MojoExecution execution = findMojoExecution(mavenPluginWrapper);
 		final MojoExecution pmdGoalExecution = findForkedExecution(execution,
 		        "org.apache.maven.plugins", "maven-pmd-plugin", "pmd");
@@ -110,11 +112,11 @@ public class EclipsePmdProjectConfigurator
 		                session, mavenProjectFacade.getMavenProject(monitor),
 		                execution, pmdGoalExecution, project, monitor);
 		this.createOrUpdateEclipsePmdConfiguration(mavenPluginWrapper, project,
-		        pluginCfgTranslator, monitor, session);
+		        pluginCfgTranslator, monitor, mavenProject);
 
 		// in PMD we need to enable or disable the builder for skip
 		if (!this.createOrUpdateEclipsePmdConfiguration(mavenPluginWrapper, project,
-		        pluginCfgTranslator, monitor, session)) {
+		        pluginCfgTranslator, monitor, mavenProject)) {
 			unconfigureEclipsePlugin(project, monitor);
 			return;
 		}
@@ -146,12 +148,12 @@ public class EclipsePmdProjectConfigurator
 	private boolean createOrUpdateEclipsePmdConfiguration(
 	        final MavenPluginWrapper pluginWrapper, final IProject project,
 	        final MavenPluginConfigurationTranslator pluginCfgTranslator,
-	        final IProgressMonitor monitor, final MavenSession session)
+	        final IProgressMonitor monitor, final MavenProject mavenProject)
 	        throws CoreException {
 
 		final MojoExecution execution = findMojoExecution(pluginWrapper);
 		final ResourceResolver resourceResolver = AbstractMavenPluginProjectConfigurator
-		        .getResourceResolver(execution, session, project.getLocation());
+		        .getResourceResolver(execution, mavenProject, project.getLocation());
 		try {
 			List<Rule> allRules = this.locatePmdRules(pluginCfgTranslator, resourceResolver);
 			Collection<String> excludePatterns = new ArrayList<>();
