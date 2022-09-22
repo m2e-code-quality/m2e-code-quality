@@ -35,7 +35,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
@@ -53,7 +52,6 @@ import org.slf4j.LoggerFactory;
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginConfigurationTranslator;
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
-
 import net.sf.eclipsecs.core.config.ICheckConfiguration;
 import net.sf.eclipsecs.core.projectconfig.FileMatchPattern;
 import net.sf.eclipsecs.core.projectconfig.FileSet;
@@ -84,11 +82,11 @@ public class MavenPluginConfigurationTranslator
 	private final String projectName;
 
 	private MavenPluginConfigurationTranslator(final IMaven maven,
-	        final MavenSession session, final MavenProject mavenProject,
+	        final MavenProject mavenProject,
 	        final MojoExecution mojoExecution, final IProject project,
 	        final URI basedirUri, final Path workingDirectory,
 	        final IProgressMonitor monitor) throws CoreException {
-		super(maven, session, mavenProject, mojoExecution, project, monitor);
+		super(maven, mavenProject, mojoExecution, project, monitor);
 		this.projectName = project.getName();
 		this.workingDirectory = workingDirectory;
 		this.basedirUri = basedirUri;
@@ -566,7 +564,7 @@ public class MavenPluginConfigurationTranslator
 	        final AbstractMavenPluginProjectConfigurator<?> configurator,
 	        final MavenProject mavenProject,
 	        final MavenPluginWrapper mavenPlugin, final IProject project,
-	        final IProgressMonitor monitor, final MavenSession session)
+	        final IProgressMonitor monitor)
 	        throws CoreException {
 		final List<MavenPluginConfigurationTranslator> m2csConverters =
 		        new ArrayList<>();
@@ -574,7 +572,7 @@ public class MavenPluginConfigurationTranslator
 			final Path path = project.getWorkingLocation(configurator.getId())
 			        .toFile().toPath();
 			m2csConverters.add(new MavenPluginConfigurationTranslator(maven,
-			        session, mavenProject, execution, project,
+			        mavenProject, execution, project,
 			        project.getLocationURI(), path, monitor));
 		}
 		return m2csConverters;

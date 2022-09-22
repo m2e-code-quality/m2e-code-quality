@@ -27,9 +27,9 @@ import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.L
 import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.MAX_RANK;
 import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.OMIT_VISITORS;
 import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.PRIORITY;
+import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.SKIP;
 import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.THRESHOLD;
 import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.VISITORS;
-import static com.basistech.m2e.code.quality.findbugs.FindbugsEclipseConstants.SKIP;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,7 +39,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
@@ -55,7 +54,6 @@ import org.slf4j.LoggerFactory;
 
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginConfigurationTranslator;
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
-
 import edu.umd.cs.findbugs.DetectorFactory;
 import edu.umd.cs.findbugs.DetectorFactoryCollection;
 import edu.umd.cs.findbugs.config.ProjectFilterSettings;
@@ -71,10 +69,10 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 
 	private MavenPluginConfigurationTranslator(
 	        final IMaven maven,
-	        final MavenSession session, final MavenProject mavenProject,
+	        final MavenProject mavenProject,
 	        final MojoExecution execution, final IProject project,
 	        final IProgressMonitor monitor) throws CoreException {
-		super(maven, session, mavenProject, execution, project, monitor);
+		super(maven, mavenProject, execution, project, monitor);
 	}
 
 	public boolean isSkip() throws CoreException {
@@ -296,7 +294,7 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 
 	public static MavenPluginConfigurationTranslator newInstance(
 	        final IMaven maven,
-	        final MavenPluginWrapper mavenPlugin, final MavenSession session,
+	        final MavenPluginWrapper mavenPlugin,
 	        final MavenProject mavenProject, final IProject project,
 	        final IProgressMonitor monitor) throws CoreException {
 
@@ -313,7 +311,7 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 			                        + mojoExecutions.size()));
 		}
 		final MojoExecution execution = mojoExecutions.get(0);
-		return new MavenPluginConfigurationTranslator(maven, session, mavenProject,
+		return new MavenPluginConfigurationTranslator(maven, mavenProject,
 				execution, project, monitor);
 	}
 }

@@ -21,36 +21,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.model.Dependency;
-import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.MojoExecution;
-import org.apache.maven.plugin.PluginManagerException;
-import org.apache.maven.plugin.PluginResolutionException;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.embedder.ArtifactKey;
-import org.eclipse.m2e.core.embedder.IMaven;
-import org.eclipse.m2e.core.embedder.IMavenExecutionContext;
-import org.eclipse.m2e.core.internal.embedder.MavenImpl;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
-import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
-import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +45,6 @@ import com.google.common.base.Preconditions;
  * plugin configuration.
  * 
  */
-@SuppressWarnings("restriction")
 public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectNature>
         extends AbstractProjectConfigurator {
 
@@ -134,7 +115,7 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 		}
 
 		this.handleProjectConfigurationChange(request.mavenProjectFacade(),
-		        project, pluginWrapper, null, monitor);
+		        project, pluginWrapper, monitor);
 	}
 
 	@Override
@@ -170,7 +151,7 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 		}
 		if (pluginWrapper.isPluginConfigured()) {
 			this.handleProjectConfigurationChange(mavenProjectFacade, project,
-			        pluginWrapper, null, monitor);
+			        pluginWrapper, monitor);
 		} else {
 			// TODO: redirect to eclipse logger.
 			// this.console.logMessage(String.format(
@@ -188,7 +169,7 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 	protected abstract void handleProjectConfigurationChange(
 	        final IMavenProjectFacade mavenProjectFacade,
 	        final IProject project, final MavenPluginWrapper mavenPluginWrapper,
-	        final MavenSession session, final IProgressMonitor monitor)
+	        final IProgressMonitor monitor)
 	        throws CoreException;
 
 	/**
@@ -253,66 +234,6 @@ public abstract class AbstractMavenPluginProjectConfigurator<N extends IProjectN
 			return true;
 		}
 		return false;
-	}
-
-	public static ResourceResolver getResourceResolver(
-	        final MojoExecution mojoExecution, final MavenProject mavenProject,
-	        final IPath projectLocation) throws CoreException {
-		// call for side effect of ensuring that the realm is set in the
-		// descriptor.
-		final IMaven mvn = MavenPlugin.getMaven();
-		final List<IPath> pluginDepencyProjectLocations = new ArrayList<>();
-		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-		final IMavenProjectRegistry mavenProjectRegistry =
-		        MavenPlugin.getMavenProjectRegistry();
-		final List<IMavenProjectFacade> projects =
-		        mavenProjectRegistry.getProjects();
-		final List<Dependency> dependencies =
-		        mojoExecution.getPlugin().getDependencies();
-		for (final Dependency dependency : dependencies) {
-			for (final IMavenProjectFacade projectFacade : projects) {
-				final IProject project = projectFacade.getProject();
-				if (!project.isAccessible()) {
-					LOG.debug("Project registry contains closed project {}",
-					        project);
-					// this is actually a bug somewhere in registry refresh
-					// logic, closed projects should not be there
-					continue;
-				}
-				final ArtifactKey artifactKey = projectFacade.getArtifactKey();
-				if (artifactKey.groupId().equals(dependency.getGroupId())
-				        && artifactKey.artifactId()
-				                .equals(dependency.getArtifactId())
-				        && artifactKey.version()
-				                .equals(dependency.getVersion())) {
-					final IResource outputLocation =
-					        root.findMember(projectFacade.getOutputLocation());
-					if (outputLocation != null) {
-						pluginDepencyProjectLocations.add(outputLocation.getLocation());
-					}
-				}
-			}
-		}
-		    var executionContext = mvn.createExecutionContext();
-		    return executionContext.execute(mavenProject, (context, pm) -> {
-		        try {
-    	            // we want just the classpath of the Mojo to load resources from it
-    	            BuildPluginManager buildPluginManager = ((MavenImpl)mvn)
-    	                    .lookup(BuildPluginManager.class);
-    	            ClassRealm pluginRealm = buildPluginManager.getPluginRealm(context.getSession(),
-    	                    mojoExecution.getMojoDescriptor().getPluginDescriptor());
-    	            return new ResourceResolver(pluginRealm, projectLocation,
-    	                    pluginDepencyProjectLocations);
-		        } catch (PluginResolutionException | PluginManagerException e) {
-		            throw new CoreException(new Status(IStatus.ERROR,
-		                    FrameworkUtil
-		                    .getBundle(AbstractMavenPluginProjectConfigurator.class)
-		                    .getSymbolicName(),
-		                    "Failed to access classpath of mojo " 
-		                            + mojoExecution.getMojoDescriptor().getId(), 
-		                            e));
-		        }
-		    }, null);
 	}
 
 	private MavenPluginWrapper getMavenPlugin(final IProgressMonitor monitor,

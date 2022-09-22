@@ -26,7 +26,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.ConfigurationContainer;
 import org.apache.maven.model.PluginExecution;
 import org.apache.maven.plugin.MojoExecution;
@@ -57,11 +56,11 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 
 	private MavenPluginConfigurationTranslator(
 	        final IMaven maven,
-	        final MavenSession session, final MavenProject mavenProject,
+	        final MavenProject mavenProject,
 	        final MojoExecution execution, final MojoExecution forkedExecution,
 	        final IProject project,
 	        final IProgressMonitor monitor) throws CoreException {
-		super(maven, session, mavenProject, forkedExecution, project, monitor);
+		super(maven, mavenProject, forkedExecution, project, monitor);
 		this.basedirUri = project.getLocationURI();
 		this.checkExecution = execution;
 		checkConfiguration = new PluginExecution();
@@ -310,12 +309,12 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 
 	public static MavenPluginConfigurationTranslator newInstance(
 	        final IMaven maven,
-	        final MavenSession session, final MavenProject mavenProject,
+	        final MavenProject mavenProject,
 	        final MojoExecution checkGoalExecution, 
 	        final MojoExecution pmdGoalExecution, final IProject project,
 	        final IProgressMonitor monitor) throws CoreException {
 		final MavenPluginConfigurationTranslator m2csConverter =
-		        new MavenPluginConfigurationTranslator(maven, session,
+		        new MavenPluginConfigurationTranslator(maven,
 		                mavenProject, checkGoalExecution, pmdGoalExecution, 
 		                project, monitor);
 		m2csConverter.initialize();
