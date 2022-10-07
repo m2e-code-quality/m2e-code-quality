@@ -192,6 +192,20 @@
                             </environments>
                         </configuration>
                     </plugin>
+                    <plugin>
+                        <groupId>org.eclipse.tycho</groupId>
+                        <artifactId>tycho-surefire-plugin</artifactId>
+                        <configuration>
+                            <dependencies combine.children="append">
+                                <!-- make sure to detect a default JVM -->
+                                <dependency>
+                                    <type>eclipse-plugin</type>
+                                    <artifactId>org.eclipse.jdt.launching.macosx</artifactId>
+                                    <version>0.0.0</version>
+                                </dependency>
+                            </dependencies>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
