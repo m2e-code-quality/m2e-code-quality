@@ -93,8 +93,10 @@ rm -rf "${CURRENT_SITE_FOLDER}"
 mkdir "${CURRENT_SITE_FOLDER}"
 pushd "${CURRENT_SITE_FOLDER}"
 git init -q --initial-branch="${SITE_GITHUB_BRANCH}"
-git config --local user.name "m2e-code-quality-bot"
-git config --local user.email "m2e-code-quality-bot@users.noreply.github.com"
+# configure git
+# see https://github.com/orgs/community/discussions/26560 and https://api.github.com/users/github-actions[bot]
+git config --local user.name "github-actions[bot]"
+git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
 git remote add origin "${SITE_GITHUB_REPO_URL}"
 git pull --rebase origin "${SITE_GITHUB_BRANCH}"
 popd
