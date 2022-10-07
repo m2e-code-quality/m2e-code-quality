@@ -16,8 +16,9 @@ RELEASE_BRANCH=master
 echo "Preparing release ${RELEASE_TAG} on branch ${RELEASE_BRANCH}"
 
 # configure git
-git config --local user.name "m2e-code-quality-bot"
-git config --local user.email "m2e-code-quality-bot@users.noreply.github.com"
+# see https://github.com/orgs/community/discussions/26560 and https://api.github.com/users/github-actions[bot]
+git config --local user.name "github-actions[bot]"
+git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
 # verify same commit as branch
 HEAD=$(git rev-parse --verify HEAD)
