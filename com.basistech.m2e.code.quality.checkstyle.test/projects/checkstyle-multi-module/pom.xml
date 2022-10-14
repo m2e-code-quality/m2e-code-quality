@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.basistech</groupId>
-	<artifactId>checkstyle-check</artifactId>
+	<artifactId>checkstyle-multi-module-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,14 +17,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.1.0</version>
-				<dependencies>
-					<dependency>
-						<groupId>com.puppycrawl.tools</groupId>
-						<artifactId>checkstyle</artifactId>
-						<version>8.29</version>
-					</dependency>
-				</dependencies>
+				<version>3.2.0</version>
+				<configuration>
+					<configLocation>checks/checkstyle_config.xml</configLocation>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -36,23 +32,7 @@
 		</plugins>
 	</build>
 
-	<profiles>
-		<profile>
-			<id>skip</id>
-			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-checkstyle-plugin</artifactId>
-							<version>3.0.0</version>
-							<configuration>
-								<skip>true</skip>
-							</configuration>
-						</plugin>
-					</plugins>
-				</pluginManagement>
-			</build>
-		</profile>
-	</profiles>
+	<modules>
+		<module>module1</module>
+	</modules>
 </project>
