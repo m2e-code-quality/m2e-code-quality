@@ -158,6 +158,16 @@ public class EclipseCheckstyleProjectConfigurationTest extends AbstractMavenProj
 		assertEquals(2, configuration.getLocalCheckConfigurations().size());
 	}
 
+	@Test
+	public void testCheckstyleMultiModule() throws Exception {
+		final IProject parent = importProject("projects/checkstyle-multi-module/pom.xml");
+		final IProject module1 = importProject("projects/checkstyle-multi-module/module1/pom.xml");
+		runBuild(parent);
+		runBuild(module1);
+
+		assertMarkers(module1, MARKER_ID, 1);
+	}
+
 	private final class TriggerCheckstyleExplicitly implements ProjectCallable {
 
 		@Override

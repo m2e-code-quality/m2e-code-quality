@@ -114,7 +114,8 @@ public abstract class AbstractMavenProjectConfiguratorTestCase extends AbstractM
 	protected void assertMarkers(final IProject project, final String markerId, final int minimumMarkerCount)
 			throws Exception {
 		final IMarker[] markers = findMarkers(project, markerId);
-		assertTrue(markers.length >= minimumMarkerCount);
+		assertTrue("Expected at least " + minimumMarkerCount + " markers, but got only " + markers.length,
+				markers.length >= minimumMarkerCount);
 	}
 
 	protected void assertNoMarkers(final IProject project, final String markerId) throws Exception {

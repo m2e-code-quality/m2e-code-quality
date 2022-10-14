@@ -167,7 +167,7 @@ public class AbstractMavenPluginConfigurationTranslator {
 			final IPath projectLocation) throws CoreException {
 		// call for side effect of ensuring that the realm is set in the
 		// descriptor.
-		final List<IPath> pluginDepencyProjectLocations = new ArrayList<>();
+		final List<IPath> additionalProjectLocations = new ArrayList<>();
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		final IMavenProjectRegistry mavenProjectRegistry = MavenPlugin.getMavenProjectRegistry();
 		final List<IMavenProjectFacade> projects = mavenProjectRegistry.getProjects();
@@ -187,7 +187,7 @@ public class AbstractMavenPluginConfigurationTranslator {
 						&& artifactKey.version().equals(dependency.getVersion())) {
 					final IResource outputLocation = root.findMember(projectFacade.getOutputLocation());
 					if (outputLocation != null) {
-						pluginDepencyProjectLocations.add(outputLocation.getLocation());
+						additionalProjectLocations.add(outputLocation.getLocation());
 					}
 				}
 			}
@@ -199,7 +199,19 @@ public class AbstractMavenPluginConfigurationTranslator {
 				BuildPluginManager buildPluginManager = ((MavenImpl) maven).lookup(BuildPluginManager.class);
 				ClassRealm pluginRealm = buildPluginManager.getPluginRealm(context.getSession(),
 						mojoExecution.getMojoDescriptor().getPluginDescriptor());
-				return new ResourceResolver(pluginRealm, projectLocation, pluginDepencyProjectLocations);
+
+				// Do the same as the maven-checkstyle-plugin: Add the module's base path and
+				// the base path of its parents to the search locations.
+				// See https://issues.apache.org/jira/browse/MCHECKSTYLE-131
+				// See https://github.com/apache/maven-checkstyle-plugin/blob/b07adb2e51d6b016dd564893685f46b33fffe5db/src/main/java/org/apache/maven/plugins/checkstyle/exec/DefaultCheckstyleExecutor.java#L767-L777
+				MavenProject project = mavenProject;
+				while (project != null && project.getFile() != null) {
+					IPath projectPath = org.eclipse.core.runtime.Path.fromOSString(project.getFile().getParentFile().getAbsolutePath());
+					additionalProjectLocations.add(projectPath);
+					project = project.getParent();
+				}
+
+				return new ResourceResolver(pluginRealm, projectLocation, additionalProjectLocations);
 			} catch (PluginResolutionException | PluginManagerException e) {
 				throw new CoreException(new Status(IStatus.ERROR,
 						FrameworkUtil.getBundle(AbstractMavenPluginProjectConfigurator.class).getSymbolicName(),
