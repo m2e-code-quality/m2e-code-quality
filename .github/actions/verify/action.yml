@@ -21,8 +21,10 @@ runs:
   using: 'composite'
   steps:
     - name: Build with Maven
-      uses: GabrielBB/xvfb-action@v1
-      with:
-        run: bash tools/build.sh -Dtarget.platform=${{ inputs.targetPlatform }} -Dmaven.test.skip=${{ inputs.skipTests }}
+      run: |
+        XVFB=""
+        [ "${{ runner.os }}" = "Linux" ] && XVFB="xvfb-run --auto-servernum"
+        $XVFB bash tools/build.sh -Dtarget.platform=${{ inputs.targetPlatform }} -Dmaven.test.skip=${{ inputs.skipTests }}
+      shell: bash
       env:
         KEYSTORE_PASSWORD: ${{ inputs.keystorePassword }}
