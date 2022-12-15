@@ -7,3 +7,4 @@ bin
 findbugs.p2
 current-site/
 vendor/
+tools/letsencrypt/
