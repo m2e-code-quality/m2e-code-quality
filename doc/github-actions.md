@@ -58,7 +58,10 @@ As last step, the site repo is pushed to github using the deploy key and github 
 ## Signing
 
 The plugin is signed with a certificate for CN=m2e-code-quality.github.io. This certificate has
-been issued by Let's Encrypt.
+been issued by Let's Encrypt. The certificate is requested manually using `certbot`, the challenge
+is added manually to <https://github.com/m2e-code-quality/m2e-code-quality.github.io>. The
+whole procedure is described here: <https://adangel.org/2021/09/16/code-signing-lets-encrypt-github-pages/>.
+See also the script `tools/request-new-code-signing-cert.sh`.
 
 The keystore is `tools/code-signing.p12`.
 
