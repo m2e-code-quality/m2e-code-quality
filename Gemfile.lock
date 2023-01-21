@@ -16,12 +16,11 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.1.4.1)
+    activesupport (7.0.4.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-      zeitwerk (~> 2.3)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     async (1.30.1)
@@ -42,7 +41,7 @@ GEM
       async
     async-pool (0.3.8)
       async (>= 1.25)
-    concurrent-ruby (1.1.9)
+    concurrent-ruby (1.1.10)
     console (1.13.1)
       fiber-local
     faraday (1.8.0)
@@ -67,9 +66,9 @@ GEM
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
     fiber-local (1.0.0)
-    i18n (1.8.10)
+    i18n (1.12.0)
       concurrent-ruby (~> 1.0)
-    minitest (5.14.4)
+    minitest (5.17.0)
     multi_json (1.15.0)
     multipart-post (2.1.1)
     nio4r (2.5.8)
@@ -91,9 +90,8 @@ GEM
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
     timers (4.3.3)
-    tzinfo (2.0.4)
+    tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
-    zeitwerk (2.4.2)
 
 PLATFORMS
   ruby
