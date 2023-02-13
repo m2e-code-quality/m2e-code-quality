@@ -19,7 +19,7 @@
         <target.platform>2022-09</target.platform>
         <target.ee>JavaSE-17</target.ee>
 
-        <tycho-version>3.0.1</tycho-version>
+        <tycho-version>3.0.2</tycho-version>
         <main.basedir>${basedir}</main.basedir>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
