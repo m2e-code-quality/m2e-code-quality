@@ -99,6 +99,7 @@ public class EclipseSpotbugsProjectConfigurator extends AbstractMavenPluginProje
 		final UserPreferences prefs = UserPreferences.createDefaultUserPreferences();
 		pluginCfgTranslator.setIncludeFilterFiles(prefs);
 		pluginCfgTranslator.setExcludeFilterFiles(prefs);
+		pluginCfgTranslator.setExcludeBugsFiles(prefs);
 		// pluginCfgTranslator.setBugCatagories(prefs);
 		pluginCfgTranslator.setEffort(prefs);
 		pluginCfgTranslator.setMinRank(prefs);
