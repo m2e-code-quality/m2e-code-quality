@@ -27,6 +27,7 @@ public final class SpotbugsEclipseConstants {
 			"edu.umd.cs.findbugs.plugin.eclipse.findbugsNature";
 	public static final String FB_EXCLUDE_FILTER_FILE = ".fbExcludeFilterFile";
 	public static final String FB_INCLUDE_FILTER_FILE = ".fbIncludeFilterFile";
+	public static final String FB_EXCLUDE_BUGS_FILE = ".fbExcludeBugsFile";
 	public static final String VISITORS = "visitors";
 	public static final String THRESHOLD = "threshold";
 	public static final String OMIT_VISITORS = "omitVisitors";
@@ -36,6 +37,7 @@ public final class SpotbugsEclipseConstants {
 	public static final String BUG_CATEGORIES = "bugCategories";
 	public static final String EXCLUDE_FILTER_FILE = "excludeFilterFile";
 	public static final String INCLUDE_FILTER_FILE = "includeFilterFile";
+	public static final String EXCLUDE_BUGS_FILE = "excludeBugsFile";
 	public static final String MAX_RANK = "maxRank";
 	public static final String SKIP = "skip";
 

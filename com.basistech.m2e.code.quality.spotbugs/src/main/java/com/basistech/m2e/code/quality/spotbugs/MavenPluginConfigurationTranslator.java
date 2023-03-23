@@ -19,7 +19,9 @@ package com.basistech.m2e.code.quality.spotbugs;
 import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.BUG_CATEGORIES;
 import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.DEBUG;
 import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.EFFORT;
+import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.EXCLUDE_BUGS_FILE;
 import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.EXCLUDE_FILTER_FILE;
+import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.FB_EXCLUDE_BUGS_FILE;
 import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.FB_EXCLUDE_FILTER_FILE;
 import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.FB_INCLUDE_FILTER_FILE;
 import static com.basistech.m2e.code.quality.spotbugs.SpotbugsEclipseConstants.INCLUDE_FILTER_FILE;
@@ -114,6 +116,26 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		}
 		newExcludeFilteredFiles.putAll(curExcludeFilteredFiles);
 		prefs.setExcludeFilterFiles(newExcludeFilteredFiles);
+	}
+
+	public void setExcludeBugsFiles(final UserPreferences prefs) throws CoreException {
+		LOG.debug("entering setExcludeBugsFiles");
+		final String excludeBugsFile = getParameterValue(EXCLUDE_BUGS_FILE, String.class);
+		// don't do anything if null
+		if (excludeBugsFile == null) {
+			LOG.debug("excludeBugsFile is null");
+			return;
+		}
+		List<String> filterFiles = this.copyUrlResourcesToProject(excludeBugsFile, FB_EXCLUDE_BUGS_FILE);
+		final Map<String, Boolean> curExcludeBugsFiles = prefs.getExcludeBugsFiles();
+		final Map<String, Boolean> newExcludeBugsFiles = new HashMap<>();
+		for (String filterFile : filterFiles) {
+			if (!curExcludeBugsFiles.containsKey(filterFile)) {
+				newExcludeBugsFiles.put(filterFile, Boolean.TRUE);
+			}
+		}
+		newExcludeBugsFiles.putAll(curExcludeBugsFiles);
+		prefs.setExcludeBugsFiles(newExcludeBugsFiles);
 	}
 
 	/**
