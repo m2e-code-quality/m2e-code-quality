@@ -16,7 +16,8 @@
     </scm>
 
     <properties>
-        <target.platform>2022-09</target.platform>
+        <!-- default target platform -->
+        <target.platform>2023-03</target.platform>
         <target.ee>JavaSE-17</target.ee>
 
         <tycho-version>3.0.4</tycho-version>
@@ -25,6 +26,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <java.version>17</java.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
@@ -282,19 +284,6 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-        <profile>
-            <id>2022-09</id>
-            <activation>
-                <property>
-                    <name>target.platform</name>
-                    <value>2022-09</value>
-                </property>
-            </activation>
-            <properties>
-                <maven.compiler.release>17</maven.compiler.release>
-                <target.ee>JavaSE-17</target.ee>
-            </properties>
         </profile>
         <profile>
             <id>local-findbugs-p2</id>
