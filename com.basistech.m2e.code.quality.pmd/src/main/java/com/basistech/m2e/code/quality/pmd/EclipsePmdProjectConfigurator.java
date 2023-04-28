@@ -25,14 +25,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
@@ -48,11 +51,9 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sourceforge.pmd.PMDException;
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleSet;
-import net.sourceforge.pmd.RuleSetFactory;
-import net.sourceforge.pmd.RuleSetNotFoundException;
+import net.sourceforge.pmd.RuleSetLoader;
 import net.sourceforge.pmd.RuleSetReferenceId;
 import net.sourceforge.pmd.eclipse.plugin.PMDPlugin;
 import net.sourceforge.pmd.eclipse.runtime.PMDRuntimeConstants;
@@ -62,7 +63,7 @@ import net.sourceforge.pmd.eclipse.runtime.properties.IProjectProperties;
 import net.sourceforge.pmd.eclipse.runtime.properties.IProjectPropertiesManager;
 import net.sourceforge.pmd.eclipse.runtime.properties.PropertiesException;
 import net.sourceforge.pmd.eclipse.runtime.writer.WriterException;
-import net.sourceforge.pmd.util.ResourceLoader;
+import net.sourceforge.pmd.eclipse.util.internal.IOUtil;
 
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
@@ -72,8 +73,7 @@ public class EclipsePmdProjectConfigurator extends AbstractMavenPluginProjectCon
 
 	private static final Logger LOG = LoggerFactory.getLogger(EclipsePmdProjectConfigurator.class);
 
-	// create a rule set factory for instantiating rule sets
-	private final RuleSetFactory factory = new RuleSetFactory();
+	private final RuleSetLoader ruleSetLoader = new RuleSetLoader();
 
 	public EclipsePmdProjectConfigurator() {
 		super(PMDNature.PMD_NATURE, PMDRuntimeConstants.PMD_MARKER, PMD_RULESET_FILE);
@@ -141,38 +141,34 @@ public class EclipsePmdProjectConfigurator extends AbstractMavenPluginProjectCon
 			final IProgressMonitor monitor, final MavenProject mavenProject) throws CoreException {
 
 		final ResourceResolver resourceResolver = pluginCfgTranslator.getResourceResolver();
+		List<Rule> allRules = this.locatePmdRules(pluginCfgTranslator, resourceResolver);
+		Collection<Pattern> excludePatterns = new ArrayList<>();
+		Collection<Pattern> includePatterns = new ArrayList<>();
+
+		this.buildAndAddPmdExcludeAndIncludePatterns(pluginCfgTranslator, excludePatterns, includePatterns);
+
+		final RuleSet ruleset = RuleSet.create("M2Eclipse PMD RuleSet", "M2Eclipse PMD RuleSet",
+				PMD_RULESET_FILE, excludePatterns, includePatterns, allRules);
+
+		// persist the ruleset to a file under the project.
+		final File rulesetFile = writeRuleSet(project.getFile(PMD_RULESET_FILE), ruleset, monitor);
+
 		try {
-			List<Rule> allRules = this.locatePmdRules(pluginCfgTranslator, resourceResolver);
-			Collection<String> excludePatterns = new ArrayList<>();
-			Collection<String> includePatterns = new ArrayList<>();
-
-			this.buildAndAddPmdExcludeAndIncludePatterns(pluginCfgTranslator, excludePatterns, includePatterns);
-
-			final RuleSet ruleset = this.factory.createNewRuleSet("M2Eclipse PMD RuleSet", "M2Eclipse PMD RuleSet",
-					PMD_RULESET_FILE, excludePatterns, includePatterns, allRules);
-
-			// persist the ruleset to a file under the project.
-			final File rulesetFile = writeRuleSet(project.getFile(PMD_RULESET_FILE), ruleset, monitor);
-
-			try {
-				final IProjectPropertiesManager mgr = PMDPlugin.getDefault().getPropertiesManager();
-				final IProjectProperties projectProperties = mgr.loadProjectProperties(project);
-				projectProperties.setPmdEnabled(true);
-				projectProperties.setRuleSetFile(rulesetFile.getAbsolutePath());
-				projectProperties.setRuleSetStoredInProject(true);
-				mgr.storeProjectProperties(projectProperties);
-			} catch (final PropertiesException ex) {
-				// remove the files
-				return false;
-			}
-		} catch (final PMDException ex) {
-			// nothing to do, skip configuration
+			final IProjectPropertiesManager mgr = PMDPlugin.getDefault().getPropertiesManager();
+			final IProjectProperties projectProperties = mgr.loadProjectProperties(project);
+			projectProperties.setPmdEnabled(true);
+			projectProperties.setRuleSetFile(rulesetFile.getAbsolutePath());
+			projectProperties.setRuleSetStoredInProject(true);
+			mgr.storeProjectProperties(projectProperties);
+		} catch (final PropertiesException ex) {
+			// remove the files
+			return false;
 		}
 		return true;
 	}
 
 	private List<Rule> locatePmdRules(final MavenPluginConfigurationTranslator pluginCfgTranslator,
-			final ResourceResolver resourceResolver) throws CoreException, PMDException {
+			final ResourceResolver resourceResolver) throws CoreException {
 
 		List<Rule> allRules = new ArrayList<>();
 
@@ -183,28 +179,14 @@ public class EclipsePmdProjectConfigurator extends AbstractMavenPluginProjectCon
 			final URL resolvedLocation = resourceResolver.resolveLocation(ruleSetReferenceId.getRuleSetFileName());
 
 			if (resolvedLocation == null) {
-				throw new PMDException(String.format(
-						"Failed to resolve RuleSet from location [%s],SKIPPING Eclipse PMD configuration", loc));
+				throw new CoreException(Status.error(String.format(
+						"Failed to resolve RuleSet from location [%s],SKIPPING Eclipse PMD configuration", loc)));
 			}
 
-			RuleSet ruleSetAtLocations;
-			try {
-				final RuleSetReferenceId resolvedRuleSetReference = new RuleSetReferenceId(loc) {
-
-					@Override
-					public InputStream getInputStream(final ResourceLoader arg0) throws RuleSetNotFoundException {
-						try {
-							return resolvedLocation.openStream();
-						} catch (final IOException e) {
-							// ignore them.
-						}
-						LOG.warn("No ruleset found for {}", loc);
-						return null;
-					}
-				};
-				ruleSetAtLocations = this.factory.createRuleSet(resolvedRuleSetReference);
+			try (Reader r = new InputStreamReader(resolvedLocation.openStream(), StandardCharsets.UTF_8)) {
+				RuleSet ruleSetAtLocations = this.ruleSetLoader.loadFromString("filename", IOUtil.toString(r));
 				allRules.addAll(ruleSetAtLocations.getRules());
-			} catch (final RuleSetNotFoundException e) {
+			} catch (final IOException e) {
 				LOG.error("Couldn't find ruleset {}", loc, e);
 			}
 		}
@@ -245,7 +227,7 @@ public class EclipsePmdProjectConfigurator extends AbstractMavenPluginProjectCon
 	}
 
 	private void buildAndAddPmdExcludeAndIncludePatterns(final MavenPluginConfigurationTranslator pluginCfgTranslator,
-			final Collection<String> excludePatterns, final Collection<String> includePatterns) {
+			final Collection<Pattern> excludePatterns, final Collection<Pattern> includePatterns) {
 		final List<String> excludeRoots = pluginCfgTranslator.getExcludeRoots();
 		final List<String> includeRoots = pluginCfgTranslator.getIncludeRoots();
 		final List<String> pluginIncludes = pluginCfgTranslator.getIncludes();
@@ -267,19 +249,19 @@ public class EclipsePmdProjectConfigurator extends AbstractMavenPluginProjectCon
 			for (final String ir : includeRoots) {
 				for (final String ep : pluginExcludes) {
 					final String fullPattern = ".*" + ir + ep;
-					excludePatterns.add(StringUtils.replace(fullPattern, ".*.*", ".*"));
+					excludePatterns.add(Pattern.compile(StringUtils.replace(fullPattern, ".*.*", ".*")));
 				}
 			}
 		}
 		// 1.) Do the excludeRoots first
 		for (final String er : excludeRootsSet) {
-			excludePatterns.add(".*" + er);
+			excludePatterns.add(Pattern.compile(".*" + er));
 		}
 		// 3.) Now all includes
 		for (final String ir : includeRoots) {
 			for (final String ip : pluginIncludes) {
 				final String fullPattern = ".*" + ir + ip;
-				includePatterns.add(StringUtils.replace(fullPattern, ".*.*", ".*"));
+				includePatterns.add(Pattern.compile(StringUtils.replace(fullPattern, ".*.*", ".*")));
 			}
 		}
 	}
