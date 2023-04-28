@@ -51,8 +51,11 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.sourceforge.pmd.PMDConfiguration;
 import net.sourceforge.pmd.Rule;
+import net.sourceforge.pmd.RulePriority;
 import net.sourceforge.pmd.RuleSet;
+import net.sourceforge.pmd.RuleSetLoadException;
 import net.sourceforge.pmd.RuleSetLoader;
 import net.sourceforge.pmd.RuleSetReferenceId;
 import net.sourceforge.pmd.eclipse.plugin.PMDPlugin;
@@ -72,8 +75,6 @@ import com.basistech.m2e.code.quality.shared.ResourceResolver;
 public class EclipsePmdProjectConfigurator extends AbstractMavenPluginProjectConfigurator<PMDNature> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(EclipsePmdProjectConfigurator.class);
-
-	private final RuleSetLoader ruleSetLoader = new RuleSetLoader();
 
 	public EclipsePmdProjectConfigurator() {
 		super(PMDNature.PMD_NATURE, PMDRuntimeConstants.PMD_MARKER, PMD_RULESET_FILE);
@@ -170,6 +171,12 @@ public class EclipsePmdProjectConfigurator extends AbstractMavenPluginProjectCon
 	private List<Rule> locatePmdRules(final MavenPluginConfigurationTranslator pluginCfgTranslator,
 			final ResourceResolver resourceResolver) throws CoreException {
 
+		
+		PMDConfiguration pmdConfiguration = new PMDConfiguration();
+		pmdConfiguration.setMinimumPriority(RulePriority.LOW);
+		pmdConfiguration.setRuleSetFactoryCompatibilityEnabled(false);
+		final RuleSetLoader ruleSetLoader = RuleSetLoader.fromPmdConfig(pmdConfiguration);
+
 		List<Rule> allRules = new ArrayList<>();
 
 		final List<String> rulesetStringLocations = pluginCfgTranslator.getRulesets();
@@ -184,8 +191,10 @@ public class EclipsePmdProjectConfigurator extends AbstractMavenPluginProjectCon
 			}
 
 			try (Reader r = new InputStreamReader(resolvedLocation.openStream(), StandardCharsets.UTF_8)) {
-				RuleSet ruleSetAtLocations = this.ruleSetLoader.loadFromString("filename", IOUtil.toString(r));
+				RuleSet ruleSetAtLocations = ruleSetLoader.loadFromString(loc, IOUtil.toString(r));
 				allRules.addAll(ruleSetAtLocations.getRules());
+			} catch (final RuleSetLoadException e) {
+				LOG.error("Couldn't load ruleset {}", loc, e);
 			} catch (final IOException e) {
 				LOG.error("Couldn't find ruleset {}", loc, e);
 			}
