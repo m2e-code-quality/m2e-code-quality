@@ -20,21 +20,25 @@ import static com.basistech.m2e.code.quality.pmd.PmdEclipseConstants.MAVEN_PLUGI
 import static com.basistech.m2e.code.quality.pmd.PmdEclipseConstants.MAVEN_PLUGIN_GROUPID;
 import static com.basistech.m2e.code.quality.pmd.PmdEclipseConstants.PMD_RULESET_FILE;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.maven.plugin.MojoExecution;
@@ -66,13 +70,19 @@ import net.sourceforge.pmd.eclipse.runtime.properties.IProjectProperties;
 import net.sourceforge.pmd.eclipse.runtime.properties.IProjectPropertiesManager;
 import net.sourceforge.pmd.eclipse.runtime.properties.PropertiesException;
 import net.sourceforge.pmd.eclipse.runtime.writer.WriterException;
-import net.sourceforge.pmd.eclipse.util.internal.IOUtil;
 
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
 import com.basistech.m2e.code.quality.shared.ResourceResolver;
 
 public class EclipsePmdProjectConfigurator extends AbstractMavenPluginProjectConfigurator<PMDNature> {
+	private static final Pattern XML_ENCODING_PATTERN = Pattern.compile("<\\?xml\\s+version\\s*=\\s*['\"][^'\"]+['\"]\\s+encoding\\s*=\\s*['\"]([^'\"]+)['\"]");
+	private static final byte[] UTF16BE_BOM = new byte[] { (byte) 0xfe, (byte) 0xff, 0x00, 0x3c };
+	private static final byte[] UTF16LE_BOM = new byte[] { (byte) 0xff, (byte) 0xfe, 0x3c, 0x00 };
+	private static final byte[] UTF8_BOM = new byte[] { (byte) 0xef, (byte) 0xbb, (byte) 0xbf, 0x3c };
+	private static final byte[] UTF16BE = new byte[] { 0x00, 0x3c, 0x00, 0x3f };
+	private static final byte[] UTF16LE = new byte[] { 0x3c, 0x00, 0x3f, 0x00 };
+	private static final byte[] ASCII = new byte[] { 0x3c, 0x3f, 0x78, 0x6d };
 
 	private static final Logger LOG = LoggerFactory.getLogger(EclipsePmdProjectConfigurator.class);
 
@@ -171,7 +181,6 @@ public class EclipsePmdProjectConfigurator extends AbstractMavenPluginProjectCon
 	private List<Rule> locatePmdRules(final MavenPluginConfigurationTranslator pluginCfgTranslator,
 			final ResourceResolver resourceResolver) throws CoreException {
 
-		
 		PMDConfiguration pmdConfiguration = new PMDConfiguration();
 		pmdConfiguration.setMinimumPriority(RulePriority.LOW);
 		pmdConfiguration.setRuleSetFactoryCompatibilityEnabled(false);
@@ -190,8 +199,8 @@ public class EclipsePmdProjectConfigurator extends AbstractMavenPluginProjectCon
 						"Failed to resolve RuleSet from location [%s],SKIPPING Eclipse PMD configuration", loc)));
 			}
 
-			try (Reader r = new InputStreamReader(resolvedLocation.openStream(), StandardCharsets.UTF_8)) {
-				RuleSet ruleSetAtLocations = ruleSetLoader.loadFromString(loc, IOUtil.toString(r));
+			try (InputStream in = resolvedLocation.openStream()) {
+				RuleSet ruleSetAtLocations = ruleSetLoader.loadFromString(loc, loadXmlStreamIntoString(in));
 				allRules.addAll(ruleSetAtLocations.getRules());
 			} catch (final RuleSetLoadException e) {
 				LOG.error("Couldn't load ruleset {}", loc, e);
@@ -201,6 +210,43 @@ public class EclipsePmdProjectConfigurator extends AbstractMavenPluginProjectCon
 		}
 
 		return allRules;
+	}
+
+	private String loadXmlStreamIntoString(InputStream r) throws IOException {
+		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		BufferedInputStream in = new BufferedInputStream(r);
+		in.transferTo(bytes);
+
+		// this is an xml stream, find the encoding in the first bytes. A well-formed xml file
+		// must begin with "<?xml version=" and we can guess the basic encoding (UTF-16 vs. UTF-8)
+		// see https://www.w3.org/TR/xml/#sec-guessing
+		byte[] byteArray = bytes.toByteArray();
+		Charset charset = Charset.defaultCharset();
+		if (Arrays.equals(byteArray, 0, 4, UTF16BE_BOM, 0, 4)) {
+			charset = StandardCharsets.UTF_16BE;
+		} else if (Arrays.equals(byteArray, 0, 4, UTF16LE_BOM, 0, 4)) {
+			charset = StandardCharsets.UTF_16LE;
+		} else if (Arrays.equals(byteArray, 0, 4, UTF8_BOM, 0, 4)) {
+			charset = StandardCharsets.UTF_8;
+		} else if (Arrays.equals(byteArray, 0, 4, UTF16BE, 0, 4)) {
+			charset = StandardCharsets.UTF_16BE;
+		} else if (Arrays.equals(byteArray, 0, 4, UTF16LE, 0, 4)) {
+			charset = StandardCharsets.UTF_16LE;
+		} else if (Arrays.equals(byteArray, 0, 4, ASCII, 0, 4)) {
+			charset = StandardCharsets.ISO_8859_1;
+		}
+		LOG.debug("Detected {} using the first 4 bytes", charset);
+
+		// <?xml version="1.0" encoding="UTF-8"?>
+		CharBuffer decoded = charset.decode(ByteBuffer.wrap(byteArray));
+		String prolog = decoded.subSequence(0, 100).toString();
+		Matcher matcher = XML_ENCODING_PATTERN.matcher(prolog);
+		if (matcher.find()) {
+			LOG.debug("Found encoding {} in XML prolog", matcher.group(1));
+			charset = Charset.forName(matcher.group(1));
+			decoded = charset.decode(ByteBuffer.wrap(byteArray));
+		}
+		return decoded.toString();
 	}
 
 	/**
