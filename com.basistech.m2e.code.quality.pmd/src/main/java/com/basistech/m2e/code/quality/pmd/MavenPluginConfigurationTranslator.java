@@ -69,8 +69,7 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		if (rulesets == null) {
 			// no special rulesets configured - use the same defaults as the
 			// maven-pmd-plugin does
-			return Arrays.asList("/rulesets/java/basic.xml", "/rulesets/java/unusedcode.xml",
-					"/rulesets/java/imports.xml");
+			return Arrays.asList("/rulesets/java/maven-pmd-plugin-default.xml");
 		}
 		return Arrays.asList(rulesets);
 	}

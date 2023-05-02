@@ -115,7 +115,6 @@ public class EclipsePmdProjectConfigurationTest extends AbstractMavenProjectConf
 		ReviewCodeCmd cmd = new ReviewCodeCmd();
 		cmd.addResource(project);
 		cmd.setStepCount(1);
-		cmd.setTaskMarker(true);
 		cmd.setOpenPmdPerspective(false);
 		cmd.setOpenPmdViolationsOverviewView(false);
 		cmd.setOpenPmdViolationsOutlineView(false);
