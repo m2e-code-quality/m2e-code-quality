@@ -8,12 +8,14 @@
  *******************************************************************************/
 package com.basistech.m2e.code.quality.spotbugs.tests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.junit.Test;
@@ -43,6 +45,16 @@ public class EclipseSpotbugsProjectConfigurationTest extends AbstractMavenProjec
 	public void testSpotbugsSpotbugs() throws Exception {
 		importProjectRunBuildAndFindMarkers("projects/spotbugs-spotbugs/pom.xml", MARKER_ID, 2,
 				new TriggerSpotbugsExplicitly());
+	}
+
+	@Test
+	public void testSpotbugsExcludeBugsFile() throws Exception {
+		final IProject project = importProject("projects/exclude-bugs-file/pom.xml");
+		runBuild(project, new TriggerSpotbugsExplicitly());
+		final IMarker[] markers = findMarkers(project, MARKER_ID);
+		assertEquals("Expected exactly one marker, but got " + markers.length, 1, markers.length);
+		int lineNumber = markers[0].getAttribute(IMarker.LINE_NUMBER, -1);
+		assertEquals("Expected the marker at line 13", 13, lineNumber);
 	}
 
 	@Test
