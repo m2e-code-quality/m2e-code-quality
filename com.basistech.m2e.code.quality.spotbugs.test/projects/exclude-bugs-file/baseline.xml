@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<BugCollection sequence='0' release=''
+  analysisTimestamp='1683129410629' version='4.7.3'
+  timestamp='1683129395900'>
+  <BugInstance instanceOccurrenceNum='0'
+    instanceHash='901dec069e7895775d5e3e88f893c9d7' cweid='440' rank='7'
+    abbrev='RV' category='CORRECTNESS' priority='1'
+    type='RV_ABSOLUTE_VALUE_OF_HASHCODE' instanceOccurrenceMax='0'>
+    <ShortMessage>Bad attempt to compute absolute value of signed 32-bit
+      hashcode</ShortMessage>
+    <LongMessage>Bad attempt to compute absolute value of signed 32-bit
+      hashcode in cat.App.main(String[])</LongMessage>
+    <Class classname='cat.App' primary='true'>
+      <SourceLine classname='cat.App' start='7' end='15'
+        sourcepath='cat/App.java' sourcefile='App.java'>
+        <Message>At App.java:[lines 7-15]</Message>
+      </SourceLine>
+      <Message>In class cat.App</Message>
+    </Class>
+    <Method isStatic='true' classname='cat.App'
+      signature='([Ljava/lang/String;)V' name='main' primary='true'>
+      <SourceLine endBytecode='154' classname='cat.App'
+        start='9' end='15' sourcepath='cat/App.java'
+        sourcefile='App.java' startBytecode='0'></SourceLine>
+      <Message>In method cat.App.main(String[])</Message>
+    </Method>
+    <SourceLine endBytecode='16' classname='cat.App'
+      start='11' end='11' sourcepath='cat/App.java'
+      sourcefile='App.java' startBytecode='16' primary='true'>
+      <Message>At App.java:[line 11]</Message>
+    </SourceLine>
+  </BugInstance>
+</BugCollection>
