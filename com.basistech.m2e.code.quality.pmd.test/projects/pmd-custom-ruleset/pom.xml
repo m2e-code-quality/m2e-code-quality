@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.basistech</groupId>
-	<artifactId>pmd-check</artifactId>
+	<artifactId>pmd-custom-ruleset</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -18,6 +18,11 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
 				<version>3.20.0</version>
+				<configuration>
+					<rulesets>
+						<ruleset>custom-ruleset.xml</ruleset>
+					</rulesets>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -28,24 +33,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>skip</id>
-			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-pmd-plugin</artifactId>
-							<version>3.20.0</version>
-							<configuration>
-								<skip>true</skip>
-							</configuration>
-						</plugin>
-					</plugins>
-				</pluginManagement>
-			</build>
-		</profile>
-	</profiles>
 </project>
