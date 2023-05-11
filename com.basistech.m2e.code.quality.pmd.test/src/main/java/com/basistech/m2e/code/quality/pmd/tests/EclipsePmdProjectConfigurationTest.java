@@ -111,6 +111,11 @@ public class EclipsePmdProjectConfigurationTest extends AbstractMavenProjectConf
 		assertTrue(hasBuilder(p, BUILDER_ID));
 	}
 
+	@Test
+	public void testPmdCustomRuleset() throws Exception {
+		importProjectRunBuildAndFindMarkers("projects/pmd-custom-ruleset/pom.xml", MARKER_ID, 1);
+	}
+
 	protected Map<IFile, Set<MarkerInfo2>> triggerPmd(final IProject project) throws Exception {
 		ReviewCodeCmd cmd = new ReviewCodeCmd();
 		cmd.addResource(project);

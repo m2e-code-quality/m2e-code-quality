@@ -239,7 +239,7 @@ public class EclipsePmdProjectConfigurator extends AbstractMavenPluginProjectCon
 
 		// <?xml version="1.0" encoding="UTF-8"?>
 		CharBuffer decoded = charset.decode(ByteBuffer.wrap(byteArray));
-		String prolog = decoded.subSequence(0, 100).toString();
+		String prolog = decoded.subSequence(0, Math.min(100, decoded.length())).toString();
 		Matcher matcher = XML_ENCODING_PATTERN.matcher(prolog);
 		if (matcher.find()) {
 			LOG.debug("Found encoding {} in XML prolog", matcher.group(1));
