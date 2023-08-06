@@ -17,7 +17,7 @@
 
     <properties>
         <!-- default target platform -->
-        <target.platform>2023-03</target.platform>
+        <target.platform>2023-06</target.platform>
         <target.ee>JavaSE-17</target.ee>
 
         <tycho-version>3.0.5</tycho-version>
