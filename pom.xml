@@ -7,7 +7,7 @@
 
     <groupId>com.basistech.m2e-code-quality</groupId>
     <artifactId>m2e-code-quality-plugins</artifactId>
-    <version>2.0.0.202209221556-r</version>
+    <version>2.1.0.202312161747-r</version>
     <packaging>pom</packaging>
 
     <scm>
@@ -16,15 +16,17 @@
     </scm>
 
     <properties>
-        <target.platform>2022-09</target.platform>
+        <!-- default target platform -->
+        <target.platform>2023-12</target.platform>
         <target.ee>JavaSE-17</target.ee>
 
-        <tycho-version>2.7.5</tycho-version>
+        <tycho-version>4.0.4</tycho-version>
         <main.basedir>${basedir}</main.basedir>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <java.version>17</java.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
@@ -50,7 +52,6 @@
         <module>com.basistech.m2e.code.quality.pmd.feature</module>
         <module>com.basistech.m2e.code.quality.pmd.test</module>
         <module>com.basistech.m2e.code.quality.site</module>
-        <module>com.basistech.m2e.code.quality.target-platform</module>
     </modules>
 
     <build>
@@ -68,9 +69,9 @@
                     <target>
                         <artifact>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>com.basistech.m2e.code.quality.target-platform</artifactId>
+                            <artifactId>m2e-code-quality-plugins</artifactId>
                             <version>${project.version}</version>
-                            <classifier>${target.platform}</classifier>
+                            <classifier>target-platforms/${target.platform}</classifier>
                         </artifact>
                     </target>
                 </configuration>
@@ -78,7 +79,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.7.2.0</version>
+                <version>4.8.2.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -162,7 +163,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.3.0</version>
+                    <version>3.3.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -190,6 +191,20 @@
                                     <arch>x86_64</arch>
                                 </environment>
                             </environments>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.eclipse.tycho</groupId>
+                        <artifactId>tycho-surefire-plugin</artifactId>
+                        <configuration>
+                            <dependencies combine.children="append">
+                                <!-- make sure to detect a default JVM -->
+                                <dependency>
+                                    <type>eclipse-plugin</type>
+                                    <artifactId>org.eclipse.jdt.launching.macosx</artifactId>
+                                    <version>0.0.0</version>
+                                </dependency>
+                            </dependencies>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -268,45 +283,6 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-        <profile>
-            <id>2021-09</id>
-            <activation>
-                <property>
-                    <name>target.platform</name>
-                    <value>2021-09</value>
-                </property>
-            </activation>
-            <properties>
-                <maven.compiler.release>11</maven.compiler.release>
-                <target.ee>JavaSE-11</target.ee>
-            </properties>
-        </profile>
-        <profile>
-            <id>2022-06</id>
-            <activation>
-                <property>
-                    <name>target.platform</name>
-                    <value>2022-06</value>
-                </property>
-            </activation>
-            <properties>
-                <maven.compiler.release>11</maven.compiler.release>
-                <target.ee>JavaSE-11</target.ee>
-            </properties>
-        </profile>
-        <profile>
-            <id>2022-09</id>
-            <activation>
-                <property>
-                    <name>target.platform</name>
-                    <value>2022-09</value>
-                </property>
-            </activation>
-            <properties>
-                <maven.compiler.release>17</maven.compiler.release>
-                <target.ee>JavaSE-17</target.ee>
-            </properties>
         </profile>
         <profile>
             <id>local-findbugs-p2</id>

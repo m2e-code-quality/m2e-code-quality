@@ -15,8 +15,8 @@ That's the default token that is issued by github actions. It allows to push to 
 same repo as the action has been started. This token is used to generate a changelog
 and create a release.
 
-During the release, also some commits are done. These use the
-identity of [m2e-code-quality-bot](https://github.com/m2e-code-quality-bot).
+During the release, also some commits are done. These use the identity of
+[github-actions[bot]](https://api.github.com/users/github-actions[bot]).
 
 ### KEYSTORE_PASSWORD
 
@@ -33,7 +33,7 @@ with write access.
 This secret is written to `~/.ssh/m2e-code-quality-p2-site_deploy_key` in the script
 `tools/publish-update-site.sh`.
 
-For the commit, the identity of [m2e-code-quality-bot](https://github.com/m2e-code-quality-bot) is used.
+For the commit, the identity of [github-actions[bot]](https://api.github.com/users/github-actions[bot]) is used.
 
 ## What is being done
 
@@ -58,7 +58,10 @@ As last step, the site repo is pushed to github using the deploy key and github 
 ## Signing
 
 The plugin is signed with a certificate for CN=m2e-code-quality.github.io. This certificate has
-been issued by Let's Encrypt.
+been issued by Let's Encrypt. The certificate is requested manually using `certbot`, the challenge
+is added manually to <https://github.com/m2e-code-quality/m2e-code-quality.github.io>. The
+whole procedure is described here: <https://adangel.org/2021/09/16/code-signing-lets-encrypt-github-pages/>.
+See also the script `tools/request-new-code-signing-cert.sh`.
 
 The keystore is `tools/code-signing.p12`.
 

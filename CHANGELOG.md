@@ -1,5 +1,64 @@
 # Changelog
 
+## [Unreleased](https://github.com/m2e-code-quality/m2e-code-quality/tree/HEAD)
+
+[Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/2.1.0...HEAD)
+
+**Closed issues:**
+
+- Proper releases instead of just snapshots? [\#341](https://github.com/m2e-code-quality/m2e-code-quality/issues/341)
+
+## [2.1.0](https://github.com/m2e-code-quality/m2e-code-quality/tree/2.1.0) (2023-12-08)
+
+[Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/2.0.0...2.1.0)
+
+**Implemented enhancements:**
+
+- Support eclipse 2023-12 [\#340](https://github.com/m2e-code-quality/m2e-code-quality/pull/340) ([adangel](https://github.com/adangel))
+- Support eclipse 2023-06 [\#331](https://github.com/m2e-code-quality/m2e-code-quality/pull/331) ([adangel](https://github.com/adangel))
+- Support eclipse 2023-03 [\#321](https://github.com/m2e-code-quality/m2e-code-quality/pull/321) ([adangel](https://github.com/adangel))
+- Add support for PMD 7.x [\#320](https://github.com/m2e-code-quality/m2e-code-quality/pull/320) ([adangel](https://github.com/adangel))
+- Add support for excludeBugsFile option for SpotBugs [\#316](https://github.com/m2e-code-quality/m2e-code-quality/pull/316) ([harbulot](https://github.com/harbulot))
+- Use o.e.jdt.launching.macosx for configuring the installed JDKs in tests [\#301](https://github.com/m2e-code-quality/m2e-code-quality/pull/301) ([adangel](https://github.com/adangel))
+
+**Fixed bugs:**
+
+- Incompatible with latest PMD plugin [\#327](https://github.com/m2e-code-quality/m2e-code-quality/issues/327)
+- EclipsePmdProjectConfigurator fails if ruleset file is shorter than 100 characters [\#322](https://github.com/m2e-code-quality/m2e-code-quality/issues/322)
+- m2e checkstyle does not work in multimodule project [\#299](https://github.com/m2e-code-quality/m2e-code-quality/issues/299)
+
+**Closed issues:**
+
+- m2e-code-quality-bot 2FA, and or delete? [\#336](https://github.com/m2e-code-quality/m2e-code-quality/issues/336)
+- Require two-factor authentication for all members of the m2e-code-quality GitHub org [\#282](https://github.com/m2e-code-quality/m2e-code-quality/issues/282)
+
+**Merged pull requests:**
+
+- Bump com.github.spotbugs:spotbugs-maven-plugin from 4.7.3.5 to 4.8.2.0 [\#339](https://github.com/m2e-code-quality/m2e-code-quality/pull/339) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump tycho-version from 4.0.2 to 4.0.4 [\#338](https://github.com/m2e-code-quality/m2e-code-quality/pull/338) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump activesupport from 7.0.4.3 to 7.0.7.2 [\#333](https://github.com/m2e-code-quality/m2e-code-quality/pull/333) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump tycho-version from 4.0.1 to 4.0.2 [\#332](https://github.com/m2e-code-quality/m2e-code-quality/pull/332) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump maven from 3.8.6 to 3.9.4 [\#330](https://github.com/m2e-code-quality/m2e-code-quality/pull/330) ([adangel](https://github.com/adangel))
+- Bump protocol-http1 from 0.14.2 to 0.15.1 [\#329](https://github.com/m2e-code-quality/m2e-code-quality/pull/329) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump tycho-version from 3.0.5 to 4.0.1 [\#328](https://github.com/m2e-code-quality/m2e-code-quality/pull/328) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump tycho-version from 3.0.4 to 3.0.5 [\#325](https://github.com/m2e-code-quality/m2e-code-quality/pull/325) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump spotbugs-maven-plugin from 4.7.3.4 to 4.7.3.5 [\#324](https://github.com/m2e-code-quality/m2e-code-quality/pull/324) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Fix IndexOutOfBoundsException when loading ruleset [\#323](https://github.com/m2e-code-quality/m2e-code-quality/pull/323) ([adangel](https://github.com/adangel))
+- Bump spotbugs-maven-plugin from 4.7.3.2 to 4.7.3.4 [\#319](https://github.com/m2e-code-quality/m2e-code-quality/pull/319) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump maven-resources-plugin from 3.3.0 to 3.3.1 [\#318](https://github.com/m2e-code-quality/m2e-code-quality/pull/318) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump tycho-version from 3.0.1 to 3.0.4 [\#315](https://github.com/m2e-code-quality/m2e-code-quality/pull/315) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump activesupport from 7.0.4.1 to 7.0.4.3 [\#314](https://github.com/m2e-code-quality/m2e-code-quality/pull/314) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump spotbugs-maven-plugin from 4.7.3.0 to 4.7.3.2 [\#313](https://github.com/m2e-code-quality/m2e-code-quality/pull/313) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump activesupport from 6.1.4.1 to 7.0.4.1 [\#309](https://github.com/m2e-code-quality/m2e-code-quality/pull/309) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Updated code-signing certificate [\#308](https://github.com/m2e-code-quality/m2e-code-quality/pull/308) ([adangel](https://github.com/adangel))
+- Replace GabrielBB/xvfb-action with direct xvfb-run call [\#307](https://github.com/m2e-code-quality/m2e-code-quality/pull/307) ([adangel](https://github.com/adangel))
+- Bump tycho-version from 3.0.0 to 3.0.1 [\#306](https://github.com/m2e-code-quality/m2e-code-quality/pull/306) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump spotbugs-maven-plugin from 4.7.2.1 to 4.7.3.0 [\#305](https://github.com/m2e-code-quality/m2e-code-quality/pull/305) ([dependabot[bot]](https://github.com/apps/dependabot))
+- ResourceResolver - search up the maven project parent hierarchy [\#304](https://github.com/m2e-code-quality/m2e-code-quality/pull/304) ([adangel](https://github.com/adangel))
+- Bump spotbugs-maven-plugin from 4.7.2.0 to 4.7.2.1 [\#303](https://github.com/m2e-code-quality/m2e-code-quality/pull/303) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Remove usage of m2e-code-quality-bot and use github-actions\[bot\] instead [\#302](https://github.com/m2e-code-quality/m2e-code-quality/pull/302) ([adangel](https://github.com/adangel))
+- Bump tycho-version from 2.7.5 to 3.0.0 [\#300](https://github.com/m2e-code-quality/m2e-code-quality/pull/300) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [2.0.0](https://github.com/m2e-code-quality/m2e-code-quality/tree/2.0.0) (2022-09-22)
 
 [Full Changelog](https://github.com/m2e-code-quality/m2e-code-quality/compare/1.1.5...2.0.0)

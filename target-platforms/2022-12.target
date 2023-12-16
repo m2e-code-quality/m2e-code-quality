@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Eclipse 4.25.x (2022-09)">
+<target name="Eclipse 4.26.x (2022-12)">
     <locations>
         <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
             <unit id="org.eclipse.platform.ide" version="0.0.0"/>
@@ -8,7 +8,7 @@
             <unit id="org.eclipse.m2e.sdk.feature.feature.group" version="0.0.0"/>
             <unit id="org.eclipse.m2e.feature.feature.group" version="0.0.0"/>
             <unit id="org.apache.commons.lang" version="0.0.0"/>
-            <repository location="https://download.eclipse.org/releases/2022-09/"/>
+            <repository location="https://download.eclipse.org/releases/2022-12/"/>
          </location>
         <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
             <unit id="net.sf.eclipsecs.feature.group" version="0.0.0"/>
