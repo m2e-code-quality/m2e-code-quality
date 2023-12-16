@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.basistech.m2e-code-quality</groupId>
         <artifactId>m2e-code-quality-plugins</artifactId>
-        <version>2.1.0.202312161747-r</version>
+        <version>2.1.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>com.basistech.m2e.code.quality.pmd</artifactId>

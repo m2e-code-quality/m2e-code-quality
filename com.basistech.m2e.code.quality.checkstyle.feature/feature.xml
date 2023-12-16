@@ -2,7 +2,7 @@
 <feature
       id="com.basistech.m2e.code.quality.checkstyle.feature"
       label="Checkstyle configuration plugin for M2Eclipse"
-      version="2.1.0.202312161747-r"
+      version="2.1.1.qualifier"
       plugin="com.basistech.m2e.code.quality.shared">
 
    <description>
