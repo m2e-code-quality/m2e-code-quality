@@ -22,7 +22,7 @@ on:
 jobs:
   # verify build on one node before multiple builds on different os are started
   fail-fast-build:
-    name: fail-fast verify (ubuntu-latest, 2023-12)
+    name: fail-fast verify (ubuntu-latest, 2024-03)
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -33,7 +33,7 @@ jobs:
 
       - uses: ./.github/actions/verify
         with:
-          targetPlatform: 2023-12
+          targetPlatform: 2024-03
 
   verify:
     needs: fail-fast-build
@@ -43,13 +43,15 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macOS-latest ]
-        targetPlatform: [ 2023-12 ]
+        targetPlatform: [ 2024-03 ]
         exclude:
           # exclude the fail-fast-build, which already ran
           - os: ubuntu-latest
-            targetPlatform: 2023-12
+            targetPlatform: 2024-03
         # run some other target platforms only on linux
         include:
+          #- os: ubuntu-latest
+          #  targetPlatform: 2023-12
           #- os: ubuntu-latest
           #  targetPlatform: 2023-09
           #- os: ubuntu-latest
@@ -89,7 +91,7 @@ jobs:
 
       - uses: ./.github/actions/verify
         with:
-          targetPlatform: 2023-12
+          targetPlatform: 2024-03
           keystorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           skipTests: 'true'
 
@@ -122,7 +124,7 @@ jobs:
 
       - uses: ./.github/actions/verify
         with:
-          targetPlatform: 2023-12
+          targetPlatform: 2024-03
           keystorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           skipTests: 'true'
 
