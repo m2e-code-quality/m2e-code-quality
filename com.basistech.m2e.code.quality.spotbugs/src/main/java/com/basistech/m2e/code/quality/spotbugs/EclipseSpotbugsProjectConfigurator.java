@@ -58,7 +58,7 @@ public class EclipseSpotbugsProjectConfigurator extends AbstractMavenPluginProje
 
 	@Override
 	protected String[] getMavenPluginGoals() {
-		return new String[] { "spotbugs", "check", "verify" };
+		return new String[] { "spotbugs", "check" };
 	}
 
 	@Override
