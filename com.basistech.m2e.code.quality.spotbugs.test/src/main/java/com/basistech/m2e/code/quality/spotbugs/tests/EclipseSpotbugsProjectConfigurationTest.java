@@ -48,6 +48,12 @@ public class EclipseSpotbugsProjectConfigurationTest extends AbstractMavenProjec
 	}
 
 	@Test
+	public void testSpotbugsVerify() throws Exception {
+		importProjectRunBuildAndFindMarkers("projects/spotbugs-verify/pom.xml", MARKER_ID, 2,
+				new TriggerSpotbugsExplicitly());
+	}
+
+	@Test
 	public void testSpotbugsExcludeBugsFile() throws Exception {
 		final IProject project = importProject("projects/exclude-bugs-file/pom.xml");
 		runBuild(project, new TriggerSpotbugsExplicitly());
