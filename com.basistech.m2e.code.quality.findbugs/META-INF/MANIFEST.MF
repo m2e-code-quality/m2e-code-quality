@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: M2Eclipse Project Configurator for Eclipse FindBugs
 Bundle-SymbolicName: com.basistech.m2e.code.quality.findbugs;singleton:=true
-Bundle-Version: 2.1.0.202312161747-r
+Bundle-Version: 2.2.0.202404151854-r
 Import-Package: org.slf4j
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jdt.core,
  org.eclipse.m2e.core;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.m2e.maven.runtime;bundle-version="[3.0.0,4.0.0)",
- com.basistech.m2e.code.quality.shared;bundle-version="2.1.0.202312161747-r",
+ com.basistech.m2e.code.quality.shared;bundle-version="2.2.0.202404151854-r",
  edu.umd.cs.findbugs.plugin.eclipse;bundle-version="[2.0.0,4.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: Basis Technology Corp.

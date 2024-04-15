@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,12 +57,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.sourceforge.pmd.PMDConfiguration;
-import net.sourceforge.pmd.Rule;
-import net.sourceforge.pmd.RulePriority;
-import net.sourceforge.pmd.RuleSet;
-import net.sourceforge.pmd.RuleSetLoadException;
-import net.sourceforge.pmd.RuleSetLoader;
-import net.sourceforge.pmd.RuleSetReferenceId;
 import net.sourceforge.pmd.eclipse.plugin.PMDPlugin;
 import net.sourceforge.pmd.eclipse.runtime.PMDRuntimeConstants;
 import net.sourceforge.pmd.eclipse.runtime.builder.MarkerUtil;
@@ -70,6 +65,11 @@ import net.sourceforge.pmd.eclipse.runtime.properties.IProjectProperties;
 import net.sourceforge.pmd.eclipse.runtime.properties.IProjectPropertiesManager;
 import net.sourceforge.pmd.eclipse.runtime.properties.PropertiesException;
 import net.sourceforge.pmd.eclipse.runtime.writer.WriterException;
+import net.sourceforge.pmd.lang.rule.Rule;
+import net.sourceforge.pmd.lang.rule.RulePriority;
+import net.sourceforge.pmd.lang.rule.RuleSet;
+import net.sourceforge.pmd.lang.rule.RuleSetLoadException;
+import net.sourceforge.pmd.lang.rule.RuleSetLoader;
 
 import com.basistech.m2e.code.quality.shared.AbstractMavenPluginProjectConfigurator;
 import com.basistech.m2e.code.quality.shared.MavenPluginWrapper;
@@ -183,7 +183,6 @@ public class EclipsePmdProjectConfigurator extends AbstractMavenPluginProjectCon
 
 		PMDConfiguration pmdConfiguration = new PMDConfiguration();
 		pmdConfiguration.setMinimumPriority(RulePriority.LOW);
-		pmdConfiguration.setRuleSetFactoryCompatibilityEnabled(false);
 		final RuleSetLoader ruleSetLoader = RuleSetLoader.fromPmdConfig(pmdConfiguration);
 
 		List<Rule> allRules = new ArrayList<>();
@@ -191,8 +190,24 @@ public class EclipsePmdProjectConfigurator extends AbstractMavenPluginProjectCon
 		final List<String> rulesetStringLocations = pluginCfgTranslator.getRulesets();
 
 		for (final String loc : rulesetStringLocations) {
-			final RuleSetReferenceId ruleSetReferenceId = new RuleSetReferenceId(loc);
-			final URL resolvedLocation = resourceResolver.resolveLocation(ruleSetReferenceId.getRuleSetFileName());
+			final String ruleSetFileName;
+
+			// parse the given ruleset locations; possible variants:
+			if (loc.matches("(?i)^https?://.+")) {
+				// uri with http/https
+				ruleSetFileName = loc;
+			} else if (loc.matches("(?i).+\\.xml.*")) {
+				// path/ruleset.xml
+				// path/ruleset.xml/RuleName
+				String lowercaseLoc = loc.toLowerCase(Locale.ROOT);
+				int lastXmlIndex = lowercaseLoc.lastIndexOf(".xml");
+				ruleSetFileName = loc.substring(0, lastXmlIndex + ".xml".length());
+			} else {
+				// fallback, just take everything
+				ruleSetFileName = loc;
+			}
+			
+			final URL resolvedLocation = resourceResolver.resolveLocation(ruleSetFileName);
 
 			if (resolvedLocation == null) {
 				throw new CoreException(Status.error(String.format(
