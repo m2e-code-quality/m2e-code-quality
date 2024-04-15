@@ -3,13 +3,13 @@ Bundle-ManifestVersion: 2
 Bundle-Name: M2Eclipse Extension to support Eclipse PMD Configuration
 Bundle-SymbolicName: com.basistech.m2e.code.quality.pmd
  ;singleton:=true
-Bundle-Version: 2.2.0.202404151854-r
+Bundle-Version: 2.2.1.qualifier
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.ui.console,
  org.eclipse.m2e.core;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.m2e.maven.runtime;bundle-version="[3.0.0,4.0.0)",
- com.basistech.m2e.code.quality.shared;bundle-version="2.2.0.202404151854-r",
+ com.basistech.m2e.code.quality.shared;bundle-version="2.2.1",
  net.sourceforge.pmd.eclipse.plugin;bundle-version="[7.0.0,8.0.0)"
 Import-Package: org.slf4j
 Bundle-RequiredExecutionEnvironment: JavaSE-17
