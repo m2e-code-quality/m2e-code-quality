@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Minimal Custom PMD Ruleset"
+  xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+  <description>Minimal Custom PMD Rulese</description>
+
+  <!-- Customized as documented here: https://pmd.github.io/pmd/pmd_rules_java_codestyle.html#shortvariable -->
+        <!-- Attempt to override default value 3 with 42 -->
+  <rule ref="category/java/codestyle.xml/ShortVariable">
+        <properties>
+            <property name="minimum" value="42" />
+        </properties>
+  </rule>
+</ruleset>

@@ -11,15 +11,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.junit.Test;
-
-import com.basistech.m2e.code.quality.shared.test.AbstractMavenProjectConfiguratorTestCase;
 
 import net.sourceforge.pmd.eclipse.runtime.PMDRuntimeConstants;
 import net.sourceforge.pmd.eclipse.runtime.builder.MarkerUtil;
@@ -27,6 +30,9 @@ import net.sourceforge.pmd.eclipse.runtime.builder.PMDBuilder;
 import net.sourceforge.pmd.eclipse.runtime.builder.PMDNature;
 import net.sourceforge.pmd.eclipse.runtime.cmd.MarkerInfo2;
 import net.sourceforge.pmd.eclipse.runtime.cmd.ReviewCodeCmd;
+
+import com.basistech.m2e.code.quality.pmd.PmdEclipseConstants;
+import com.basistech.m2e.code.quality.shared.test.AbstractMavenProjectConfiguratorTestCase;
 
 public class EclipsePmdProjectConfigurationTest extends AbstractMavenProjectConfiguratorTestCase {
 
@@ -114,6 +120,20 @@ public class EclipsePmdProjectConfigurationTest extends AbstractMavenProjectConf
 	@Test
 	public void testPmdCustomRuleset() throws Exception {
 		importProjectRunBuildAndFindMarkers("projects/pmd-custom-ruleset/pom.xml", MARKER_ID, 1);
+	}
+
+	@Test
+	public void testPmdCustomRulesetWithProperty() throws Exception {
+		final String projectName = "pmd-custom-ruleset-with-property";
+		importProjectRunBuildAndFindMarkers("projects/" + projectName + "/pom.xml", MARKER_ID, 1);
+
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+		IFile generatedRuleset = project.getFile(PmdEclipseConstants.PMD_RULESET_FILE);
+		StringWriter rulesetContent = new StringWriter();
+		try (Reader in = new InputStreamReader(generatedRuleset.getContents(), StandardCharsets.UTF_8)) {
+			in.transferTo(rulesetContent);
+		}
+		assertTrue(rulesetContent.toString().contains("value=\"42\""));
 	}
 
 	protected Map<IFile, Set<MarkerInfo2>> triggerPmd(final IProject project) throws Exception {
