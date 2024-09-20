@@ -171,6 +171,18 @@
 
     <profiles>
         <profile>
+            <id>eclipse-2022-09</id>
+            <activation>
+                <property>
+                    <name>target.platform</name>
+                    <value>2022-09</value>
+                </property>
+            </activation>
+            <properties>
+                <target.ee>JavaSE-17</target.ee>
+            </properties>
+        </profile>
+        <profile>
             <id>osx</id>
             <activation>
                 <os><family>mac</family></os>
