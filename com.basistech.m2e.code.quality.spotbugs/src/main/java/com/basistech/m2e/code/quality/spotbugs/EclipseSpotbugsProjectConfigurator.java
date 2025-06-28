@@ -107,7 +107,6 @@ public class EclipseSpotbugsProjectConfigurator extends AbstractMavenPluginProje
 		pluginCfgTranslator.setOmitVisitors(prefs);
 		pluginCfgTranslator.setPriority(prefs);
 		pluginCfgTranslator.setThreshold(prefs);
-		prefs.setRunAtFullBuild(false);
 
 		FindbugsPlugin.DEBUG = pluginCfgTranslator.debugEnabled();
 		return prefs;
