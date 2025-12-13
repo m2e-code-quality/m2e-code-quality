@@ -13,8 +13,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.basistech.m2e.code.quality.shared;bundle-version="2.2.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: Basis Technology Corp.
-Import-Package: org.apache.commons.lang,
- org.eclipse.jface.preference,
+Import-Package: org.eclipse.jface.preference,
  org.eclipse.swt.widgets,
  org.eclipse.ui,
  org.eclipse.ui.plugin,
