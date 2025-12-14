@@ -7,7 +7,7 @@
 
     <groupId>com.basistech.m2e-code-quality</groupId>
     <artifactId>m2e-code-quality-plugins</artifactId>
-    <version>2.3.0.202512141248-r</version>
+    <version>2.3.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <scm>
