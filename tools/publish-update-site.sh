@@ -23,7 +23,6 @@ set -eu
 
 
 GIT_ROOT_DIR="$(cd "$(dirname "$0")" && git rev-parse --show-toplevel)"
-OLD_RELEASES_FILE=${GIT_ROOT_DIR}/tools/old_releases.list
 
 RELEASE_TAG=""
 if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
@@ -56,7 +55,10 @@ function regenCompositeMetadata () {
 
     echo "<?xml version='1.0' encoding='UTF-8'?><?compositeArtifactRepository version='1.0.0'?>
 <repository name='${SITE_NAME}' type='org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository' version='1.0.0'>
-  <properties size='2'><property name='p2.timestamp' value='${now}'/><property name='p2.compressed' value='true'/></properties>
+  <properties size='2'>
+    <property name='p2.timestamp' value='${now}'/>
+    <property name='p2.compressed' value='true'/>
+  </properties>
   <children size='${countChildren}'>" > "${targetFolder}/compositeContent.xml"
     for sd in $subdirs; do
         echo "    <child location='${sd}'/>" >> "${targetFolder}/compositeContent.xml"
@@ -67,7 +69,10 @@ function regenCompositeMetadata () {
 
     echo "<?xml version='1.0' encoding='UTF-8'?><?compositeArtifactRepository version='1.0.0'?>
 <repository name='${SITE_NAME}' type='org.eclipse.equinox.internal.p2.artifact.repository.CompositeArtifactRepository' version='1.0.0'>
-  <properties size='2'><property name='p2.timestamp' value='${now}'/><property name='p2.compressed' value='true'/></properties>
+  <properties size='2'>
+    <property name='p2.timestamp' value='${now}'/>
+    <property name='p2.compressed' value='true'/>
+  </properties>
   <children size='${countChildren}'>" > "${targetFolder}/compositeArtifacts.xml"
     for sd in $subdirs; do
         echo "    <child location='${sd}'/>" >> "${targetFolder}/compositeArtifacts.xml"
@@ -113,9 +118,18 @@ else
 fi
 
 ## -- regenerate composite meta data
-STABLE_RELEASES="$(cat "${OLD_RELEASES_FILE}") $(find ${CURRENT_SITE_FOLDER}/* -maxdepth 1 -type d -name "[0-9]\.[0-9].[0-9]" -printf '%f\n')"
+STABLE_RELEASES="$(find ${CURRENT_SITE_FOLDER}/* -maxdepth 0 -type d -name "[0-9]\.[0-9].[0-9]" -printf '%f\n')"
 
 regenCompositeMetadata "${STABLE_RELEASES}" "${CURRENT_SITE_FOLDER}/"
+
+## -- update index.md
+END_LINE="$(grep -n "@@RELEASE_LIST_MARKER@@" "${CURRENT_SITE_FOLDER}/index.md" | head -1 | cut -f 1 -d ':')"
+INDEX_MD_CONTENT="$(head -$END_LINE "${CURRENT_SITE_FOLDER}/index.md")"
+echo "$INDEX_MD_CONTENT" > "${CURRENT_SITE_FOLDER}/index.md"
+for release in $STABLE_RELEASES; do
+  echo "* [${release}](${release}/)" >> "${CURRENT_SITE_FOLDER}/index.md"
+done
+
 
 ## -- generate changelog
 if [ -n "$RELEASE_TAG" ]; then

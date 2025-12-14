@@ -14,4 +14,15 @@
             <jdkHome>${env.JAVA17_HOME}</jdkHome>
         </configuration>
     </toolchain>
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>21</version>
+            <vendor>openjdk</vendor>
+            <id>JavaSE-21</id>
+        </provides>
+        <configuration>
+            <jdkHome>${env.JAVA21_HOME}</jdkHome>
+        </configuration>
+    </toolchain>
 </toolchains>

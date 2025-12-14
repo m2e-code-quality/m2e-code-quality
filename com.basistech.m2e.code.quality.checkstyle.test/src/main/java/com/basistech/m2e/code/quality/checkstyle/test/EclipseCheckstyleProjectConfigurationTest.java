@@ -168,6 +168,15 @@ public class EclipseCheckstyleProjectConfigurationTest extends AbstractMavenProj
 		assertMarkers(module1, MARKER_ID, 1);
 	}
 
+	@Test
+	public void testCheckstylePropertyExpansion() throws Exception {
+		final IProject p = importProject("projects/checkstyle-propertyExpansion/pom.xml");
+		assertTrue(p.exists());
+
+		runBuild(p);
+		assertNoMarkers(p, MARKER_ID);
+	}
+
 	private final class TriggerCheckstyleExplicitly implements ProjectCallable {
 
 		@Override

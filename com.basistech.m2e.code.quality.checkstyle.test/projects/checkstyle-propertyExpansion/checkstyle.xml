@@ -1,0 +1,12 @@
+<!DOCTYPE module PUBLIC
+  "-//Checkstyle//DTD Checkstyle Configuration 1.2//EN"
+  "https://checkstyle.org/dtds/configuration_1_2.dtd">
+
+<module name="Checker">
+  <module name="TreeWalker">
+    <module name="PackageName">
+      <property name="format"
+         value="^com\.example\.${projectname}(\.[a-z][a-zA-Z0-9]+)*$"/>
+    </module>
+  </module>
+</module>

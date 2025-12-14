@@ -34,7 +34,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
@@ -481,7 +480,7 @@ public class MavenPluginConfigurationTranslator extends AbstractMavenPluginConfi
 		if (propertyExpansion != null) {
 			try {
 				// beware of windows path separator
-				final String escapedPropertyExpansion = StringEscapeUtils.escapeJava(propertyExpansion);
+				final String escapedPropertyExpansion = propertyExpansion.replace("\\", "\\\\");
 				props.load(new StringReader(escapedPropertyExpansion));
 			} catch (final IOException e) {
 				throw new CheckstylePluginException(String.format("[%s]: Failed to checkstyle propertyExpansion [%s]",
