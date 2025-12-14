@@ -20,7 +20,7 @@
         <target.platform>2025-12</target.platform>
         <target.ee>JavaSE-21</target.ee>
 
-        <tycho-version>4.0.13</tycho-version>
+        <tycho-version>5.0.1</tycho-version>
         <main.basedir>${basedir}</main.basedir>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
