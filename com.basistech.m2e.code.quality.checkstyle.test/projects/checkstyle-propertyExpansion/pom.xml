@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.basistech</groupId>
-	<artifactId>pmd-check</artifactId>
+	<artifactId>checkstyle-propertyExpansion</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -16,8 +16,23 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.28.0</version>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.6.0</version>
+				<configuration>
+					<configLocation>checkstyle.xml</configLocation>
+					<propertyExpansion>
+						firstProperty=C:\foo\bar.txt
+						projectname=whizbang
+						anotherProperty=bazinga
+					</propertyExpansion>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.puppycrawl.tools</groupId>
+						<artifactId>checkstyle</artifactId>
+						<version>12.3.0</version>
+					</dependency>
+				</dependencies>
 				<executions>
 					<execution>
 						<goals>
@@ -37,8 +52,8 @@
 					<plugins>
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-pmd-plugin</artifactId>
-							<version>3.28.0</version>
+							<artifactId>maven-checkstyle-plugin</artifactId>
+							<version>3.6.0</version>
 							<configuration>
 								<skip>true</skip>
 							</configuration>
