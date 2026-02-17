@@ -13,7 +13,7 @@ runs:
       if: ${{ inputs.withRuby == 'true' }}
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.7
+        ruby-version: 4.0
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
     - name: Set up JDK 17
