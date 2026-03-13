@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/github-changelog-generator/github-changelog-generator.git
-  revision: df6622dbdc907e7c3a4f851383a47c47715393b2
+  revision: ecb79b90e6d7f09c2833a06d44513f3d110a521d
   branch: master
   specs:
-    github_changelog_generator (1.16.4)
+    github_changelog_generator (1.17.0)
       activesupport
       async (>= 1.25.0)
       async-http-faraday
@@ -29,9 +29,9 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
-    addressable (2.8.8)
+    addressable (2.8.9)
       public_suffix (>= 2.0.2, < 8.0)
-    async (2.36.0)
+    async (2.38.0)
       console (~> 1.29)
       fiber-annotation
       io-event (~> 1.11)
@@ -51,7 +51,7 @@ GEM
     async-http-faraday (0.22.1)
       async-http (~> 0.42)
       faraday
-    async-pool (0.11.1)
+    async-pool (0.11.2)
       async (>= 2.0)
     base64 (0.3.0)
     benchmark (0.5.0)
@@ -78,12 +78,13 @@ GEM
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
     io-endpoint (0.17.2)
-    io-event (1.14.2)
+    io-event (1.14.4)
     io-stream (0.11.1)
-    json (2.18.1)
+    json (2.19.1)
     logger (1.7.0)
     metrics (0.15.0)
-    minitest (6.0.1)
+    minitest (6.0.2)
+      drb (~> 2.0)
       prism (~> 1.5)
     net-http (0.9.1)
       uri (>= 0.11.1)
@@ -92,14 +93,14 @@ GEM
       sawyer (~> 0.9)
     prism (1.9.0)
     protocol-hpack (1.5.1)
-    protocol-http (0.59.0)
+    protocol-http (0.60.0)
     protocol-http1 (0.37.0)
       protocol-http (~> 0.58)
     protocol-http2 (0.24.0)
       protocol-hpack (~> 1.4)
       protocol-http (~> 0.47)
     protocol-url (0.4.0)
-    public_suffix (7.0.2)
+    public_suffix (7.0.5)
     rainbow (3.1.1)
     rake (13.3.1)
     sawyer (0.9.3)
