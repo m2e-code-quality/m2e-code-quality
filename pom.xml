@@ -17,10 +17,10 @@
 
     <properties>
         <!-- default target platform -->
-        <target.platform>2025-12</target.platform>
+        <target.platform>2026-03</target.platform>
         <target.ee>JavaSE-21</target.ee>
 
-        <tycho-version>5.0.1</tycho-version>
+        <tycho-version>5.0.2</tycho-version>
         <main.basedir>${basedir}</main.basedir>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -163,7 +163,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.4.0</version>
+                    <version>3.5.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
