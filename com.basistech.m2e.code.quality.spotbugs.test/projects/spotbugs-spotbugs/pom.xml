@@ -20,6 +20,7 @@
 				<version>4.9.8.2</version>
 				<executions>
 					<execution>
+						<phase>verify</phase> <!-- the goal spotbugs is not bound by default-->
 						<goals>
 							<goal>spotbugs</goal>
 						</goals>
