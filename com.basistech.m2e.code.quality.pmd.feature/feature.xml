@@ -2,7 +2,7 @@
 <feature
       id="com.basistech.m2e.code.quality.pmd.feature"
       label="PMD configuration plugin for M2Eclipse"
-      version="2.3.0.202512141248-r"
+      version="2.3.1.202604161607-r"
       plugin="com.basistech.m2e.code.quality.shared">
 
    <description>

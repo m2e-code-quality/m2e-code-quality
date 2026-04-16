@@ -5,3 +5,14 @@ updates:
   schedule:
     interval: daily
   open-pull-requests-limit: 10
+- package-ecosystem: github-actions
+  directories:
+    - /
+    - /.github/actions/setup
+    - /.github/actions/verify
+  schedule:
+    interval: daily
+- package-ecosystem: bundler
+  directory: "/"
+  schedule:
+    interval: daily
