@@ -7,7 +7,6 @@
  *******************************************************************************/
 package com.basistech.m2e.code.quality.pmd.tests;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -15,25 +14,23 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.m2e.tests.common.JobHelpers;
 import org.junit.Test;
 
 import net.sourceforge.pmd.eclipse.runtime.PMDRuntimeConstants;
-import net.sourceforge.pmd.eclipse.runtime.builder.MarkerUtil;
 import net.sourceforge.pmd.eclipse.runtime.builder.PMDBuilder;
 import net.sourceforge.pmd.eclipse.runtime.builder.PMDNature;
-import net.sourceforge.pmd.eclipse.runtime.cmd.MarkerInfo2;
 import net.sourceforge.pmd.eclipse.runtime.cmd.ReviewCodeCmd;
 
 import com.basistech.m2e.code.quality.pmd.PmdEclipseConstants;
 import com.basistech.m2e.code.quality.shared.test.AbstractMavenProjectConfiguratorTestCase;
 
+@SuppressWarnings("restriction")
 public class EclipsePmdProjectConfigurationTest extends AbstractMavenProjectConfiguratorTestCase {
 
 	private static final String MARKER_ID = PMDRuntimeConstants.PMD_MARKER;
@@ -42,7 +39,7 @@ public class EclipsePmdProjectConfigurationTest extends AbstractMavenProjectConf
 
 	@Test
 	public void testPmdCheck() throws Exception {
-		importProjectRunBuildAndFindMarkers("projects/pmd-check/pom.xml", MARKER_ID, 3);
+		importProjectRunBuildAndFindMarkers("projects/pmd-check/pom.xml", MARKER_ID, 3, new WaitForReviewCommand());
 	}
 
 	@Test
@@ -75,7 +72,7 @@ public class EclipsePmdProjectConfigurationTest extends AbstractMavenProjectConf
 		assertTrue(hasBuilder(p, BUILDER_ID));
 
 		// run the build -> markers
-		runBuild(p);
+		runBuild(p, new WaitForReviewCommand());
 		assertMarkers(p, MARKER_ID, 1);
 
 		refreshProjectWithProfiles(p, "skip");
@@ -88,10 +85,11 @@ public class EclipsePmdProjectConfigurationTest extends AbstractMavenProjectConf
 		assertNoMarkers(p, MARKER_ID);
 
 		// building alone does not produces markers
-		runBuild(p);
+		runBuild(p, new WaitForReviewCommand());
 		assertNoMarkers(p, MARKER_ID);
 
 		// explicitly running produces the markers
+		new TriggerPmdExplicitly().call(p);
 		assertMarkers(p, MARKER_ID, 1);
 	}
 
@@ -119,13 +117,13 @@ public class EclipsePmdProjectConfigurationTest extends AbstractMavenProjectConf
 
 	@Test
 	public void testPmdCustomRuleset() throws Exception {
-		importProjectRunBuildAndFindMarkers("projects/pmd-custom-ruleset/pom.xml", MARKER_ID, 1);
+		importProjectRunBuildAndFindMarkers("projects/pmd-custom-ruleset/pom.xml", MARKER_ID, 1, new WaitForReviewCommand());
 	}
 
 	@Test
 	public void testPmdCustomRulesetWithProperty() throws Exception {
 		final String projectName = "pmd-custom-ruleset-with-property";
-		importProjectRunBuildAndFindMarkers("projects/" + projectName + "/pom.xml", MARKER_ID, 1);
+		importProjectRunBuildAndFindMarkers("projects/" + projectName + "/pom.xml", MARKER_ID, 1, new WaitForReviewCommand());
 
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		IFile generatedRuleset = project.getFile(PmdEclipseConstants.PMD_RULESET_FILE);
@@ -136,34 +134,34 @@ public class EclipsePmdProjectConfigurationTest extends AbstractMavenProjectConf
 		assertTrue(rulesetContent.toString().contains("value=\"42\""));
 	}
 
-	protected Map<IFile, Set<MarkerInfo2>> triggerPmd(final IProject project) throws Exception {
-		ReviewCodeCmd cmd = new ReviewCodeCmd();
-		cmd.addResource(project);
-		cmd.setStepCount(1);
-		cmd.setOpenPmdPerspective(false);
-		cmd.setOpenPmdViolationsOverviewView(false);
-		cmd.setOpenPmdViolationsOutlineView(false);
-		cmd.setUserInitiated(true);
-		cmd.setRunAlways(false);
-		cmd.performExecute();
+	protected class TriggerPmdExplicitly implements ProjectCallable {
+		@Override
+		public void call(IProject project) throws Exception {
+			ReviewCodeCmd cmd = new ReviewCodeCmd();
+			cmd.addResource(project);
+			cmd.setStepCount(1);
+			cmd.setOpenPmdPerspective(false);
+			cmd.setOpenPmdViolationsOverviewView(false);
+			cmd.setOpenPmdViolationsOutlineView(false);
+			cmd.setUserInitiated(true);
+			cmd.setRunAlways(false);
+			cmd.performExecute();
 
-		cmd.join();
-		return cmd.getMarkers();
+			cmd.join();
+		}
 	}
 
-	@Override
-	protected void assertNoMarkers(IProject project, String markerId) throws Exception {
-		final IMarker[] markers = MarkerUtil.findAllMarkers(project);
-		assertEquals(0, markers.length);
-	}
-
-	@Override
-	protected void assertMarkers(final IProject project, final String markerId, final int minimumMarkerCount)
-			throws Exception {
-
-		Map<IFile, Set<MarkerInfo2>> markers = triggerPmd(project);
-
-		assertEquals(markers.size(), 1);
-		assertTrue(markers.values().iterator().next().size() >= minimumMarkerCount);
+	protected class WaitForReviewCommand implements ProjectCallable {
+		@Override
+		public void call(IProject project) throws Exception {
+			String name = new ReviewCodeCmd().getName();
+			JobHelpers.waitForJobs(new JobHelpers.IJobMatcher() {
+				@Override
+				public boolean matches(Job job) {
+					return job.getName().equals(name);
+				}
+			}, 60_000);
+			waitForJobsToComplete();
+		}
 	}
 }
