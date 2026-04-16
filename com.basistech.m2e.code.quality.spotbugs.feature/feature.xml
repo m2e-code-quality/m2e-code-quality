@@ -2,7 +2,7 @@
 <feature
       id="com.basistech.m2e.code.quality.spotbugs.feature"
       label="SpotBugs configuration plugin for M2Eclipse"
-      version="2.3.1.202604161607-r"
+      version="2.3.2.qualifier"
       plugin="com.basistech.m2e.code.quality.shared">
 
    <description>
