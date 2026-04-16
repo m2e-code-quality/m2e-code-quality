@@ -17,11 +17,13 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.m2e.tests.common.JobHelpers;
 import org.junit.Test;
 
 import com.basistech.m2e.code.quality.shared.test.AbstractMavenProjectConfiguratorTestCase;
-
+import de.tobject.findbugs.FindBugsJob;
 import de.tobject.findbugs.FindbugsPlugin;
 import de.tobject.findbugs.builder.FindBugsWorker;
 import de.tobject.findbugs.builder.ResourceUtils;
@@ -38,25 +40,25 @@ public class EclipseSpotbugsProjectConfigurationTest extends AbstractMavenProjec
 	@Test
 	public void testSpotbugsCheck() throws Exception {
 		importProjectRunBuildAndFindMarkers("projects/spotbugs-check/pom.xml", MARKER_ID, 2,
-				new TriggerSpotbugsExplicitly());
+				new WaitForFindbugsJob());
 	}
 
 	@Test
 	public void testSpotbugsSpotbugs() throws Exception {
 		importProjectRunBuildAndFindMarkers("projects/spotbugs-spotbugs/pom.xml", MARKER_ID, 2,
-				new TriggerSpotbugsExplicitly());
+				new WaitForFindbugsJob());
 	}
 
 	@Test
 	public void testSpotbugsVerify() throws Exception {
 		importProjectRunBuildAndFindMarkers("projects/spotbugs-verify/pom.xml", MARKER_ID, 2,
-				new TriggerSpotbugsExplicitly());
+				new WaitForFindbugsJob());
 	}
 
 	@Test
 	public void testSpotbugsExcludeBugsFile() throws Exception {
 		final IProject project = importProject("projects/exclude-bugs-file/pom.xml");
-		runBuild(project, new TriggerSpotbugsExplicitly());
+		runBuild(project, new WaitForFindbugsJob());
 		final IMarker[] markers = findMarkers(project, MARKER_ID);
 		assertEquals("Expected exactly one marker, but got " + markers.length, 1, markers.length);
 		int lineNumber = markers[0].getAttribute(IMarker.LINE_NUMBER, -1);
@@ -93,7 +95,7 @@ public class EclipseSpotbugsProjectConfigurationTest extends AbstractMavenProjec
 		assertTrue(hasBuilder(p, BUILDER_ID));
 
 		// run the build -> markers
-		runBuild(p, new TriggerSpotbugsExplicitly());
+		runBuild(p, new WaitForFindbugsJob());
 		assertMarkers(p, MARKER_ID, 1);
 
 		refreshProjectWithProfiles(p, "skip");
@@ -105,8 +107,9 @@ public class EclipseSpotbugsProjectConfigurationTest extends AbstractMavenProjec
 		// no remaining markers
 		assertNoMarkers(p, MARKER_ID);
 
-		// building alone does not produces markers
-		runBuild(p);
+		// building alone does not produces markers (since there is no FindBugsBuilder registered for the project)
+		// and there won't be any FindBugsJobs, so the WaitForFindbugsJob() doesn't actually need to wait
+		runBuild(p, new WaitForFindbugsJob());
 		assertNoMarkers(p, MARKER_ID);
 
 		// explicitly running produces the markers
@@ -147,6 +150,28 @@ public class EclipseSpotbugsProjectConfigurationTest extends AbstractMavenProjec
 				final FindBugsWorker worker = new FindBugsWorker(project, monitor);
 				worker.work(e.getValue());
 			}
+
+			waitForJobsToComplete();
+		}
+	}
+
+	/**
+	 * By default, SpotBugs Analysis runs as a separate job from the build job.
+	 * This means, the initial "waitForJobsToComplete()" is not enough - Spotbugs
+	 * might not have been executed yet.
+	 * <p>Here we wait explicitly for FindBugsJobs to be completed and wait afterwards
+	 * again until the resources are updated with the markers. This is done via a
+	 * WorkspaceJob (see de.tobject.findbugs.reporter.MarkerUtil.createMarkers(...)).
+	 */
+	protected class WaitForFindbugsJob implements ProjectCallable {
+		@Override
+		public void call(IProject project) throws Exception {
+			JobHelpers.waitForJobs(new JobHelpers.IJobMatcher() {
+				@Override
+				public boolean matches(Job job) {
+					return job instanceof FindBugsJob || job.getName().contains("SpotBugs");
+				}
+			}, 60_000);
 
 			waitForJobsToComplete();
 		}
