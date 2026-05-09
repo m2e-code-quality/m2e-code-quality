@@ -28,7 +28,7 @@
   <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Doomph.redirection.m2e-code-quality"
-      value="https://raw.githubusercontent.com/m2e-code-quality/m2e-code-quality/master/->${git.clone.location|uri}/"/>
+      value="https://raw.githubusercontent.com/m2e-code-quality/m2e-code-quality/develop/->${git.clone.location|uri}/"/>
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
