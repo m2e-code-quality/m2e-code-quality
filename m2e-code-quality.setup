@@ -72,8 +72,6 @@
       <requirement
           name="org.eclipse.m2e.sdk.feature.feature.group"/>
       <requirement
-          name="org.apache.commons.lang"/>
-      <requirement
           name="net.sf.eclipsecs.feature.group"/>
       <requirement
           name="net.sourceforge.pmd.eclipse.feature.group"/>
