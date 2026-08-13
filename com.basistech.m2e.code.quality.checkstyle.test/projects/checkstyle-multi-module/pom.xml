@@ -21,6 +21,13 @@
 				<configuration>
 					<configLocation>checks/checkstyle_config.xml</configLocation>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.puppycrawl.tools</groupId>
+						<artifactId>checkstyle</artifactId>
+						<version>13.10.0</version>
+					</dependency>
+				</dependencies>
 				<executions>
 					<execution>
 						<goals>
