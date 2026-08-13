@@ -54,8 +54,9 @@ jobs:
           #  targetPlatform: 2025-12
           #- os: ubuntu-latest
           #  targetPlatform: 2025-09
-          #- os: ubuntu-latest
-          #  targetPlatform: 2025-06
+          - os: ubuntu-latest
+            targetPlatform: 2025-06
+          # all older platforms are incompatible with checkstyle 13+, which requires Java 21
           #- os: ubuntu-latest
           #  targetPlatform: 2025-03
           #- os: ubuntu-latest
@@ -76,8 +77,8 @@ jobs:
           #  targetPlatform: 2023-03
           #- os: ubuntu-latest
           #  targetPlatform: 2022-12
-          - os: ubuntu-latest
-            targetPlatform: 2022-09
+          #- os: ubuntu-latest
+          #  targetPlatform: 2022-09
       fail-fast: true
 
     runs-on: ${{ matrix.os }}
