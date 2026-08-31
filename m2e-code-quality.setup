@@ -15,8 +15,16 @@
       xsi:type="jdt:JRETask"
       version="JavaSE-17"
       location="${jre.location-17}"
-      name="java17">
-    <description>Define the JDK needed to compile and run the Java projects of ${scope.project.label}</description>
+      name="java17"
+      executionEnvironmentDefault="false">
+    <description>Define the JDK needed to compile and run the Java projects of ${scope.project.label} for older eclipse platforms</description>
+  </setupTask>
+  <setupTask
+      xsi:type="jdt:JRETask"
+      version="JavaSE-21"
+      location="${jre.location-21}"
+      name="java21">
+    <description>Define the JDK needed to compile and run the Java projects of ${scope.project.label} for current eclipse platforms</description>
   </setupTask>
   <setupTask
       xsi:type="setup:EclipseIniTask"
@@ -28,7 +36,7 @@
   <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Doomph.redirection.m2e-code-quality"
-      value="https://raw.githubusercontent.com/m2e-code-quality/m2e-code-quality/master/->${git.clone.location|uri}/"/>
+      value="https://raw.githubusercontent.com/m2e-code-quality/m2e-code-quality/develop/->${git.clone.location|uri}/"/>
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
@@ -72,8 +80,6 @@
       <requirement
           name="org.eclipse.m2e.sdk.feature.feature.group"/>
       <requirement
-          name="org.apache.commons.lang"/>
-      <requirement
           name="net.sf.eclipsecs.feature.group"/>
       <requirement
           name="net.sourceforge.pmd.eclipse.feature.group"/>
@@ -89,6 +95,19 @@
           name="2022-09">
         <repository
             url="https://download.eclipse.org/releases/2022-09/"/>
+        <repository
+            url="https://checkstyle.org/eclipse-cs-update-site/updates/12.x/"/>
+        <repository
+            url="https://pmd.github.io/pmd-eclipse-plugin-p2-site/"/>
+        <repository
+            url="https://findbugs.cs.umd.edu/eclipse/"/>
+        <repository
+            url="https://spotbugs.github.io/eclipse/"/>
+      </repositoryList>
+      <repositoryList
+          name="${eclipse.target.platform}">
+        <repository
+            url="https://download.eclipse.org/releases/${eclipse.target.platform}"/>
         <repository
             url="https://checkstyle.org/eclipse-cs-update-site/"/>
         <repository
